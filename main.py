@@ -1,31 +1,20 @@
-from Melodie import Simulator
-from Melodie import Config
-from typing import Optional
 import os
-from models.render_building.model import BuildingModel
-from models.render_building.scenario import BuildingScenario
+
+from Melodie import Config
+
+from models.render_building.run import run_building_model
 
 
-def run_building_model(cfg: "Config", cores: Optional[int] = None):
-    simulator = Simulator(
-        config=cfg,
-        model_cls=BuildingModel,
-        scenario_cls=BuildingScenario
-    )
-    if cores is None:
-        simulator.run()
-    else:
-        simulator.run_parallel(cores=cores)
-
-
-if __name__ == "__main__":
-    project_name = "rokig"
+def get_config(project_name: str):
     project_root = os.path.join(os.path.dirname(__file__), f"projects/{project_name}")
-    config = Config(
+    return Config(
         project_name=project_name,
         project_root=project_root,
         input_folder=os.path.join(project_root, "input"),
         output_folder=os.path.join(project_root, "output"),
         input_cache=True
     )
-    run_building_model(cfg=config)
+
+
+if __name__ == "__main__":
+    run_building_model(cfg=get_config("rokig"))
