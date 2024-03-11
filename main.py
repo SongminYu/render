@@ -19,9 +19,10 @@ def run_building_model(cfg: "Config", cores: Optional[int] = None):
 
 
 if __name__ == "__main__":
-    project_root = os.path.join(os.path.dirname(__file__), "projects/rokig")
+    project_name = "rokig"
+    project_root = os.path.join(os.path.dirname(__file__), f"projects/{project_name}")
     config = Config(
-        project_name="rokig",
+        project_name=project_name,
         project_root=project_root,
         input_folder=os.path.join(project_root, "input"),
         output_folder=os.path.join(project_root, "output"),
