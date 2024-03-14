@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 class BuildingDataCollector(RenderDataCollector):
     scenario: "BuildingScenario"
 
+    # TODO: add units in the tables
+
     def setup(self):
         # define table names (move constants.py here)
         ...
