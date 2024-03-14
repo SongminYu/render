@@ -3,7 +3,7 @@ import os
 from Melodie import Config
 
 from models.render_building.run import run_building_model
-
+from dashboards.run import run_building_dashboard
 
 def get_config(project_name: str):
     project_root = os.path.join(os.path.dirname(__file__), f"projects/{project_name}")
@@ -16,5 +16,8 @@ def get_config(project_name: str):
     )
 
 
+
+
 if __name__ == "__main__":
     run_building_model(cfg=get_config("rokig"))
+    run_building_dashboard()
