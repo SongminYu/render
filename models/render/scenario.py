@@ -1,7 +1,7 @@
 from typing import Optional
 
 from Melodie import Scenario
-
+import pandas as pd
 from models.render.render_dict import RenderDict
 from models.render.render_key import RenderKey
 from utils.logger import get_logger
@@ -28,15 +28,30 @@ class RenderScenario(Scenario):
         )
 
     @load_timer()
-    def load_param(self, file_name: str, col: Optional[str] = "value") -> RenderDict:
-        return RenderDict.from_dataframe(
+    def load_param(
+            self,
+            file_name: str,
+            col: Optional[str] = "value",
+            region_level: Optional[int] = None
+    ) -> RenderDict:
+        rdict = RenderDict.from_dataframe(
             tdict_type="Data",
             df=self.load_dataframe(file_name),
             value_column_name=col
         )
+        if region_level is not None:
+            rdict.region_level = region_level
+        return rdict
 
     @load_timer()
-    def load_scenario(self, file_name: str, time: str = "year", scenario_filter: Optional[str] = None) -> RenderDict:
+    def load_scenario(
+            self,
+            file_name: str,
+            time: str = "year",
+            scenario_filter: Optional[str] = None,
+            all_years: Optional[bool] = False,
+            region_level: Optional[int] = None,
+    ) -> RenderDict:
         df = self.load_dataframe(file_name)
         if scenario_filter is not None:
             df = df.loc[df["id_scenario"] == self.__dict__[scenario_filter]]
@@ -45,11 +60,18 @@ class RenderScenario(Scenario):
             if "id_scenario" in df.columns:
                 df = df.loc[df["id_scenario"] == df["id_scenario"].unique()[0]]
                 df.loc[:, "id_scenario"] = self.id
-        return RenderDict.from_dataframe(
+        if time == "year" and not all_years:
+            df_index_cols = df[[col for col in df.columns if col.startswith(("id_", "unit"))]]
+            df_data_cols = df.loc[:, str(self.start_year):str(self.end_year)]
+            df = pd.concat([df_index_cols, df_data_cols], axis=1)
+        rdict = RenderDict.from_dataframe(
             tdict_type="Data",
             df=df,
             time_column_name=time
         )
+        if region_level is not None:
+            rdict.region_level = region_level
+        return rdict
 
     def load_framework(self):
         self.regions = self.load_id("ID_Region.xlsx")

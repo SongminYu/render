@@ -1,7 +1,9 @@
+import numpy as np
+import pandas as pd
+
+from models.render.render_dict import RenderDict
 from models.render.scenario import RenderScenario
 from models.render_building.building_key import BuildingKey
-from models.render.render_dict import RenderDict
-import pandas as pd
 
 
 class BuildingScenario(RenderScenario):
@@ -19,7 +21,7 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
 
-    def load_data(self):
+    def load_scenario_data(self):
         self.load_framework()
         self.load_ids()
         self.load_relations()
@@ -61,9 +63,9 @@ class BuildingScenario(RenderScenario):
         self.p_building_construction_year_min = self.load_param("Parameter_Building_ConstructionYear.xlsx", col="min")
         self.p_building_construction_year_max = self.load_param("Parameter_Building_ConstructionYear.xlsx", col="max")
         self.p_building_component_minimum_lifetime = self.load_param("Parameter_BuildingComponent_MinimumLifetime.xlsx")
-        self.p_building_envelope_component_area_ref = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='reference')
-        self.p_building_envelope_component_area_ratio = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='ratio')
-        self.p_building_envelope_window_area_orientation = self.load_param("Parameter_Building_Envelope_WindowAreaOrientation.xlsx")
+        self.p_building_envelope_component_area_ref = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='reference', region_level=0)
+        self.p_building_envelope_component_area_ratio = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='ratio', region_level=0)
+        self.p_building_envelope_window_area_orientation = self.load_param("Parameter_Building_Envelope_WindowAreaOrientation.xlsx", region_level=0)
         self.p_building_rc_appliance_internal_gain = self.load_param("Parameter_Building_RC_ApplianceInternalGain.xlsx")
         self.p_unit_user_person_number = self.load_param("Parameter_UnitUser_PersonNumber.xlsx")
         self.p_unit_user_person_number_area_relevance = self.load_param("Parameter_UnitUser_PersonNumber_AreaRelevance.xlsx")
@@ -87,38 +89,117 @@ class BuildingScenario(RenderScenario):
         self.s_building_construction_period = self.load_scenario("Scenario_Building_ConstructionPeriod.xlsx")
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")
-        self.s_building_unit_area = self.load_scenario("Scenario_Building_UnitArea.xlsx")
-        self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx")
-        self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx")
-        self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx")
+        self.s_building_unit_area = self.load_scenario("Scenario_Building_UnitArea.xlsx", region_level=0)
+        self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
+        self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
+        self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=0)
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
-        self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx")
-        self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx")
-        self.pr_building_occupancy = self.load_scenario("Profile_BuildingOccupancy.xlsx")
+        self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
+        self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
+        self.pr_building_occupancy = self.load_scenario("Profile_BuildingOccupancy.xlsx", time="hour")
         self.pr_appliance_electricity = self.load_scenario("Profile_ApplianceElectricity.xlsx", time="hour")
         self.pr_hot_water = self.load_scenario("Profile_HotWater.xlsx", time="hour")
-        self.pr_weather_temperature = self.load_scenario("Profile_WeatherTemperature.xlsx", time="hour")
-        self.pr_weather_radiation = self.load_scenario("Profile_WeatherRadiation.xlsx", time="hour")
-        # DataFrame
+        self.pr_weather_temperature = self.load_scenario("Profile_WeatherTemperature.xlsx", time="hour", region_level=0)
+        self.pr_weather_radiation = self.load_scenario("Profile_WeatherRadiation.xlsx", time="hour", region_level=0)
+        # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 
+    def setup_results_containers(self):
+        self.building_profile = []
+        self.building_stock = []
+        self.building_num_model = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type"
+            ],
+        )
+        self.building_num_total = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type"
+            ],
+        )
+        self.renovation_action_building = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_construction_period",
+                "year"
+            ]
+        )
+        self.renovation_action_component = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_construction_period",
+                "id_building_component",
+                "year"
+            ],
+        )
+        self.building_floor_area = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_construction_period",
+                "year"
+            ],
+        )
+        self.energy_consumption = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_construction_period",
+                "id_end_use",
+                "id_energy_carrier",
+                "year"
+            ]
+        )
+        self.building_efficiency_class_count = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_construction_period",
+                "id_building_efficiency_class",
+                "year"
+            ]
+        )
+        self.building_num_model = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type"
+        ])
+        self.building_num_total = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type"
+        ])
+
     def setup_agent_params(self):
-
-        self.building_num_model = RenderDict.create_empty_data_tdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type"
-        ])
-        self.building_num_total = RenderDict.create_empty_data_tdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type"
-        ])
-
         df = self.load_dataframe("SimulatorCoverage.xlsx")
         df = df.loc[df["id_region"] == self.id_region]
         agent_params = []
@@ -143,3 +224,11 @@ class BuildingScenario(RenderScenario):
 
     def get_building_num_scaling(self, rkey: "BuildingKey"):
         return self.building_num_total.get_item(rkey)/self.building_num_model.get_item(rkey)
+
+    @staticmethod
+    def get_hour_profile(profile_rdict: "RenderDict", rkey: "BuildingKey"):
+        pr = np.zeros(8760, )
+        for hour in range(1, 8761):
+            rkey.hour = hour
+            pr[hour - 1] = profile_rdict.get_item(rkey)
+        return pr

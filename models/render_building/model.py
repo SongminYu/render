@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 
 from models.render.model import RenderModel
 from models.render_building.building import Building
+from models.render_building.data_collector import BuildingDataCollector
 from models.render_building.environment import BuildingEnvironment
 from models.render_building.scenario import BuildingScenario
 
@@ -16,12 +17,40 @@ class BuildingModel(RenderModel):
         self.set_seed()
         self.buildings: "AgentList[Building]" = self.create_agent_list(Building)
         self.environment: "BuildingEnvironment" = self.create_environment(BuildingEnvironment)
+        self.data_collector: "BuildingDataCollector" = self.create_data_collector(BuildingDataCollector)
 
     def setup(self):
+        self.scenario.load_scenario_data()
+        self.scenario.setup_results_containers()
         self.scenario.setup_agent_params()
-        # self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
-        # self.environment.setup_buildings(self.buildings)
+        self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
+        self.environment.setup_buildings(self.buildings)
+
+    def collect_building_info(self):
+        self.data_collector.collect_building_floor_area(self.buildings)
+        self.data_collector.collect_building_stock(self.buildings)
+        self.data_collector.collect_building_energy_consumption(self.buildings)
+        self.data_collector.collect_building_efficiency_class_count(self.buildings)
+        self.data_collector.collect_building_profile(self.buildings)
+
+    def export_building_info(self):
+        self.data_collector.export_building_floor_area()
+        self.data_collector.export_building_stock()
+        self.data_collector.export_building_energy_consumption()
+        self.data_collector.export_building_efficiency_class_count()
+        self.data_collector.export_building_profile()
+        self.data_collector.export_renovation_rate()
 
     def run(self):
-        print()
-        ...
+        for year in range(self.scenario.start_year, self.scenario.end_year + 1):
+            self.environment.update_buildings_year(self.buildings)
+            self.environment.update_buildings_profile_appliance(self.buildings)
+            self.environment.update_buildings_technology_cooling(self.buildings)
+            self.environment.update_buildings_profile_hot_water(self.buildings)
+            self.environment.update_buildings_technology_heating(self.buildings)
+            self.environment.update_buildings_technology_ventilation(self.buildings)
+            self.environment.update_buildings_renovation(self.buildings)
+            self.environment.update_buildings_demolition(self.buildings)
+            self.environment.update_buildings_construction(self.buildings)
+            self.collect_building_info()
+        self.export_building_info()
