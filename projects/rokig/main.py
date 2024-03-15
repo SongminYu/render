@@ -19,5 +19,5 @@ def get_config(project_name: str):
 
 if __name__ == "__main__":
     config = get_config("rokig")
-    run_building_model(cfg=config)
+    run_building_model(cfg=config, cores=6)
     # concat_region_tables(cfg=config, file_name_prefix="energy_consumption")
