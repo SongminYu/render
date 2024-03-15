@@ -36,6 +36,17 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     dropdown.render(app,
                                     data,
+                                    id_dropdown=ids.SECTOR_DROPDOWN,
+                                    id_options=DataSchema.ID_SECTOR,
+                                    id_select_all_button=ids.SELECT_ALL_SECTORS_BUTTON
+                                    ),
+                ],
+            ),
+            html.Div(
+                className="dropdown-container",
+                children=[
+                    dropdown.render(app,
+                                    data,
                                     id_dropdown=ids.SUBSECTOR_DROPDOWN,
                                     id_options=DataSchema.ID_SUBSECTOR,
                                     id_select_all_button=ids.SELECT_ALL_SUBSECTORS_BUTTON
@@ -45,8 +56,8 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
             bar_chart.render(app,
                              data,
                              id_barchart=ids.BAR_CHART,
-                             id_dropdown=ids.SUBSECTOR_DROPDOWN,
-                             id_filtered_colum=DataSchema.ID_SUBSECTOR,
+                             dropdowns=[{'id': ids.SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                        {'id': ids.SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}],
                              x=DataSchema.ID_BUILDING_TYPE,
                              y=DataSchema.ID_APPLIANCE_ELECTRICITY_DEMAND,
                              ),

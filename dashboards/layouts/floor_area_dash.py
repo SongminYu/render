@@ -44,9 +44,8 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
             ),
             bar_chart.render(app,
                              data,
-                             id_barchart=ids.BAR_CHART,
-                             id_dropdown=ids.SECTOR_DROPDOWN,
-                             id_filtered_colum=DataSchema.ID_SECTOR,
+                             id_barchart=ids.BAR_CHART,  #
+                             dropdowns=[{'id': ids.SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR}],
                              x=DataSchema.ID_BUILDING_TYPE,
                              y=DataSchema.VALUE
                              ),
