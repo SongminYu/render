@@ -288,7 +288,7 @@ class Building(Agent):
             epsilon = 0.9  # emissivity of the thermal radiation of the outer surface
             # Stefan-Boltzmann constant: σ = 5.67 × 10-8 W/(m2⋅K4)
             sigma = 5.67 * 10 ** (-8)
-            outside_temperature = self.scenario.get_hour_profile(self.scenario.pr_weather_temperature, self.rkey)
+            outside_temperature = self.scenario.pr_weather_temperature.get_item(self.rkey)
             # external radiant heat transfer coefficient
             h_r = 4 * epsilon * sigma * ((outside_temperature + 273.15) ** 3)
             component = get_building_component(component_name)
@@ -299,7 +299,7 @@ class Building(Agent):
         rkey = self.rkey.make_copy()
         for id_orientation in self.scenario.orientations.keys():
             rkey.id_orientation = id_orientation
-            total_radiation += self.scenario.get_hour_profile(self.scenario.pr_weather_radiation, rkey)
+            total_radiation += self.scenario.pr_weather_radiation.get_item(rkey)
 
         self.solar_gain_opa = create_empty_arr()
         for component_name in ["roof", "wall"]:
@@ -316,7 +316,7 @@ class Building(Agent):
         for id_orientation in self.scenario.orientations.keys():
             rkey.id_orientation = id_orientation
             self.solar_gain_gla += correction_param * transmittance_factor * shading_factor * (1 - frame_share) * \
-                                   self.scenario.get_hour_profile(self.scenario.pr_weather_radiation, rkey) * \
+                                   self.scenario.pr_weather_radiation.get_item(rkey) * \
                                    self.scenario.p_building_envelope_window_area_orientation.get_item(rkey)
 
         # gains in total
@@ -324,7 +324,7 @@ class Building(Agent):
         self.solar_gain = self.solar_gain_opa + self.solar_gain_gla
 
     def update_building_rc_temperature(self):
-        self.weather_temperature = self.scenario.get_hour_profile(self.scenario.pr_weather_temperature, self.rkey)
+        self.weather_temperature = self.scenario.pr_weather_temperature.get_item(self.rkey)
         if self.rkey.id_building_efficiency_class is None:
             self.set_temperature_min = np.ones((8760,)) * 20
             self.set_temperature_max = np.ones((8760,)) * 27

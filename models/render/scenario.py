@@ -6,6 +6,7 @@ from models.render.render_dict import RenderDict
 from models.render.render_key import RenderKey
 from utils.logger import get_logger
 from utils.decorators import load_timer
+
 log = get_logger(__name__)
 
 
@@ -47,7 +48,6 @@ class RenderScenario(Scenario):
     def load_scenario(
             self,
             file_name: str,
-            time: str = "year",
             scenario_filter: Optional[str] = None,
             all_years: Optional[bool] = False,
             region_level: Optional[int] = None,
@@ -60,14 +60,27 @@ class RenderScenario(Scenario):
             if "id_scenario" in df.columns:
                 df = df.loc[df["id_scenario"] == df["id_scenario"].unique()[0]]
                 df.loc[:, "id_scenario"] = self.id
-        if time == "year" and not all_years:
+        if not all_years:
             df_index_cols = df[[col for col in df.columns if col.startswith(("id_", "unit"))]]
             df_data_cols = df.loc[:, str(self.start_year):str(self.end_year)]
             df = pd.concat([df_index_cols, df_data_cols], axis=1)
         rdict = RenderDict.from_dataframe(
             tdict_type="Data",
             df=df,
-            time_column_name=time
+            time_column_name="year",
+        )
+        if region_level is not None:
+            rdict.region_level = region_level
+        return rdict
+
+    def load_profile(
+            self,
+            file_name: str,
+            region_level: Optional[int] = None,
+    ) -> RenderDict:
+        rdict = RenderDict.from_profile_dataframe(
+            tdict_type="Data",
+            df=self.load_dataframe(file_name)
         )
         if region_level is not None:
             rdict.region_level = region_level
@@ -79,11 +92,16 @@ class RenderScenario(Scenario):
         self.subsectors = self.load_id("ID_SubSector.xlsx")
         self.energy_carriers = self.load_id("ID_EnergyCarrier.xlsx")
         self.r_sector_subsector = self.load_relation("Relation_Sector_SubSector.xlsx")
-        self.s_emission_factor = self.load_scenario("Scenario_EnergyCarrier_EmissionFactor.xlsx", scenario_filter="id_scenario_energy_emission_factor")
-        self.s_energy_carrier_price_wholesale = self.load_scenario("Scenario_EnergyCarrier_Price_Wholesale.xlsx", scenario_filter="id_scenario_energy_price_wholesale")
-        self.s_energy_carrier_price_tax_rate = self.load_scenario("Scenario_EnergyCarrier_Price_TaxRate.xlsx", scenario_filter="id_scenario_energy_price_tax_rate")
-        self.s_energy_carrier_price_markup = self.load_scenario("Scenario_EnergyCarrier_Price_MarkUp.xlsx", scenario_filter="id_scenario_energy_price_mark_up")
-        self.s_energy_carrier_price_co2_emission = self.load_scenario("Scenario_EnergyCarrier_Price_CO2Emission.xlsx", scenario_filter="id_scenario_energy_price_co2_emission")
+        self.s_emission_factor = self.load_scenario("Scenario_EnergyCarrier_EmissionFactor.xlsx",
+                                                    scenario_filter="id_scenario_energy_emission_factor")
+        self.s_energy_carrier_price_wholesale = self.load_scenario("Scenario_EnergyCarrier_Price_Wholesale.xlsx",
+                                                                   scenario_filter="id_scenario_energy_price_wholesale")
+        self.s_energy_carrier_price_tax_rate = self.load_scenario("Scenario_EnergyCarrier_Price_TaxRate.xlsx",
+                                                                  scenario_filter="id_scenario_energy_price_tax_rate")
+        self.s_energy_carrier_price_markup = self.load_scenario("Scenario_EnergyCarrier_Price_MarkUp.xlsx",
+                                                                scenario_filter="id_scenario_energy_price_mark_up")
+        self.s_energy_carrier_price_co2_emission = self.load_scenario("Scenario_EnergyCarrier_Price_CO2Emission.xlsx",
+                                                                      scenario_filter="id_scenario_energy_price_co2_emission")
         self.setup_final_energy_carrier_price()
 
     def setup_final_energy_carrier_price(self):
@@ -108,11 +126,11 @@ class RenderScenario(Scenario):
                 self.s_final_energy_carrier_price.set_item(
                     rkey,
                     (
-                         self.s_energy_carrier_price_wholesale.get_item(rkey) +
-                         self.s_energy_carrier_price_markup.get_item(rkey) +
-                         (
-                             self.s_energy_carrier_price_co2_emission.get_item(rkey) *
-                             self.s_emission_factor.get_item(rkey)
-                         )
+                            self.s_energy_carrier_price_wholesale.get_item(rkey) +
+                            self.s_energy_carrier_price_markup.get_item(rkey) +
+                            (
+                                    self.s_energy_carrier_price_co2_emission.get_item(rkey) *
+                                    self.s_emission_factor.get_item(rkey)
+                            )
                     ) * (1 + self.s_energy_carrier_price_tax_rate.get_item(rkey))
                 )

@@ -52,14 +52,14 @@ class UnitUser:
     def init_demand_profile(self):
         person_num_relevance = self.scenario.p_unit_demand_profile_person_number_relevance.get_item(self.rkey)
         if person_num_relevance == 0:
-            self.appliance_electricity_profile = self.scenario.get_hour_profile(self.scenario.pr_appliance_electricity, self.rkey)
-            self.hot_water_profile = self.scenario.get_hour_profile(self.scenario.pr_hot_water, self.rkey)
+            self.appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey)
+            self.hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey)
         else:
-            self.appliance_electricity_profile = self.scenario.get_hour_profile(self.scenario.pr_appliance_electricity, self.rkey) * self.person_num
-            self.hot_water_profile = self.scenario.get_hour_profile(self.scenario.pr_hot_water, self.rkey) * self.person_num
+            self.appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey) * self.person_num
+            self.hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey) * self.person_num
 
     def init_occupancy_profile(self):
-        self.occupancy_profile = self.scenario.get_hour_profile(self.scenario.pr_building_occupancy, self.rkey)
+        self.occupancy_profile = self.scenario.pr_building_occupancy.get_item(self.rkey)
 
     def get_hour_profile(self, profile_rdict: "RenderDict"):
         pr = np.zeros(8760, )

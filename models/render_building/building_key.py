@@ -13,7 +13,6 @@ class BuildingKey(RenderKey):
         id_subsector_agent: Optional[int] = None,
         id_energy_carrier: Optional[int] = None,
         year: Optional[int] = None,
-        hour: Optional[int] = None,
         id_action: Optional[int] = None,
         id_building_construction_period: Optional[int] = None,
         id_building_height: Optional[int] = None,
@@ -38,7 +37,6 @@ class BuildingKey(RenderKey):
             id_energy_carrier=id_energy_carrier,
             year=year
         )
-        self.hour = hour
         self.id_action = id_action
         self.id_building_construction_period = id_building_construction_period
         self.id_building_height = id_building_height

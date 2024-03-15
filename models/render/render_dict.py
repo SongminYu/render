@@ -3,7 +3,7 @@ from typing import List
 from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
-
+import pandas as pd
 from tab2dict import TabDict
 
 if TYPE_CHECKING:
@@ -82,3 +82,22 @@ class RenderDict(TabDict):
     def accumulate_item(self, rkey: "RenderKey", value):
         super().accumulate_item(tkey=rkey, value=value)
 
+    @classmethod
+    def from_profile_dataframe(
+            cls,
+            df: pd.DataFrame,
+            tdict_type: TabDictType,
+        ):
+        key_cols = [col for col in df.columns if col.startswith("id_")]
+        val_cols = [col for col in df.columns if not col.startswith(("id_", "unit"))]
+        tdict_data = {}
+        for _, row in df.iterrows():
+            key = []
+            for key_col in key_cols:
+                key.append(row[key_col])
+            tdict_data[tuple(key)] = row.loc[val_cols].astype(float).to_numpy()
+        return cls._construct_tdict(
+            tdict_type=tdict_type,
+            key_cols=key_cols,
+            tdict_data=tdict_data
+        )

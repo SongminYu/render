@@ -26,6 +26,7 @@ class BuildingScenario(RenderScenario):
         self.load_ids()
         self.load_relations()
         self.load_params()
+        self.load_profiles()
         self.load_scenarios()
 
     def load_ids(self):
@@ -83,6 +84,13 @@ class BuildingScenario(RenderScenario):
         self.p_building_efficiency_class_intensity = self.load_dataframe("Parameter_Building_EfficiencyClass_Intensity.xlsx")
         self.p_renovation_sync_probability = self.load_dataframe("Parameter_Renovation_SyncProbability.xlsx")
 
+    def load_profiles(self):
+        self.pr_building_occupancy = self.load_profile("Profile_BuildingOccupancy.xlsx")
+        self.pr_appliance_electricity = self.load_profile("Profile_ApplianceElectricity.xlsx")
+        self.pr_hot_water = self.load_profile("Profile_HotWater.xlsx")
+        self.pr_weather_temperature = self.load_profile("Profile_WeatherTemperature.xlsx", region_level=0)
+        self.pr_weather_radiation = self.load_profile("Profile_WeatherRadiation.xlsx", region_level=0)
+
     def load_scenarios(self):
         # RenderDict
         self.s_building = self.load_scenario("Scenario_Building.xlsx")
@@ -96,11 +104,6 @@ class BuildingScenario(RenderScenario):
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
         self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
-        self.pr_building_occupancy = self.load_scenario("Profile_BuildingOccupancy.xlsx", time="hour")
-        self.pr_appliance_electricity = self.load_scenario("Profile_ApplianceElectricity.xlsx", time="hour")
-        self.pr_hot_water = self.load_scenario("Profile_HotWater.xlsx", time="hour")
-        self.pr_weather_temperature = self.load_scenario("Profile_WeatherTemperature.xlsx", time="hour", region_level=0)
-        self.pr_weather_radiation = self.load_scenario("Profile_WeatherRadiation.xlsx", time="hour", region_level=0)
         # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 
@@ -224,11 +227,3 @@ class BuildingScenario(RenderScenario):
 
     def get_building_num_scaling(self, rkey: "BuildingKey"):
         return self.building_num_total.get_item(rkey)/self.building_num_model.get_item(rkey)
-
-    @staticmethod
-    def get_hour_profile(profile_rdict: "RenderDict", rkey: "BuildingKey"):
-        pr = np.zeros(8760, )
-        for hour in range(1, 8761):
-            rkey.hour = hour
-            pr[hour - 1] = profile_rdict.get_item(rkey)
-        return pr
