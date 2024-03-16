@@ -2,7 +2,7 @@ import os
 
 from Melodie import Config
 
-from models.render_building.run import run_building_model
+from models.render_building.main import run_building_model
 from projects.rokig.analysis.concat import concat_region_tables
 
 
@@ -19,5 +19,5 @@ def get_config(project_name: str):
 
 if __name__ == "__main__":
     config = get_config("rokig")
-    run_building_model(cfg=config, cores=6)
+    run_building_model(cfg=config)
     # concat_region_tables(cfg=config, file_name_prefix="energy_consumption")

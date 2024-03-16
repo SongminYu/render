@@ -16,8 +16,6 @@ if TYPE_CHECKING:
 class BuildingDataCollector(RenderDataCollector):
     scenario: "BuildingScenario"
 
-    # TODO: add units in the tables
-
     def setup(self):
         # define table names (move constants.py here)
         ...
@@ -31,7 +29,9 @@ class BuildingDataCollector(RenderDataCollector):
             )
 
     def export_building_floor_area(self):
-        self.scenario.building_floor_area.to_dataframe().to_csv(
+        df = self.scenario.building_floor_area.to_dataframe()
+        df.insert(self.get_unit_position(df), "unit", "m2")
+        df.to_csv(
             os.path.join(self.config.output_folder,
                          f"floor_area_R{self.scenario.id_region}.csv"),
             index=False
@@ -53,7 +53,18 @@ class BuildingDataCollector(RenderDataCollector):
                 self.scenario.building_profile.append(building_dict)
 
     def export_building_profile(self):
-        pd.DataFrame(self.scenario.building_profile).to_csv(
+        def match_unit(profile_name: str):
+            if profile_name.startswith("temp"):
+                unit = "Celsius degree"
+            else:
+                unit = "W"
+            return unit
+
+        df = pd.DataFrame(self.scenario.building_profile)
+        unit_values = df['profile_name'].apply(match_unit)
+        unit_position = df.columns.get_loc("profile_name") + 1
+        df.insert(unit_position, "unit", unit_values)
+        df.to_csv(
             os.path.join(self.config.output_folder, f"building_profile_R{self.scenario.id_region}.csv"),
             index=False
         )
@@ -177,7 +188,9 @@ class BuildingDataCollector(RenderDataCollector):
                             self.scenario.energy_consumption.accumulate_item(rkey, demand * intensity)
 
     def export_building_energy_consumption(self):
-        self.scenario.energy_consumption.to_dataframe().to_csv(
+        df = self.scenario.energy_consumption.to_dataframe()
+        df.insert(self.get_unit_position(df), "unit", "kWh")
+        df.to_csv(
             os.path.join(self.config.output_folder, f"energy_consumption_R{self.scenario.id_region}.csv"),
             index=False
         )
@@ -190,7 +203,9 @@ class BuildingDataCollector(RenderDataCollector):
             )
 
     def export_building_efficiency_class_count(self):
-        self.scenario.building_efficiency_class_count.to_dataframe().to_csv(
+        df = self.scenario.building_efficiency_class_count.to_dataframe()
+        df.insert(self.get_unit_position(df), "unit", "count")
+        df.to_csv(
             os.path.join(
                 self.config.output_folder,
                 f"building_efficiency_class_count_R{self.scenario.id_region}.csv"
@@ -201,6 +216,7 @@ class BuildingDataCollector(RenderDataCollector):
     def export_renovation_rate(self):
 
         def export_to_csv(df: pd.DataFrame, file_name: str):
+            df.insert(self.get_unit_position(df), "unit", "count")
             df.to_csv(
                 os.path.join(
                     self.config.output_folder,
@@ -331,3 +347,7 @@ class BuildingDataCollector(RenderDataCollector):
 
         building_weighted = create_renovation_rate_building_weighted(component_processed)
         export_to_csv(df=building_weighted, file_name="renovation_rate_building")
+
+    @staticmethod
+    def get_unit_position(df: pd.DataFrame):
+        return max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1

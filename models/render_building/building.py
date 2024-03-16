@@ -6,9 +6,9 @@ from Melodie import Agent
 
 from models.render_building.building_component import BuildingComponent
 from models.render_building.building_key import BuildingKey
+from models.render_building.building_r5c1 import R5C1, spec
 from models.render_building.building_unit import Unit
 from models.render_building.tech_heating import HeatingSystem
-from models.render_building.building_r5c1 import R5C1, spec
 from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
