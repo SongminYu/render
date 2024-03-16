@@ -32,4 +32,23 @@ def concat_region_tables(cfg: "Config", file_name_prefix: str):
         df_sector.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}_Sector{id_sector}.csv"), index=False)
 
 
+def find_id(cfg: "Config", id_name: str):
 
+    def get_data_files():
+        return [
+            file for file in os.listdir(cfg.input_folder) if
+            file.endswith(".xlsx") or file.endswith(".csv")
+        ]
+
+    files = []
+    print(f'Following tables are relevant to {id_name} --> ')
+    for file_name in get_data_files():
+        df = pd.read_excel(os.path.join(cfg.input_folder, file_name), engine='openpyxl')
+        if id_name in list(df.columns):
+            files.append(file_name)
+    if files:
+        for file_name in files:
+            print(file_name)
+    else:
+        print(f"No table is relevant to {id_name}.")
+    return files
