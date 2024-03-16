@@ -14,20 +14,19 @@ def render(app: Dash, data: pd.DataFrame, id_dropdown, id_options, id_select_all
     def select_all_years(_: int) -> list[str]:
         return unique_options
 
+    dropdown = html.Div(children=[dcc.Dropdown(id=id_dropdown,
+                                               options=[{"label": options, "value": options} for options in unique_options],
+                                               value=unique_options,
+                                               multi=True, )],
+                        style=dict(width='80%'))
+    select_all_button = html.Button(children=["Select All"],
+                                    id=id_select_all_button,
+                                    n_clicks=0,
+                                    style=dict(width='20%'))
+
     return html.Div(
         children=[
             html.H6(f"Select {id_options}"),
-            dcc.Dropdown(
-                id=id_dropdown,
-                options=[{"label": options, "value": options} for options in unique_options],
-                value=unique_options,
-                multi=True,
-            ),
-            html.Button(
-                className="dropdown-button",
-                children=["Select All"],
-                id=id_select_all_button,
-                n_clicks=0,
-            ),
-        ]
+            html.Div(children=[dropdown, select_all_button], style=dict(display='flex'))
+        ],
     )
