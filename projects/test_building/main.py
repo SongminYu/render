@@ -20,6 +20,6 @@ def get_config(project_name: str):
 
 if __name__ == "__main__":
     config = get_config("test_building")
-    # run_building_model(cfg=config)
     # concat_region_tables(cfg=config, file_name_prefix="energy_consumption")
-    find_id(cfg=config, id_name="id_subsector")
+    # find_id(cfg=config, id_name="id_subsector")
+    run_building_model(cfg=config)
