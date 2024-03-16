@@ -8,7 +8,7 @@ from dashboards.layouts import floor_area_ids as ids
 import pandas as pd
 
 from dashboards.components import (
-    bar_chart,
+    bar_chart_filtered,
     dropdown,
 )
 
