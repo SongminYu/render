@@ -88,8 +88,8 @@ class RenderDict(TabDict):
             df: pd.DataFrame,
             tdict_type: TabDictType,
         ):
-        key_cols = [col for col in df.columns if col.startswith("id_")]
-        val_cols = [col for col in df.columns if not col.startswith(("id_", "unit"))]
+        key_cols = [col for col in df.columns if col.startswith(("id_", "year"))]
+        val_cols = [col for col in df.columns if not col.startswith(("id_", "year", "unit"))]
         tdict_data = {}
         for _, row in df.iterrows():
             key = []

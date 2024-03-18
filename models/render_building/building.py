@@ -8,7 +8,9 @@ from models.render_building.building_component import BuildingComponent
 from models.render_building.building_key import BuildingKey
 from models.render_building.building_r5c1 import R5C1, spec
 from models.render_building.building_unit import Unit
+from models.render_building.tech_cooling import CoolingSystem
 from models.render_building.tech_heating import HeatingSystem
+from models.render_building.tech_ventilation import VentilationSystem
 from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
@@ -114,6 +116,10 @@ class Building(Agent):
             self.building_components.append(component)
 
     def init_building_cooling_system(self):
+        self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)
+        if random.uniform(0, 1) <= self.scenario.s_cooling_penetration_rate.get_item(self.rkey):
+            self.cooling_system.init_adoption()
+
         # for a percentage of buildings, cooling systems are initialized (id_end_use = 2)
         # (1) dwelling-based or building-based?
         # --> It can be mixed if the whole building has to be installed with cooling together or not.
@@ -130,9 +136,17 @@ class Building(Agent):
         # Tertiary
         # - Penetration curve will be developed based on GHD-Befragung data
         # - Technology availability table and efficiency/energy intensity of different efficiency levels (for modeling MEPS) will be developed based on FORECAST-ResidentialAppliance
-        ...
 
     def init_building_heating_system(self):
+        self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
+        self.heating_system.init_option()
+        self.heating_system.init_heating_technology_main()
+        self.heating_system.init_heating_technology_second()
+        self.heating_system.technologies = [
+            self.heating_system.heating_technology_main,
+            self.heating_system.heating_technology_second
+        ]
+
         # TODO: initialize the age of the heating system also with lifetime logic
         #  1. keep the id_heating_technology
         #  2. add attributes: construction_year, installation_year, next_replace_year
@@ -141,17 +155,16 @@ class Building(Agent):
         #     which could influence the COP/feasibility of HP or low-temperature district heating.
         #     But this can also be done by linking to the efficiency class.
         #     However, it should be noted that, our efficiency class includes dhw demand.
-        self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
-        self.heating_system.init_option()
-        self.heating_system.init_heating_technology_main()
-        self.heating_system.init_heating_technology_second()
-        self.heating_system.update_energy_intensity()
+
+        # TODO: add supply-temperature
+        #  --> are mapped to id_building_efficiency_class
+        #  --> can be lowered by renovating the radiator system (in the renovation modeling)
+        #  --> decides the feasibility of using HP and (low-temperature) district heating
 
     def init_building_ventilation_system(self):
-        # always building-based
-        # energy_intensity is initialized as kWh/m2-year ? (id_end_use = 5)
-        # see cooling for the other notes
-        ...
+        self.ventilation_system = VentilationSystem(self.rkey.make_copy(), self.scenario)
+        if random.uniform(0, 1) <= self.scenario.s_ventilation_penetration_rate.get_item(self.rkey):
+            self.ventilation_system.init_adoption()
 
     def init_building_renovation_history(self):
         for component in self.building_components:
@@ -163,11 +176,6 @@ class Building(Agent):
                     break
 
     def init_building_heating_cooling_demand(self):
-
-        # TODO: add supply-temperature
-        # --> are mapped to id_building_efficiency_class
-        # --> can be lowered by renovating the radiator system (in the renovation modeling)
-        # --> decides the feasibility of using HP and (low-temperature) district heating
 
         def init_building_efficiency_class():
             self.update_building_rc_params()
@@ -373,6 +381,64 @@ class Building(Agent):
                 break
 
     """
+    Calculate final energy demand
+    """
+
+    def init_final_energy_demand(self):
+
+        self.final_energy_demand: dict = {}  # {key: id_end_use, value: [(id_energy_carrier, final_energy_demand)]}
+        self.update_appliance_electricity_final_energy_demand()
+        self.update_space_cooling_final_energy_demand()
+        self.update_space_heating_final_energy_demand()
+        self.update_hot_water_final_energy_demand()
+        self.update_ventilation_final_energy_demand()
+
+    def update_appliance_electricity_final_energy_demand(self):
+        self.final_energy_demand[1] = [
+            (1, self.appliance_electricity_profile.sum())
+        ]
+
+    def update_space_cooling_final_energy_demand(self):
+        self.final_energy_demand[2] = [
+            (
+                self.cooling_system.energy_intensity.id_energy_carrier,
+                self.cooling_system.energy_intensity.value * abs(self.cooling_demand_profile.sum())
+            )
+        ]
+
+    def update_space_heating_final_energy_demand(self):
+        self.final_energy_demand[3] = []
+        for heating_technology in self.heating_system.technologies:
+            if heating_technology is not None:
+                for energy_intensity in heating_technology.space_heating_energy_intensities:
+                    self.final_energy_demand[energy_intensity.id_end_use].append(
+                        (
+                            energy_intensity.id_energy_carrier,
+                            energy_intensity.value * self.heating_demand_profile.sum()
+                        )
+                    )
+
+    def update_hot_water_final_energy_demand(self):
+        self.final_energy_demand[4] = []
+        for heating_technology in self.heating_system.technologies:
+            if heating_technology is not None:
+                for energy_intensity in heating_technology.hot_water_energy_intensities:
+                    self.final_energy_demand[energy_intensity.id_end_use].append(
+                        (
+                            energy_intensity.id_energy_carrier,
+                            energy_intensity.value * self.hot_water_profile.sum()
+                        )
+                    )
+
+    def update_ventilation_final_energy_demand(self):
+        self.final_energy_demand[5] = [
+            (
+                self.ventilation_system.energy_intensity.id_energy_carrier,
+                self.total_living_area * self.ventilation_system.energy_intensity.value
+            )
+        ]
+
+    """
     Future projection functions
     """
 
@@ -399,3 +465,4 @@ class Building(Agent):
             d1[index] = row["prob"]
             d2[index] = sync_renovation_actions
         return d2[dict_sample(d1)]
+

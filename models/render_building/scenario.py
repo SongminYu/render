@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 from models.render.render_dict import RenderDict
@@ -44,6 +43,10 @@ class BuildingScenario(RenderScenario):
         self.unit_user_types = self.load_id("ID_UnitUserType.xlsx")
         self.heating_systems = self.load_id("ID_HeatingSystem.xlsx")
         self.heating_technologies = self.load_id("ID_HeatingTechnology.xlsx")
+        self.cooling_technologies = self.load_id("ID_CoolingTechnology.xlsx")
+        self.cooling_technology_efficiency_classes = self.load_id("ID_CoolingTechnology_EfficiencyClass.xlsx")
+        self.ventilation_technologies = self.load_id("ID_VentilationTechnology.xlsx")
+        self.ventilation_technology_efficiency_classes = self.load_id("ID_VentilationTechnology_EfficiencyClass.xlsx")
 
     def load_relations(self):
         self.r_building_component_option = self.load_relation("Relation_BuildingComponent_Option.xlsx")
@@ -53,10 +56,14 @@ class BuildingScenario(RenderScenario):
         self.r_sector_heating_system = self.load_relation("Relation_Sector_HeatingSystem.xlsx")
         self.r_heating_system_technology_main = self.load_relation("Relation_HeatingSystem_HeatingTechnologyMain.xlsx")
         self.r_heating_technology_energy_carrier = self.load_relation("Relation_HeatingTechnology_EnergyCarrier.xlsx")
+        self.r_cooling_technology_efficiency_class = self.load_relation("Relation_CoolingTechnology_EfficiencyClass.xlsx")
+        self.r_cooling_technology_energy_carrier = self.load_relation("Relation_CoolingTechnology_EnergyCarrier.xlsx")
+        self.r_ventilation_technology_efficiency_class = self.load_relation("Relation_VentilationTechnology_EfficiencyClass.xlsx")
+        self.r_ventilation_technology_energy_carrier = self.load_relation("Relation_VentilationTechnology_EnergyCarrier.xlsx")
 
     def load_params(self):
         # RenderDict
-        self.p_building_component_efficiency_coefficient = self.load_param("Parameter_BuildingComponent_EfficiencyCoefficient.xlsx")
+        self.p_building_component_efficiency = self.load_param("Parameter_BuildingComponent_EfficiencyCoefficient.xlsx")
         self.p_building_height_min = self.load_param("Parameter_Building_Height.xlsx", col="min")
         self.p_building_height_max = self.load_param("Parameter_Building_Height.xlsx", col="max")
         self.p_building_unit_number_min = self.load_param("Parameter_Building_UnitNumber.xlsx", col="min")
@@ -79,6 +86,12 @@ class BuildingScenario(RenderScenario):
         self.p_heating_technology_lifetime_max = self.load_param("Parameter_HeatingTechnology_Lifetime.xlsx", col="max")
         self.p_heating_technology_second_contribution_space_heating = self.load_param("Parameter_HeatingTechnology_Second_Contribution.xlsx", col="space_heating")
         self.p_heating_technology_second_contribution_hot_water = self.load_param("Parameter_HeatingTechnology_Second_Contribution.xlsx", col="hot_water")
+        self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
+        self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
+        self.p_cooling_technology_efficiency = self.load_param("Parameter_CoolingTechnology_EfficiencyCoefficient.xlsx")
+        self.p_ventilation_technology_lifetime_min = self.load_param("Parameter_VentilationTechnology_Lifetime.xlsx", col="min")
+        self.p_ventilation_technology_lifetime_max = self.load_param("Parameter_VentilationTechnology_Lifetime.xlsx", col="max")
+        self.p_ventilation_technology_energy_intensity = self.load_param("Parameter_VentilationTechnology_EnergyIntensity.xlsx")
         # DataFrame
         self.p_building_component_lifetime = self.load_dataframe("Parameter_BuildingComponent_Lifetime.xlsx")
         self.p_building_efficiency_class_intensity = self.load_dataframe("Parameter_Building_EfficiencyClass_Intensity.xlsx")
@@ -104,6 +117,17 @@ class BuildingScenario(RenderScenario):
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
         self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
+        self.s_cooling_penetration_rate = self.load_scenario("Scenario_Cooling_PenetrationRate.xlsx", region_level=0)
+        self.s_cooling_technology_market_share = self.load_scenario("Scenario_CoolingTechnology_MarketShare.xlsx", region_level=0)
+        self.s_cooling_technology_efficiency_class_market_share = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
+        self.s_cooling_technology_availability = self.load_scenario("Scenario_CoolingTechnology_Availability.xlsx", region_level=0)
+        self.s_cooling_technology_investment_cost = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
+        self.s_ventilation_penetration_rate = self.load_scenario("Scenario_Ventilation_PenetrationRate.xlsx", region_level=0)
+        self.s_ventilation_technology_market_share = self.load_scenario("Scenario_VentilationTechnology_MarketShare.xlsx", region_level=0)
+        self.s_ventilation_technology_efficiency_class_market_share = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
+        self.s_ventilation_technology_availability = self.load_scenario("Scenario_VentilationTechnology_Availability.xlsx", region_level=0)
+        self.s_ventilation_technology_investment_cost = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
+
         # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 
@@ -162,7 +186,7 @@ class BuildingScenario(RenderScenario):
                 "year"
             ],
         )
-        self.energy_consumption = RenderDict.create_empty_rdict(
+        self.final_energy_demand = RenderDict.create_empty_rdict(
             key_cols=[
                 "id_scenario",
                 "id_region",

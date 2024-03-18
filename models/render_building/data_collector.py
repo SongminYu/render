@@ -155,43 +155,20 @@ class BuildingDataCollector(RenderDataCollector):
             index=False
         )
 
-    def collect_building_energy_consumption(self, buildings: "AgentList[Building]"):
+    def collect_building_final_energy_demand(self, buildings: "AgentList[Building]"):
         for building in buildings:
             rkey = building.rkey.make_copy()
             scaling = self.scenario.get_building_num_scaling(rkey)
-            # collect appliance electricity and space cooling
-            end_use_demand = {
-                1: building.appliance_electricity_profile.sum() * scaling,
-                2: abs(building.cooling_demand_profile.sum() * scaling / 3)
-            }
-            for id_end_use, demand in end_use_demand.items():
-                rkey = rkey.set_id(id_values={"id_end_use": id_end_use, "id_energy_carrier": 1})
-                self.scenario.energy_consumption.accumulate_item(rkey, demand)
-            # collect space heating and hot water
-            for heating_technology in [
-                building.heating_system.heating_technology_main,
-                building.heating_system.heating_technology_second
-            ]:
-                if heating_technology is not None:
-                    for energy_carrier in heating_technology.energy_carriers:
-                        rkey.set_id(id_values={
-                            "id_heating_technology": heating_technology.rkey.id_heating_technology,
-                            "id_energy_carrier": energy_carrier.rkey.id_energy_carrier
-                        }),
-                        end_use_demand = {
-                            3: building.heating_demand_profile.sum() * scaling,
-                            4: building.hot_water_profile.sum() * scaling
-                        }
-                        for id_end_use, demand in end_use_demand.items():
-                            rkey = rkey.set_id(id_values={"id_end_use": id_end_use})
-                            intensity = building.heating_system.energy_intensity.get_item(rkey)
-                            self.scenario.energy_consumption.accumulate_item(rkey, demand * intensity)
+            for id_end_use, end_use_energy_intensities in building.final_energy_demand.items():
+                for id_energy_carrier, final_energy_demand in end_use_energy_intensities:
+                    rkey.set_id({"id_end_use": id_end_use, "id_energy_carrier": id_energy_carrier})
+                    self.scenario.final_energy_demand.accumulate_item(rkey, value=final_energy_demand * scaling)
 
-    def export_building_energy_consumption(self):
-        df = self.scenario.energy_consumption.to_dataframe()
+    def export_building_final_energy_demand(self):
+        df = self.scenario.final_energy_demand.to_dataframe()
         df.insert(self.get_unit_position(df), "unit", "kWh")
         df.to_csv(
-            os.path.join(self.config.output_folder, f"energy_consumption_R{self.scenario.id_region}.csv"),
+            os.path.join(self.config.output_folder, f"final_energy_demand_R{self.scenario.id_region}.csv"),
             index=False
         )
 

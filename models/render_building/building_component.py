@@ -59,7 +59,7 @@ class BuildingComponent:
             rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
             d[id_building_component_option_efficiency_class] = self.scenario.s_building_component_availability.get_item(rkey)
         self.rkey.id_building_component_option_efficiency_class = dict_sample(d)
-        self.u_value = self.scenario.p_building_component_efficiency_coefficient.get_item(self.rkey)
+        self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
 
     def get_lifetime(self):
         df = self.rkey.filter_dataframe(self.scenario.p_building_component_lifetime)
