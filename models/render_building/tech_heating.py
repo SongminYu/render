@@ -17,6 +17,7 @@ class HeatingSystem:
         self.scenario = scenario
         self.heating_technology_main: Optional["HeatingTechnology"] = None
         self.heating_technology_second: Optional["HeatingTechnology"] = None
+        # self.radiator =
         self.technologies = []
 
     def init_option(self):

@@ -399,12 +399,15 @@ class Building(Agent):
         ]
 
     def update_space_cooling_final_energy_demand(self):
-        self.final_energy_demand[2] = [
-            (
-                self.cooling_system.energy_intensity.id_energy_carrier,
-                self.cooling_system.energy_intensity.value * abs(self.cooling_demand_profile.sum())
-            )
-        ]
+        if self.cooling_system.is_adopted:
+            self.final_energy_demand[2] = [
+                (
+                    self.cooling_system.energy_intensity.id_energy_carrier,
+                    self.cooling_system.energy_intensity.value * abs(self.cooling_demand_profile.sum())
+                )
+            ]
+        else:
+            self.final_energy_demand[2] = []
 
     def update_space_heating_final_energy_demand(self):
         self.final_energy_demand[3] = []
@@ -431,12 +434,15 @@ class Building(Agent):
                     )
 
     def update_ventilation_final_energy_demand(self):
-        self.final_energy_demand[5] = [
-            (
-                self.ventilation_system.energy_intensity.id_energy_carrier,
-                self.total_living_area * self.ventilation_system.energy_intensity.value
-            )
-        ]
+        if self.ventilation_system.is_adopted:
+            self.final_energy_demand[5] = [
+                (
+                    self.ventilation_system.energy_intensity.id_energy_carrier,
+                    self.total_living_area * self.ventilation_system.energy_intensity.value
+                )
+            ]
+        else:
+            self.final_energy_demand[5] = []
 
     """
     Future projection functions
