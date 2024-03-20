@@ -42,9 +42,9 @@ class BuildingDataCollector(RenderDataCollector):
             for profile_name in [
                 "heating_demand_profile",
                 "cooling_demand_profile",
-                "temp_mass_profile",
-                "temp_surface_profile",
-                "temp_air_profile"
+                # "temp_mass_profile",
+                # "temp_surface_profile",
+                # "temp_air_profile"
             ]:
                 building_dict = building.rkey.to_dict()
                 building_dict["profile_name"] = profile_name

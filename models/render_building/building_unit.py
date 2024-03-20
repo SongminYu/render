@@ -21,8 +21,6 @@ class UnitUser:
         self.scenario = scenario
         self.init_unit_user_rkey()
         self.init_person_num()
-        self.init_demand_profile()
-        self.init_occupancy_profile()
 
     def init_unit_user_rkey(self):
         self.rkey.init_dimension(
@@ -38,14 +36,22 @@ class UnitUser:
         else:
             self.person_num = int(self.scenario.s_building_unit_area.get_item(self.rkey) / self.scenario.p_unit_user_person_number.get_item(self.rkey))
 
-    def init_demand_profile(self):
-        person_num_relevance = self.scenario.p_unit_demand_profile_person_number_relevance.get_item(self.rkey)
-        if person_num_relevance == 0:
-            self.appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey)
-            self.hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey)
+    @property
+    def hot_water_profile(self):
+        if self.scenario.p_unit_demand_profile_person_number_relevance.get_item(self.rkey) == 0:
+            hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey)
         else:
-            self.appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey) * self.person_num
-            self.hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey) * self.person_num
+            hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey) * self.person_num
+        return hot_water_profile
 
-    def init_occupancy_profile(self):
-        self.occupancy_profile = self.scenario.pr_building_occupancy.get_item(self.rkey)
+    @property
+    def appliance_electricity_profile(self):
+        if self.scenario.p_unit_demand_profile_person_number_relevance.get_item(self.rkey) == 0:
+            appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey)
+        else:
+            appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey) * self.person_num
+        return appliance_electricity_profile
+
+    @property
+    def occupancy_profile(self):
+        return self.scenario.pr_building_occupancy.get_item(self.rkey)

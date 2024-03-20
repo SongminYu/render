@@ -83,7 +83,7 @@ class Building(Agent):
         def sum_unit_profile(unit_profile_name: str):
             sum_profile = create_empty_arr()
             for unit in self.units:
-                sum_profile += unit.user.__dict__[unit_profile_name]
+                sum_profile += getattr(unit.user, unit_profile_name)
             return sum_profile
 
         self.occupancy_profile = sum_unit_profile("occupancy_profile") / self.unit_number
@@ -370,9 +370,11 @@ class Building(Agent):
         self.cooling_demand_profile: np.ndarray = abs(r5c1_model.cooling_demand_profile / 1000)  # from Wh to kWh
         self.cooling_demand = self.cooling_demand_profile.sum()
         self.cooling_demand_per_m2 = self.cooling_demand / self.total_living_area
-        self.temp_mass_profile: np.ndarray = r5c1_model.temp_mass_profile
-        self.temp_surface_profile: np.ndarray = r5c1_model.temp_surface_profile
-        self.temp_air_profile: np.ndarray = r5c1_model.temp_air_profile
+
+        # for memory efficiency, the three profiles below are commented out:
+        # self.temp_mass_profile: np.ndarray = r5c1_model.temp_mass_profile
+        # self.temp_surface_profile: np.ndarray = r5c1_model.temp_surface_profile
+        # self.temp_air_profile: np.ndarray = r5c1_model.temp_air_profile
 
     def update_building_efficiency_class(self):
         for _, row in self.scenario.p_building_efficiency_class_intensity.iterrows():
