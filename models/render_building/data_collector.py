@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from Melodie import AgentList
     from models.render_building.scenario import BuildingScenario
     from models.render_building.building import Building
+    from models.render_building.tech_heating import HeatingTechnology
 
 
 class BuildingDataCollector(RenderDataCollector):
@@ -100,49 +101,38 @@ class BuildingDataCollector(RenderDataCollector):
             building_dict["building_number"] = self.scenario.get_building_num_scaling(building.rkey)
             # collect building heating system
             building_dict["id_heating_system"] = building.heating_system.rkey.id_heating_system
-            for ht_name in ["main", "second"]:
-                heating_technology = building.heating_system.__dict__[f"heating_technology_{ht_name}"]
+            for ht_name, heating_technology in [
+                ["main", building.heating_system.heating_technology_main],
+                ["second", building.heating_system.heating_technology_second],
+            ]:
                 if heating_technology is not None:
                     building_dict[f"{ht_name}_id_heating_technology"] = heating_technology.rkey.id_heating_technology
                     building_dict[f"{ht_name}_installation_year"] = heating_technology.installation_year
                     building_dict[f"{ht_name}_next_replace_year"] = heating_technology.next_replace_year
-                    building_dict[
-                        f"{ht_name}_space_heating_contribution"] = heating_technology.space_heating_contribution
+                    building_dict[f"{ht_name}_space_heating_contribution"] = heating_technology.space_heating_contribution
                     building_dict[f"{ht_name}_hot_water_contribution"] = heating_technology.hot_water_contribution
-                    energy_carriers = heating_technology.energy_carriers
-                    end_uses = {3: "heating_demand", 4: "hot_water_demand"}
-                    count = 1
-                    for energy_carrier in energy_carriers:
-                        rkey = energy_carrier.rkey.make_copy()
-                        building_dict[f"{ht_name}_id_energy_carrier_{count}"] = rkey.id_energy_carrier
-                        building_dict[f"{ht_name}_id_ec{count}_efficiency"] = energy_carrier.efficiency
-                        for id_end_use, end_use in end_uses.items():
-                            rkey = rkey.set_id({"id_end_use": id_end_use})
-                            building_dict[
-                                f"{ht_name}_ec{count}_{end_use}_intensity"] = building.heating_system.energy_intensity.get_item(
-                                rkey)
-                            building_dict[f"{ht_name}_ec{count}_{end_use}_consumption"] = building_dict[end_use] * \
-                                                                                          building_dict[
-                                                                                              f"{ht_name}_ec{count}_{end_use}_intensity"]
-                        count += 1
-                    if len(energy_carriers) == 1:
-                        building_dict[f"{ht_name}_id_energy_carrier_2"] = None
-                        building_dict[f"{ht_name}_id_ec2_efficiency"] = None
-                        for id_end_use, end_use in end_uses.items():
-                            building_dict[f"{ht_name}_ec2_{end_use}_intensity"] = None
-                            building_dict[f"{ht_name}_ec2_{end_use}_consumption"] = None
+                    for end_use, energy_intensities in [
+                        ["space_heating", heating_technology.space_heating_energy_intensities],
+                        ["hot_water", heating_technology.hot_water_energy_intensities],
+                    ]:
+                        count = 1
+                        for energy_intensity in energy_intensities:
+                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_id_energy_carrier"] = energy_intensity.id_energy_carrier
+                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_value"] = energy_intensity.value
+                            count += 1
+                        if len(energy_intensities) == 1:
+                            building_dict[f"{ht_name}_{end_use}_energy_intensity_2_id_energy_carrier"] = None
+                            building_dict[f"{ht_name}_{end_use}_energy_intensity_2_value"] = None
                 else:
-                    building_dict[f"second_id_heating_technology"] = None
-                    building_dict[f"second_installation_year"] = None
-                    building_dict[f"second_next_replace_year"] = None
-                    building_dict[f"second_space_heating_contribution"] = None
-                    building_dict[f"second_hot_water_contribution"] = None
-                    for ec_count in [1, 2]:
-                        building_dict[f"second_id_energy_carrier_{ec_count}"] = None
-                        building_dict[f"second_id_ec{ec_count}_efficiency"] = None
-                        for end_use in ["heating_demand", "hot_water_demand"]:
-                            building_dict[f"second_ec{ec_count}_{end_use}_intensity"] = None
-                            building_dict[f"second_ec{ec_count}_{end_use}_consumption"] = None
+                    building_dict[f"{ht_name}_id_heating_technology"] = None
+                    building_dict[f"{ht_name}_installation_year"] = None
+                    building_dict[f"{ht_name}_next_replace_year"] = None
+                    building_dict[f"{ht_name}_space_heating_contribution"] = None
+                    building_dict[f"{ht_name}_hot_water_contribution"] = None
+                    for end_use in ["space_heating", "hot_water"]:
+                        for count in [1, 2]:
+                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_id_energy_carrier"] = None
+                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_value"] = None
             # save the building dict
             self.scenario.building_stock.append(building_dict)
 
