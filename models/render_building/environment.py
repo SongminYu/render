@@ -42,7 +42,8 @@ class BuildingEnvironment(Environment):
 
     def update_buildings_technology_cooling(self, buildings: "AgentList[Building]"):
         # diffusion: decided by an exogenous penetration rate (pathway from FORECAST)
-        # --> for example, the penetration rates are a1, a2, a3, ..., then in period 2, the adoption probability is (a2 - a1)/(1 - a1)
+        # --> for example, the penetration rates are a1, a2, a3, ..., then in period 2,
+        # the adoption probability is (a2 - a1)/(1 - a1)
         # replace: triggered by lifetime
         ...
 
@@ -52,7 +53,6 @@ class BuildingEnvironment(Environment):
         ...
 
     def update_buildings_technology_heating(self, buildings: "AgentList[Building]"):
-
         # replace: triggered by lifetime
         # (1) sync renovation
         # --> might be triggered before replacing the heating system, then the feasible technologies could be more.
@@ -67,7 +67,6 @@ class BuildingEnvironment(Environment):
         #     --> switching from one type of system to another is totally open
         #     --> the barrier is reflected in the cost for switching from one type of technology to the other
         # --> a utility function is designed and the utilities are pre-calculated and saved in a rdict
-
         ...
 
     def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
@@ -76,7 +75,6 @@ class BuildingEnvironment(Environment):
         ...
 
     def update_buildings_renovation(self, buildings: "AgentList[Building]"):
-
         # How is renovation triggered?
         # (1) natural renovation
         # --> triggered by lifetime (each component),

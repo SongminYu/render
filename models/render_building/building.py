@@ -190,7 +190,7 @@ class Building(Agent):
         self.update_building_rc_temperature()
         self.update_building_heating_cooling_demand()
         # TODO: if we update the id_building_efficiency_class here again, we will have 1 and 2.
-        #  In fact, the hwb is very sensitive to the set temperature.
+        #  In fact, the hwb is sensitive to the set temperature.
         # self.update_building_efficiency_class()
 
     """

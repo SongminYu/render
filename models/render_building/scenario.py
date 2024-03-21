@@ -249,5 +249,16 @@ class BuildingScenario(RenderScenario):
                 })
         self.agent_params = pd.DataFrame(agent_params)
 
+        def agent_num_analysis():
+            # This function is used to calculate `agent_num` for memory demand analysis.
+            # `self.agent_num` needs to be collected.
+            self.agent_num = self.agent_params.groupby([
+                "id_region", "id_sector", "id_subsector", "id_building_type"
+            ], as_index=False)["id_subsector_agent"].count()
+            self.agent_num.rename(columns={'id_subsector_agent': 'agent_num'}, inplace=True)
+            self.agent_num["agent_min"] = self.building_num_min
+            self.agent_num["agent_max"] = self.building_num_max
+        agent_num_analysis()
+
     def get_building_num_scaling(self, rkey: "BuildingKey"):
         return self.building_num_total.get_item(rkey)/self.building_num_model.get_item(rkey)

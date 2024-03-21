@@ -15,7 +15,6 @@ def read_dataframe(file_path: str):
 def concat_region_tables(cfg: "Config", file_name_prefix: str):
     df_list = []
     region_ids = read_dataframe(os.path.join(cfg.input_folder, "ID_Region.xlsx"))["id_region"].to_list()
-    print(region_ids)
     for id_region in region_ids:
         file_path = os.path.join(os.path.join(cfg.output_folder, f'{file_name_prefix}_R{id_region}.csv'))
         if os.path.exists(file_path):

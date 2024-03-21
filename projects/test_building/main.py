@@ -18,8 +18,12 @@ def get_config(project_name: str):
     )
 
 
+def run_tool(cfg: "Config"):
+    concat_region_tables(cfg=cfg, file_name_prefix="AgentNumAgg")
+    # find_id(cfg=cfg, id_name="id_subsector")
+
+
 if __name__ == "__main__":
     config = get_config("test_building")
-    # concat_region_tables(cfg=config, file_name_prefix="energy_consumption")
-    # find_id(cfg=config, id_name="id_subsector")
-    run_building_model(cfg=config)
+    run_building_model(cfg=config, cores=10)
+    run_tool(cfg=config)
