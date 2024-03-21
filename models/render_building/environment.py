@@ -156,9 +156,6 @@ class BuildingEnvironment(Environment):
             for building in buildings:
                 ...
 
-
-
-
     def update_buildings_demolition(self, buildings: "AgentList[Building]"):
         # How is demolition triggered?
         # --> logic of FORECAST-Building
