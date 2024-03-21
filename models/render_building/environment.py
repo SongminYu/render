@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from Melodie import AgentList
     from models.render_building.scenario import BuildingScenario
     from models.render_building.building import Building
+    from models.render_building.building_key import BuildingKey
 
 
 class BuildingEnvironment(Environment):
@@ -31,26 +32,65 @@ class BuildingEnvironment(Environment):
 
     @staticmethod
     def update_buildings_year(buildings: "AgentList[Building]"):
-        for building in tqdm(buildings, desc="Updating buildings year --> "):
+
+        def update_units_year():
+            for unit in building.units:
+                unit.rkey.year += 1
+                unit.user.rkey.year += 1
+
+        def update_components_year():
+            for component in building.building_components:
+                component.rkey.year += 1
+
+        def update_heating_system_year():
+            building.heating_system.rkey.year += 1
+            building.heating_system.heating_technology_main.rkey.year += 1
+            building.heating_system.heating_technology_second.rkey.year += 1
+
+        def update_cooling_system_year():
+            building.cooling_system.rkey.year += 1
+
+        def update_ventilation_system_year():
+            building.ventilation_system.rkey.year += 1
+
+        for building in buildings:
             building.rkey.year += 1
+            update_units_year()
+            update_components_year()
+            update_heating_system_year()
+            update_cooling_system_year()
+            update_ventilation_system_year()
 
     def update_buildings_profile_appliance(self, buildings: "AgentList[Building]"):
-        # efficiency improvement (shifting down profiles)
-        # --> multiply the hourly values with an exogenous factor (indexed by key_cols)
-        # --> non-electricity and non-residential appliances (taking the output of other models)
-        ...
+        for building in buildings:
+            index = self.scenario.s_useful_energy_demand_index_appliance_electricity.get_item(building.rkey)
+            if index != 1:
+                building.appliance_electricity_profile = building.appliance_electricity_profile * index
+                building.appliance_electricity_demand = building.appliance_electricity_profile.sum()
+                building.appliance_electricity_demand_per_person = building.appliance_electricity_demand / building.population
 
     def update_buildings_technology_cooling(self, buildings: "AgentList[Building]"):
-        # diffusion: decided by an exogenous penetration rate (pathway from FORECAST)
-        # --> for example, the penetration rates are a1, a2, a3, ..., then in period 2,
-        # the adoption probability is (a2 - a1)/(1 - a1)
-        # replace: triggered by lifetime
-        ...
+
+        def get_cooling_adoption_prob(rkey: "BuildingKey"):
+            penetration_rate_1 = self.scenario.s_cooling_penetration_rate.get_item(rkey)
+            rkey.year = rkey.year - 1
+            penetration_rate_0 = self.scenario.s_cooling_penetration_rate.get_item(rkey)
+            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
+
+        for building in buildings:
+            if not building.cooling_system.is_adopted:
+                building.cooling_system.adopt(adoption_prob=get_cooling_adoption_prob(building.rkey.make_copy()))
+            else:
+                building.cooling_system.replace()
 
     def update_buildings_profile_hot_water(self, buildings: "AgentList[Building]"):
-        # behavior change (shifting profiles)
-        # --> multiply the hourly values with an exogenous factor (indexed by key_cols)
-        ...
+        for building in buildings:
+            index = self.scenario.s_useful_energy_demand_index_hot_water.get_item(building.rkey)
+            if index != 1:
+                building.hot_water_profile = building.hot_water_profile * index
+                building.hot_water_demand = building.hot_water_profile.sum()
+                building.hot_water_demand_per_person = building.hot_water_demand / building.population
+                building.hot_water_demand_per_m2 = building.hot_water_demand / building.total_living_area
 
     def update_buildings_technology_heating(self, buildings: "AgentList[Building]"):
         # replace: triggered by lifetime
@@ -70,11 +110,24 @@ class BuildingEnvironment(Environment):
         ...
 
     def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
-        # diffusion: decided by an exogenous penetration rate (pathway from FORECAST)
-        # replace: triggered by lifetime
-        ...
 
-    def update_buildings_renovation(self, buildings: "AgentList[Building]"):
+        def get_ventilation_adoption_prob(rkey: "BuildingKey"):
+            penetration_rate_1 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
+            rkey.year = rkey.year - 1
+            penetration_rate_0 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
+            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
+
+        for building in buildings:
+            if not building.ventilation_system.is_adopted:
+                building.ventilation_system.adopt(adoption_prob=get_ventilation_adoption_prob(building.rkey.make_copy()))
+            else:
+                building.ventilation_system.replace()
+
+    def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
+        if self.scenario.renovation_lifecycle:
+            for building in buildings:
+                ...
+
         # How is renovation triggered?
         # (1) natural renovation
         # --> triggered by lifetime (each component),
@@ -97,6 +150,14 @@ class BuildingEnvironment(Environment):
         # --> limitation of craftsman capacity (with a high capacity, we can still have the not-limited demand as results)
         # (3) material demand
         ...
+
+    def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
+        if self.scenario.renovation_mandatory:
+            for building in buildings:
+                ...
+
+
+
 
     def update_buildings_demolition(self, buildings: "AgentList[Building]"):
         # How is demolition triggered?

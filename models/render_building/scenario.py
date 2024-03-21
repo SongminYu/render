@@ -19,6 +19,8 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_mark_up = 0
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
+        self.renovation_lifecycle = 1
+        self.renovation_mandatory = 1
 
     def load_scenario_data(self):
         self.load_framework()
@@ -127,7 +129,8 @@ class BuildingScenario(RenderScenario):
         self.s_ventilation_technology_efficiency_class_market_share = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_availability = self.load_scenario("Scenario_VentilationTechnology_Availability.xlsx", region_level=0)
         self.s_ventilation_technology_investment_cost = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
-
+        self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
+        self.s_useful_energy_demand_index_hot_water = self.load_scenario("Scenario_UsefulEnergyDemandIndex_HotWater.xlsx", region_level=0)
         # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 

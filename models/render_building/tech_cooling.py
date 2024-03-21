@@ -60,7 +60,15 @@ class CoolingSystem:
 
     def adopt(self, adoption_prob: float):
         if random.uniform(0, 1) <= adoption_prob:
-            ...
+            self.install_cooling_technology()
 
     def replace(self):
-        ...
+        if self.rkey.year == self.next_replace_year:
+            self.install_cooling_technology()
+
+    def install_cooling_technology(self):
+        self.rkey.id_cooling_technology = ...
+        self.rkey.id_cooling_technology_efficiency_class = ...
+        self.update_energy_intensity()
+        self.installation_year = self.rkey.year
+        self.next_replace_year = self.rkey.year + self.get_lifetime()
