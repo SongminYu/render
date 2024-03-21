@@ -183,11 +183,13 @@ class Building(Agent):
             self.update_building_heating_cooling_demand()
             self.heating_demand_norm = self.heating_demand_profile.sum()
             self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
+            self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
             self.update_building_efficiency_class()
 
         init_building_efficiency_class()
         self.update_building_rc_temperature()
         self.update_building_heating_cooling_demand()
+        # self.update_building_efficiency_class()
 
     """
     5R1C model - ISO13790
@@ -367,6 +369,7 @@ class Building(Agent):
         self.heating_demand_profile: np.ndarray = r5c1_model.heating_demand_profile / 1000  # from Wh to kWh
         self.heating_demand = self.heating_demand_profile.sum()
         self.heating_demand_per_m2 = self.heating_demand / self.total_living_area
+        self.total_heating_per_m2 = self.heating_demand_per_m2 + self.hot_water_demand_per_m2
         self.cooling_demand_profile: np.ndarray = abs(r5c1_model.cooling_demand_profile / 1000)  # from Wh to kWh
         self.cooling_demand = self.cooling_demand_profile.sum()
         self.cooling_demand_per_m2 = self.cooling_demand / self.total_living_area
@@ -378,7 +381,7 @@ class Building(Agent):
 
     def update_building_efficiency_class(self):
         for _, row in self.scenario.p_building_efficiency_class_intensity.iterrows():
-            if row["max"] >= self.heating_demand_per_m2 + self.hot_water_demand_per_m2:
+            if row["min"] <= self.total_heating_per_m2 <= row["max"]:
                 self.rkey.id_building_efficiency_class = row["id_building_efficiency_class"]
                 break
 
