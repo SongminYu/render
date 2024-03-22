@@ -350,10 +350,8 @@ class Building(Agent):
             # update set_temperature based on occupancy
             for hour in range(0, 8760):
                 if random.uniform(0, 1) < self.scenario.optimal_heating_behavior_prob:
-                    self.set_temperature_min[hour] = empty_min + (occupied_min - empty_min) * self.occupancy_profile[
-                        hour]
-                    self.set_temperature_max[hour] = empty_max - (empty_max - occupied_max) * self.occupancy_profile[
-                        hour]
+                    self.set_temperature_min[hour] = empty_min + (occupied_min - empty_min) * self.occupancy_profile[hour]
+                    self.set_temperature_max[hour] = empty_max - (empty_max - occupied_max) * self.occupancy_profile[hour]
                 else:
                     self.set_temperature_min[hour] = occupied_min
                     self.set_temperature_max[hour] = occupied_max
