@@ -26,6 +26,7 @@ class BuildingKey(RenderKey):
         id_unit_user_type: Optional[int] = None,
         id_heating_system: Optional[int] = None,
         id_heating_technology: Optional[int] = None,
+        id_radiator: Optional[int] = None,
         id_cooling_technology: Optional[int] = None,
         id_cooling_technology_efficiency_class: Optional[int] = None,
         id_ventilation_technology: Optional[int] = None,
@@ -54,6 +55,7 @@ class BuildingKey(RenderKey):
         self.id_unit_user_type = id_unit_user_type
         self.id_heating_system = id_heating_system
         self.id_heating_technology = id_heating_technology
+        self.id_radiator = id_radiator
         self.id_cooling_technology = id_cooling_technology
         self.id_cooling_technology_efficiency_class = id_cooling_technology_efficiency_class
         self.id_ventilation_technology = id_ventilation_technology

@@ -139,27 +139,15 @@ class Building(Agent):
 
     def init_building_heating_system(self):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
-        self.heating_system.init_option()
+        self.heating_system.init_system_type()
+        self.heating_system.init_radiator_type()
+        self.heating_system.init_supply_temperature()
         self.heating_system.init_heating_technology_main()
         self.heating_system.init_heating_technology_second()
         self.heating_system.technologies = [
             self.heating_system.heating_technology_main,
             self.heating_system.heating_technology_second
         ]
-
-        # TODO: initialize the age of the heating system also with lifetime logic
-        #  1. keep the id_heating_technology
-        #  2. add attributes: construction_year, installation_year, next_replace_year
-        #  3. also apply minimum_lifetime to heating systems
-        #  4. we are missing supply-temperature of the building,
-        #     which could influence the COP/feasibility of HP or low-temperature district heating.
-        #     But this can also be done by linking to the efficiency class.
-        #     However, it should be noted that, our efficiency class includes dhw demand.
-
-        # TODO: add supply-temperature
-        #  --> are mapped to id_building_efficiency_class
-        #  --> can be lowered by renovating the radiator system (in the renovation modeling)
-        #  --> decides the feasibility of using HP and (low-temperature) district heating
 
     def init_building_ventilation_system(self):
         self.ventilation_system = VentilationSystem(self.rkey.make_copy(), self.scenario)
@@ -189,9 +177,6 @@ class Building(Agent):
         init_building_efficiency_class()
         self.update_building_rc_temperature()
         self.update_building_heating_cooling_demand()
-        # TODO: if we update the id_building_efficiency_class here again, we will have 1 and 2.
-        #  In fact, the hwb is sensitive to the set temperature.
-        # self.update_building_efficiency_class()
 
     """
     5R1C model - ISO13790

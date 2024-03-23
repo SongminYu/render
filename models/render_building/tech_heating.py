@@ -15,17 +15,34 @@ class HeatingSystem:
     def __init__(self, rkey: "BuildingKey", scenario: "BuildingScenario"):
         self.rkey = rkey
         self.scenario = scenario
+        self.supply_temperature = scenario
         self.heating_technology_main: Optional["HeatingTechnology"] = None
         self.heating_technology_second: Optional["HeatingTechnology"] = None
-        # self.radiator =
         self.technologies = []
 
-    def init_option(self):
+    def init_system_type(self):
         self.rkey.init_dimension(
             dimension_name="id_heating_system",
             dimension_ids=self.scenario.r_sector_heating_system.get_item(self.rkey),
             rdict=self.scenario.s_heating_system
         )
+
+    def init_radiator_type(self):
+        self.rkey.init_dimension(
+            dimension_name="id_radiator",
+            dimension_ids=self.scenario.radiators.keys(),
+            rdict=self.scenario.s_radiator
+        )
+
+    def init_supply_temperature(self):
+        # questions:
+        # 1. Do we consider the impact of supply temperature on the efficiency of heating technologies?
+        # 2. Are the supply-temperature different for space heating and hot water?
+        # 3. If so, are the efficiency of heating technology different for space heating and hot water?
+
+        # analysis:
+        # 1. We can export the demand at different supply temperature.
+        ...
 
     def init_heating_technology_main(self):
         self.heating_technology_main = HeatingTechnology(self.rkey.make_copy(), self.scenario)
