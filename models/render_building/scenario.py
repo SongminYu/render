@@ -33,7 +33,7 @@ class BuildingScenario(RenderScenario):
         self.load_scenarios()
 
     def load_ids(self):
-        self.actions = self.load_id("ID_Action.xlsx")
+        self.building_actions = self.load_id("ID_Building_Action.xlsx")
         self.building_construction_periods = self.load_id("ID_Building_ConstructionPeriod.xlsx")
         self.building_heights = self.load_id("ID_Building_Height.xlsx")
         self.building_locations = self.load_id("ID_Building_Location.xlsx")
@@ -46,6 +46,7 @@ class BuildingScenario(RenderScenario):
         self.orientations = self.load_id("ID_Orientation.xlsx")
         self.unit_user_types = self.load_id("ID_UnitUserType.xlsx")
         self.heating_systems = self.load_id("ID_HeatingSystem.xlsx")
+        self.heating_system_actions = self.load_id("ID_HeatingSystem_Action.xlsx")
         self.heating_technologies = self.load_id("ID_HeatingTechnology.xlsx")
         self.radiators = self.load_id("ID_Radiator.xlsx")
         self.cooling_technologies = self.load_id("ID_CoolingTechnology.xlsx")
@@ -118,24 +119,35 @@ class BuildingScenario(RenderScenario):
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")
         self.s_building_unit_area = self.load_scenario("Scenario_Building_UnitArea.xlsx", region_level=0)
         self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
+        self.s_building_component_cost_investment = self.load_scenario("Scenario_BuildingComponent_Cost_Investment.xlsx", region_level=0)
+        self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0)
+        self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0)
         self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=0)
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
-        self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
+        self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
+        self.s_heating_technology_availability = self.load_scenario("Scenario_HeatingTechnology_Availability.xlsx", region_level=0)
+        self.s_heating_technology_cost_investment = self.load_scenario("Scenario_HeatingTechnology_Cost_Investment.xlsx", region_level=0)
+        self.s_heating_technology_cost_om = self.load_scenario("Scenario_HeatingTechnology_Cost_OM.xlsx", region_level=0)
+        self.s_heating_technology_cost_labor = self.load_scenario("Scenario_HeatingTechnology_Cost_Labor.xlsx", region_level=0)
+        self.s_heating_technology_input_labor = self.load_scenario("Scenario_HeatingTechnology_Input_Labor.xlsx", region_level=0)
         self.s_radiator = self.load_scenario("Scenario_Radiator.xlsx", region_level=0)
+        self.s_radiator_cost_investment = self.load_scenario("Scenario_Radiator_Cost_Investment.xlsx", region_level=0)
+        self.s_radiator_cost_labor = self.load_scenario("Scenario_Radiator_Cost_Labor.xlsx", region_level=0)
+        self.s_radiator_input_labor = self.load_scenario("Scenario_Radiator_Input_Labor.xlsx", region_level=0)
         self.s_cooling_penetration_rate = self.load_scenario("Scenario_Cooling_PenetrationRate.xlsx", region_level=0)
         self.s_cooling_technology_market_share = self.load_scenario("Scenario_CoolingTechnology_MarketShare.xlsx", region_level=0)
         self.s_cooling_technology_efficiency_class_market_share = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
         self.s_cooling_technology_availability = self.load_scenario("Scenario_CoolingTechnology_Availability.xlsx", region_level=0)
-        self.s_cooling_technology_investment_cost = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
-        self.s_cooling_technology_om_cost = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_OMCost.xlsx", region_level=0)
+        self.s_cooling_technology_cost_investment = self.load_scenario("Scenario_CoolingTechnology_Cost_Investment.xlsx", region_level=0)
+        self.s_cooling_technology_cost_om = self.load_scenario("Scenario_CoolingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_ventilation_penetration_rate = self.load_scenario("Scenario_Ventilation_PenetrationRate.xlsx", region_level=0)
         self.s_ventilation_technology_market_share = self.load_scenario("Scenario_VentilationTechnology_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_efficiency_class_market_share = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_availability = self.load_scenario("Scenario_VentilationTechnology_Availability.xlsx", region_level=0)
-        self.s_ventilation_technology_investment_cost = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
-        self.s_ventilation_technology_om_cost = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_OMCost.xlsx", region_level=0)
+        self.s_ventilation_technology_cost_investment = self.load_scenario("Scenario_VentilationTechnology_Cost_Investment.xlsx", region_level=0)
+        self.s_ventilation_technology_cost_om = self.load_scenario("Scenario_VentilationTechnology_Cost_OM.xlsx", region_level=0)
         self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
         self.s_useful_energy_demand_index_hot_water = self.load_scenario("Scenario_UsefulEnergyDemandIndex_HotWater.xlsx", region_level=0)
         self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
@@ -264,6 +276,9 @@ class BuildingScenario(RenderScenario):
         return self.building_num_total.get_item(rkey)/self.building_num_model.get_item(rkey)
 
     def setup_cost(self):
+        self.setup_building_component_cost()
+        self.setup_heating_technology_cost()
+        self.setup_radiator_cost()
         self.setup_cooling_technology_cost()
         self.setup_ventilation_technology_cost()
 
@@ -274,6 +289,18 @@ class BuildingScenario(RenderScenario):
     @staticmethod
     def calc_opex(energy_intensity: float, energy_price: float, om_cost: float):
         return energy_intensity * energy_price + om_cost
+
+    @timer()
+    def setup_building_component_cost(self):
+        ...
+
+    @timer()
+    def setup_heating_technology_cost(self):
+        ...
+
+    @timer()
+    def setup_radiator_cost(self):
+        ...
 
     @timer()
     def setup_cooling_technology_cost(self):
@@ -315,14 +342,14 @@ class BuildingScenario(RenderScenario):
                             rkey.year = year
                             if self.s_cooling_technology_availability.get_item(rkey):
                                 self.cooling_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
-                                    investment_cost=self.s_cooling_technology_investment_cost.get_item(rkey),
+                                    investment_cost=self.s_cooling_technology_cost_investment.get_item(rkey),
                                     lifetime=0.5 * (self.p_cooling_technology_lifetime_min.get_item(rkey) + self.p_cooling_technology_lifetime_max.get_item(rkey)),
                                     interest_rate=self.s_interest_rate.get_item(rkey)
                                 ))
                                 self.cooling_technology_capex.set_item(rkey=rkey, value=self.calc_opex(
                                     energy_intensity=1 / self.p_cooling_technology_efficiency.get_item(rkey),
                                     energy_price=get_energy_price(),
-                                    om_cost=self.s_cooling_technology_om_cost.get_item(rkey)
+                                    om_cost=self.s_cooling_technology_cost_om.get_item(rkey)
                                 ))
 
     @timer()
@@ -365,13 +392,13 @@ class BuildingScenario(RenderScenario):
                             rkey.year = year
                             if self.s_ventilation_technology_availability.get_item(rkey):
                                 self.ventilation_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
-                                    investment_cost=self.s_ventilation_technology_investment_cost.get_item(rkey),
+                                    investment_cost=self.s_ventilation_technology_cost_investment.get_item(rkey),
                                     lifetime=0.5 * (self.p_ventilation_technology_lifetime_min.get_item(rkey) + self.p_ventilation_technology_lifetime_max.get_item(rkey)),
                                     interest_rate=self.s_interest_rate.get_item(rkey)
                                 ))
                                 self.ventilation_technology_opex.set_item(rkey=rkey, value=self.calc_opex(
                                     energy_intensity=self.p_ventilation_technology_energy_intensity.get_item(rkey),
                                     energy_price=get_energy_price(),
-                                    om_cost=self.s_ventilation_technology_om_cost.get_item(rkey)
+                                    om_cost=self.s_ventilation_technology_cost_om.get_item(rkey)
                                 ))
 

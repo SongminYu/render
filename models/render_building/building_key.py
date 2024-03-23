@@ -13,7 +13,7 @@ class BuildingKey(RenderKey):
         id_subsector_agent: Optional[int] = None,
         id_energy_carrier: Optional[int] = None,
         year: Optional[int] = None,
-        id_action: Optional[int] = None,
+        id_building_action: Optional[int] = None,
         id_building_construction_period: Optional[int] = None,
         id_building_height: Optional[int] = None,
         id_building_location: Optional[int] = None,
@@ -25,6 +25,7 @@ class BuildingKey(RenderKey):
         id_orientation: Optional[int] = None,
         id_unit_user_type: Optional[int] = None,
         id_heating_system: Optional[int] = None,
+        id_heating_system_action: Optional[int] = None,
         id_heating_technology: Optional[int] = None,
         id_radiator: Optional[int] = None,
         id_cooling_technology: Optional[int] = None,
@@ -42,7 +43,7 @@ class BuildingKey(RenderKey):
             id_energy_carrier=id_energy_carrier,
             year=year
         )
-        self.id_action = id_action
+        self.id_building_action = id_building_action
         self.id_building_construction_period = id_building_construction_period
         self.id_building_height = id_building_height
         self.id_building_location = id_building_location
@@ -54,6 +55,7 @@ class BuildingKey(RenderKey):
         self.id_orientation = id_orientation
         self.id_unit_user_type = id_unit_user_type
         self.id_heating_system = id_heating_system
+        self.id_heating_system_action = id_heating_system_action
         self.id_heating_technology = id_heating_technology
         self.id_radiator = id_radiator
         self.id_cooling_technology = id_cooling_technology

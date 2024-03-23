@@ -56,6 +56,12 @@ class Building(Agent):
         )
 
         self.rkey.init_dimension(
+            dimension_name="id_radiator",
+            dimension_ids=self.scenario.radiators.keys(),
+            rdict=self.scenario.s_radiator
+        )
+
+        self.rkey.init_dimension(
             dimension_name="id_building_location",
             dimension_ids=self.scenario.building_locations.keys(),
             rdict=self.scenario.s_building_location
@@ -140,7 +146,6 @@ class Building(Agent):
     def init_building_heating_system(self):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
         self.heating_system.init_system_type()
-        self.heating_system.init_radiator_type()
         self.heating_system.init_supply_temperature()
         self.heating_system.init_heating_technology_main()
         self.heating_system.init_heating_technology_second()

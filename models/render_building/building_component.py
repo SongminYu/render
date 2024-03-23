@@ -38,7 +38,7 @@ class BuildingComponent:
         )
         self.installation_year = self.construction_year
         self.next_replace_year = self.construction_year + self.get_lifetime()
-        self.set_efficiency(action_year=self.construction_year, id_action=1)
+        self.set_efficiency(action_year=self.construction_year, id_building_action=1)
 
     def renovate(self, action_year: int):
         minimum_lifetime = self.scenario.p_building_component_minimum_lifetime.get_item(self.rkey)
@@ -46,14 +46,14 @@ class BuildingComponent:
         if action_year - self.installation_year >= minimum_lifetime:
             self.installation_year = action_year
             self.next_replace_year = action_year + self.get_lifetime()
-            self.set_efficiency(action_year=action_year, id_action=2)
+            self.set_efficiency(action_year=action_year, id_building_action=2)
             rkey = self.rkey.make_copy().set_id({"year": action_year})
             self.scenario.renovation_action_building.accumulate_item(rkey=rkey, value=1)
             self.scenario.renovation_action_component.accumulate_item(rkey=rkey, value=1)
 
-    def set_efficiency(self, action_year: int, id_action: int):
+    def set_efficiency(self, action_year: int, id_building_action: int):
         rkey = self.rkey.make_copy()
-        rkey.year, rkey.id_action = action_year, id_action
+        rkey.year, rkey.id_building_action = action_year, id_building_action
         d = {}
         for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
             rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class

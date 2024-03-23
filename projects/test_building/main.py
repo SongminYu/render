@@ -20,10 +20,10 @@ def get_config(project_name: str):
 
 def run_tool(cfg: "Config"):
     # concat_region_tables(cfg=cfg, file_name_prefix="AgentNumAgg")
-    find_id(cfg=cfg, id_name="id_scenario")
+    find_id(cfg=cfg, id_name="id_building_action")
 
 
 if __name__ == "__main__":
     config = get_config("test_building")
-    run_building_model(cfg=config)
-    # run_tool(cfg=config)
+    # run_building_model(cfg=config)
+    run_tool(cfg=config)

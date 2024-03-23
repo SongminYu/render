@@ -27,13 +27,6 @@ class HeatingSystem:
             rdict=self.scenario.s_heating_system
         )
 
-    def init_radiator_type(self):
-        self.rkey.init_dimension(
-            dimension_name="id_radiator",
-            dimension_ids=self.scenario.radiators.keys(),
-            rdict=self.scenario.s_radiator
-        )
-
     def init_supply_temperature(self):
         # questions:
         # 1. Do we consider the impact of supply temperature on the efficiency of heating technologies?
