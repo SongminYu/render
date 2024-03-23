@@ -40,7 +40,7 @@ def find_id(cfg: "Config", id_name: str):
         ]
 
     files = []
-    print(f'Following tables are relevant to {id_name} --> ')
+    print(f'Following tables are relevant to `{id_name}` --> ')
     for file_name in get_data_files():
         df = pd.read_excel(os.path.join(cfg.input_folder, file_name), engine='openpyxl')
         if id_name in list(df.columns):
