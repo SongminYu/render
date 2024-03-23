@@ -21,6 +21,13 @@ class RenderDict(TabDict):
         tdict_data: dict,
         region_level: Optional[int] = None
     ):
+        """
+        Taking Germany as example:
+        region_level = 0 --> NUTS0, Germany (id_region = 9)
+        region_level = 1 --> NUTS1, Baden-Württemberg (DE1, id_region = 901)
+        region_level = 2 --> NUTS2, Stuttgart (DE11, id_region = 90101)
+        region_level = 3 --> NUTS3, Stuttgart Stadtkreis (DE111, id_region = 9010101)
+        """
         super().__init__(
             tdict_type=tdict_type,
             key_cols=key_cols,
