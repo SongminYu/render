@@ -1,8 +1,10 @@
+import numpy as np
 import pandas as pd
 
 from models.render.render_dict import RenderDict
 from models.render.scenario import RenderScenario
 from models.render_building.building_key import BuildingKey
+from utils.decorators import timer
 
 
 class BuildingScenario(RenderScenario):
@@ -127,13 +129,16 @@ class BuildingScenario(RenderScenario):
         self.s_cooling_technology_efficiency_class_market_share = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
         self.s_cooling_technology_availability = self.load_scenario("Scenario_CoolingTechnology_Availability.xlsx", region_level=0)
         self.s_cooling_technology_investment_cost = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
+        self.s_cooling_technology_om_cost = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_OMCost.xlsx", region_level=0)
         self.s_ventilation_penetration_rate = self.load_scenario("Scenario_Ventilation_PenetrationRate.xlsx", region_level=0)
         self.s_ventilation_technology_market_share = self.load_scenario("Scenario_VentilationTechnology_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_efficiency_class_market_share = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_availability = self.load_scenario("Scenario_VentilationTechnology_Availability.xlsx", region_level=0)
         self.s_ventilation_technology_investment_cost = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_InvestmentCost.xlsx", region_level=0)
+        self.s_ventilation_technology_om_cost = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_OMCost.xlsx", region_level=0)
         self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
         self.s_useful_energy_demand_index_hot_water = self.load_scenario("Scenario_UsefulEnergyDemandIndex_HotWater.xlsx", region_level=0)
+        self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
         # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 
@@ -255,16 +260,118 @@ class BuildingScenario(RenderScenario):
                 })
         self.agent_params = pd.DataFrame(agent_params)
 
-        def agent_num_analysis():
-            # This function is used to calculate `agent_num` for memory demand analysis.
-            # `self.agent_num` needs to be collected.
-            self.agent_num = self.agent_params.groupby([
-                "id_region", "id_sector", "id_subsector", "id_building_type"
-            ], as_index=False)["id_subsector_agent"].count()
-            self.agent_num.rename(columns={'id_subsector_agent': 'agent_num'}, inplace=True)
-            self.agent_num["agent_min"] = self.building_num_min
-            self.agent_num["agent_max"] = self.building_num_max
-        agent_num_analysis()
-
     def get_building_num_scaling(self, rkey: "BuildingKey"):
         return self.building_num_total.get_item(rkey)/self.building_num_model.get_item(rkey)
+
+    def setup_cost(self):
+        self.setup_cooling_technology_cost()
+        self.setup_ventilation_technology_cost()
+
+    @staticmethod
+    def calc_capex(investment_cost: float, lifetime: float, interest_rate: float):
+        return investment_cost * interest_rate / (1 - (1 + interest_rate) ** (- lifetime))
+
+    @staticmethod
+    def calc_opex(energy_intensity: float, energy_price: float, om_cost: float):
+        return energy_intensity * energy_price + om_cost
+
+    @timer()
+    def setup_cooling_technology_cost(self):
+
+        def get_energy_price():
+            rkey.id_energy_carrier = self.r_cooling_technology_energy_carrier.get_item(rkey)[0]
+            return self.s_final_energy_carrier_price.get_item(rkey)
+
+        self.cooling_technology_capex = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_cooling_technology",
+            "id_cooling_technology_efficiency_class",
+            "year"
+        ], region_level=0)
+
+        self.cooling_technology_opex = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_cooling_technology",
+            "id_cooling_technology_efficiency_class",
+            "year"
+        ], region_level=0)
+
+        rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
+        for id_sector in self.sectors.keys():
+            rkey.id_sector = id_sector
+            for id_subsector in self.r_sector_subsector.get_item(rkey):
+                rkey.id_subsector = id_subsector
+                for id_cooling_technology in self.cooling_technologies.keys():
+                    rkey.id_cooling_technology = id_cooling_technology
+                    for id_cooling_technology_efficiency_class in self.r_cooling_technology_efficiency_class.get_item(rkey):
+                        rkey.id_cooling_technology_efficiency_class = id_cooling_technology_efficiency_class
+                        for year in range(self.start_year, self.end_year + 1):
+                            rkey.year = year
+                            if self.s_cooling_technology_availability.get_item(rkey):
+                                self.cooling_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
+                                    investment_cost=self.s_cooling_technology_investment_cost.get_item(rkey),
+                                    lifetime=0.5 * (self.p_cooling_technology_lifetime_min.get_item(rkey) + self.p_cooling_technology_lifetime_max.get_item(rkey)),
+                                    interest_rate=self.s_interest_rate.get_item(rkey)
+                                ))
+                                self.cooling_technology_capex.set_item(rkey=rkey, value=self.calc_opex(
+                                    energy_intensity=1 / self.p_cooling_technology_efficiency.get_item(rkey),
+                                    energy_price=get_energy_price(),
+                                    om_cost=self.s_cooling_technology_om_cost.get_item(rkey)
+                                ))
+
+    @timer()
+    def setup_ventilation_technology_cost(self):
+
+        def get_energy_price():
+            rkey.id_energy_carrier = self.r_ventilation_technology_energy_carrier.get_item(rkey)[0]
+            return self.s_final_energy_carrier_price.get_item(rkey)
+
+        self.ventilation_technology_capex = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_ventilation_technology",
+            "id_ventilation_technology_efficiency_class",
+            "year"
+        ], region_level=0)
+
+        self.ventilation_technology_opex = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_ventilation_technology",
+            "id_ventilation_technology_efficiency_class",
+            "year"
+        ], region_level=0)
+
+        rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
+        for id_sector in self.sectors.keys():
+            rkey.id_sector = id_sector
+            for id_subsector in self.r_sector_subsector.get_item(rkey):
+                rkey.id_subsector = id_subsector
+                for id_ventilation_technology in self.ventilation_technologies.keys():
+                    rkey.id_ventilation_technology = id_ventilation_technology
+                    for id_ventilation_technology_efficiency_class in self.r_ventilation_technology_efficiency_class.get_item(rkey):
+                        rkey.id_ventilation_technology_efficiency_class = id_ventilation_technology_efficiency_class
+                        for year in range(self.start_year, self.end_year + 1):
+                            rkey.year = year
+                            if self.s_ventilation_technology_availability.get_item(rkey):
+                                self.ventilation_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
+                                    investment_cost=self.s_ventilation_technology_investment_cost.get_item(rkey),
+                                    lifetime=0.5 * (self.p_ventilation_technology_lifetime_min.get_item(rkey) + self.p_ventilation_technology_lifetime_max.get_item(rkey)),
+                                    interest_rate=self.s_interest_rate.get_item(rkey)
+                                ))
+                                self.ventilation_technology_opex.set_item(rkey=rkey, value=self.calc_opex(
+                                    energy_intensity=self.p_ventilation_technology_energy_intensity.get_item(rkey),
+                                    energy_price=get_energy_price(),
+                                    om_cost=self.s_ventilation_technology_om_cost.get_item(rkey)
+                                ))
+

@@ -18,3 +18,14 @@ def load_timer():
     return decorator
 
 
+def timer():
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            result = func(*args, **kwargs)
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            logger.info(f"{elapsed_time:.2f}s --> {func.__name__}")
+            return result
+        return wrapper
+    return decorator

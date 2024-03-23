@@ -43,8 +43,10 @@ class RenderDict(TabDict):
         return keys
 
     @classmethod
-    def create_empty_rdict(cls, key_cols: List[str]):
-        return cls.create_empty_data_tdict(key_cols)
+    def create_empty_rdict(cls, key_cols: List[str], region_level: int = 3):
+        rdict = cls.create_empty_data_tdict(key_cols)
+        rdict.region_level = region_level
+        return rdict
 
     def _tkey2tuple_with_region_level_check(self, rkey: "RenderKey") -> tuple:
 

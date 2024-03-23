@@ -107,6 +107,7 @@ class RenderScenario(Scenario):
             "id_energy_carrier",
             "year"
         ])
+        self.s_final_energy_carrier_price.region_level = 0
         markup = self.load_dataframe("Scenario_EnergyCarrier_Price_MarkUp.xlsx")
         # markup table has the most detailed index columns and can cover the possible rkeys in other tables:
         # wholesale, tax_rate, and co2_emission

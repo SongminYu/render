@@ -23,6 +23,7 @@ class BuildingModel(RenderModel):
         self.scenario.load_scenario_data()
         self.scenario.setup_results_containers()
         self.scenario.setup_agent_params()
+        self.scenario.setup_cost()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
 
