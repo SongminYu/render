@@ -21,6 +21,16 @@ class BuildingDataCollector(RenderDataCollector):
         # define table names (move constants.py here)
         ...
 
+    def collect_scenario_cost(self):
+        self.save_dataframe(df=self.scenario.building_component_capex.to_dataframe(), df_name=f"BuildingComponentCapex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.heating_technology_capex.to_dataframe(), df_name=f"HeatingTechnologyCapex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.heating_technology_opex.to_dataframe(), df_name=f"HeatingTechnologyOpex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.radiator_capex.to_dataframe(), df_name=f"RadiatorCapex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.cooling_technology_capex.to_dataframe(), df_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.cooling_technology_opex.to_dataframe(), df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
+        self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
+
     def collect_building_floor_area(self, buildings: "AgentList[Building]"):
         for building in buildings:
             self.scenario.building_floor_area.accumulate_item(
@@ -32,11 +42,7 @@ class BuildingDataCollector(RenderDataCollector):
     def export_building_floor_area(self):
         df = self.scenario.building_floor_area.to_dataframe()
         df.insert(self.get_unit_position(df), "unit", "m2")
-        df.to_csv(
-            os.path.join(self.config.output_folder,
-                         f"floor_area_R{self.scenario.id_region}.csv"),
-            index=False
-        )
+        self.save_dataframe(df=df, df_name=f"floor_area_R{self.scenario.id_region}")
 
     def collect_building_profile(self, buildings: "AgentList[Building]"):
         for building in tqdm(buildings, desc="Collecting buildings_profile --> "):
@@ -65,10 +71,7 @@ class BuildingDataCollector(RenderDataCollector):
         unit_values = df['profile_name'].apply(match_unit)
         unit_position = df.columns.get_loc("profile_name") + 1
         df.insert(unit_position, "unit", unit_values)
-        df.to_csv(
-            os.path.join(self.config.output_folder, f"building_profile_R{self.scenario.id_region}.csv"),
-            index=False
-        )
+        self.save_dataframe(df=df, df_name=f"building_profile_R{self.scenario.id_region}")
 
     def collect_building_stock(self, buildings: "AgentList[Building]"):
         building_component_name = {
@@ -137,13 +140,7 @@ class BuildingDataCollector(RenderDataCollector):
             self.scenario.building_stock.append(building_dict)
 
     def export_building_stock(self):
-        pd.DataFrame(self.scenario.building_stock).to_csv(
-            os.path.join(
-                self.config.output_folder,
-                f"building_stock_R{self.scenario.id_region}.csv"
-            ),
-            index=False
-        )
+        self.save_dataframe(df=pd.DataFrame(self.scenario.building_stock), df_name=f"building_stock_R{self.scenario.id_region}")
 
     def collect_building_final_energy_demand(self, buildings: "AgentList[Building]"):
         for building in buildings:
@@ -157,10 +154,7 @@ class BuildingDataCollector(RenderDataCollector):
     def export_building_final_energy_demand(self):
         df = self.scenario.final_energy_demand.to_dataframe()
         df.insert(self.get_unit_position(df), "unit", "kWh")
-        df.to_csv(
-            os.path.join(self.config.output_folder, f"final_energy_demand_R{self.scenario.id_region}.csv"),
-            index=False
-        )
+        self.save_dataframe(df=df, df_name=f"final_energy_demand_R{self.scenario.id_region}")
 
     def collect_building_efficiency_class_count(self, buildings: "AgentList[Building]"):
         for building in buildings:
@@ -172,25 +166,13 @@ class BuildingDataCollector(RenderDataCollector):
     def export_building_efficiency_class_count(self):
         df = self.scenario.building_efficiency_class_count.to_dataframe()
         df.insert(self.get_unit_position(df), "unit", "count")
-        df.to_csv(
-            os.path.join(
-                self.config.output_folder,
-                f"building_efficiency_class_count_R{self.scenario.id_region}.csv"
-            ),
-            index=False
-        )
+        self.save_dataframe(df=df, df_name=f"building_efficiency_class_count_R{self.scenario.id_region}")
 
     def export_renovation_rate(self):
 
         def export_to_csv(df: pd.DataFrame, file_name: str):
             df.insert(self.get_unit_position(df), "unit", "count")
-            df.to_csv(
-                os.path.join(
-                    self.config.output_folder,
-                    f"{file_name}_R{self.scenario.id_region}.csv"
-                ),
-                index=False
-            )
+            self.save_dataframe(df=df, df_name=f"{file_name}_R{self.scenario.id_region}")
 
         def get_construction_period_percentage(row_rkey: "BuildingKey"):
             df = self.scenario.load_dataframe("Scenario_Building_ConstructionPeriod.xlsx")

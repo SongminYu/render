@@ -11,6 +11,7 @@ from models.render_building.building_unit import Unit
 from models.render_building.tech_cooling import CoolingSystem
 from models.render_building.tech_heating import HeatingSystem
 from models.render_building.tech_ventilation import VentilationSystem
+from models.render_building.tech_radiator import Radiator
 from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
@@ -53,12 +54,6 @@ class Building(Agent):
             dimension_name="id_building_construction_period",
             dimension_ids=self.scenario.building_construction_periods.keys(),
             rdict=self.scenario.s_building_construction_period
-        )
-
-        self.rkey.init_dimension(
-            dimension_name="id_radiator",
-            dimension_ids=self.scenario.radiators.keys(),
-            rdict=self.scenario.s_radiator
         )
 
         self.rkey.init_dimension(
@@ -120,6 +115,11 @@ class Building(Agent):
             )
             component.construct()
             self.building_components.append(component)
+
+    def init_radiator(self):
+        self.radiator = Radiator(self.rkey.make_copy(), self.scenario)
+        self.radiator.init_option()
+        self.radiator.init_installation_year()
 
     def init_building_cooling_system(self):
         self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)

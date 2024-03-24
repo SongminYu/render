@@ -23,6 +23,7 @@ class BuildingEnvironment(Environment):
             building.init_building_profiles()
             building.init_building_size()
             building.init_building_components_construction()
+            building.init_radiator()
             building.init_building_cooling_system()
             building.init_building_heating_system()
             building.init_building_ventilation_system()
@@ -42,6 +43,9 @@ class BuildingEnvironment(Environment):
             for component in building.building_components:
                 component.rkey.year += 1
 
+        def update_radiator_year():
+            building.radiator.rkey.year += 1
+
         def update_heating_system_year():
             building.heating_system.rkey.year += 1
             building.heating_system.heating_technology_main.rkey.year += 1
@@ -57,6 +61,7 @@ class BuildingEnvironment(Environment):
             building.rkey.year += 1
             update_units_year()
             update_components_year()
+            update_radiator_year()
             update_heating_system_year()
             update_cooling_system_year()
             update_ventilation_system_year()
