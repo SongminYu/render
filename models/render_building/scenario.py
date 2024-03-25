@@ -474,7 +474,7 @@ class BuildingScenario(RenderScenario):
                                     lifetime=0.5 * (self.p_cooling_technology_lifetime_min.get_item(rkey) + self.p_cooling_technology_lifetime_max.get_item(rkey)),
                                     interest_rate=self.s_interest_rate.get_item(rkey)
                                 ))
-                                self.cooling_technology_capex.set_item(rkey=rkey, value=self.calc_opex(
+                                self.cooling_technology_opex.set_item(rkey=rkey, value=self.calc_opex(
                                     energy_intensity=1 / self.p_cooling_technology_efficiency.get_item(rkey),
                                     energy_price=get_energy_price(),
                                     om_cost=self.s_cooling_technology_cost_om.get_item(rkey)
