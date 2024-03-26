@@ -1,20 +1,19 @@
 
+# RenderDash
 
-framework: PlotlyDash
+This document contains the development plan of the `RenderDash` tool. 
 
-some points to think about when designing...
+### Mar. 27th, 2024
 
-- template module in the future
-- possibility to download the figure and data as excel files
+- `__init__.py` files can be removed
+- `building_stock_ids.py` can be moved into `building_stock_dash.py`?
+- ids are linked, e.g., when `id_sector = 6` is unselected, `id_subsector = 61` should also be removed. See if there is a flexible way to have such relation considered. If not, we can postpone this demand.
+- energy intensity redefined in the new building stock table
+- add tables (end-use v.s. energy carrier) on the dashboard: model results and calibration targets (Sirin is updating the target value table)
 
 
-Todos...
+### Later stage
 
-from the building stock table, 
-for a combination of `id_scenario`, `id_region`, `id_sector`, `id_subsector`, `year` (multiple choice),
-we can have a matrix for the final energy demand
- - row: energy carrier
- - column: end-use, incl. appliance electricity, space cooling, hot water, space heating
-On the dashboard, 
- - we can visualize it as a stack bar chart: x-axis as end-use, y-axis as final energy consumption
- - we can have a table showing the matrix
+- geographic visualization
+- GHSL data processing to distribute NUTS3 and location results to 100m x 100m grid cell (hectare) level.
+
