@@ -146,7 +146,6 @@ class Building(Agent):
     def init_building_heating_system(self):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
         self.heating_system.init_system_type()
-        self.heating_system.init_supply_temperature()
         self.heating_system.init_heating_technology_main()
         self.heating_system.init_heating_technology_second()
         self.heating_system.technologies = [

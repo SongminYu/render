@@ -25,8 +25,8 @@ class BuildingModel(RenderModel):
         self.scenario.setup_agent_params()
         self.scenario.setup_cost_data()
         self.data_collector.collect_scenario_cost()
-        # self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
-        # self.environment.setup_buildings(self.buildings)
+        self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
+        self.environment.setup_buildings(self.buildings)
 
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)
@@ -44,17 +44,16 @@ class BuildingModel(RenderModel):
         # self.data_collector.export_renovation_rate()
 
     def run(self):
-        ...
-        # for year in range(self.scenario.start_year, self.scenario.end_year + 1):
-        #     self.collect_building_info()
-        #     self.environment.update_buildings_year(self.buildings)
-        #     self.environment.update_buildings_profile_appliance(self.buildings)
-        #     self.environment.update_buildings_technology_cooling(self.buildings)
-        #     self.environment.update_buildings_profile_hot_water(self.buildings)
-        #     self.environment.update_buildings_technology_heating(self.buildings)
-        #     self.environment.update_buildings_technology_ventilation(self.buildings)
-        #     self.environment.update_buildings_renovation_lifecycle(self.buildings)
-        #     self.environment.update_buildings_renovation_mandatory(self.buildings)
-        #     self.environment.update_buildings_demolition(self.buildings)
-        #     self.environment.update_buildings_construction(self.buildings)
-        # self.export_building_info()
+        for year in range(self.scenario.start_year, self.scenario.end_year + 1):
+            self.collect_building_info()
+            self.environment.update_buildings_year(self.buildings)
+            self.environment.update_buildings_profile_appliance(self.buildings)
+            self.environment.update_buildings_technology_cooling(self.buildings)
+            self.environment.update_buildings_profile_hot_water(self.buildings)
+            self.environment.update_buildings_technology_heating(self.buildings)
+            self.environment.update_buildings_technology_ventilation(self.buildings)
+            self.environment.update_buildings_renovation_lifecycle(self.buildings)
+            self.environment.update_buildings_renovation_mandatory(self.buildings)
+            self.environment.update_buildings_demolition(self.buildings)
+            self.environment.update_buildings_construction(self.buildings)
+        self.export_building_info()
