@@ -49,7 +49,8 @@ class BuildingEnvironment(Environment):
         def update_heating_system_year():
             building.heating_system.rkey.year += 1
             building.heating_system.heating_technology_main.rkey.year += 1
-            building.heating_system.heating_technology_second.rkey.year += 1
+            if building.heating_system.heating_technology_second is not None:
+                building.heating_system.heating_technology_second.rkey.year += 1
 
         def update_cooling_system_year():
             building.cooling_system.rkey.year += 1
