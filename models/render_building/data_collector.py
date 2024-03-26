@@ -111,7 +111,7 @@ class BuildingDataCollector(RenderDataCollector):
                 if heating_technology is not None:
                     building_dict[f"{ht_name}_id_heating_technology"] = heating_technology.rkey.id_heating_technology
                     building_dict[f"{ht_name}_supply_temperature_space_heating"] = heating_technology.supply_temperature_space_heating
-                    building_dict[f"{ht_name}_supply_temperature_hot_water"] = heating_technology.rkey.supply_temperature_hot_water
+                    building_dict[f"{ht_name}_supply_temperature_hot_water"] = heating_technology.supply_temperature_hot_water
                     building_dict[f"{ht_name}_installation_year"] = heating_technology.installation_year
                     building_dict[f"{ht_name}_next_replace_year"] = heating_technology.next_replace_year
                     building_dict[f"{ht_name}_space_heating_contribution"] = heating_technology.space_heating_contribution

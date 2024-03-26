@@ -24,11 +24,11 @@ class BuildingEnvironment(Environment):
             building.init_building_size()
             building.init_building_components_construction()
             building.init_radiator()
+            building.init_building_renovation_history()
+            building.init_building_heating_cooling_demand()
             building.init_building_cooling_system()
             building.init_building_heating_system()
             building.init_building_ventilation_system()
-            building.init_building_renovation_history()
-            building.init_building_heating_cooling_demand()
             building.init_final_energy_demand()
 
     @staticmethod

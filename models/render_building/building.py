@@ -119,6 +119,7 @@ class Building(Agent):
     def init_radiator(self):
         self.radiator = Radiator(self.rkey.make_copy(), self.scenario)
         self.radiator.init_option()
+        self.rkey.id_radiator = self.radiator.rkey.id_radiator
         self.radiator.init_installation_year()
 
     def init_building_cooling_system(self):
