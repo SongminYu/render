@@ -15,7 +15,6 @@ class HeatingSystem:
     def __init__(self, rkey: "BuildingKey", scenario: "BuildingScenario"):
         self.rkey = rkey
         self.scenario = scenario
-        self.supply_temperature = scenario
         self.heating_technology_main: Optional["HeatingTechnology"] = None
         self.heating_technology_second: Optional["HeatingTechnology"] = None
         self.technologies = []
@@ -27,19 +26,10 @@ class HeatingSystem:
             rdict=self.scenario.s_heating_system
         )
 
-    def init_supply_temperature(self):
-        # questions:
-        # 1. Do we consider the impact of supply temperature on the efficiency of heating technologies?
-        # 2. Are the supply-temperature different for space heating and hot water?
-        # 3. If so, are the efficiency of heating technology different for space heating and hot water?
-
-        # analysis:
-        # 1. We can export the demand at different supply temperature.
-        ...
-
     def init_heating_technology_main(self):
         self.heating_technology_main = HeatingTechnology(self.rkey.make_copy(), self.scenario)
         self.heating_technology_main.init_option()
+        self.heating_technology_main.init_supply_temperature()
         self.heating_technology_main.init_installation_year()
         self.heating_technology_main.update_energy_intensity()
 
@@ -58,6 +48,7 @@ class HeatingSystem:
             rkey = self.rkey.make_copy().set_id({"id_heating_technology": dict_sample(second_technologies)})
             # init second heating technology
             self.heating_technology_second = HeatingTechnology(rkey, self.scenario)
+            self.heating_technology_second.init_supply_temperature()
             self.heating_technology_second.init_installation_year()
             self.heating_technology_second.space_heating_contribution = self.scenario.p_heating_technology_second_contribution_space_heating.get_item(rkey)
             self.heating_technology_second.hot_water_contribution = self.scenario.p_heating_technology_second_contribution_hot_water.get_item(rkey)
@@ -83,6 +74,8 @@ class HeatingTechnology:
     def __init__(self, rkey: "BuildingKey", scenario: "BuildingScenario"):
         self.rkey = rkey
         self.scenario = scenario
+        self.supply_temperature_space_heating = 0
+        self.supply_temperature_hot_water = 0
         self.space_heating_contribution = 1
         self.hot_water_contribution = 1
         self.installation_year = 0
@@ -98,6 +91,10 @@ class HeatingTechnology:
                 rdict=self.scenario.s_heating_technology_main
             )
 
+    def init_supply_temperature(self):
+        self.supply_temperature_space_heating = self.scenario.p_building_supply_temperature_space_heating.get_item(self.rkey)
+        self.supply_temperature_hot_water = self.scenario.p_building_supply_temperature_hot_water.get_item(self.rkey)
+
     def init_installation_year(self):
         lifetime = self.get_lifetime()
         age = random.randint(0, lifetime)
@@ -111,6 +108,12 @@ class HeatingTechnology:
         )
 
     def update_energy_intensity(self):
+
+        def efficiency_adjustment_factor(supply_temperature):
+            adjustment_parameter = self.scenario.p_heating_technology_supply_temperature_efficiency_adjustment.get_item(self.rkey)
+            adjustment_factor = ...  # TODO: depending on supply_temperature
+            return adjustment_factor
+
         self.space_heating_energy_intensities = []
         self.hot_water_energy_intensities = []
         for id_energy_carrier in self.scenario.r_heating_technology_energy_carrier.get_item(self.rkey):
@@ -118,10 +121,12 @@ class HeatingTechnology:
             self.space_heating_energy_intensities.append(EnergyIntensity(
                 id_end_use=3,
                 id_energy_carrier=rkey.id_energy_carrier,
+                # value=self.space_heating_contribution * (1 / (self.scenario.s_heating_technology_efficiency.get_item(rkey) * efficiency_adjustment_factor(self.supply_temperature_space_heating)))
                 value=self.space_heating_contribution * (1 / self.scenario.s_heating_technology_efficiency.get_item(rkey))
             ))
             self.hot_water_energy_intensities.append(EnergyIntensity(
                 id_end_use=4,
                 id_energy_carrier=rkey.id_energy_carrier,
+                # value=self.hot_water_contribution * (1 / (self.scenario.s_heating_technology_efficiency.get_item(rkey) * efficiency_adjustment_factor(self.supply_temperature_hot_water)))
                 value=self.hot_water_contribution * (1 / self.scenario.s_heating_technology_efficiency.get_item(rkey))
             ))

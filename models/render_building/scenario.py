@@ -76,7 +76,8 @@ class BuildingScenario(RenderScenario):
         self.p_building_height_max = self.load_param("Parameter_Building_Height.xlsx", col="max")
         self.p_building_unit_number_min = self.load_param("Parameter_Building_UnitNumber.xlsx", col="min")
         self.p_building_unit_number_max = self.load_param("Parameter_Building_UnitNumber.xlsx", col="max")
-        self.p_building_supply_temperature = self.load_param("Parameter_Building_SupplyTemperature.xlsx")
+        self.p_building_supply_temperature_space_heating = self.load_param("Parameter_Building_SupplyTemperature.xlsx", col="space_heating")
+        self.p_building_supply_temperature_hot_water = self.load_param("Parameter_Building_SupplyTemperature.xlsx", col="hot_water")
         self.p_building_construction_year_min = self.load_param("Parameter_Building_ConstructionYear.xlsx", col="min")
         self.p_building_construction_year_max = self.load_param("Parameter_Building_ConstructionYear.xlsx", col="max")
         self.p_building_component_minimum_lifetime = self.load_param("Parameter_BuildingComponent_MinimumLifetime.xlsx")
@@ -97,6 +98,7 @@ class BuildingScenario(RenderScenario):
         self.p_heating_technology_lifetime_max = self.load_param("Parameter_HeatingTechnology_Lifetime.xlsx", col="max")
         self.p_heating_technology_second_contribution_space_heating = self.load_param("Parameter_HeatingTechnology_Second_Contribution.xlsx", col="space_heating")
         self.p_heating_technology_second_contribution_hot_water = self.load_param("Parameter_HeatingTechnology_Second_Contribution.xlsx", col="hot_water")
+        self.p_heating_technology_supply_temperature_efficiency_adjustment = self.load_param("Parameter_HeatingTechnology_SupplyTemperatureEfficiencyAdjustment.xlsx")
         self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
         self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
         self.p_cooling_technology_efficiency = self.load_param("Parameter_CoolingTechnology_EfficiencyCoefficient.xlsx")
@@ -320,7 +322,7 @@ class BuildingScenario(RenderScenario):
             "id_building_component_option_efficiency_class",
             "id_building_action",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/m2 (component area)
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():
@@ -366,7 +368,7 @@ class BuildingScenario(RenderScenario):
             "id_heating_technology",
             "id_heating_system_action",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/kW
 
         self.heating_technology_opex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -376,7 +378,7 @@ class BuildingScenario(RenderScenario):
             "id_heating_technology",
             "id_heating_system_action",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/kWh
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():
@@ -409,7 +411,7 @@ class BuildingScenario(RenderScenario):
             "id_radiator",
             "id_building_action",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/m2 (living area)
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():
@@ -445,7 +447,7 @@ class BuildingScenario(RenderScenario):
             "id_cooling_technology",
             "id_cooling_technology_efficiency_class",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/kW
 
         self.cooling_technology_opex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -455,7 +457,7 @@ class BuildingScenario(RenderScenario):
             "id_cooling_technology",
             "id_cooling_technology_efficiency_class",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/kWh
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():
@@ -495,7 +497,7 @@ class BuildingScenario(RenderScenario):
             "id_ventilation_technology",
             "id_ventilation_technology_efficiency_class",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/m2 (living area)
 
         self.ventilation_technology_opex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -505,7 +507,7 @@ class BuildingScenario(RenderScenario):
             "id_ventilation_technology",
             "id_ventilation_technology_efficiency_class",
             "year"
-        ], region_level=0)
+        ], region_level=0)  # unit: euro/m2-year (living area)
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():
