@@ -5,11 +5,15 @@ This document contains the development plan of the `RenderDash` tool.
 
 ### Mar. 27th, 2024
 
-- `__init__.py` files can be removed
-- `building_stock_ids.py` can be moved into `building_stock_dash.py`?
-- ids are linked, e.g., when `id_sector = 6` is unselected, `id_subsector = 61` should also be removed. See if there is a flexible way to have such relation considered. If not, we can postpone this demand.
-- energy intensity redefined in the new building stock table
-- add tables (end-use v.s. energy carrier) on the dashboard: model results and calibration targets (Sirin is updating the target value table)
+- [ ] `__init__.py` files can be removed
+- [ ] `building_stock_ids.py` can be moved into `building_stock_dash.py`?
+- [x] ids are linked, e.g., when `id_sector = 6` is unselected, `id_subsector = 61` should also be removed. See if there is a flexible way to have such relation considered. If not, we can postpone this demand.
+- [x] energy intensity redefined in the new building stock table
+- [ ] add tables (end-use v.s. energy carrier) on the dashboard: 
+  - model results
+  - calibration targets (Sirin is updating the target value table)
+  - difference in absolute number
+  - difference in percentage
 
 
 ### Later stage
