@@ -13,7 +13,7 @@ def run_building_model(cfg: "Config", cores: Optional[int] = None):
         model_cls=BuildingModel,
         scenario_cls=BuildingScenario
     )
-    if cores is None:
+    if cores is None or cores == 1:
         simulator.run()
     else:
         simulator.run_parallel(cores=cores)
