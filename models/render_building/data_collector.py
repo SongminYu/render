@@ -92,10 +92,8 @@ class BuildingDataCollector(RenderDataCollector):
             # collect building components
             for building_component in building.building_components:
                 component_name = building_component_name[building_component.rkey.id_building_component]
-                building_dict[
-                    f"{component_name}_id_component_option"] = building_component.rkey.id_building_component_option
-                building_dict[
-                    f"{component_name}_id_efficiency_class"] = building_component.rkey.id_building_component_option_efficiency_class
+                building_dict[f"{component_name}_id_component_option"] = building_component.rkey.id_building_component_option
+                building_dict[f"{component_name}_id_efficiency_class"] = building_component.rkey.id_building_component_option_efficiency_class
                 for component_key, component_value in building_component.__dict__.items():
                     if component_value is not None:
                         if isinstance(component_value, int) or isinstance(component_value, float):
@@ -109,35 +107,54 @@ class BuildingDataCollector(RenderDataCollector):
                 ["second", building.heating_system.heating_technology_second],
             ]:
                 if heating_technology is not None:
-                    building_dict[f"{ht_name}_id_heating_technology"] = heating_technology.rkey.id_heating_technology
-                    building_dict[f"{ht_name}_supply_temperature_space_heating"] = heating_technology.supply_temperature_space_heating
-                    building_dict[f"{ht_name}_supply_temperature_hot_water"] = heating_technology.supply_temperature_hot_water
-                    building_dict[f"{ht_name}_installation_year"] = heating_technology.installation_year
-                    building_dict[f"{ht_name}_next_replace_year"] = heating_technology.next_replace_year
-                    building_dict[f"{ht_name}_space_heating_contribution"] = heating_technology.space_heating_contribution
-                    building_dict[f"{ht_name}_hot_water_contribution"] = heating_technology.hot_water_contribution
-                    for end_use, energy_intensities in [
-                        ["space_heating", heating_technology.space_heating_energy_intensities],
-                        ["hot_water", heating_technology.hot_water_energy_intensities],
+                    building_dict[f"heating_system_{ht_name}_id_heating_technology"] = heating_technology.rkey.id_heating_technology
+                    building_dict[f"heating_system_{ht_name}_supply_temperature_space_heating"] = heating_technology.supply_temperature_space_heating
+                    building_dict[f"heating_system_{ht_name}_supply_temperature_hot_water"] = heating_technology.supply_temperature_hot_water
+                    building_dict[f"heating_system_{ht_name}_installation_year"] = heating_technology.installation_year
+                    building_dict[f"heating_system_{ht_name}_next_replace_year"] = heating_technology.next_replace_year
+                    building_dict[f"heating_system_{ht_name}_space_heating_contribution"] = heating_technology.space_heating_contribution
+                    building_dict[f"heating_system_{ht_name}_hot_water_contribution"] = heating_technology.hot_water_contribution
+                    for end_use, end_use_useful_demand, energy_intensities in [
+                        ["space_heating", building.heating_demand, heating_technology.space_heating_energy_intensities],
+                        ["hot_water", building.hot_water_demand, heating_technology.hot_water_energy_intensities],
                     ]:
                         count = 1
                         for energy_intensity in energy_intensities:
-                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_id_energy_carrier"] = energy_intensity.id_energy_carrier
-                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_value"] = energy_intensity.value
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_id_energy_carrier"] = energy_intensity.id_energy_carrier
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_intensity"] = energy_intensity.value
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_consumption"] = energy_intensity.value * end_use_useful_demand
                             count += 1
                         if len(energy_intensities) == 1:
-                            building_dict[f"{ht_name}_{end_use}_energy_intensity_2_id_energy_carrier"] = None
-                            building_dict[f"{ht_name}_{end_use}_energy_intensity_2_value"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_id_energy_carrier"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_intensity"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_consumption"] = None
                 else:
-                    building_dict[f"{ht_name}_id_heating_technology"] = None
-                    building_dict[f"{ht_name}_installation_year"] = None
-                    building_dict[f"{ht_name}_next_replace_year"] = None
-                    building_dict[f"{ht_name}_space_heating_contribution"] = None
-                    building_dict[f"{ht_name}_hot_water_contribution"] = None
+                    building_dict[f"heating_system_{ht_name}_id_heating_technology"] = None
+                    building_dict[f"heating_system_{ht_name}_supply_temperature_space_heating"] = None
+                    building_dict[f"heating_system_{ht_name}_supply_temperature_hot_water"] = None
+                    building_dict[f"heating_system_{ht_name}_installation_year"] = None
+                    building_dict[f"heating_system_{ht_name}_next_replace_year"] = None
+                    building_dict[f"heating_system_{ht_name}_space_heating_contribution"] = None
+                    building_dict[f"heating_system_{ht_name}_hot_water_contribution"] = None
                     for end_use in ["space_heating", "hot_water"]:
                         for count in [1, 2]:
-                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_id_energy_carrier"] = None
-                            building_dict[f"{ht_name}_{end_use}_energy_intensity_{count}_value"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_id_energy_carrier"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_intensity"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_consumption"] = None
+            # collect building cooling system
+            building_dict[f"cooling_system_id_cooling_technology"] = building.cooling_system.rkey.id_cooling_technology
+            building_dict[f"cooling_system_installation_year"] = building.cooling_system.installation_year
+            building_dict[f"cooling_system_next_replace_year"] = building.cooling_system.next_replace_year
+            building_dict[f"cooling_system_id_energy_carrier"] = building.cooling_system.energy_intensity.id_energy_carrier
+            building_dict[f"cooling_system_energy_intensity"] = building.cooling_system.energy_intensity.value
+            building_dict[f"cooling_system_energy_consumption"] = building.cooling_system.energy_intensity.value * building.cooling_demand
+            # collection building ventilation system
+            building_dict[f"ventilation_system_id_ventilation_technology"] = building.ventilation_system.rkey.id_ventilation_technology
+            building_dict[f"ventilation_system_installation_year"] = building.ventilation_system.installation_year
+            building_dict[f"ventilation_system_next_replace_year"] = building.ventilation_system.next_replace_year
+            building_dict[f"ventilation_system_id_energy_carrier"] = building.ventilation_system.energy_intensity.id_energy_carrier
+            building_dict[f"ventilation_system_energy_intensity"] = building.ventilation_system.energy_intensity.value
+            building_dict[f"ventilation_system_energy_consumption"] = building.ventilation_system.energy_intensity.value * building.total_living_area
             # save the building dict
             self.scenario.building_stock.append(building_dict)
 
