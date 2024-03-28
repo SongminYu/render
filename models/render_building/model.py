@@ -27,7 +27,7 @@ class BuildingModel(RenderModel):
         # self.data_collector.collect_scenario_cost()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
-        self.collect_heating_technology_main_initial_adoption()
+        # self.collect_heating_technology_main_initial_adoption()
 
     def collect_heating_technology_main_initial_adoption(self):
         for building in self.buildings:
