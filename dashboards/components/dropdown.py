@@ -11,7 +11,7 @@ def render(app: Dash, data: pd.DataFrame, id_dropdown, id_options, id_select_all
         Output(id_dropdown, "value"),
         Input(id_select_all_button, "n_clicks"),
     )
-    def select_all_years(_: int) -> list[str]:
+    def select_all(_: int) -> list[str]:
         return unique_options
 
     dropdown = html.Div(children=[dcc.Dropdown(id=id_dropdown,
