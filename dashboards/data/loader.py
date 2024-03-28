@@ -24,61 +24,58 @@ class DataSchema_Building_Stock:
     ID_BUILDING = "id_building"
     ID_BUILDING_CONSTRUCTION_PERIOD = "id_building_construction_period"
 
+    END_USE = 'end_use'
+
     APPLIANCE_ELECTRICITY_DEMAND = "appliance_electricity_demand"
     COOLING_DEMAND = "cooling_demand"
 
-    MAIN_EC1_HEATING_DEMAND_CONSUMPTION = "main_ec1_heating_demand_consumption"
-    MAIN_EC2_HEATING_DEMAND_CONSUMPTION = "main_ec2_heating_demand_consumption"
-    SECOND_EC1_HEATING_DEMAND_CONSUMPTION = "second_ec1_heating_demand_consumption"
-    SECOND_EC2_HEATING_DEMAND_CONSUMPTION = "second_ec2_heating_demand_consumption"
-    TOTAL_HEATING_CONSUMPTION = "total_heating_consumption"
+    # has to be extended by 'id_energy_carrier' or 'consumption'
+    SPACE_HEATING = ["heating_system_main_space_heating_energy_carrier_1",
+                     "heating_system_main_space_heating_energy_carrier_2",
+                     "heating_system_second_space_heating_energy_carrier_1",
+                     "heating_system_second_space_heating_energy_carrier_2"
+                     ]
 
-    MAIN_EC1_HOT_WATER_DEMAND_CONSUMPTION = "main_ec1_hot_water_demand_consumption"
-    MAIN_EC2_HOT_WATER_DEMAND_CONSUMPTION = "main_ec2_hot_water_demand_consumption"
-    SECOND_EC1_HOT_WATER_DEMAND_CONSUMPTION = "second_ec1_hot_water_demand_consumption"
-    SECOND_EC2_HOT_WATER_DEMAND_CONSUMPTION = "second_ec2_hot_water_demand_consumption"
-    TOTAL_HOT_WATER_CONSUMPTION = "total_hot_water_consumption"
-
-
-def create_total_heating_consumption_column(df: pd.DataFrame) -> pd.DataFrame:
-    columns = [DataSchema_Building_Stock.MAIN_EC1_HEATING_DEMAND_CONSUMPTION,
-               DataSchema_Building_Stock.MAIN_EC2_HEATING_DEMAND_CONSUMPTION,
-               DataSchema_Building_Stock.SECOND_EC1_HEATING_DEMAND_CONSUMPTION,
-               DataSchema_Building_Stock.SECOND_EC2_HEATING_DEMAND_CONSUMPTION]
-
-    for column in columns:
-        df[column] = df[column].fillna(0)
-
-    df[DataSchema_Building_Stock.TOTAL_HEATING_CONSUMPTION] = df[columns].sum(axis=1)
-    return df
+    HOT_WATER = ["heating_system_main_hot_water_energy_carrier_1",
+                 "heating_system_main_hot_water_energy_carrier_2",
+                 "heating_system_second_hot_water_energy_carrier_1",
+                 "heating_system_second_hot_water_energy_carrier_2"]
 
 
-def create_total_hot_water_consumption_column(df: pd.DataFrame) -> pd.DataFrame:
-    columns = [DataSchema_Building_Stock.MAIN_EC1_HOT_WATER_DEMAND_CONSUMPTION,
-               DataSchema_Building_Stock.MAIN_EC2_HOT_WATER_DEMAND_CONSUMPTION,
-               DataSchema_Building_Stock.SECOND_EC1_HOT_WATER_DEMAND_CONSUMPTION,
-               DataSchema_Building_Stock.SECOND_EC2_HOT_WATER_DEMAND_CONSUMPTION]
-
-    for column in columns:
-        df[column] = df[column].fillna(0)
-
-    df[DataSchema_Building_Stock.TOTAL_HOT_WATER_CONSUMPTION] = df[columns].sum(axis=1)
-    return df
 
 
-def preprocessing_building_stock_data(df: pd.DataFrame, path:str) -> pd.DataFrame:
-    changed_df = False
-    if DataSchema_Building_Stock.TOTAL_HEATING_CONSUMPTION not in df.columns:
-        df = create_total_heating_consumption_column(df)
-        changed_df = True
-    if DataSchema_Building_Stock.TOTAL_HOT_WATER_CONSUMPTION not in df.columns:
-        df = create_total_hot_water_consumption_column(df)
-        changed_df = True
+def create_space_heating_table(df: pd.DataFrame, general_columns, end_use, end_use_columns) -> pd.DataFrame:
+    rename_col = ['id_energy_carrier', 'consumption']
+    end_use_dfs = []
 
-    if changed_df:
-        df.to_csv(path, index=False)
+    temp_cols = {}
+    for i, end_use_id in enumerate(end_use_columns):
+        temp_cols[i] = [f'{end_use_id}_id_energy_carrier', f'{end_use_id}_consumption']
+        temp_df = df[general_columns + temp_cols[i]]
+        rename = {}
+        for j, column in enumerate(temp_cols[i]):
+            rename[column] = rename_col[j]
+        end_use_dfs.append(temp_df.rename(columns=rename))
 
-    return df
+    end_use_df = pd.concat(end_use_dfs, ignore_index=True)
+
+    for column in rename_col:
+        end_use_df[column] = end_use_df[column].fillna(0)
+
+    end_use_df[DataSchema_Building_Stock.END_USE] = end_use
+
+    return end_use_df
+
+
+def preprocessing_building_stock_data(df: pd.DataFrame, general_columns, path: str) -> pd.DataFrame:
+    space_heating = create_space_heating_table(df, general_columns, 'space_heating',
+                                               DataSchema_Building_Stock.SPACE_HEATING)
+    hot_water = create_space_heating_table(df, general_columns, 'hot_water',
+                                           DataSchema_Building_Stock.HOT_WATER)
+
+    end_use = pd.concat([space_heating, hot_water], ignore_index=True)
+    end_use.to_csv(path, index=False)
+    return end_use
 
 
 def load_data(path: str) -> pd.DataFrame:
