@@ -3,7 +3,6 @@ from dash_bootstrap_components.themes import BOOTSTRAP
 
 from dashboards.data.loader import DataSchema_Floor_Area as DataSchema
 from dashboards.data.loader import load_data
-from dashboards.layouts import floor_area_ids as ids
 
 import pandas as pd
 
@@ -13,6 +12,15 @@ from dashboards.components import (
 )
 
 DATA_PATH = "../data/floor_area.csv"
+
+# IDs for dashboard
+SECTOR_DROPDOWN = "sector-dropdown"
+SELECT_ALL_SECTORS_BUTTON = "select-all-sectors-button"
+
+SUBSECTOR_DROPDOWN = "subsector-dropdown"
+SELECT_ALL_SUBSECTORS_BUTTON = "select-all-subsectors-button"
+
+BAR_CHART = "bar-chart"
 
 
 def run_floor_area_dash() -> None:
@@ -36,16 +44,16 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     dropdown.render(app,
                                     data,
-                                    id_dropdown=ids.SECTOR_DROPDOWN,
+                                    id_dropdown=SECTOR_DROPDOWN,
                                     id_options=DataSchema.ID_SECTOR,
-                                    id_select_all_button=ids.SELECT_ALL_SECTORS_BUTTON
+                                    id_select_all_button=SELECT_ALL_SECTORS_BUTTON
                                     ),
                 ],
             ),
             bar_chart_filtered.render(app,
                              data,
-                             id_barchart=ids.BAR_CHART,  #
-                             dropdowns=[{'id': ids.SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR}],
+                             id_barchart=BAR_CHART,  #
+                             dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR}],
                              x=DataSchema.ID_BUILDING_TYPE,
                              y=DataSchema.VALUE
                              ),

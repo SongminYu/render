@@ -3,7 +3,6 @@ from dash_bootstrap_components.themes import BOOTSTRAP
 
 from dashboards.data.loader import DataSchema_Building_Stock as DataSchema
 from dashboards.data import loader
-from dashboards.layouts import building_stock_ids as ids
 
 import pandas as pd
 
@@ -14,6 +13,24 @@ from dashboards.components import (
 )
 
 DATA_PATH = "../data/building_stock_R9160025.csv"
+
+# IDs for dashboard
+SCENARIO_DROPDOWN = "scenario-dropdown"
+SELECT_ALL_SCENARIOS_BUTTON = "select-all-scenarios-button"
+
+REGION_DROPDOWN = "region-dropdown"
+SELECT_ALL_REGIONS_BUTTON = "select-all-regions-button"
+
+SECTOR_DROPDOWN = "sector-dropdown"
+SELECT_ALL_SECTORS_BUTTON = "select-all-sectors-button"
+
+SUBSECTOR_DROPDOWN = "subsector-dropdown"
+SELECT_ALL_SUBSECTORS_BUTTON = "select-all-subsectors-button"
+
+YEAR_DROPDOWN = "year-dropdown"
+SELECT_ALL_YEARS_BUTTON = "select-all-years-button"
+
+BAR_CHART = "bar-chart"
 
 
 def run_building_stock_dash() -> None:
@@ -38,9 +55,9 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     dropdown.render(app,
                                     data,
-                                    id_dropdown=ids.SCENARIO_DROPDOWN,
+                                    id_dropdown=SCENARIO_DROPDOWN,
                                     id_options=DataSchema.ID_SCENARIO,
-                                    id_select_all_button=ids.SELECT_ALL_SCENARIOS_BUTTON
+                                    id_select_all_button=SELECT_ALL_SCENARIOS_BUTTON
                                     ),
                 ],
             ),
@@ -49,9 +66,9 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     dropdown.render(app,
                                     data,
-                                    id_dropdown=ids.REGION_DROPDOWN,
+                                    id_dropdown=REGION_DROPDOWN,
                                     id_options=DataSchema.ID_REGION,
-                                    id_select_all_button=ids.SELECT_ALL_REGIONS_BUTTON
+                                    id_select_all_button=SELECT_ALL_REGIONS_BUTTON
                                     ),
                 ],
             ),
@@ -60,9 +77,9 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     dropdown.render(app,
                                     data,
-                                    id_dropdown=ids.SECTOR_DROPDOWN,
+                                    id_dropdown=SECTOR_DROPDOWN,
                                     id_options=DataSchema.ID_SECTOR,
-                                    id_select_all_button=ids.SELECT_ALL_SECTORS_BUTTON
+                                    id_select_all_button=SELECT_ALL_SECTORS_BUTTON
                                     ),
                 ],
             ),
@@ -71,11 +88,11 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     sub_dropdown.render(app,
                                     data,
-                                    id_sub_dropdown=ids.SUBSECTOR_DROPDOWN,
-                                    id_dropdown=ids.SECTOR_DROPDOWN,
+                                    id_sub_dropdown=SUBSECTOR_DROPDOWN,
+                                    id_dropdown=SECTOR_DROPDOWN,
                                     id_sub_options=DataSchema.ID_SUBSECTOR,
                                     id_options = DataSchema.ID_SECTOR,
-                                    id_select_all_button=ids.SELECT_ALL_SUBSECTORS_BUTTON
+                                    id_select_all_button=SELECT_ALL_SUBSECTORS_BUTTON
                                     ),
                 ],
             ),
@@ -84,17 +101,17 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 children=[
                     dropdown.render(app,
                                     data,
-                                    id_dropdown=ids.YEAR_DROPDOWN,
+                                    id_dropdown=YEAR_DROPDOWN,
                                     id_options=DataSchema.YEAR,
-                                    id_select_all_button=ids.SELECT_ALL_YEARS_BUTTON
+                                    id_select_all_button=SELECT_ALL_YEARS_BUTTON
                                     ),
                 ],
             ),
             bar_chart_data.render(app,
                                   data,
-                                  id_barchart=ids.BAR_CHART,
-                                  dropdowns=[{'id': ids.SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                             {'id': ids.SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}],
+                                  id_barchart=BAR_CHART,
+                                  dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                             {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}],
                                   x=[DataSchema.APPLIANCE_ELECTRICITY_DEMAND,
                                      DataSchema.COOLING_DEMAND,
                                      DataSchema.TOTAL_HEATING_CONSUMPTION,
