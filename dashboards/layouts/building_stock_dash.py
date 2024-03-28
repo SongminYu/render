@@ -10,6 +10,7 @@ import pandas as pd
 from dashboards.components import (
     bar_chart_data,
     dropdown,
+    sub_dropdown,
 )
 
 DATA_PATH = "../data/building_stock_R9160025.csv"
@@ -66,12 +67,14 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 ],
             ),
             html.Div(
-                className="dropdown-container",
+                className="sub-dropdown-container",
                 children=[
-                    dropdown.render(app,
+                    sub_dropdown.render(app,
                                     data,
-                                    id_dropdown=ids.SUBSECTOR_DROPDOWN,
-                                    id_options=DataSchema.ID_SUBSECTOR,
+                                    id_sub_dropdown=ids.SUBSECTOR_DROPDOWN,
+                                    id_dropdown=ids.SECTOR_DROPDOWN,
+                                    id_sub_options=DataSchema.ID_SUBSECTOR,
+                                    id_options = DataSchema.ID_SECTOR,
                                     id_select_all_button=ids.SELECT_ALL_SUBSECTORS_BUTTON
                                     ),
                 ],
