@@ -138,6 +138,8 @@ class BuildingScenario(RenderScenario):
         self.s_heating_technology_cost_om = self.load_scenario("Scenario_HeatingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_heating_technology_cost_labor = self.load_scenario("Scenario_HeatingTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_heating_technology_input_labor = self.load_scenario("Scenario_HeatingTechnology_Input_Labor.xlsx", region_level=0)
+        self.s_infrastructure_availability_district_heating = self.load_scenario("Scenario_Infrastructure_Availability_DistrictHeating.xlsx")
+        self.s_infrastructure_availability_gas = self.load_scenario("Scenario_Infrastructure_Availability_Gas.xlsx")
         self.s_radiator = self.load_scenario("Scenario_Radiator.xlsx", region_level=0)
         self.s_radiator_cost_material = self.load_scenario("Scenario_Radiator_Cost_Material.xlsx", region_level=0)
         self.s_radiator_cost_labor = self.load_scenario("Scenario_Radiator_Cost_Labor.xlsx", region_level=0)
@@ -241,6 +243,19 @@ class BuildingScenario(RenderScenario):
                 "id_building_type",
                 "id_building_construction_period",
                 "id_building_efficiency_class",
+                "year"
+            ]
+        )
+        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(
+            key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_location",
+                "id_heating_system",
+                "id_heating_technology",
                 "year"
             ]
         )
