@@ -2,6 +2,7 @@ from typing import List
 import pandas as pd
 import os
 
+
 def parse_memory_log(file_names: List[str]):
     for file_name in file_names:
         with open(f'{file_name}.txt', 'r') as file:
