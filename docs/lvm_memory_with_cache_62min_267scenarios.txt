@@ -1,4 +1,3 @@
-62 min --> 267 scenarios
 Total memory usage of Python processes: 1247368 KB
 Total memory usage of Python processes: 1272072 KB
 Total memory usage of Python processes: 1273864 KB
@@ -3782,4 +3781,3 @@ Total memory usage of Python processes: 1508 KB
 Total memory usage of Python processes: 1508 KB
 Total memory usage of Python processes: 1508 KB
 Total memory usage of Python processes: 1508 KB
-
