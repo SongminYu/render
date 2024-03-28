@@ -121,13 +121,13 @@ class BuildingDataCollector(RenderDataCollector):
                         count = 1
                         for energy_intensity in energy_intensities:
                             building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_id_energy_carrier"] = energy_intensity.id_energy_carrier
-                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_intensity"] = energy_intensity.value
-                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_consumption"] = energy_intensity.value * end_use_useful_demand
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_energy_intensity"] = energy_intensity.value
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_energy_consumption"] = energy_intensity.value * end_use_useful_demand
                             count += 1
                         if len(energy_intensities) == 1:
                             building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_id_energy_carrier"] = None
-                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_intensity"] = None
-                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_consumption"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_energy_intensity"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_2_energy_consumption"] = None
                 else:
                     building_dict[f"heating_system_{ht_name}_id_heating_technology"] = None
                     building_dict[f"heating_system_{ht_name}_supply_temperature_space_heating"] = None
@@ -139,8 +139,8 @@ class BuildingDataCollector(RenderDataCollector):
                     for end_use in ["space_heating", "hot_water"]:
                         for count in [1, 2]:
                             building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_id_energy_carrier"] = None
-                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_intensity"] = None
-                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_consumption"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_energy_intensity"] = None
+                            building_dict[f"heating_system_{ht_name}_{end_use}_energy_carrier_{count}_energy_consumption"] = None
             # collect building cooling system
             building_dict[f"cooling_system_id_cooling_technology"] = building.cooling_system.rkey.id_cooling_technology
             building_dict[f"cooling_system_installation_year"] = building.cooling_system.installation_year
