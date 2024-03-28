@@ -7,12 +7,10 @@ from dashboards.data import loader
 import pandas as pd
 
 from dashboards.components import (
-    bar_chart_data,
+    stacked_bar_chart,
     dropdown,
     sub_dropdown,
 )
-
-DATA_PATH = "../data/building_stock_R9160025.csv"
 
 # IDs for dashboard
 SCENARIO_DROPDOWN = "scenario-dropdown"
@@ -32,11 +30,17 @@ SELECT_ALL_YEARS_BUTTON = "select-all-years-button"
 
 BAR_CHART = "bar-chart"
 
+DATA_PATH = "../data/building_stock_new_R9010101.csv"
+END_USE_PATH = "../data/building_stock_end_use.csv"
+
 
 def run_building_stock_dash() -> None:
+    dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR,
+                 DataSchema.YEAR]
+
     # load the data and create the data manager
     data = loader.load_data(DATA_PATH)
-    data = loader.preprocessing_building_stock_data(data, DATA_PATH)
+    data = loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
 
     app = Dash(external_stylesheets=[BOOTSTRAP])
     app.title = "Building Stock Dashboard"
@@ -87,13 +91,13 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                 className="sub-dropdown-container",
                 children=[
                     sub_dropdown.render(app,
-                                    data,
-                                    id_sub_dropdown=SUBSECTOR_DROPDOWN,
-                                    id_dropdown=SECTOR_DROPDOWN,
-                                    id_sub_options=DataSchema.ID_SUBSECTOR,
-                                    id_options = DataSchema.ID_SECTOR,
-                                    id_select_all_button=SELECT_ALL_SUBSECTORS_BUTTON
-                                    ),
+                                        data,
+                                        id_sub_dropdown=SUBSECTOR_DROPDOWN,
+                                        id_dropdown=SECTOR_DROPDOWN,
+                                        id_sub_options=DataSchema.ID_SUBSECTOR,
+                                        id_options=DataSchema.ID_SECTOR,
+                                        id_select_all_button=SELECT_ALL_SUBSECTORS_BUTTON
+                                        ),
                 ],
             ),
             html.Div(
@@ -107,16 +111,14 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                                     ),
                 ],
             ),
-            bar_chart_data.render(app,
-                                  data,
-                                  id_barchart=BAR_CHART,
-                                  dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                             {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}],
-                                  x=[DataSchema.APPLIANCE_ELECTRICITY_DEMAND,
-                                     DataSchema.COOLING_DEMAND,
-                                     DataSchema.TOTAL_HEATING_CONSUMPTION,
-                                     DataSchema.TOTAL_HOT_WATER_CONSUMPTION],
-                                  ),
+            stacked_bar_chart.render(app,
+                                     data,
+                                     id_barchart=BAR_CHART,
+                                     dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}],
+                                     x='end_use',
+                                     y='consumption',
+                                     category='id_energy_carrier'),
         ],
     )
 
