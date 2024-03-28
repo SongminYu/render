@@ -17,6 +17,8 @@ class HeatingSystem:
         self.scenario = scenario
         self.heating_technology_main: Optional["HeatingTechnology"] = None
         self.heating_technology_second: Optional["HeatingTechnology"] = None
+        self.district_heating_available = False
+        self.gas_available = False
         self.technologies = []
 
     def init_system_type(self):
@@ -29,6 +31,10 @@ class HeatingSystem:
     def init_heating_technology_main(self):
         self.heating_technology_main = HeatingTechnology(self.rkey.make_copy(), self.scenario)
         self.heating_technology_main.init_option()
+        if self.heating_technology_main.rkey.id_heating_technology in [11]:
+            self.district_heating_available = True
+        elif self.heating_technology_main.rkey.id_heating_technology in [21, 23, 31, 41]:
+            self.gas_available = True
         self.heating_technology_main.init_supply_temperature()
         self.heating_technology_main.init_installation_year()
         self.heating_technology_main.update_energy_intensity()

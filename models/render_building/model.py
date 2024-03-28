@@ -27,6 +27,18 @@ class BuildingModel(RenderModel):
         # self.data_collector.collect_scenario_cost()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
+        self.collect_heating_technology_main_initial_adoption()
+
+    def collect_heating_technology_main_initial_adoption(self):
+        for building in self.buildings:
+            self.scenario.heating_technology_main_initial_adoption.accumulate_item(
+                rkey=building.heating_system.heating_technology_main.rkey,
+                value=1
+            )
+        self.data_collector.save_dataframe(
+            df=self.scenario.heating_technology_main_initial_adoption.to_dataframe(),
+            df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}"
+        )
 
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)
