@@ -1,0 +1,21 @@
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2vh;
+}
+
+.app-div {
+    padding: 50px 10vw; /* padding at top/bottom and left/right */
+}
+
+.table-container {
+    width: 48%
+}
+
+.dropdown-container {
+    width: 83%
+}
+
+.button-container {
+    width: 15%
+}
