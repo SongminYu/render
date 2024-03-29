@@ -42,18 +42,20 @@ class BuildingModel(RenderModel):
 
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)
-        self.data_collector.collect_building_stock(self.buildings)
+        # self.data_collector.collect_building_stock(self.buildings)
         # self.data_collector.collect_building_final_energy_demand(self.buildings)
         # self.data_collector.collect_building_efficiency_class_count(self.buildings)
         # self.data_collector.collect_building_profile(self.buildings)
+        ...
 
     def export_building_info(self):
         # self.data_collector.export_building_floor_area()
-        self.data_collector.export_building_stock()
+        # self.data_collector.export_building_stock()
         # self.data_collector.export_building_final_energy_demand()
         # self.data_collector.export_building_efficiency_class_count()
         # self.data_collector.export_building_profile()
         # self.data_collector.export_renovation_rate()
+        ...
 
     def run(self):
         for year in range(self.scenario.start_year, self.scenario.end_year + 1):
