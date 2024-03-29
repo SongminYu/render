@@ -1,3 +1,4 @@
+import random
 from typing import TYPE_CHECKING
 
 from Melodie import Environment
@@ -66,6 +67,32 @@ class BuildingEnvironment(Environment):
             update_heating_system_year()
             update_cooling_system_year()
             update_ventilation_system_year()
+
+    def update_buildings_district_heating_availability(self, buildings: "AgentList[Building]"):
+
+        def get_district_heating_connection_prob(rkey: "BuildingKey"):
+            connection_rate_1 = self.scenario.s_infrastructure_availability_district_heating.get_item(rkey)
+            rkey.year = rkey.year - 1
+            connection_rate_0 = self.scenario.s_infrastructure_availability_district_heating.get_item(rkey)
+            return (connection_rate_1 - connection_rate_0) / (1 - connection_rate_0)
+
+        for building in buildings:
+            if not building.heating_system.district_heating_available:
+                if random.uniform(0, 1) <= get_district_heating_connection_prob(building.rkey.make_copy()):
+                    building.heating_system.district_heating_available = True
+
+    def update_buildings_gas_availability(self, buildings: "AgentList[Building]"):
+
+        def get_gas_connection_prob(rkey: "BuildingKey"):
+            connection_rate_1 = self.scenario.s_infrastructure_availability_gas.get_item(rkey)
+            rkey.year = rkey.year - 1
+            connection_rate_0 = self.scenario.s_infrastructure_availability_gas.get_item(rkey)
+            return (connection_rate_1 - connection_rate_0) / (1 - connection_rate_0)
+
+        for building in buildings:
+            if not building.heating_system.gas_available:
+                if random.uniform(0, 1) <= get_gas_connection_prob(building.rkey.make_copy()):
+                    building.heating_system.gas_available = True
 
     def update_buildings_profile_appliance(self, buildings: "AgentList[Building]"):
         for building in buildings:

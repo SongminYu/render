@@ -250,9 +250,6 @@ class BuildingScenario(RenderScenario):
             key_cols=[
                 "id_scenario",
                 "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
                 "id_building_location",
                 "id_heating_system",
                 "id_heating_technology",
