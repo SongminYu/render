@@ -61,6 +61,8 @@ class BuildingModel(RenderModel):
         for year in range(self.scenario.start_year, self.scenario.end_year + 1):
             self.collect_building_info()
             # self.environment.update_buildings_year(self.buildings)
+            # self.environment.update_buildings_district_heating_availability(self.buildings)
+            # self.environment.update_buildings_gas_availability(self.buildings)
             # self.environment.update_buildings_profile_appliance(self.buildings)
             # self.environment.update_buildings_technology_cooling(self.buildings)
             # self.environment.update_buildings_profile_hot_water(self.buildings)

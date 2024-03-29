@@ -102,6 +102,8 @@ class BuildingDataCollector(RenderDataCollector):
             building_dict["building_number"] = self.scenario.get_building_num_scaling(building.rkey)
             # collect building heating system
             building_dict["id_heating_system"] = building.heating_system.rkey.id_heating_system
+            building_dict["district_heating_available"] = building.heating_system.district_heating_available
+            building_dict["gas_available"] = building.heating_system.gas_available
             for ht_name, heating_technology in [
                 ["main", building.heating_system.heating_technology_main],
                 ["second", building.heating_system.heating_technology_second],
