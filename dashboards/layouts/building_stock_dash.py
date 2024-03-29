@@ -35,17 +35,18 @@ END_USE_PATH = "../data/building_stock_end_use.csv"
 
 
 def run_building_stock_dash() -> None:
-    dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR,
-                 DataSchema.YEAR]
+    # preprocessing step only necessary if data changed and/or there is no 'building_stock_end_use.csv' file in 'data'
+    # dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR, DataSchema.YEAR]
+    # data = loader.load_data(DATA_PATH)
+    # data = loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
 
     # load the data and create the data manager
-    data = loader.load_data(DATA_PATH)
-    data = loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
+    data = loader.load_data(END_USE_PATH)
 
     app = Dash(external_stylesheets=[BOOTSTRAP])
     app.title = "Building Stock Dashboard"
     app.layout = create_layout(app, data)
-    app.run()
+    app.run(debug=True)
 
 
 def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
@@ -114,10 +115,13 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
             stacked_bar_chart.render(app,
                                      data,
                                      id_barchart=BAR_CHART,
-                                     dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}],
+                                     dropdowns=[{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
+                                                {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+                                                {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
+                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},],
                                      x='end_use',
-                                     y='consumption',
+                                     y='energy_consumption',
                                      category='id_energy_carrier'),
         ],
     )
