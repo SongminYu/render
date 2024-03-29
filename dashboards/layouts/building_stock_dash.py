@@ -8,6 +8,7 @@ import pandas as pd
 
 from dashboards.components import (
     stacked_bar_chart,
+    data_table,
     dropdown,
     sub_dropdown,
 )
@@ -30,8 +31,12 @@ SELECT_ALL_YEARS_BUTTON = "select-all-years-button"
 
 BAR_CHART = "bar-chart"
 
+END_USE_DATA_TABLE = "end-use-data-table"
+REFERENCE_DATA_TABLE = "reference-data-table"
+
 DATA_PATH = "../data/building_stock_new_R9010101.csv"
 END_USE_PATH = "../data/building_stock_end_use.csv"
+REFERENCE_PATH = "../data/RENDER_CalibrationTarget.csv"
 
 
 def run_building_stock_dash() -> None:
@@ -43,75 +48,50 @@ def run_building_stock_dash() -> None:
     # load the data and create the data manager
     data = loader.load_data(END_USE_PATH)
 
-    app = Dash(external_stylesheets=[BOOTSTRAP])
+    reference_data = loader.load_data(REFERENCE_PATH)
+
+    app = Dash(__name__, external_stylesheets=[BOOTSTRAP])
     app.title = "Building Stock Dashboard"
-    app.layout = create_layout(app, data)
+    app.layout = create_layout(app, data, reference_data)
     app.run(debug=True)
 
 
-def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
+def create_layout(app: Dash, data: pd.DataFrame, reference_data) -> html.Div:
+    end_use_table = data_table.render(app,
+                                      data,
+                                      id_datatable=END_USE_DATA_TABLE,
+                                      title='Model Results:',
+                                      dropdowns=[{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
+                                                 {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+                                                 {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                                 {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
+                                                 {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
+                                      x='end_use',
+                                      y='energy_consumption',
+                                      category='id_energy_carrier')
+
+    reference_table = data_table.render(app,
+                                        reference_data,
+                                        id_datatable=REFERENCE_DATA_TABLE,
+                                        title='Reference Data:',
+                                        dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                                   {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
+                                                   {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
+                                        x='end_use',
+                                        y='value',
+                                        category='id_energy_carrier')
+
     return html.Div(
         className="app-div",
         children=[
             html.H1(app.title),
             html.Hr(),
-            html.Div(
-                className="dropdown-container",
-                children=[
-                    dropdown.render(app,
-                                    data,
-                                    id_dropdown=SCENARIO_DROPDOWN,
-                                    id_options=DataSchema.ID_SCENARIO,
-                                    id_select_all_button=SELECT_ALL_SCENARIOS_BUTTON
-                                    ),
-                ],
-            ),
-            html.Div(
-                className="dropdown-container",
-                children=[
-                    dropdown.render(app,
-                                    data,
-                                    id_dropdown=REGION_DROPDOWN,
-                                    id_options=DataSchema.ID_REGION,
-                                    id_select_all_button=SELECT_ALL_REGIONS_BUTTON
-                                    ),
-                ],
-            ),
-            html.Div(
-                className="dropdown-container",
-                children=[
-                    dropdown.render(app,
-                                    data,
-                                    id_dropdown=SECTOR_DROPDOWN,
-                                    id_options=DataSchema.ID_SECTOR,
-                                    id_select_all_button=SELECT_ALL_SECTORS_BUTTON
-                                    ),
-                ],
-            ),
-            html.Div(
-                className="sub-dropdown-container",
-                children=[
-                    sub_dropdown.render(app,
-                                        data,
-                                        id_sub_dropdown=SUBSECTOR_DROPDOWN,
-                                        id_dropdown=SECTOR_DROPDOWN,
-                                        id_sub_options=DataSchema.ID_SUBSECTOR,
-                                        id_options=DataSchema.ID_SECTOR,
-                                        id_select_all_button=SELECT_ALL_SUBSECTORS_BUTTON
-                                        ),
-                ],
-            ),
-            html.Div(
-                className="dropdown-container",
-                children=[
-                    dropdown.render(app,
-                                    data,
-                                    id_dropdown=YEAR_DROPDOWN,
-                                    id_options=DataSchema.YEAR,
-                                    id_select_all_button=SELECT_ALL_YEARS_BUTTON
-                                    ),
-                ],
-            ),
+            dropdown.render(app, data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
+            dropdown.render(app, data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
+            dropdown.render(app, data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
+            sub_dropdown.render(app, data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
+                                DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
+            dropdown.render(app, data, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
             stacked_bar_chart.render(app,
                                      data,
                                      id_barchart=BAR_CHART,
@@ -119,10 +99,11 @@ def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
                                                 {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
                                                 {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
                                                 {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
-                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},],
+                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
                                      x='end_use',
                                      y='energy_consumption',
                                      category='id_energy_carrier'),
+            html.Div(className='flex-container', children=[end_use_table, reference_table])
         ],
     )
 
