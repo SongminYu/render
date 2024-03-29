@@ -16,6 +16,10 @@ This document contains the development plan of the `RenderDash` tool.
   - difference in percentage
 
 
+### Apr. 3th, 2024
+
+- [ ] Can we have all the dashboards on the same website, or with a few sheet pages? So we can easily switch between the dashboards.
+
 ### Later stage
 
 - geographic visualization
