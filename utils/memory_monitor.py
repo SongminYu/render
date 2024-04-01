@@ -3,7 +3,8 @@ import psutil
 import time
 
 
-def monitor_python_memory_usage(interval=1, output_file='memory_usage.csv'):
+def monitor_python_memory_usage(interval=1):
+    output_file = f'memory_usage_{time.strftime('Y%YM%mD%dH%HM%MS%S', time.localtime())}.csv'
     with open(output_file, 'w', newline='') as csvfile:
         fieldnames = ['timestamp', 'memory_usage_gb', 'unit']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -28,4 +29,3 @@ def monitor_python_memory_usage(interval=1, output_file='memory_usage.csv'):
 
 if __name__ == "__main__":
     monitor_python_memory_usage()
-

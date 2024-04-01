@@ -20,6 +20,7 @@ def get_data_files(folder: str):
 
 
 def concat_region_tables(cfg: "Config", file_name_prefix: str):
+    print(f'Concating {file_name_prefix} tables...')
     df_list = []
     region_ids = read_dataframe(os.path.join(cfg.input_folder, "ID_Region.xlsx"))["id_region"].to_list()
     for id_region in region_ids:
@@ -31,11 +32,12 @@ def concat_region_tables(cfg: "Config", file_name_prefix: str):
     if "id_sector" in df.columns:
         for id_sector in df["id_sector"].unique():
             df_sector = df.loc[df["id_sector"] == id_sector]
-            if file_name_prefix == "energy_consumption":
+            if file_name_prefix == "final_energy_demand":
                 df_sector.loc[:, "value"] = df_sector["value"]/10**9
                 df_sector.loc[:, "unit"] = "TWh"
-                df_sector_heating = df_sector.loc[df_sector["id_end_use"] == 3]
-                df_sector_heating.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}_Sector{id_sector}_SpaceHeating.csv"), index=False)
+                for id_end_use in [1, 2, 3, 4, 5]:
+                    df_sector_end_use = df_sector.loc[df_sector["id_end_use"] == id_end_use]
+                    df_sector_end_use.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}_Sector{id_sector}_EndUse{id_end_use}.csv"), index=False)
             df_sector.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}_Sector{id_sector}.csv"), index=False)
 
 
