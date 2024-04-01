@@ -31,15 +31,24 @@ class BuildingDataCollector(RenderDataCollector):
         self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
 
-    def export_heating_technology_main_initial_adoption(self, buildings: "AgentList[Building]"):
-        for building in buildings:
-            self.scenario.heating_technology_main_initial_adoption.accumulate_item(
-                rkey=building.heating_system.heating_technology_main.rkey,
-                value=1
-            )
+    def export_heating_technology_main_initial_adoption(self):
         self.save_dataframe(
             df=self.scenario.heating_technology_main_initial_adoption.to_dataframe(),
             df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}"
+        )
+
+    def export_location_infrastructure(self):
+        self.save_dataframe(
+            df=self.scenario.location_building_num.to_dataframe(),
+            df_name=f"LocationBuildingNum_R{self.scenario.id_region}"
+        )
+        self.save_dataframe(
+            df=self.scenario.location_building_num_heating_tech_district_heating.to_dataframe(),
+            df_name=f"LocationBuildingNum_DistrictHeating_R{self.scenario.id_region}"
+        )
+        self.save_dataframe(
+            df=self.scenario.location_building_num_heating_tech_gas.to_dataframe(),
+            df_name=f"LocationBuildingNum_GasBoiler_R{self.scenario.id_region}"
         )
 
     def collect_building_floor_area(self, buildings: "AgentList[Building]"):

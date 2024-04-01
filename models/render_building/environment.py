@@ -18,6 +18,7 @@ class BuildingEnvironment(Environment):
 
     @staticmethod
     def setup_buildings(buildings: "AgentList[Building]"):
+
         for building in tqdm(buildings, desc="Setting up buildings --> "):
             building.init_rkey()
             building.init_units()
@@ -31,6 +32,10 @@ class BuildingEnvironment(Environment):
             building.init_building_heating_system()
             building.init_building_ventilation_system()
             building.init_final_energy_demand()
+
+        for building in buildings:
+            building.init_building_district_heating_availability()
+            building.init_building_gas_availability()
 
     @staticmethod
     def update_buildings_year(buildings: "AgentList[Building]"):

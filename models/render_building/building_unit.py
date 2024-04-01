@@ -30,8 +30,7 @@ class UnitUser:
         )
 
     def init_person_num(self):
-        area_relevance = self.scenario.p_unit_user_person_number_area_relevance.get_item(self.rkey)
-        if area_relevance == 0:
+        if self.scenario.p_unit_user_person_number_area_relevance.get_item(self.rkey) == 0:
             self.person_num = self.scenario.p_unit_user_person_number.get_item(self.rkey)
         else:
             self.person_num = int(self.scenario.s_building_unit_area.get_item(self.rkey) / self.scenario.p_unit_user_person_number.get_item(self.rkey))

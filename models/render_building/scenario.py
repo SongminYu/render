@@ -169,26 +169,21 @@ class BuildingScenario(RenderScenario):
     def setup_results_containers(self):
         self.building_profile = []
         self.building_stock = []
-        self.building_num_model = RenderDict.create_empty_rdict(
-            key_cols=[
+        self.building_num_model = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
                 "id_subsector",
                 "id_building_type"
-            ],
-        )
-        self.building_num_total = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.building_num_total = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
                 "id_subsector",
                 "id_building_type"
-            ],
-        )
-        self.renovation_action_building = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.renovation_action_building = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -196,10 +191,8 @@ class BuildingScenario(RenderScenario):
                 "id_building_type",
                 "id_building_construction_period",
                 "year"
-            ]
-        )
-        self.renovation_action_component = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.renovation_action_component = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -208,10 +201,8 @@ class BuildingScenario(RenderScenario):
                 "id_building_construction_period",
                 "id_building_component",
                 "year"
-            ],
-        )
-        self.building_floor_area = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.building_floor_area = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -219,10 +210,8 @@ class BuildingScenario(RenderScenario):
                 "id_building_type",
                 "id_building_construction_period",
                 "year"
-            ],
-        )
-        self.final_energy_demand = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.final_energy_demand = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -232,10 +221,8 @@ class BuildingScenario(RenderScenario):
                 "id_end_use",
                 "id_energy_carrier",
                 "year"
-            ]
-        )
-        self.building_efficiency_class_count = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.building_efficiency_class_count = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -244,31 +231,32 @@ class BuildingScenario(RenderScenario):
                 "id_building_construction_period",
                 "id_building_efficiency_class",
                 "year"
-            ]
-        )
-        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_building_location",
                 "id_heating_system",
                 "id_heating_technology",
                 "year"
-            ]
-        )
-        self.building_num_model = RenderDict.create_empty_rdict(key_cols=[
+            ])
+        self.location_building_num = RenderDict.create_empty_rdict(key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_building_location",
+                "year"
+            ])
+        self.location_building_num_heating_tech_district_heating = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type"
+            "id_building_location",
+            "year"
         ])
-        self.building_num_total = RenderDict.create_empty_rdict(key_cols=[
+        self.location_building_num_heating_tech_gas = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type"
+            "id_building_location",
+            "year"
         ])
 
     def setup_agent_params(self):
