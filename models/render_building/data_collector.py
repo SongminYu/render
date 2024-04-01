@@ -226,11 +226,10 @@ class BuildingDataCollector(RenderDataCollector):
         def get_construction_period_percentage(row_rkey: "BuildingKey"):
             df = self.scenario.load_dataframe("Scenario_Building_ConstructionPeriod.xlsx")
             df1 = df.loc[
-                (df["id_scenario"] == row_rkey.id_scenario) &
                 (df["id_region"] == row_rkey.id_region) &
                 (df["id_sector"] == row_rkey.id_sector) &
                 (df["id_building_type"] == row_rkey.id_building_type)
-                ]
+            ]
             df2 = df1.loc[df1["id_building_construction_period"] == row_rkey.id_building_construction_period]
             return df2.iloc[0]["2019"] / df1["2019"].sum()
 
