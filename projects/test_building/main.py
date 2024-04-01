@@ -26,6 +26,6 @@ def run_tool(cfg: "Config"):
 
 if __name__ == "__main__":
     config = get_config("test_building")
-    run_building_model(cfg=config, cores=4)
+    run_building_model(cfg=config, cores=10)
     # run_tool(cfg=config)
 
