@@ -1,5 +1,6 @@
 import random
 from typing import TYPE_CHECKING
+from typing import Optional
 
 from models.render_building.tech import EnergyIntensity
 from models.render_building.building_key import BuildingKey
@@ -16,7 +17,7 @@ class CoolingSystem:
         self.is_adopted = False
         self.installation_year = 0
         self.next_replace_year = 0
-        self.energy_intensity = 0
+        self.energy_intensity: Optional["EnergyIntensity"] = None
 
     def init_adoption(self):
         self.is_adopted = True

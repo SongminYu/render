@@ -1,4 +1,3 @@
-import os
 from typing import TYPE_CHECKING
 
 import pandas as pd
@@ -11,7 +10,6 @@ if TYPE_CHECKING:
     from Melodie import AgentList
     from models.render_building.scenario import BuildingScenario
     from models.render_building.building import Building
-    from models.render_building.tech_heating import HeatingTechnology
 
 
 class BuildingDataCollector(RenderDataCollector):
@@ -167,16 +165,26 @@ class BuildingDataCollector(RenderDataCollector):
             building_dict[f"cooling_system_id_cooling_technology"] = building.cooling_system.rkey.id_cooling_technology
             building_dict[f"cooling_system_installation_year"] = building.cooling_system.installation_year
             building_dict[f"cooling_system_next_replace_year"] = building.cooling_system.next_replace_year
-            building_dict[f"cooling_system_id_energy_carrier"] = building.cooling_system.energy_intensity.id_energy_carrier
-            building_dict[f"cooling_system_energy_intensity"] = building.cooling_system.energy_intensity.value
-            building_dict[f"cooling_system_energy_consumption"] = building.cooling_system.energy_intensity.value * building.cooling_demand
+            if building.cooling_system.energy_intensity is not None:
+                building_dict[f"cooling_system_id_energy_carrier"] = building.cooling_system.energy_intensity.id_energy_carrier
+                building_dict[f"cooling_system_energy_intensity"] = building.cooling_system.energy_intensity.value
+                building_dict[f"cooling_system_energy_consumption"] = building.cooling_system.energy_intensity.value * building.cooling_demand
+            else:
+                building_dict[f"cooling_system_id_energy_carrier"] = None
+                building_dict[f"cooling_system_energy_intensity"] = None
+                building_dict[f"cooling_system_energy_consumption"] = None
             # collection building ventilation system
             building_dict[f"ventilation_system_id_ventilation_technology"] = building.ventilation_system.rkey.id_ventilation_technology
             building_dict[f"ventilation_system_installation_year"] = building.ventilation_system.installation_year
             building_dict[f"ventilation_system_next_replace_year"] = building.ventilation_system.next_replace_year
-            building_dict[f"ventilation_system_id_energy_carrier"] = building.ventilation_system.energy_intensity.id_energy_carrier
-            building_dict[f"ventilation_system_energy_intensity"] = building.ventilation_system.energy_intensity.value
-            building_dict[f"ventilation_system_energy_consumption"] = building.ventilation_system.energy_intensity.value * building.total_living_area
+            if building.ventilation_system.energy_intensity is not None:
+                building_dict[f"ventilation_system_id_energy_carrier"] = building.ventilation_system.energy_intensity.id_energy_carrier
+                building_dict[f"ventilation_system_energy_intensity"] = building.ventilation_system.energy_intensity.value
+                building_dict[f"ventilation_system_energy_consumption"] = building.ventilation_system.energy_intensity.value * building.total_living_area
+            else:
+                building_dict[f"ventilation_system_id_energy_carrier"] = None
+                building_dict[f"ventilation_system_energy_intensity"] = None
+                building_dict[f"ventilation_system_energy_consumption"] = None
             # save the building dict
             self.scenario.building_stock.append(building_dict)
 
