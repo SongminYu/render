@@ -29,8 +29,8 @@ class BuildingModel(RenderModel):
         # self.export_initialization_info()
 
     def export_initialization_info(self):
-        self.data_collector.collect_scenario_cost()
-        self.data_collector.collect_heating_technology_main_initial_adoption(self.buildings)
+        self.data_collector.export_scenario_cost()
+        self.data_collector.export_heating_technology_main_initial_adoption(self.buildings)
 
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)

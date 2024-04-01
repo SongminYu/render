@@ -21,7 +21,7 @@ class BuildingDataCollector(RenderDataCollector):
         # define table names (move constants.py here)
         ...
 
-    def collect_scenario_cost(self):
+    def export_scenario_cost(self):
         self.save_dataframe(df=self.scenario.building_component_capex.to_dataframe(), df_name=f"BuildingComponentCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.heating_technology_capex.to_dataframe(), df_name=f"HeatingTechnologyCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.heating_technology_opex.to_dataframe(), df_name=f"HeatingTechnologyOpex_R{self.scenario.id_region}")
@@ -31,7 +31,7 @@ class BuildingDataCollector(RenderDataCollector):
         self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
 
-    def collect_heating_technology_main_initial_adoption(self, buildings: "AgentList[Building]"):
+    def export_heating_technology_main_initial_adoption(self, buildings: "AgentList[Building]"):
         for building in buildings:
             self.scenario.heating_technology_main_initial_adoption.accumulate_item(
                 rkey=building.heating_system.heating_technology_main.rkey,
@@ -223,10 +223,8 @@ class BuildingDataCollector(RenderDataCollector):
                 rkey = BuildingKey().from_dict(row.to_dict())
                 d = row.to_dict()
                 d["num_building_renovation_model"] = d.pop("value")
-                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(
-                    rkey) * get_construction_period_percentage(row_rkey=rkey)
-                d["building_renovation_rate_construction_period"] = d["num_building_renovation_model"] / d[
-                    "num_building_model_construction_period"]
+                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(rkey) * get_construction_period_percentage(row_rkey=rkey)
+                d["building_renovation_rate_construction_period"] = d["num_building_renovation_model"] / d["num_building_model_construction_period"]
                 d["num_building_model_type"] = self.scenario.building_num_model.get_item(rkey)
                 d["building_renovation_rate_type"] = d["num_building_renovation_model"] / d["num_building_model_type"]
                 l.append(d)
@@ -238,10 +236,8 @@ class BuildingDataCollector(RenderDataCollector):
                 rkey = BuildingKey().from_dict(row.to_dict())
                 d = row.to_dict()
                 d["num_component_renovation_model"] = d.pop("value")
-                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(
-                    rkey) * get_construction_period_percentage(row_rkey=rkey)
-                d["component_renovation_rate_construction_period"] = d["num_component_renovation_model"] / d[
-                    "num_building_model_construction_period"]
+                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(rkey) * get_construction_period_percentage(row_rkey=rkey)
+                d["component_renovation_rate_construction_period"] = d["num_component_renovation_model"] / d["num_building_model_construction_period"]
                 d["num_building_model_type"] = self.scenario.building_num_model.get_item(rkey)
                 d["component_renovation_rate_type"] = d["num_component_renovation_model"] / d["num_building_model_type"]
                 l.append(d)
