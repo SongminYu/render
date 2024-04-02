@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
 import pandas as pd
-from tqdm import tqdm
 
 from models.render.data_collector import RenderDataCollector
 from models.render_building.building_key import BuildingKey
@@ -63,7 +62,7 @@ class BuildingDataCollector(RenderDataCollector):
         self.save_dataframe(df=df, df_name=f"floor_area_R{self.scenario.id_region}")
 
     def collect_building_profile(self, buildings: "AgentList[Building]"):
-        for building in tqdm(buildings, desc="Collecting buildings_profile --> "):
+        for building in buildings:
             for profile_name in [
                 "heating_demand_profile",
                 "cooling_demand_profile",
@@ -98,7 +97,7 @@ class BuildingDataCollector(RenderDataCollector):
             3: "roof",
             4: "basement"
         }
-        for building in tqdm(buildings, desc="Collecting buildings_info --> "):
+        for building in buildings:
             building_dict = building.rkey.to_dict()
             building_dict["name"] = building.name
             # collect building parameters

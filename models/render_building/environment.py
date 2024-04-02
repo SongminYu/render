@@ -33,7 +33,7 @@ class BuildingEnvironment(Environment):
             building.init_building_ventilation_system()
             building.init_final_energy_demand()
 
-        for building in buildings:
+        for building in tqdm(buildings, desc="Setting up infrastructure availability --> "):
             building.init_building_district_heating_availability()
             building.init_building_gas_availability()
 
@@ -107,6 +107,15 @@ class BuildingEnvironment(Environment):
                 building.appliance_electricity_demand = building.appliance_electricity_profile.sum()
                 building.appliance_electricity_demand_per_person = building.appliance_electricity_demand / building.population
 
+    def update_buildings_profile_hot_water(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            index = self.scenario.s_useful_energy_demand_index_hot_water.get_item(building.rkey)
+            if index != 1:
+                building.hot_water_profile = building.hot_water_profile * index
+                building.hot_water_demand = building.hot_water_profile.sum()
+                building.hot_water_demand_per_person = building.hot_water_demand / building.population
+                building.hot_water_demand_per_m2 = building.hot_water_demand / building.total_living_area
+
     def update_buildings_technology_cooling(self, buildings: "AgentList[Building]"):
 
         def get_cooling_adoption_prob(rkey: "BuildingKey"):
@@ -121,14 +130,19 @@ class BuildingEnvironment(Environment):
             else:
                 building.cooling_system.replace()
 
-    def update_buildings_profile_hot_water(self, buildings: "AgentList[Building]"):
+    def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
+
+        def get_ventilation_adoption_prob(rkey: "BuildingKey"):
+            penetration_rate_1 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
+            rkey.year = rkey.year - 1
+            penetration_rate_0 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
+            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
+
         for building in buildings:
-            index = self.scenario.s_useful_energy_demand_index_hot_water.get_item(building.rkey)
-            if index != 1:
-                building.hot_water_profile = building.hot_water_profile * index
-                building.hot_water_demand = building.hot_water_profile.sum()
-                building.hot_water_demand_per_person = building.hot_water_demand / building.population
-                building.hot_water_demand_per_m2 = building.hot_water_demand / building.total_living_area
+            if not building.ventilation_system.is_adopted:
+                building.ventilation_system.adopt(adoption_prob=get_ventilation_adoption_prob(building.rkey.make_copy()))
+            else:
+                building.ventilation_system.replace()
 
     def update_buildings_technology_heating(self, buildings: "AgentList[Building]"):
         # replace: triggered by lifetime
@@ -146,20 +160,6 @@ class BuildingEnvironment(Environment):
         #     --> the barrier is reflected in the cost for switching from one type of technology to the other
         # --> a utility function is designed and the utilities are pre-calculated and saved in a rdict
         ...
-
-    def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
-
-        def get_ventilation_adoption_prob(rkey: "BuildingKey"):
-            penetration_rate_1 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
-            rkey.year = rkey.year - 1
-            penetration_rate_0 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
-            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
-
-        for building in buildings:
-            if not building.ventilation_system.is_adopted:
-                building.ventilation_system.adopt(adoption_prob=get_ventilation_adoption_prob(building.rkey.make_copy()))
-            else:
-                building.ventilation_system.replace()
 
     def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_lifecycle:
