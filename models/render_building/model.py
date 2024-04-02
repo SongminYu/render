@@ -60,7 +60,7 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_profile_hot_water(self.buildings)
             # self.environment.update_buildings_technology_cooling(self.buildings)
             # self.environment.update_buildings_technology_ventilation(self.buildings)
-            # self.environment.update_buildings_technology_heating(self.buildings)
+            # self.environment.update_buildings_technology_heating_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
             # self.environment.update_buildings_demolition(self.buildings)

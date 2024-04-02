@@ -1,9 +1,10 @@
 import random
-from typing import TYPE_CHECKING
 from typing import Optional
+from typing import TYPE_CHECKING
 
-from models.render_building.tech import EnergyIntensity
 from models.render_building.building_key import BuildingKey
+from models.render_building.tech import EnergyIntensity
+from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
@@ -59,17 +60,39 @@ class CoolingSystem:
             value=1 / self.scenario.p_cooling_technology_efficiency.get_item(self.rkey)
         )
 
-    def adopt(self, adoption_prob: float):
+    def adopt(self, adoption_prob: float, cooling_demand_peak: float, cooling_demand: float):
         if random.uniform(0, 1) <= adoption_prob:
-            self.install_cooling_technology()
+            id_cooling_technology, id_cooling_technology_efficiency_class = self.select(
+                cooling_demand_peak=cooling_demand_peak,
+                cooling_demand=cooling_demand
+            )
+            self.install(id_cooling_technology, id_cooling_technology_efficiency_class)
 
-    def replace(self):
+    def replace(self, cooling_demand_peak: float, cooling_demand: float):
         if self.rkey.year == self.next_replace_year:
-            self.install_cooling_technology()
+            id_cooling_technology, id_cooling_technology_efficiency_class = self.select(
+                cooling_demand_peak=cooling_demand_peak,
+                cooling_demand=cooling_demand
+            )
+            self.install(id_cooling_technology, id_cooling_technology_efficiency_class)
 
-    def install_cooling_technology(self):
-        self.rkey.id_cooling_technology = ...
-        self.rkey.id_cooling_technology_efficiency_class = ...
+    def select(self, cooling_demand_peak: float, cooling_demand: float):
+        rkey = self.rkey.make_copy()
+        d = {}
+        for id_cooling_technology in self.scenario.cooling_technologies.keys():
+            rkey.id_cooling_technology = id_cooling_technology
+            for id_cooling_technology_efficiency_class in self.scenario.r_cooling_technology_efficiency_class.get_item(rkey):
+                rkey.id_cooling_technology_efficiency_class = id_cooling_technology_efficiency_class
+                if self.scenario.s_cooling_technology_availability.get_item(rkey):
+                    capex = self.scenario.cooling_technology_capex.get_item(rkey) * cooling_demand_peak
+                    opex = self.scenario.cooling_technology_opex.get_item(rkey) * cooling_demand
+                    utility = (capex + opex) ** (- self.scenario.s_cooling_technology_utility_power.get_item(rkey))
+                    d[(id_cooling_technology, id_cooling_technology_efficiency_class)] = utility
+        return dict_sample(d)
+
+    def install(self, id_cooling_technology, id_cooling_technology_efficiency_class):
+        self.rkey.id_cooling_technology = id_cooling_technology
+        self.rkey.id_cooling_technology_efficiency_class = id_cooling_technology_efficiency_class
         self.update_energy_intensity()
         self.installation_year = self.rkey.year
         self.next_replace_year = self.rkey.year + self.get_lifetime()

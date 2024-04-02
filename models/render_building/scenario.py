@@ -23,8 +23,8 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_mark_up = 0
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
-        self.renovation_lifecycle = 1
         self.renovation_mandatory = 1
+        self.heating_technology_mandatory = 1
 
     def load_scenario_data(self):
         self.load_framework()
@@ -152,6 +152,7 @@ class BuildingScenario(RenderScenario):
         self.s_cooling_technology_cost_om = self.load_scenario("Scenario_CoolingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_cooling_technology_cost_labor = self.load_scenario("Scenario_CoolingTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_cooling_technology_input_labor = self.load_scenario("Scenario_CoolingTechnology_Input_Labor.xlsx", region_level=0)
+        self.s_cooling_technology_utility_power = self.load_scenario("Scenario_CoolingTechnology_UtilityPower.xlsx", region_level=0)
         self.s_ventilation_penetration_rate = self.load_scenario("Scenario_Ventilation_PenetrationRate.xlsx", region_level=0)
         self.s_ventilation_technology_market_share = self.load_scenario("Scenario_VentilationTechnology_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_efficiency_class_market_share = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
@@ -160,6 +161,7 @@ class BuildingScenario(RenderScenario):
         self.s_ventilation_technology_cost_om = self.load_scenario("Scenario_VentilationTechnology_Cost_OM.xlsx", region_level=0)
         self.s_ventilation_technology_cost_labor = self.load_scenario("Scenario_VentilationTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_ventilation_technology_input_labor = self.load_scenario("Scenario_VentilationTechnology_Input_Labor.xlsx", region_level=0)
+        self.s_ventilation_technology_utility_power = self.load_scenario("Scenario_VentilationTechnology_UtilityPower.xlsx", region_level=0)
         self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
         self.s_useful_energy_demand_index_hot_water = self.load_scenario("Scenario_UsefulEnergyDemandIndex_HotWater.xlsx", region_level=0)
         self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
@@ -497,7 +499,7 @@ class BuildingScenario(RenderScenario):
             "id_ventilation_technology",
             "id_ventilation_technology_efficiency_class",
             "year"
-        ], region_level=0)  # unit: euro/m2 (living area)
+        ], region_level=0)  # unit: euro/m2 (total living area)
 
         self.ventilation_technology_opex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -507,7 +509,7 @@ class BuildingScenario(RenderScenario):
             "id_ventilation_technology",
             "id_ventilation_technology_efficiency_class",
             "year"
-        ], region_level=0)  # unit: euro/m2-year (living area)
+        ], region_level=0)  # unit: euro/m2-year (total living area)
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():

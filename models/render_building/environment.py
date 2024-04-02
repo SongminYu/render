@@ -126,9 +126,16 @@ class BuildingEnvironment(Environment):
 
         for building in buildings:
             if not building.cooling_system.is_adopted:
-                building.cooling_system.adopt(adoption_prob=get_cooling_adoption_prob(building.rkey.make_copy()))
+                building.cooling_system.adopt(
+                    adoption_prob=get_cooling_adoption_prob(building.rkey.make_copy()),
+                    cooling_demand_peak=building.cooling_demand_profile.max(),
+                    cooling_demand=building.cooling_demand,
+                )
             else:
-                building.cooling_system.replace()
+                building.cooling_system.replace(
+                    cooling_demand_peak=building.cooling_demand_profile.max(),
+                    cooling_demand=building.cooling_demand
+                )
 
     def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
 
@@ -139,12 +146,18 @@ class BuildingEnvironment(Environment):
             return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
 
         for building in buildings:
+            # TODO: check literature of ventilation, because maybe the "driver" should be m3 instead of m2
             if not building.ventilation_system.is_adopted:
-                building.ventilation_system.adopt(adoption_prob=get_ventilation_adoption_prob(building.rkey.make_copy()))
+                building.ventilation_system.adopt(
+                    adoption_prob=get_ventilation_adoption_prob(building.rkey.make_copy()),
+                    total_living_area=building.total_living_area
+                )
             else:
-                building.ventilation_system.replace()
+                building.ventilation_system.replace(total_living_area=building.total_living_area)
 
-    def update_buildings_technology_heating(self, buildings: "AgentList[Building]"):
+    def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            ...
         # replace: triggered by lifetime
         # (1) sync renovation
         # --> might be triggered before replacing the heating system, then the feasible technologies could be more.
@@ -161,10 +174,14 @@ class BuildingEnvironment(Environment):
         # --> a utility function is designed and the utilities are pre-calculated and saved in a rdict
         ...
 
-    def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
-        if self.scenario.renovation_lifecycle:
+    def update_buildings_technology_heating_mandatory(self, buildings: "AgentList[Building]"):
+        if self.scenario.heating_technology_mandatory:
             for building in buildings:
                 ...
+
+    def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            ...
 
         # How is renovation triggered?
         # (1) natural renovation
@@ -187,7 +204,6 @@ class BuildingEnvironment(Environment):
         # --> ranking
         # --> limitation of craftsman capacity (with a high capacity, we can still have the not-limited demand as results)
         # (3) material demand
-        ...
 
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:
