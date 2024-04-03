@@ -74,7 +74,7 @@ class HeatingSystem:
             rkey = self.rkey.make_copy().set_id({"id_heating_technology": dict_sample(second_technologies)})
             # init second heating technology
             self.heating_technology_second = HeatingTechnology(
-                rkey=self.rkey.make_copy(),
+                rkey=rkey,
                 scenario=self.scenario,
                 priority="second"
             )
