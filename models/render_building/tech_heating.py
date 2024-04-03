@@ -36,7 +36,7 @@ class HeatingSystem:
             if self.heating_technology_main.rkey.id_heating_technology in [11]:
                 self.district_heating_available = True
                 self.scenario.location_building_num_heating_tech_district_heating.accumulate_item(rkey=self.rkey, value=1)
-            elif self.heating_technology_main.rkey.id_heating_technology in [21, 23, 31, 41]:
+            elif self.heating_technology_main.rkey.id_heating_technology in [21, 24, 26, 31, 41]:
                 self.gas_available = True
                 self.scenario.location_building_num_heating_tech_gas.accumulate_item(rkey=self.rkey, value=1)
 
