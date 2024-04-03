@@ -18,6 +18,7 @@ class BuildingEnvironment(Environment):
 
     @staticmethod
     def setup_buildings(buildings: "AgentList[Building]"):
+
         for building in tqdm(buildings, desc="Setting up buildings --> "):
             building.init_rkey()
             building.init_units()
@@ -31,6 +32,10 @@ class BuildingEnvironment(Environment):
             building.init_building_heating_system()
             building.init_building_ventilation_system()
             building.init_final_energy_demand()
+
+        for building in tqdm(buildings, desc="Setting up infrastructure availability --> "):
+            building.init_building_district_heating_availability()
+            building.init_building_gas_availability()
 
     @staticmethod
     def update_buildings_year(buildings: "AgentList[Building]"):
@@ -102,20 +107,6 @@ class BuildingEnvironment(Environment):
                 building.appliance_electricity_demand = building.appliance_electricity_profile.sum()
                 building.appliance_electricity_demand_per_person = building.appliance_electricity_demand / building.population
 
-    def update_buildings_technology_cooling(self, buildings: "AgentList[Building]"):
-
-        def get_cooling_adoption_prob(rkey: "BuildingKey"):
-            penetration_rate_1 = self.scenario.s_cooling_penetration_rate.get_item(rkey)
-            rkey.year = rkey.year - 1
-            penetration_rate_0 = self.scenario.s_cooling_penetration_rate.get_item(rkey)
-            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
-
-        for building in buildings:
-            if not building.cooling_system.is_adopted:
-                building.cooling_system.adopt(adoption_prob=get_cooling_adoption_prob(building.rkey.make_copy()))
-            else:
-                building.cooling_system.replace()
-
     def update_buildings_profile_hot_water(self, buildings: "AgentList[Building]"):
         for building in buildings:
             index = self.scenario.s_useful_energy_demand_index_hot_water.get_item(building.rkey)
@@ -125,7 +116,45 @@ class BuildingEnvironment(Environment):
                 building.hot_water_demand_per_person = building.hot_water_demand / building.population
                 building.hot_water_demand_per_m2 = building.hot_water_demand / building.total_living_area
 
-    def update_buildings_technology_heating(self, buildings: "AgentList[Building]"):
+    def update_buildings_technology_cooling(self, buildings: "AgentList[Building]"):
+
+        def get_cooling_adoption_prob(rkey: "BuildingKey"):
+            penetration_rate_1 = self.scenario.s_cooling_penetration_rate.get_item(rkey)
+            rkey.year = rkey.year - 1
+            penetration_rate_0 = self.scenario.s_cooling_penetration_rate.get_item(rkey)
+            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
+
+        for building in buildings:
+            not_adopted = not building.cooling_system.is_adopted
+            triggered_to_adopt = random.uniform(0, 1) <= get_cooling_adoption_prob(building.rkey.make_copy())
+            time_to_replace = building.cooling_system.rkey.year == building.cooling_system.next_replace_year
+            if (not_adopted and triggered_to_adopt) or time_to_replace:
+                building.cooling_system.select(
+                    cooling_demand_peak=building.cooling_demand_profile.max(),
+                    cooling_demand=building.cooling_demand,
+                )
+                building.cooling_system.install()
+
+    def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
+
+        def get_ventilation_adoption_prob(rkey: "BuildingKey"):
+            penetration_rate_1 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
+            rkey.year = rkey.year - 1
+            penetration_rate_0 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
+            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
+
+        for building in buildings:
+            # TODO: check literature of ventilation, because maybe the "driver" should be m3 instead of m2
+            not_adopted = not building.ventilation_system.is_adopted
+            triggered_to_adopt = random.uniform(0, 1) <= get_ventilation_adoption_prob(building.rkey.make_copy())
+            time_to_replace = building.ventilation_system.rkey.year == building.ventilation_system.next_replace_year
+            if (not_adopted and triggered_to_adopt) or time_to_replace:
+                building.ventilation_system.select(total_living_area=building.total_living_area)
+                building.ventilation_system.install()
+
+    def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            ...
         # replace: triggered by lifetime
         # (1) sync renovation
         # --> might be triggered before replacing the heating system, then the feasible technologies could be more.
@@ -140,26 +169,15 @@ class BuildingEnvironment(Environment):
         #     --> switching from one type of system to another is totally open
         #     --> the barrier is reflected in the cost for switching from one type of technology to the other
         # --> a utility function is designed and the utilities are pre-calculated and saved in a rdict
-        ...
 
-    def update_buildings_technology_ventilation(self, buildings: "AgentList[Building]"):
-
-        def get_ventilation_adoption_prob(rkey: "BuildingKey"):
-            penetration_rate_1 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
-            rkey.year = rkey.year - 1
-            penetration_rate_0 = self.scenario.s_ventilation_penetration_rate.get_item(rkey)
-            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
-
-        for building in buildings:
-            if not building.ventilation_system.is_adopted:
-                building.ventilation_system.adopt(adoption_prob=get_ventilation_adoption_prob(building.rkey.make_copy()))
-            else:
-                building.ventilation_system.replace()
-
-    def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
-        if self.scenario.renovation_lifecycle:
+    def update_buildings_technology_heating_mandatory(self, buildings: "AgentList[Building]"):
+        if self.scenario.heating_technology_mandatory:
             for building in buildings:
                 ...
+
+    def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            ...
 
         # How is renovation triggered?
         # (1) natural renovation
@@ -182,7 +200,6 @@ class BuildingEnvironment(Environment):
         # --> ranking
         # --> limitation of craftsman capacity (with a high capacity, we can still have the not-limited demand as results)
         # (3) material demand
-        ...
 
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:

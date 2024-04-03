@@ -29,15 +29,23 @@ class HeatingSystem:
         )
 
     def init_heating_technology_main(self):
+
+        def mark_info():
+            self.scenario.location_building_num.accumulate_item(rkey=self.rkey, value=1)
+            self.scenario.heating_technology_main_initial_adoption.accumulate_item(rkey=self.heating_technology_main.rkey, value=1)
+            if self.heating_technology_main.rkey.id_heating_technology in [11]:
+                self.district_heating_available = True
+                self.scenario.location_building_num_heating_tech_district_heating.accumulate_item(rkey=self.rkey, value=1)
+            elif self.heating_technology_main.rkey.id_heating_technology in [21, 23, 31, 41]:
+                self.gas_available = True
+                self.scenario.location_building_num_heating_tech_gas.accumulate_item(rkey=self.rkey, value=1)
+
         self.heating_technology_main = HeatingTechnology(self.rkey.make_copy(), self.scenario)
         self.heating_technology_main.init_option()
-        if self.heating_technology_main.rkey.id_heating_technology in [11]:
-            self.district_heating_available = True
-        elif self.heating_technology_main.rkey.id_heating_technology in [21, 23, 31, 41]:
-            self.gas_available = True
         self.heating_technology_main.init_supply_temperature()
         self.heating_technology_main.init_installation_year()
         self.heating_technology_main.update_energy_intensity()
+        mark_info()
 
     def init_heating_technology_second(self):
         df = self.scenario.s_heating_technology_second

@@ -23,8 +23,8 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_mark_up = 0
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
-        self.renovation_lifecycle = 1
         self.renovation_mandatory = 1
+        self.heating_technology_mandatory = 1
 
     def load_scenario_data(self):
         self.load_framework()
@@ -152,6 +152,7 @@ class BuildingScenario(RenderScenario):
         self.s_cooling_technology_cost_om = self.load_scenario("Scenario_CoolingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_cooling_technology_cost_labor = self.load_scenario("Scenario_CoolingTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_cooling_technology_input_labor = self.load_scenario("Scenario_CoolingTechnology_Input_Labor.xlsx", region_level=0)
+        self.s_cooling_technology_utility_power = self.load_scenario("Scenario_CoolingTechnology_UtilityPower.xlsx", region_level=0)
         self.s_ventilation_penetration_rate = self.load_scenario("Scenario_Ventilation_PenetrationRate.xlsx", region_level=0)
         self.s_ventilation_technology_market_share = self.load_scenario("Scenario_VentilationTechnology_MarketShare.xlsx", region_level=0)
         self.s_ventilation_technology_efficiency_class_market_share = self.load_scenario("Scenario_VentilationTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
@@ -160,6 +161,7 @@ class BuildingScenario(RenderScenario):
         self.s_ventilation_technology_cost_om = self.load_scenario("Scenario_VentilationTechnology_Cost_OM.xlsx", region_level=0)
         self.s_ventilation_technology_cost_labor = self.load_scenario("Scenario_VentilationTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_ventilation_technology_input_labor = self.load_scenario("Scenario_VentilationTechnology_Input_Labor.xlsx", region_level=0)
+        self.s_ventilation_technology_utility_power = self.load_scenario("Scenario_VentilationTechnology_UtilityPower.xlsx", region_level=0)
         self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
         self.s_useful_energy_demand_index_hot_water = self.load_scenario("Scenario_UsefulEnergyDemandIndex_HotWater.xlsx", region_level=0)
         self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
@@ -169,26 +171,21 @@ class BuildingScenario(RenderScenario):
     def setup_results_containers(self):
         self.building_profile = []
         self.building_stock = []
-        self.building_num_model = RenderDict.create_empty_rdict(
-            key_cols=[
+        self.building_num_model = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
                 "id_subsector",
                 "id_building_type"
-            ],
-        )
-        self.building_num_total = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.building_num_total = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
                 "id_subsector",
                 "id_building_type"
-            ],
-        )
-        self.renovation_action_building = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.renovation_action_building = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -196,10 +193,8 @@ class BuildingScenario(RenderScenario):
                 "id_building_type",
                 "id_building_construction_period",
                 "year"
-            ]
-        )
-        self.renovation_action_component = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.renovation_action_component = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -208,10 +203,8 @@ class BuildingScenario(RenderScenario):
                 "id_building_construction_period",
                 "id_building_component",
                 "year"
-            ],
-        )
-        self.building_floor_area = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.building_floor_area = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -219,10 +212,8 @@ class BuildingScenario(RenderScenario):
                 "id_building_type",
                 "id_building_construction_period",
                 "year"
-            ],
-        )
-        self.final_energy_demand = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.final_energy_demand = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -232,10 +223,8 @@ class BuildingScenario(RenderScenario):
                 "id_end_use",
                 "id_energy_carrier",
                 "year"
-            ]
-        )
-        self.building_efficiency_class_count = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.building_efficiency_class_count = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_sector",
@@ -244,31 +233,32 @@ class BuildingScenario(RenderScenario):
                 "id_building_construction_period",
                 "id_building_efficiency_class",
                 "year"
-            ]
-        )
-        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(
-            key_cols=[
+            ])
+        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
                 "id_building_location",
                 "id_heating_system",
                 "id_heating_technology",
                 "year"
-            ]
-        )
-        self.building_num_model = RenderDict.create_empty_rdict(key_cols=[
+            ])
+        self.location_building_num = RenderDict.create_empty_rdict(key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_building_location",
+                "year"
+            ])
+        self.location_building_num_heating_tech_district_heating = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type"
+            "id_building_location",
+            "year"
         ])
-        self.building_num_total = RenderDict.create_empty_rdict(key_cols=[
+        self.location_building_num_heating_tech_gas = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type"
+            "id_building_location",
+            "year"
         ])
 
     def setup_agent_params(self):
@@ -509,7 +499,7 @@ class BuildingScenario(RenderScenario):
             "id_ventilation_technology",
             "id_ventilation_technology_efficiency_class",
             "year"
-        ], region_level=0)  # unit: euro/m2 (living area)
+        ], region_level=0)  # unit: euro/m2 (total living area)
 
         self.ventilation_technology_opex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -519,7 +509,7 @@ class BuildingScenario(RenderScenario):
             "id_ventilation_technology",
             "id_ventilation_technology_efficiency_class",
             "year"
-        ], region_level=0)  # unit: euro/m2-year (living area)
+        ], region_level=0)  # unit: euro/m2-year (total living area)
 
         rkey = BuildingKey(id_scenario=self.id, id_region=int(list(str(self.id_region))[0]))
         for id_sector in self.sectors.keys():

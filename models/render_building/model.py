@@ -23,26 +23,19 @@ class BuildingModel(RenderModel):
         self.scenario.load_scenario_data()
         self.scenario.setup_results_containers()
         self.scenario.setup_agent_params()
-        # self.scenario.setup_cost_data()
-        # self.data_collector.collect_scenario_cost()
+        self.scenario.setup_cost_data()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
-        self.collect_heating_technology_main_initial_adoption()
+        # self.export_initialization_info()
 
-    def collect_heating_technology_main_initial_adoption(self):
-        for building in self.buildings:
-            self.scenario.heating_technology_main_initial_adoption.accumulate_item(
-                rkey=building.heating_system.heating_technology_main.rkey,
-                value=1
-            )
-        self.data_collector.save_dataframe(
-            df=self.scenario.heating_technology_main_initial_adoption.to_dataframe(),
-            df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}"
-        )
+    def export_initialization_info(self):
+        self.data_collector.export_scenario_cost()
+        self.data_collector.export_heating_technology_main_initial_adoption()
+        self.data_collector.export_location_infrastructure()
 
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)
-        # self.data_collector.collect_building_stock(self.buildings)
+        self.data_collector.collect_building_stock(self.buildings)
         # self.data_collector.collect_building_final_energy_demand(self.buildings)
         # self.data_collector.collect_building_efficiency_class_count(self.buildings)
         # self.data_collector.collect_building_profile(self.buildings)
@@ -50,7 +43,7 @@ class BuildingModel(RenderModel):
 
     def export_building_info(self):
         # self.data_collector.export_building_floor_area()
-        # self.data_collector.export_building_stock()
+        self.data_collector.export_building_stock()
         # self.data_collector.export_building_final_energy_demand()
         # self.data_collector.export_building_efficiency_class_count()
         # self.data_collector.export_building_profile()
@@ -64,10 +57,10 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_district_heating_availability(self.buildings)
             # self.environment.update_buildings_gas_availability(self.buildings)
             # self.environment.update_buildings_profile_appliance(self.buildings)
-            # self.environment.update_buildings_technology_cooling(self.buildings)
             # self.environment.update_buildings_profile_hot_water(self.buildings)
-            # self.environment.update_buildings_technology_heating(self.buildings)
+            # self.environment.update_buildings_technology_cooling(self.buildings)
             # self.environment.update_buildings_technology_ventilation(self.buildings)
+            # self.environment.update_buildings_technology_heating_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
             # self.environment.update_buildings_demolition(self.buildings)

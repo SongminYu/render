@@ -1,8 +1,6 @@
-import os
 from typing import TYPE_CHECKING
 
 import pandas as pd
-from tqdm import tqdm
 
 from models.render.data_collector import RenderDataCollector
 from models.render_building.building_key import BuildingKey
@@ -11,7 +9,6 @@ if TYPE_CHECKING:
     from Melodie import AgentList
     from models.render_building.scenario import BuildingScenario
     from models.render_building.building import Building
-    from models.render_building.tech_heating import HeatingTechnology
 
 
 class BuildingDataCollector(RenderDataCollector):
@@ -21,7 +18,7 @@ class BuildingDataCollector(RenderDataCollector):
         # define table names (move constants.py here)
         ...
 
-    def collect_scenario_cost(self):
+    def export_scenario_cost(self):
         self.save_dataframe(df=self.scenario.building_component_capex.to_dataframe(), df_name=f"BuildingComponentCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.heating_technology_capex.to_dataframe(), df_name=f"HeatingTechnologyCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.heating_technology_opex.to_dataframe(), df_name=f"HeatingTechnologyOpex_R{self.scenario.id_region}")
@@ -30,6 +27,26 @@ class BuildingDataCollector(RenderDataCollector):
         self.save_dataframe(df=self.scenario.cooling_technology_opex.to_dataframe(), df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
         self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
+
+    def export_heating_technology_main_initial_adoption(self):
+        self.save_dataframe(
+            df=self.scenario.heating_technology_main_initial_adoption.to_dataframe(),
+            df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}"
+        )
+
+    def export_location_infrastructure(self):
+        self.save_dataframe(
+            df=self.scenario.location_building_num.to_dataframe(),
+            df_name=f"LocationBuildingNum_R{self.scenario.id_region}"
+        )
+        self.save_dataframe(
+            df=self.scenario.location_building_num_heating_tech_district_heating.to_dataframe(),
+            df_name=f"LocationBuildingNum_DistrictHeating_R{self.scenario.id_region}"
+        )
+        self.save_dataframe(
+            df=self.scenario.location_building_num_heating_tech_gas.to_dataframe(),
+            df_name=f"LocationBuildingNum_GasBoiler_R{self.scenario.id_region}"
+        )
 
     def collect_building_floor_area(self, buildings: "AgentList[Building]"):
         for building in buildings:
@@ -45,7 +62,7 @@ class BuildingDataCollector(RenderDataCollector):
         self.save_dataframe(df=df, df_name=f"floor_area_R{self.scenario.id_region}")
 
     def collect_building_profile(self, buildings: "AgentList[Building]"):
-        for building in tqdm(buildings, desc="Collecting buildings_profile --> "):
+        for building in buildings:
             for profile_name in [
                 "heating_demand_profile",
                 "cooling_demand_profile",
@@ -80,7 +97,7 @@ class BuildingDataCollector(RenderDataCollector):
             3: "roof",
             4: "basement"
         }
-        for building in tqdm(buildings, desc="Collecting buildings_info --> "):
+        for building in buildings:
             building_dict = building.rkey.to_dict()
             building_dict["name"] = building.name
             # collect building parameters
@@ -147,16 +164,26 @@ class BuildingDataCollector(RenderDataCollector):
             building_dict[f"cooling_system_id_cooling_technology"] = building.cooling_system.rkey.id_cooling_technology
             building_dict[f"cooling_system_installation_year"] = building.cooling_system.installation_year
             building_dict[f"cooling_system_next_replace_year"] = building.cooling_system.next_replace_year
-            building_dict[f"cooling_system_id_energy_carrier"] = building.cooling_system.energy_intensity.id_energy_carrier
-            building_dict[f"cooling_system_energy_intensity"] = building.cooling_system.energy_intensity.value
-            building_dict[f"cooling_system_energy_consumption"] = building.cooling_system.energy_intensity.value * building.cooling_demand
+            if building.cooling_system.energy_intensity is not None:
+                building_dict[f"cooling_system_id_energy_carrier"] = building.cooling_system.energy_intensity.id_energy_carrier
+                building_dict[f"cooling_system_energy_intensity"] = building.cooling_system.energy_intensity.value
+                building_dict[f"cooling_system_energy_consumption"] = building.cooling_system.energy_intensity.value * building.cooling_demand
+            else:
+                building_dict[f"cooling_system_id_energy_carrier"] = None
+                building_dict[f"cooling_system_energy_intensity"] = None
+                building_dict[f"cooling_system_energy_consumption"] = None
             # collection building ventilation system
             building_dict[f"ventilation_system_id_ventilation_technology"] = building.ventilation_system.rkey.id_ventilation_technology
             building_dict[f"ventilation_system_installation_year"] = building.ventilation_system.installation_year
             building_dict[f"ventilation_system_next_replace_year"] = building.ventilation_system.next_replace_year
-            building_dict[f"ventilation_system_id_energy_carrier"] = building.ventilation_system.energy_intensity.id_energy_carrier
-            building_dict[f"ventilation_system_energy_intensity"] = building.ventilation_system.energy_intensity.value
-            building_dict[f"ventilation_system_energy_consumption"] = building.ventilation_system.energy_intensity.value * building.total_living_area
+            if building.ventilation_system.energy_intensity is not None:
+                building_dict[f"ventilation_system_id_energy_carrier"] = building.ventilation_system.energy_intensity.id_energy_carrier
+                building_dict[f"ventilation_system_energy_intensity"] = building.ventilation_system.energy_intensity.value
+                building_dict[f"ventilation_system_energy_consumption"] = building.ventilation_system.energy_intensity.value * building.total_living_area
+            else:
+                building_dict[f"ventilation_system_id_energy_carrier"] = None
+                building_dict[f"ventilation_system_energy_intensity"] = None
+                building_dict[f"ventilation_system_energy_consumption"] = None
             # save the building dict
             self.scenario.building_stock.append(building_dict)
 
@@ -198,11 +225,10 @@ class BuildingDataCollector(RenderDataCollector):
         def get_construction_period_percentage(row_rkey: "BuildingKey"):
             df = self.scenario.load_dataframe("Scenario_Building_ConstructionPeriod.xlsx")
             df1 = df.loc[
-                (df["id_scenario"] == row_rkey.id_scenario) &
                 (df["id_region"] == row_rkey.id_region) &
                 (df["id_sector"] == row_rkey.id_sector) &
                 (df["id_building_type"] == row_rkey.id_building_type)
-                ]
+            ]
             df2 = df1.loc[df1["id_building_construction_period"] == row_rkey.id_building_construction_period]
             return df2.iloc[0]["2019"] / df1["2019"].sum()
 
@@ -212,10 +238,8 @@ class BuildingDataCollector(RenderDataCollector):
                 rkey = BuildingKey().from_dict(row.to_dict())
                 d = row.to_dict()
                 d["num_building_renovation_model"] = d.pop("value")
-                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(
-                    rkey) * get_construction_period_percentage(row_rkey=rkey)
-                d["building_renovation_rate_construction_period"] = d["num_building_renovation_model"] / d[
-                    "num_building_model_construction_period"]
+                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(rkey) * get_construction_period_percentage(row_rkey=rkey)
+                d["building_renovation_rate_construction_period"] = d["num_building_renovation_model"] / d["num_building_model_construction_period"]
                 d["num_building_model_type"] = self.scenario.building_num_model.get_item(rkey)
                 d["building_renovation_rate_type"] = d["num_building_renovation_model"] / d["num_building_model_type"]
                 l.append(d)
@@ -227,10 +251,8 @@ class BuildingDataCollector(RenderDataCollector):
                 rkey = BuildingKey().from_dict(row.to_dict())
                 d = row.to_dict()
                 d["num_component_renovation_model"] = d.pop("value")
-                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(
-                    rkey) * get_construction_period_percentage(row_rkey=rkey)
-                d["component_renovation_rate_construction_period"] = d["num_component_renovation_model"] / d[
-                    "num_building_model_construction_period"]
+                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(rkey) * get_construction_period_percentage(row_rkey=rkey)
+                d["component_renovation_rate_construction_period"] = d["num_component_renovation_model"] / d["num_building_model_construction_period"]
                 d["num_building_model_type"] = self.scenario.building_num_model.get_item(rkey)
                 d["component_renovation_rate_type"] = d["num_component_renovation_model"] / d["num_building_model_type"]
                 l.append(d)

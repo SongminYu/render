@@ -122,6 +122,30 @@ class Building(Agent):
         self.rkey.id_radiator = self.radiator.rkey.id_radiator
         self.radiator.init_installation_year()
 
+    def init_building_renovation_history(self):
+        for component in self.building_components:
+            while component.next_replace_year < self.rkey.year:
+                if random.uniform(0, 1) <= 0.70:
+                    action_year = component.next_replace_year
+                    component.renovate(action_year=action_year)
+                else:
+                    break
+
+    def init_building_heating_cooling_demand(self):
+
+        def init_building_efficiency_class():
+            self.update_building_rc_params()
+            self.update_building_rc_temperature()
+            self.update_building_heating_cooling_demand()
+            self.heating_demand_norm = self.heating_demand_profile.sum()
+            self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
+            self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
+            self.update_building_efficiency_class()
+
+        init_building_efficiency_class()
+        self.update_building_rc_temperature()
+        self.update_building_heating_cooling_demand()
+
     def init_building_cooling_system(self):
         self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)
         if random.uniform(0, 1) <= self.scenario.s_cooling_penetration_rate.get_item(self.rkey):
@@ -154,34 +178,44 @@ class Building(Agent):
             self.heating_system.heating_technology_second
         ]
 
+    def init_building_district_heating_availability(self):
+
+        def get_district_heating_connection_prob():
+            connection_prob = 0
+            n = self.scenario.location_building_num.get_item(self.rkey, not_found_default=0)
+            if n > 0:
+                m = self.scenario.location_building_num_heating_tech_district_heating.get_item(self.rkey, not_found_default=0)
+                initial_ratio = m / n
+                target_ratio = self.scenario.s_infrastructure_availability_district_heating.get_item(self.rkey)
+                if target_ratio > initial_ratio:
+                    connection_prob = (target_ratio - initial_ratio) / (1 - initial_ratio)
+            return connection_prob
+
+        if not self.heating_system.district_heating_available:
+            if random.uniform(0, 1) <= get_district_heating_connection_prob():
+                self.heating_system.district_heating_available = True
+
+    def init_building_gas_availability(self):
+
+        def get_gas_connection_prob():
+            connection_prob = 0
+            n = self.scenario.location_building_num.get_item(self.rkey, not_found_default=0)
+            if n > 0:
+                m = self.scenario.location_building_num_heating_tech_gas.get_item(self.rkey, not_found_default=0)
+                initial_ratio = m / n
+                target_ratio = self.scenario.s_infrastructure_availability_gas.get_item(self.rkey)
+                if target_ratio > initial_ratio:
+                    connection_prob = (target_ratio - initial_ratio) / (1 - initial_ratio)
+            return connection_prob
+
+        if not self.heating_system.gas_available:
+            if random.uniform(0, 1) <= get_gas_connection_prob():
+                self.heating_system.gas_available = True
+
     def init_building_ventilation_system(self):
         self.ventilation_system = VentilationSystem(self.rkey.make_copy(), self.scenario)
         if random.uniform(0, 1) <= self.scenario.s_ventilation_penetration_rate.get_item(self.rkey):
             self.ventilation_system.init_adoption()
-
-    def init_building_renovation_history(self):
-        for component in self.building_components:
-            while component.next_replace_year < self.rkey.year:
-                if random.uniform(0, 1) <= 0.70:
-                    action_year = component.next_replace_year
-                    component.renovate(action_year=action_year)
-                else:
-                    break
-
-    def init_building_heating_cooling_demand(self):
-
-        def init_building_efficiency_class():
-            self.update_building_rc_params()
-            self.update_building_rc_temperature()
-            self.update_building_heating_cooling_demand()
-            self.heating_demand_norm = self.heating_demand_profile.sum()
-            self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
-            self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
-            self.update_building_efficiency_class()
-
-        init_building_efficiency_class()
-        self.update_building_rc_temperature()
-        self.update_building_heating_cooling_demand()
 
     """
     5R1C model - ISO13790
