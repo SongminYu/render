@@ -141,9 +141,11 @@ class BuildingScenario(RenderScenario):
         self.s_infrastructure_availability_district_heating = self.load_scenario("Scenario_Infrastructure_Availability_DistrictHeating.xlsx")
         self.s_infrastructure_availability_gas = self.load_scenario("Scenario_Infrastructure_Availability_Gas.xlsx")
         self.s_radiator = self.load_scenario("Scenario_Radiator.xlsx", region_level=0)
+        self.s_radiator_availability = self.load_scenario("Scenario_Radiator_Availability.xlsx", region_level=0)
         self.s_radiator_cost_material = self.load_scenario("Scenario_Radiator_Cost_Material.xlsx", region_level=0)
         self.s_radiator_cost_labor = self.load_scenario("Scenario_Radiator_Cost_Labor.xlsx", region_level=0)
         self.s_radiator_input_labor = self.load_scenario("Scenario_Radiator_Input_Labor.xlsx", region_level=0)
+        self.s_radiator_utility_power = self.load_scenario("Scenario_Radiator_UtilityPower.xlsx", region_level=0)
         self.s_cooling_penetration_rate = self.load_scenario("Scenario_Cooling_PenetrationRate.xlsx", region_level=0)
         self.s_cooling_technology_market_share = self.load_scenario("Scenario_CoolingTechnology_MarketShare.xlsx", region_level=0)
         self.s_cooling_technology_efficiency_class_market_share = self.load_scenario("Scenario_CoolingTechnology_EfficiencyClass_MarketShare.xlsx", region_level=0)
@@ -428,11 +430,12 @@ class BuildingScenario(RenderScenario):
                             rkey.id_building_action = id_building_action
                             for year in range(self.start_year, self.end_year + 1):
                                 rkey.year = year
-                                self.radiator_capex.set_item(rkey=rkey, value=self.calc_capex(
-                                    investment_cost=self.s_radiator_cost_material.get_item(rkey) + self.s_radiator_input_labor.get_item(rkey) * self.s_radiator_cost_labor.get_item(rkey),
-                                    lifetime=0.5 * (self.p_radiator_lifetime_min.get_item(rkey) + self.p_radiator_lifetime_max.get_item(rkey)),
-                                    interest_rate=self.s_interest_rate.get_item(rkey)
-                                ))
+                                if self.s_radiator_availability.get_item(rkey):
+                                    self.radiator_capex.set_item(rkey=rkey, value=self.calc_capex(
+                                        investment_cost=self.s_radiator_cost_material.get_item(rkey) + self.s_radiator_input_labor.get_item(rkey) * self.s_radiator_cost_labor.get_item(rkey),
+                                        lifetime=0.5 * (self.p_radiator_lifetime_min.get_item(rkey) + self.p_radiator_lifetime_max.get_item(rkey)),
+                                        interest_rate=self.s_interest_rate.get_item(rkey)
+                                    ))
 
     @timer()
     def setup_cooling_technology_cost(self):

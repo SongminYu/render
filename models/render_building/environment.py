@@ -152,6 +152,12 @@ class BuildingEnvironment(Environment):
                 building.ventilation_system.select(total_living_area=building.total_living_area)
                 building.ventilation_system.install()
 
+    def update_buildings_radiator_lifecycle(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            if building.radiator.rkey.year == building.radiator.next_replace_year:
+                building.radiator.select(id_building_action=2)
+                building.radiator.install()
+
     def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
         for building in buildings:
             ...
