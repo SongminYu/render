@@ -168,21 +168,21 @@ class BuildingEnvironment(Environment):
     @staticmethod
     def update_buildings_technology_heating_lifecycle(buildings: "AgentList[Building]"):
         for building in buildings:
-            ...
-        # replace: triggered by lifetime
-        # (1) sync renovation
-        # --> might be triggered before replacing the heating system, then the feasible technologies could be more.
-        # (2) availability
-        # --> district heating, gas might not be available (requires infrastructure data & modeling)
-        # --> renewable source availability, e.g., biomass, HP, etc.
-        # --> technology availability in the market (banning policies)
-        # (3) feasibility
-        # --> some buildings cannot adopt HP and (low-temperature) district heating due to low-efficiency
-        # (4) technology choice logic (after filtering)
-        # --> the layers of system and technology have to be considered
-        #     --> switching from one type of system to another is totally open
-        #     --> the barrier is reflected in the cost for switching from one type of technology to the other
-        # --> a utility function is designed and the utilities are pre-calculated and saved in a rdict
+            for heating_technology in [
+                building.heating_system.heating_technology_main,
+                building.heating_system.heating_technology_second
+            ]:
+                if heating_technology is not None:
+                    if heating_technology.rkey.year == heating_technology.next_replace_year:
+                        heating_technology.update_optional_heating_technologies(
+                            district_heating_available=building.heating_system.district_heating_available,
+                            gas_available=building.heating_system.gas_available
+                        )
+                        heating_technology.select(
+                            heating_demand_peak=building.heating_demand_profile.max(),
+                            heating_demand=building.heating_demand,
+                        )
+                        heating_technology.install()
 
     def update_buildings_technology_heating_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.heating_technology_mandatory:

@@ -138,6 +138,7 @@ class BuildingScenario(RenderScenario):
         self.s_heating_technology_cost_om = self.load_scenario("Scenario_HeatingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_heating_technology_cost_labor = self.load_scenario("Scenario_HeatingTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_heating_technology_input_labor = self.load_scenario("Scenario_HeatingTechnology_Input_Labor.xlsx", region_level=0)
+        self.s_heating_technology_utility_power = self.load_scenario("Scenario_HeatingTechnology_UtilityPower.xlsx", region_level=0)
         self.s_infrastructure_availability_district_heating = self.load_scenario("Scenario_Infrastructure_Availability_DistrictHeating.xlsx")
         self.s_infrastructure_availability_gas = self.load_scenario("Scenario_Infrastructure_Availability_Gas.xlsx")
         self.s_radiator = self.load_scenario("Scenario_Radiator.xlsx", region_level=0)
