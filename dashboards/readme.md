@@ -20,7 +20,8 @@ This document contains the development plan of the `RenderDash` tool.
 - [ ] Add tab buttons on the same website, so we can easily switch between the dashboards --> Tutorial: https://dash.plotly.com/urls
 - [x] Tables for `id_end_use` and `id_energy_carrier`.
 - [x] `id_energy_carrier` for appliances?
-- [ ] Songmin will align the energy carrier inconsistency between model results and reference table.
+- [ ] Songmin will align the energy carrier inconsistency between model results and reference table and push the new calibration target table.
+- [ ] Songmin will confirm where ventilation goes, appliance or cooling, and change calibration target table accordingly.
 
 ### Apr. 10th, 2024
 
