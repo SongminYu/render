@@ -15,12 +15,16 @@ This document contains the development plan of the `RenderDash` tool.
   - [ ] difference in absolute number -> different energy carriers with value in the two tables
   - [ ] difference in percentage
 
-
 ### Apr. 3th, 2024
 
-- [ ] Can we have all the dashboards on the same website, or with a few sheet pages? So we can easily switch between the dashboards. (https://dash.plotly.com/urls)
-- [ ] Tables for `id_end_use` and `id_energy_carrier`
-- [ ] `id_energy_carrier` for appliances?
+- [ ] Add tab buttons on the same website, so we can easily switch between the dashboards --> Tutorial: https://dash.plotly.com/urls
+- [x] Tables for `id_end_use` and `id_energy_carrier`.
+- [x] `id_energy_carrier` for appliances?
+- [ ] Songmin will align the energy carrier inconsistency between model results and reference table.
+
+### Apr. 10th, 2024
+
+- [ ] To be added...
 
 ### Later stage
 
