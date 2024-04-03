@@ -144,3 +144,8 @@ class HeatingTechnology:
                 # value=self.hot_water_contribution * (1 / (self.scenario.s_heating_technology_efficiency.get_item(rkey) * efficiency_adjustment_factor(self.supply_temperature_hot_water)))
                 value=self.hot_water_contribution * (1 / self.scenario.s_heating_technology_efficiency.get_item(rkey))
             ))
+
+    def update_due_to_radiator_change(self, id_radiator: int):
+        self.rkey.id_radiator = id_radiator
+        self.supply_temperature_space_heating = self.scenario.p_building_supply_temperature_space_heating.get_item(self.rkey)
+        self.update_energy_intensity()
