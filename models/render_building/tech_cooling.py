@@ -60,22 +60,6 @@ class CoolingSystem:
             value=1 / self.scenario.p_cooling_technology_efficiency.get_item(self.rkey)
         )
 
-    def adopt(self, adoption_prob: float, cooling_demand_peak: float, cooling_demand: float):
-        if random.uniform(0, 1) <= adoption_prob:
-            id_cooling_technology, id_cooling_technology_efficiency_class = self.select(
-                cooling_demand_peak=cooling_demand_peak,
-                cooling_demand=cooling_demand
-            )
-            self.install(id_cooling_technology, id_cooling_technology_efficiency_class)
-
-    def replace(self, cooling_demand_peak: float, cooling_demand: float):
-        if self.rkey.year == self.next_replace_year:
-            id_cooling_technology, id_cooling_technology_efficiency_class = self.select(
-                cooling_demand_peak=cooling_demand_peak,
-                cooling_demand=cooling_demand
-            )
-            self.install(id_cooling_technology, id_cooling_technology_efficiency_class)
-
     def select(self, cooling_demand_peak: float, cooling_demand: float):
         rkey = self.rkey.make_copy()
         d = {}
@@ -88,11 +72,9 @@ class CoolingSystem:
                     opex = self.scenario.cooling_technology_opex.get_item(rkey) * cooling_demand
                     utility = (capex + opex) ** (- self.scenario.s_cooling_technology_utility_power.get_item(rkey))
                     d[(id_cooling_technology, id_cooling_technology_efficiency_class)] = utility
-        return dict_sample(d)
+        self.rkey.id_cooling_technology, self.rkey.id_cooling_technology_efficiency_class = dict_sample(d)
 
-    def install(self, id_cooling_technology, id_cooling_technology_efficiency_class):
-        self.rkey.id_cooling_technology = id_cooling_technology
-        self.rkey.id_cooling_technology_efficiency_class = id_cooling_technology_efficiency_class
+    def install(self):
         self.update_energy_intensity()
         self.installation_year = self.rkey.year
         self.next_replace_year = self.rkey.year + self.get_lifetime()

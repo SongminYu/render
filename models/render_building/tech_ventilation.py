@@ -60,20 +60,6 @@ class VentilationSystem:
             value=self.scenario.p_ventilation_technology_energy_intensity.get_item(self.rkey)
         )
 
-    def adopt(self, adoption_prob: float, total_living_area: float):
-        if random.uniform(0, 1) <= adoption_prob:
-            id_ventilation_technology, id_ventilation_technology_efficiency_class = self.select(
-                total_living_area=total_living_area
-            )
-            self.install(id_ventilation_technology, id_ventilation_technology_efficiency_class)
-
-    def replace(self, total_living_area: float):
-        if self.rkey.year == self.next_replace_year:
-            id_ventilation_technology, id_ventilation_technology_efficiency_class = self.select(
-                total_living_area=total_living_area
-            )
-            self.install(id_ventilation_technology, id_ventilation_technology_efficiency_class)
-
     def select(self, total_living_area: float):
         rkey = self.rkey.make_copy()
         d = {}
@@ -86,11 +72,9 @@ class VentilationSystem:
                     opex = self.scenario.ventilation_technology_opex.get_item(rkey) * total_living_area
                     utility = (capex + opex) ** (- self.scenario.s_ventilation_technology_utility_power.get_item(rkey))
                     d[(id_ventilation_technology, id_ventilation_technology_efficiency_class)] = utility
-        return dict_sample(d)
+        self.rkey.id_ventilation_technology, self.rkey.id_ventilation_technology_efficiency_class = dict_sample(d)
 
-    def install(self, id_ventilation_technology: int, id_ventilation_technology_efficiency_class: int):
-        self.rkey.id_ventilation_technology = id_ventilation_technology
-        self.rkey.id_ventilation_technology_efficiency_class = id_ventilation_technology_efficiency_class
+    def install(self):
         self.update_energy_intensity()
         self.installation_year = self.rkey.year
         self.next_replace_year = self.rkey.year + self.get_lifetime()
