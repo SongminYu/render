@@ -130,7 +130,7 @@ class BuildingEnvironment(Environment):
             time_to_replace = building.cooling_system.rkey.year == building.cooling_system.next_replace_year
             if (not_adopted and triggered_to_adopt) or time_to_replace:
                 building.cooling_system.select(
-                    cooling_demand_peak=building.cooling_demand_profile.max(),
+                    cooling_demand_peak=building.cooling_demand_peak,
                     cooling_demand=building.cooling_demand,
                 )
                 building.cooling_system.install()
@@ -179,7 +179,7 @@ class BuildingEnvironment(Environment):
                             gas_available=building.heating_system.gas_available
                         )
                         heating_technology.select(
-                            heating_demand_peak=building.heating_demand_profile.max(),
+                            heating_demand_peak=building.heating_demand_peak,
                             heating_demand=building.heating_demand,
                         )
                         heating_technology.install()

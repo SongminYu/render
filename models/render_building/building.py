@@ -21,6 +21,12 @@ if TYPE_CHECKING:
 def create_empty_arr():
     return np.zeros((8760, ))
 
+ID_END_USE_APPLIANCE = 1
+ID_END_USE_SPACE_COOLING = 2
+ID_END_USE_SPACE_HEATING = 3
+ID_END_USE_HOT_WATER = 4
+ID_END_USE_VENTILATION = 5
+ID_ENERGY_CARRIER_ELECTRICITY = 1
 
 class Building(Agent):
     scenario: "BuildingScenario"
@@ -392,10 +398,12 @@ class Building(Agent):
         r5c1_model.update_building_heating_cooling_demand()
         self.heating_demand_profile: np.ndarray = r5c1_model.heating_demand_profile / 1000  # from Wh to kWh
         self.heating_demand = self.heating_demand_profile.sum()
+        self.heating_demand_peak = self.heating_demand_profile.max()
         self.heating_demand_per_m2 = self.heating_demand / self.total_living_area
         self.total_heating_per_m2 = self.heating_demand_per_m2 + self.hot_water_demand_per_m2
         self.cooling_demand_profile: np.ndarray = abs(r5c1_model.cooling_demand_profile / 1000)  # from Wh to kWh
         self.cooling_demand = self.cooling_demand_profile.sum()
+        self.cooling_demand_peak = self.cooling_demand_profile.max()
         self.cooling_demand_per_m2 = self.cooling_demand / self.total_living_area
 
         # for memory efficiency, the three profiles below are commented out:
@@ -423,23 +431,23 @@ class Building(Agent):
         self.update_ventilation_final_energy_demand()
 
     def update_appliance_electricity_final_energy_demand(self):
-        self.final_energy_demand[1] = [
-            (1, self.appliance_electricity_profile.sum())
+        self.final_energy_demand[ID_END_USE_APPLIANCE] = [
+            (ID_ENERGY_CARRIER_ELECTRICITY, self.appliance_electricity_profile.sum())
         ]
 
     def update_space_cooling_final_energy_demand(self):
         if self.cooling_system.is_adopted:
-            self.final_energy_demand[2] = [
+            self.final_energy_demand[ID_END_USE_SPACE_COOLING] = [
                 (
                     self.cooling_system.energy_intensity.id_energy_carrier,
                     self.cooling_system.energy_intensity.value * abs(self.cooling_demand_profile.sum())
                 )
             ]
         else:
-            self.final_energy_demand[2] = []
+            self.final_energy_demand[ID_END_USE_SPACE_COOLING] = []
 
     def update_space_heating_final_energy_demand(self):
-        self.final_energy_demand[3] = []
+        self.final_energy_demand[ID_END_USE_SPACE_HEATING] = []
         for heating_technology in self.heating_system.technologies:
             if heating_technology is not None:
                 for energy_intensity in heating_technology.space_heating_energy_intensities:
@@ -451,7 +459,7 @@ class Building(Agent):
                     )
 
     def update_hot_water_final_energy_demand(self):
-        self.final_energy_demand[4] = []
+        self.final_energy_demand[ID_END_USE_HOT_WATER] = []
         for heating_technology in self.heating_system.technologies:
             if heating_technology is not None:
                 for energy_intensity in heating_technology.hot_water_energy_intensities:
@@ -464,14 +472,14 @@ class Building(Agent):
 
     def update_ventilation_final_energy_demand(self):
         if self.ventilation_system.is_adopted:
-            self.final_energy_demand[5] = [
+            self.final_energy_demand[ID_END_USE_VENTILATION] = [
                 (
                     self.ventilation_system.energy_intensity.id_energy_carrier,
                     self.total_living_area * self.ventilation_system.energy_intensity.value
                 )
             ]
         else:
-            self.final_energy_demand[5] = []
+            self.final_energy_demand[ID_END_USE_VENTILATION] = []
 
     """
     Future projection functions
