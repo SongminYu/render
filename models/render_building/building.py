@@ -34,7 +34,7 @@ class Building(Agent):
     scenario: "BuildingScenario"
 
     """
-    Building initialization functions
+    Building initialization
     """
 
     def setup(self):
@@ -121,7 +121,7 @@ class Building(Agent):
                 ref_area=self.__dict__[self.scenario.p_building_envelope_component_area_ref.get_item(component.rkey)],
                 ratio=self.scenario.p_building_envelope_component_area_ratio.get_item(component.rkey)
             )
-            component.construct()
+            component.init_construction()
             self.building_components[component_name] = component
 
     def init_radiator(self):
@@ -135,46 +135,14 @@ class Building(Agent):
             while component.next_replace_year < self.rkey.year:
                 if random.uniform(0, 1) <= 0.70:
                     action_year = component.next_replace_year
-                    component.renovate(action_year=action_year)
+                    component.init_historical_renovation(action_year=action_year)
                 else:
                     break
-
-    def init_building_heating_cooling_demand(self):
-
-        def init_building_efficiency_class():
-            self.update_building_rc_params()
-            self.update_building_rc_temperature()
-            self.update_building_heating_cooling_demand()
-            self.heating_demand_norm = self.heating_demand_profile.sum()
-            self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
-            self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
-            self.update_building_efficiency_class()
-
-        init_building_efficiency_class()
-        self.update_building_rc_temperature()
-        self.update_building_heating_cooling_demand()
 
     def init_building_cooling_system(self):
         self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)
         if random.uniform(0, 1) <= self.scenario.s_cooling_penetration_rate.get_item(self.rkey):
             self.cooling_system.init_adoption()
-
-        # for a percentage of buildings, cooling systems are initialized (id_end_use = 2)
-        # (1) dwelling-based or building-based?
-        # --> It can be mixed if the whole building has to be installed with cooling together or not.
-        # --> Penetration modeling can be more complicated with dwelling-based approach (iterating through units not buildings)
-        # --> Take data from FORECAST-Appliance, but FORECAST-Appliance takes a dwelling-based approach
-        # --> adoption history needs to be developed
-        # (2) technology modeling
-        # --> air-conditioner (with different efficiency levels in the availability table)
-        # --> id_cooling_technology, id_cooling_technology_efficiency_class
-
-        # Residential
-        # - Penetration curve is extracted from FORECAST-ResidentialAppliance (adoption probability of a building can be calculated based on the dwelling-based numbers)
-        # - Technology availability table and efficiency/energy intensity of different efficiency levels (for modeling MEPS) will be developed based on FORECAST-ResidentialAppliance
-        # Tertiary
-        # - Penetration curve will be developed based on GHD-Befragung data
-        # - Technology availability table and efficiency/energy intensity of different efficiency levels (for modeling MEPS) will be developed based on FORECAST-ResidentialAppliance
 
     def init_building_heating_system(self):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
@@ -226,10 +194,25 @@ class Building(Agent):
             self.ventilation_system.init_adoption()
 
     """
-    5R1C model - ISO13790
+    heating and cooling demand calculation
     """
 
-    def update_building_rc_params(self):
+    def calc_building_heating_cooling_demand(self):
+
+        def init_building_efficiency_class():
+            self.update_r5c1_params()
+            self.update_r5c1_temperature(norm=True)
+            self.conduct_r5c1_calculation()
+            self.heating_demand_norm = self.heating_demand_profile.sum()
+            self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
+            self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
+            self.assign_building_efficiency_class()
+
+        init_building_efficiency_class()
+        self.update_r5c1_temperature()
+        self.conduct_r5c1_calculation()
+
+    def update_r5c1_params(self):
 
         def get_infiltration_param(id_window_option_efficiency_class: int):
             if id_window_option_efficiency_class <= 2:
@@ -279,12 +262,10 @@ class Building(Agent):
         # h_ve_adj --> heat transfer coefficient of ventilation to external air (equation 21)
         pho_a_c = 1200 / 3600  # Wh/m3K
         b_ve_k = 1  # when there is no ventilation or a "buffer zone", it equals to 1
-        q_ve_inf = get_infiltration_param(
-            window.rkey.id_building_component_option_efficiency_class)  # air flow rate due to infiltration (unit: 1/hour)
+        q_ve_inf = get_infiltration_param(window.rkey.id_building_component_option_efficiency_class)  # air flow rate due to infiltration (unit: 1/hour)
         q_ve_ven = 0.4  # air flow rate due to ventilation (unit: 1/hour)
         h = 2.5  # height per storey (unit: m)
-        self.h_vent_adj = pho_a_c * b_ve_k * \
-                          (q_ve_inf + q_ve_ven) * self.total_living_area * h
+        self.h_vent_adj = pho_a_c * b_ve_k * (q_ve_inf + q_ve_ven) * self.total_living_area * h
 
         # h_tr_1, h_tr_2, h_tr_3 --> intermediate variables in the equation
         self.h_tr_1 = 1 / ((1 / self.h_vent_adj) + (1 / self.h_tr_is))
@@ -297,8 +278,7 @@ class Building(Agent):
         # 1. internal gains
         # 1.1 internal gains through occupancy
         phi_occ = 80  # W per person  (number of person from units)
-        self.internal_gain_occ = phi_occ * \
-                                 self.occupancy_profile * self.population
+        self.internal_gain_occ = phi_occ * self.occupancy_profile * self.population
 
         # 1.2 internal gains through appliance
         self.internal_gain_app = self.appliance_electricity_profile * \
@@ -328,8 +308,7 @@ class Building(Agent):
             # external radiant heat transfer coefficient
             h_r = 4 * epsilon * sigma * ((outside_temperature + 273.15) ** 3)
             component = self.building_components[component_name]
-            return component.area * component.u_value * resistance_coefficient * temp_diff * form_param[
-                component_name] * h_r
+            return component.area * component.u_value * resistance_coefficient * temp_diff * form_param[component_name] * h_r
 
         total_radiation = create_empty_arr()
         rkey = self.rkey.make_copy()
@@ -359,9 +338,9 @@ class Building(Agent):
         self.internal_gain = self.internal_gain_occ + self.internal_gain_app
         self.solar_gain = self.solar_gain_opa + self.solar_gain_gla
 
-    def update_building_rc_temperature(self):
+    def update_r5c1_temperature(self, norm: Optional[bool] = False):
         self.weather_temperature = self.scenario.pr_weather_temperature.get_item(self.rkey)
-        if self.rkey.id_building_efficiency_class is None:
+        if self.rkey.id_building_efficiency_class is None or norm:
             self.set_temperature_min = np.ones((8760,)) * 20
             self.set_temperature_max = np.ones((8760,)) * 27
         else:
@@ -380,7 +359,7 @@ class Building(Agent):
                     self.set_temperature_min[hour] = occupied_min
                     self.set_temperature_max[hour] = occupied_max
 
-    def update_building_heating_cooling_demand(self):
+    def conduct_r5c1_calculation(self):
 
         def inherit_params(empty_r5c1_model: "R5C1"):
             for attribute, _ in spec:
@@ -400,12 +379,7 @@ class Building(Agent):
         self.cooling_demand_peak = self.cooling_demand_profile.max()
         self.cooling_demand_per_m2 = self.cooling_demand / self.total_living_area
 
-        # for memory efficiency, the three profiles below are commented out:
-        # self.temp_mass_profile: np.ndarray = r5c1_model.temp_mass_profile
-        # self.temp_surface_profile: np.ndarray = r5c1_model.temp_surface_profile
-        # self.temp_air_profile: np.ndarray = r5c1_model.temp_air_profile
-
-    def update_building_efficiency_class(self):
+    def assign_building_efficiency_class(self):
         for _, row in self.scenario.p_building_efficiency_class_intensity.iterrows():
             if row["min"] <= self.total_heating_per_m2 <= row["max"]:
                 self.rkey.id_building_efficiency_class = row["id_building_efficiency_class"]
@@ -476,8 +450,43 @@ class Building(Agent):
             self.final_energy_demand[ID_END_USE_VENTILATION] = []
 
     """
+    Calculate total energy cost
+    """
+
+    def update_total_energy_cost(self):
+        self.total_energy_cost = 0
+        for _, end_use_energy_intensities in self.final_energy_demand.items():
+            for id_energy_carrier, final_energy_demand in end_use_energy_intensities:
+                rkey = self.rkey.make_copy().set_id({"id_energy_carrier": id_energy_carrier})
+                self.total_energy_cost += final_energy_demand * self.scenario.s_final_energy_carrier_price.get_item(rkey)
+
+    """
     Future projection functions
     """
+
+    def renovate_component(
+            self,
+            component_name: str,
+            id_building_component_option: int,
+            id_building_component_option_efficiency_class: int,
+            mark_renovation_action: Optional[bool] = True
+    ):
+        self.building_components[component_name].renovate(
+            id_building_component_option=id_building_component_option,
+            id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
+        )
+        self.calc_building_heating_cooling_demand()
+        self.update_space_cooling_final_energy_demand()
+        self.update_space_heating_final_energy_demand()
+        self.update_total_energy_cost()
+        if mark_renovation_action:
+            self.building_components[component_name].mark_renovation_action()
+
+
+
+
+
+
 
     def conduct_sync_renovation(self, trigger_type: str, trigger_id: str or int, action_year: int):
         # TODO: We don't consider sync_renovation in initialization but in future projection.
@@ -487,7 +496,7 @@ class Building(Agent):
                 id_building_component = int(col.split("_")[-1])
                 for component in self.building_components.values():
                     if component.rkey.id_building_component == id_building_component:
-                        component.renovate(action_year=action_year)
+                        component.init_historical_renovation(action_year=action_year)
 
     def get_sync_renovation_actions(self, trigger_type: str, trigger_id: str or int):
         col = f'{trigger_type}_{trigger_id}'

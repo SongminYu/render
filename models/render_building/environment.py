@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from Melodie import Environment
 from tqdm import tqdm
-
+from utils.funcs import dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
     from Melodie import AgentList
@@ -27,11 +27,12 @@ class BuildingEnvironment(Environment):
             building.init_building_components_construction()
             building.init_radiator()
             building.init_building_renovation_history()
-            building.init_building_heating_cooling_demand()
+            building.calc_building_heating_cooling_demand()
             building.init_building_cooling_system()
             building.init_building_heating_system()
             building.init_building_ventilation_system()
             building.init_final_energy_demand()
+            building.update_total_energy_cost()
 
         for building in tqdm(buildings, desc="Setting up infrastructure availability --> "):
             building.init_building_district_heating_availability()
@@ -191,29 +192,53 @@ class BuildingEnvironment(Environment):
 
     def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
         for building in buildings:
-            ...
+            total_energy_cost_before = building.total_energy_cost
+            for component_name, building_component in building.building_components.items():
+                if building_component.rkey.year == building_component.next_replace_year:
+                    d_option_cost = {}
+                    rkey = building_component.rkey.make_copy()
+                    for id_building_component_option in self.scenario.r_building_component_option.get_item(rkey):
+                        rkey.id_building_component_option = id_building_component_option
+                        for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
+                            rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
+                            if self.scenario.s_building_component_availability.get_item(rkey):
+                                capex = self.scenario.building_component_capex.get_item(rkey) * building_component.area
+                                building.renovate_component(
+                                    component_name=component_name,
+                                    id_building_component_option=id_building_component_option,
+                                    id_building_component_option_efficiency_class=id_building_component_option_efficiency_class,
+                                    mark_renovation_action=False
+                                )
+                                energy_cost_saving = total_energy_cost_before - building.total_energy_cost
+                                d_option_cost[(id_building_component_option, id_building_component_option_efficiency_class)] = capex - energy_cost_saving
+                    id_building_component_option, id_building_component_option_efficiency_class = dict_utility_sample(
+                        options=dict_normalize(d_option_cost),
+                        utility_power=self.scenario.s_building_component_utility_power.get_item(rkey)
+                    )
+                    building.renovate_component(
+                        component_name=component_name,
+                        id_building_component_option=id_building_component_option,
+                        id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
+                    )
 
-        # How is renovation triggered?
-        # (1) natural renovation
-        # --> triggered by lifetime (each component),
-        # --> sync_renovation can be triggerd (incl. heating system) but those minimum lifetime is considered
-        # (2) forced renovation
-        # --> triggerd by efficiency requirement (policy scenario)
 
-        # How is renovation done?
-        # (1) conventional renovation
-        # --> for individual components, with longer time and lower cost
-        # (2) serial renovation
-        # --> for individual or multiple components, with shorter time and higher cost (less craftsman demand?)
 
-        # furthermore
-        # (1) craftsman demand, with data from:
-        # --> https://www.nature.com/articles/s41597-023-02379-6
-        # --> https://springernature.figshare.com/collections/Realization_times_of_energetic_modernization_measures_for_buildings_based_on_interviews_with_craftworkers/6650900/1)
-        # (2) renovation_actions are stored in a pipeline and executed by the end of the year to implement
-        # --> ranking
-        # --> limitation of craftsman capacity (with a high capacity, we can still have the not-limited demand as results)
-        # (3) material demand
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:

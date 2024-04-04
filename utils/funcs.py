@@ -1,6 +1,6 @@
 import random
 from typing import Dict, Any
-
+import math
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -22,3 +22,18 @@ def dict_sample(options: Dict[Any, float]) -> Any:
             option_chosen_key = key
             break
     return option_chosen_key
+
+
+def dict_normalize(options: Dict[Any, float]) -> Dict[Any, float]:
+    value_min = min(options.values())
+    value_max = max(options.values())
+    for key, value in options.items():
+        options[key] = (value - value_min) / (value_max - value_min)
+    return options
+
+
+def dict_utility_sample(options: Dict[Any, float], utility_power: float) -> Any:
+    for key, value in options.items():
+        options[key] = math.exp(- value * utility_power)
+    return dict_sample(options)
+

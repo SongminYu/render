@@ -23,8 +23,8 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_mark_up = 0
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
-        self.renovation_mandatory = 1
-        self.heating_technology_mandatory = 1
+        self.renovation_mandatory = 0
+        self.heating_technology_mandatory = 0
 
     def load_scenario_data(self):
         self.load_framework()
@@ -102,6 +102,7 @@ class BuildingScenario(RenderScenario):
         self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
         self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
         self.p_cooling_technology_efficiency = self.load_param("Parameter_CoolingTechnology_EfficiencyCoefficient.xlsx")
+        self.p_heating_technology_cost_material = self.load_scenario("Parameter_HeatingTechnology_Cost_Material.xlsx", region_level=0)
         self.p_ventilation_technology_lifetime_min = self.load_param("Parameter_VentilationTechnology_Lifetime.xlsx", col="min")
         self.p_ventilation_technology_lifetime_max = self.load_param("Parameter_VentilationTechnology_Lifetime.xlsx", col="max")
         self.p_ventilation_technology_energy_intensity = self.load_param("Parameter_VentilationTechnology_EnergyIntensity.xlsx")
@@ -124,17 +125,17 @@ class BuildingScenario(RenderScenario):
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")
         self.s_building_unit_area = self.load_scenario("Scenario_Building_UnitArea.xlsx", region_level=0)
+        self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
         self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
         self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0)
         self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0)
-        self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0)
-        self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
+        self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True)
+        self.s_building_component_utility_power = self.load_scenario("Scenario_BuildingComponent_UtilityPower.xlsx", region_level=0)
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=0)
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
         self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
         self.s_heating_technology_availability = self.load_scenario("Scenario_HeatingTechnology_Availability.xlsx", region_level=0)
-        self.s_heating_technology_cost_material = self.load_scenario("Scenario_HeatingTechnology_Cost_Material.xlsx", region_level=0)
         self.s_heating_technology_cost_om = self.load_scenario("Scenario_HeatingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_heating_technology_cost_labor = self.load_scenario("Scenario_HeatingTechnology_Cost_Labor.xlsx", region_level=0)
         self.s_heating_technology_input_labor = self.load_scenario("Scenario_HeatingTechnology_Input_Labor.xlsx", region_level=0)
@@ -207,6 +208,16 @@ class BuildingScenario(RenderScenario):
                 "id_building_component",
                 "year"
             ])
+        self.renovation_action_labor_demand = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type",
+            "id_building_construction_period",
+            "id_building_component",
+            "year"
+        ])
         self.building_floor_area = RenderDict.create_empty_rdict(key_cols=[
                 "id_scenario",
                 "id_region",
@@ -365,16 +376,6 @@ class BuildingScenario(RenderScenario):
                 opex += energy_intensity * energy_price
             return opex
 
-        self.heating_technology_capex = RenderDict.create_empty_rdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_heating_technology",
-            "id_heating_system_action",
-            "year"
-        ], region_level=0)  # unit: euro/kW
-
         self.heating_technology_opex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
@@ -397,11 +398,6 @@ class BuildingScenario(RenderScenario):
                         for year in range(self.start_year, self.end_year + 1):
                             rkey.year = year
                             if self.s_heating_technology_availability.get_item(rkey):
-                                self.heating_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
-                                    investment_cost=self.s_heating_technology_cost_material.get_item(rkey) + self.s_heating_technology_input_labor.get_item(rkey) * self.s_heating_technology_cost_labor.get_item(rkey),
-                                    lifetime=0.5 * (self.p_heating_technology_lifetime_min.get_item(rkey) + self.p_heating_technology_lifetime_max.get_item(rkey)),
-                                    interest_rate=self.s_interest_rate.get_item(rkey)
-                                ))
                                 self.heating_technology_opex.set_item(rkey=rkey, value=calc_heating_technology_opex())
 
     @timer()

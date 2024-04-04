@@ -1,5 +1,5 @@
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Tuple, Dict, Optional
 
 from utils.funcs import dict_sample
 from models.render_building.building_key import BuildingKey
@@ -31,27 +31,33 @@ class BuildingComponent:
     def init_area(self, ref_area, ratio):
         self.area = ref_area * ratio
 
-    def construct(self):
+    def get_lifetime(self):
+        df = self.rkey.filter_dataframe(self.scenario.p_building_component_lifetime)
+        d = {}
+        for index, row in df.iterrows():
+            d[(row["min"], row["max"])] = row["pdf"]
+        lifetime_min, lifetime_max = dict_sample(d)
+        return random.randint(lifetime_min, lifetime_max)
+
+    def init_construction(self):
         self.construction_year = random.randint(
             self.scenario.p_building_construction_year_min.get_item(self.rkey),
             self.scenario.p_building_construction_year_max.get_item(self.rkey)
         )
         self.installation_year = self.construction_year
         self.next_replace_year = self.construction_year + self.get_lifetime()
-        self.set_efficiency(action_year=self.construction_year, id_building_action=1)
+        self.init_random_select(action_year=self.construction_year, id_building_action=1)
 
-    def renovate(self, action_year: int):
+    def init_historical_renovation(self, action_year: int):
         minimum_lifetime = self.scenario.p_building_component_minimum_lifetime.get_item(self.rkey)
         # this minimum_lifetime should be no longer than the possible shortest lifetime
         if action_year - self.installation_year >= minimum_lifetime:
             self.installation_year = action_year
             self.next_replace_year = action_year + self.get_lifetime()
-            self.set_efficiency(action_year=action_year, id_building_action=2)
-            rkey = self.rkey.make_copy().set_id({"year": action_year})
-            self.scenario.renovation_action_building.accumulate_item(rkey=rkey, value=1)
-            self.scenario.renovation_action_component.accumulate_item(rkey=rkey, value=1)
+            self.init_random_select(action_year=action_year, id_building_action=2)
+            self.mark_renovation_action(rkey=self.rkey.make_copy().set_id({"year": action_year}))
 
-    def set_efficiency(self, action_year: int, id_building_action: int):
+    def init_random_select(self, action_year: int, id_building_action: int):
         rkey = self.rkey.make_copy()
         rkey.year, rkey.id_building_action = action_year, id_building_action
         d = {}
@@ -61,11 +67,21 @@ class BuildingComponent:
         self.rkey.id_building_component_option_efficiency_class = dict_sample(d)
         self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
 
-    def get_lifetime(self):
-        df = self.rkey.filter_dataframe(self.scenario.p_building_component_lifetime)
-        d = {}
-        for index, row in df.iterrows():
-            d[(row["min"], row["max"])] = row["pdf"]
-        lifetime_min, lifetime_max = dict_sample(d)
-        return random.randint(lifetime_min, lifetime_max)
+    def mark_renovation_action(self, rkey: Optional["BuildingKey"] = None):
+        if rkey is None:
+            rkey = self.rkey
+        self.scenario.renovation_action_building.accumulate_item(rkey=rkey, value=1)
+        self.scenario.renovation_action_component.accumulate_item(rkey=rkey, value=1)
+        # self.scenario.renovation_action_labor_demand.accumulate_item(rkey=rkey, value=self.scenario.s_building_component_input_labor.get_item(self.rkey))
+
+    def renovate(self, id_building_component_option: int, id_building_component_option_efficiency_class: int):
+        self.rkey.id_building_component_option = id_building_component_option
+        self.rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
+        self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
+        self.installation_year = self.rkey.year
+        self.next_replace_year = self.rkey.year + self.get_lifetime()
+
+
+
+
 

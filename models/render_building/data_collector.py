@@ -63,13 +63,7 @@ class BuildingDataCollector(RenderDataCollector):
 
     def collect_building_profile(self, buildings: "AgentList[Building]"):
         for building in buildings:
-            for profile_name in [
-                "heating_demand_profile",
-                "cooling_demand_profile",
-                # "temp_mass_profile",
-                # "temp_surface_profile",
-                # "temp_air_profile"
-            ]:
+            for profile_name in ["heating_demand_profile", "cooling_demand_profile"]:
                 building_dict = building.rkey.to_dict()
                 building_dict["profile_name"] = profile_name
                 for index, value in enumerate(building.__dict__[profile_name]):
