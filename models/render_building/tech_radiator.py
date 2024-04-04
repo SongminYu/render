@@ -2,7 +2,7 @@ import random
 from typing import TYPE_CHECKING
 
 from models.render_building.building_key import BuildingKey
-from utils.funcs import dict_sample
+from utils.funcs import dict_normalize, dict_utility_sample
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
 
@@ -36,14 +36,16 @@ class Radiator:
 
     def select(self, id_building_action: int):
         rkey = self.rkey.make_copy().set_id({"id_building_action": id_building_action})
-        d = {}
+        d_option_cost = {}
         for id_radiator in self.scenario.radiators.keys():
             rkey.id_radiator = id_radiator
             if self.scenario.s_radiator_availability.get_item(rkey):
                 capex = self.scenario.radiator_capex.get_item(rkey)
-                utility = capex ** (- self.scenario.s_radiator_utility_power.get_item(rkey))
-                d[id_radiator] = utility
-        self.rkey.id_radiator = dict_sample(d)
+                d_option_cost[id_radiator] = capex
+        self.rkey.id_radiator = dict_utility_sample(
+            options=dict_normalize(d_option_cost),
+            utility_power=self.scenario.s_radiator_utility_power.get_item(rkey)
+        )
 
     def install(self):
         self.installation_year = self.rkey.year

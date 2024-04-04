@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from models.render_building.building_key import BuildingKey
 from models.render_building.tech import EnergyIntensity
-from utils.funcs import dict_sample
+from utils.funcs import dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
@@ -62,7 +62,7 @@ class CoolingSystem:
 
     def select(self, cooling_demand_peak: float, cooling_demand: float):
         rkey = self.rkey.make_copy()
-        d = {}
+        d_option_cost = {}
         for id_cooling_technology in self.scenario.cooling_technologies.keys():
             rkey.id_cooling_technology = id_cooling_technology
             for id_cooling_technology_efficiency_class in self.scenario.r_cooling_technology_efficiency_class.get_item(rkey):
@@ -70,9 +70,11 @@ class CoolingSystem:
                 if self.scenario.s_cooling_technology_availability.get_item(rkey):
                     capex = self.scenario.cooling_technology_capex.get_item(rkey) * cooling_demand_peak
                     opex = self.scenario.cooling_technology_opex.get_item(rkey) * cooling_demand
-                    utility = (capex + opex) ** (- self.scenario.s_cooling_technology_utility_power.get_item(rkey))
-                    d[(id_cooling_technology, id_cooling_technology_efficiency_class)] = utility
-        self.rkey.id_cooling_technology, self.rkey.id_cooling_technology_efficiency_class = dict_sample(d)
+                    d_option_cost[(id_cooling_technology, id_cooling_technology_efficiency_class)] = capex + opex
+        self.rkey.id_cooling_technology, self.rkey.id_cooling_technology_efficiency_class = dict_utility_sample(
+            options=dict_normalize(d_option_cost),
+            utility_power=self.scenario.s_cooling_technology_utility_power.get_item(rkey)
+        )
 
     def install(self):
         self.update_energy_intensity()

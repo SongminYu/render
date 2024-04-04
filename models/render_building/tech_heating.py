@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from models.render_building.building_key import BuildingKey
 from models.render_building.tech import EnergyIntensity
-from utils.funcs import dict_sample
+from utils.funcs import dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
@@ -188,15 +188,17 @@ class HeatingTechnology:
 
     def select(self, heating_demand_peak: float, heating_demand: float):
         rkey = self.rkey.make_copy()
-        d = {}
+        d_option_cost = {}
         for id_heating_technology in self.optional_heating_technologies:
             rkey.id_heating_technology = id_heating_technology
             if self.scenario.s_heating_technology_availability.get_item(rkey):
-                capex = self.scenario.heating_technology_capex.get_item(rkey) * heating_demand_peak
+                capex = ...
                 opex = self.scenario.heating_technology_opex.get_item(rkey) * heating_demand
-                utility = (capex + opex) ** (- self.scenario.s_heating_technology_utility_power.get_item(rkey))
-                d[id_heating_technology] = utility
-        self.rkey.id_heating_technology = dict_sample(d)
+                d_option_cost[id_heating_technology] = capex + opex
+        self.rkey.id_heating_technology = dict_utility_sample(
+            options=dict_normalize(d_option_cost),
+            utility_power=self.scenario.s_heating_technology_utility_power.get_item(rkey)
+        )
 
     def install(self):
         self.update_energy_intensity_space_heating()
