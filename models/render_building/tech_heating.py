@@ -2,18 +2,15 @@ import random
 from typing import Optional
 from typing import TYPE_CHECKING
 
+from models.render_building import cons
 from models.render_building.building_key import BuildingKey
 from models.render_building.tech import EnergyIntensity
-from utils.funcs import dict_normalize, dict_utility_sample
+from utils.funcs import dict_sample, dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
 
-DISTRICT_HEATING_TECHNOLOGIES = [11]
-GAS_HEATING_TECHNOLOGIES = [21, 24, 26, 31, 41]
-ID_END_USE_SPACE_HEATING = 3
-ID_END_USE_HOT_WATER = 4
-SECOND_HEATING_TECHNOLOGIES = [34, 50]
+
 
 
 class HeatingSystem:
@@ -39,10 +36,10 @@ class HeatingSystem:
         def mark_info():
             self.scenario.location_building_num.accumulate_item(rkey=self.rkey, value=1)
             self.scenario.heating_technology_main_initial_adoption.accumulate_item(rkey=self.heating_technology_main.rkey, value=1)
-            if self.heating_technology_main.rkey.id_heating_technology in DISTRICT_HEATING_TECHNOLOGIES:
+            if self.heating_technology_main.rkey.id_heating_technology in cons.DISTRICT_HEATING_TECHNOLOGIES:
                 self.district_heating_available = True
                 self.scenario.location_building_num_heating_tech_district_heating.accumulate_item(rkey=self.rkey, value=1)
-            elif self.heating_technology_main.rkey.id_heating_technology in GAS_HEATING_TECHNOLOGIES:
+            elif self.heating_technology_main.rkey.id_heating_technology in cons.GAS_HEATING_TECHNOLOGIES:
                 self.gas_available = True
                 self.scenario.location_building_num_heating_tech_gas.accumulate_item(rkey=self.rkey, value=1)
 
@@ -152,7 +149,7 @@ class HeatingTechnology:
                 self.get_space_heating_efficiency_adjustment_factor()
             )
             self.space_heating_energy_intensities.append(EnergyIntensity(
-                id_end_use=ID_END_USE_SPACE_HEATING,
+                id_end_use=cons.ID_END_USE_SPACE_HEATING,
                 id_energy_carrier=rkey.id_energy_carrier,
                 value=self.space_heating_contribution * (1 / adjusted_efficiency)
             ))
@@ -165,7 +162,7 @@ class HeatingTechnology:
                 "year": self.installation_year
             })
             self.hot_water_energy_intensities.append(EnergyIntensity(
-                id_end_use=ID_END_USE_HOT_WATER,
+                id_end_use=cons.ID_END_USE_HOT_WATER,
                 id_energy_carrier=rkey.id_energy_carrier,
                 value=self.hot_water_contribution * (1 / self.scenario.s_heating_technology_efficiency.get_item(rkey))
             ))
@@ -177,14 +174,14 @@ class HeatingTechnology:
 
     def update_optional_heating_technologies(self, district_heating_available: bool, gas_available: bool):
         if self.priority == "main":
-            l = list(set(self.scenario.heating_technologies) - set(SECOND_HEATING_TECHNOLOGIES))
+            l = list(set(self.scenario.heating_technologies) - set(cons.SECOND_HEATING_TECHNOLOGIES))
             if not district_heating_available:
-                l = list(set(l) - set(DISTRICT_HEATING_TECHNOLOGIES))
+                l = list(set(l) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
             if not gas_available:
-                l = list(set(l) - set(GAS_HEATING_TECHNOLOGIES))
+                l = list(set(l) - set(cons.GAS_HEATING_TECHNOLOGIES))
             self.optional_heating_technologies = l
         else:
-            self.optional_heating_technologies = SECOND_HEATING_TECHNOLOGIES
+            self.optional_heating_technologies = cons.SECOND_HEATING_TECHNOLOGIES
 
     def select(self, heating_demand_peak: float, heating_demand: float):
         rkey = self.rkey.make_copy()

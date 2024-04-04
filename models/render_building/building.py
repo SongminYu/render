@@ -4,26 +4,19 @@ from typing import TYPE_CHECKING, List, Optional, Dict
 import numpy as np
 from Melodie import Agent
 
+from models.render_building import cons
 from models.render_building.building_component import BuildingComponent
 from models.render_building.building_key import BuildingKey
 from models.render_building.building_r5c1 import R5C1, spec
 from models.render_building.building_unit import Unit
 from models.render_building.tech_cooling import CoolingSystem
 from models.render_building.tech_heating import HeatingSystem
-from models.render_building.tech_ventilation import VentilationSystem
 from models.render_building.tech_radiator import Radiator
+from models.render_building.tech_ventilation import VentilationSystem
 from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
-
-
-ID_END_USE_APPLIANCE = 1
-ID_END_USE_SPACE_COOLING = 2
-ID_END_USE_SPACE_HEATING = 3
-ID_END_USE_HOT_WATER = 4
-ID_END_USE_VENTILATION = 5
-ID_ENERGY_CARRIER_ELECTRICITY = 1
 
 
 def create_empty_arr():
@@ -399,23 +392,23 @@ class Building(Agent):
         self.update_ventilation_final_energy_demand()
 
     def update_appliance_electricity_final_energy_demand(self):
-        self.final_energy_demand[ID_END_USE_APPLIANCE] = [
-            (ID_ENERGY_CARRIER_ELECTRICITY, self.appliance_electricity_profile.sum())
+        self.final_energy_demand[cons.ID_END_USE_APPLIANCE] = [
+            (cons.ID_ENERGY_CARRIER_ELECTRICITY, self.appliance_electricity_profile.sum())
         ]
 
     def update_space_cooling_final_energy_demand(self):
         if self.cooling_system.is_adopted:
-            self.final_energy_demand[ID_END_USE_SPACE_COOLING] = [
+            self.final_energy_demand[cons.ID_END_USE_SPACE_COOLING] = [
                 (
                     self.cooling_system.energy_intensity.id_energy_carrier,
                     self.cooling_system.energy_intensity.value * abs(self.cooling_demand_profile.sum())
                 )
             ]
         else:
-            self.final_energy_demand[ID_END_USE_SPACE_COOLING] = []
+            self.final_energy_demand[cons.ID_END_USE_SPACE_COOLING] = []
 
     def update_space_heating_final_energy_demand(self):
-        self.final_energy_demand[ID_END_USE_SPACE_HEATING] = []
+        self.final_energy_demand[cons.ID_END_USE_SPACE_HEATING] = []
         for heating_technology in self.heating_system.technologies:
             if heating_technology is not None:
                 for energy_intensity in heating_technology.space_heating_energy_intensities:
@@ -427,7 +420,7 @@ class Building(Agent):
                     )
 
     def update_hot_water_final_energy_demand(self):
-        self.final_energy_demand[ID_END_USE_HOT_WATER] = []
+        self.final_energy_demand[cons.ID_END_USE_HOT_WATER] = []
         for heating_technology in self.heating_system.technologies:
             if heating_technology is not None:
                 for energy_intensity in heating_technology.hot_water_energy_intensities:
@@ -440,14 +433,14 @@ class Building(Agent):
 
     def update_ventilation_final_energy_demand(self):
         if self.ventilation_system.is_adopted:
-            self.final_energy_demand[ID_END_USE_VENTILATION] = [
+            self.final_energy_demand[cons.ID_END_USE_VENTILATION] = [
                 (
                     self.ventilation_system.energy_intensity.id_energy_carrier,
                     self.total_living_area * self.ventilation_system.energy_intensity.value
                 )
             ]
         else:
-            self.final_energy_demand[ID_END_USE_VENTILATION] = []
+            self.final_energy_demand[cons.ID_END_USE_VENTILATION] = []
 
     """
     Calculate total energy cost

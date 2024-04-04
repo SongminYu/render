@@ -1,8 +1,8 @@
 import random
-from typing import TYPE_CHECKING, Tuple, Dict, Optional
+from typing import TYPE_CHECKING, Optional
 
-from utils.funcs import dict_sample
 from models.render_building.building_key import BuildingKey
+from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario

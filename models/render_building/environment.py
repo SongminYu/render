@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from Melodie import Environment
 from tqdm import tqdm
+
 from utils.funcs import dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:

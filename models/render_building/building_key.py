@@ -1,5 +1,6 @@
-from models.render.render_key import RenderKey
 from typing import Optional
+
+from models.render.render_key import RenderKey
 
 
 class BuildingKey(RenderKey):

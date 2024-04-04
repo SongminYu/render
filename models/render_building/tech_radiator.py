@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from models.render_building.building_key import BuildingKey
 from utils.funcs import dict_normalize, dict_utility_sample
+
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
 
