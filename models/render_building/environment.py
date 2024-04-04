@@ -222,25 +222,6 @@ class BuildingEnvironment(Environment):
                         id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                     )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:
             for building in buildings:
