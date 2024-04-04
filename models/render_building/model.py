@@ -53,9 +53,6 @@ class BuildingModel(RenderModel):
     def run(self):
         for year in range(self.scenario.start_year, self.scenario.end_year + 1):
             self.collect_building_info()
-            # TODO: the costs may need to be normalized before calculating utility,
-            #  or the capex and opex can be too high after multiplying the capacity and annual demand,
-            #  the utility is not sensitive at all any more
             # self.environment.update_buildings_year(self.buildings)
             # self.environment.update_buildings_district_heating_availability(self.buildings)
             # self.environment.update_buildings_gas_availability(self.buildings)
