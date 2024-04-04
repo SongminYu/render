@@ -102,7 +102,7 @@ class BuildingScenario(RenderScenario):
         self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
         self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
         self.p_cooling_technology_efficiency = self.load_param("Parameter_CoolingTechnology_EfficiencyCoefficient.xlsx")
-        self.p_heating_technology_cost_material = self.load_scenario("Parameter_HeatingTechnology_Cost_Material.xlsx", region_level=0)
+        # self.p_heating_technology_cost_material = self.load_scenario("Parameter_HeatingTechnology_Cost_Material.xlsx", region_level=0)
         self.p_ventilation_technology_lifetime_min = self.load_param("Parameter_VentilationTechnology_Lifetime.xlsx", col="min")
         self.p_ventilation_technology_lifetime_max = self.load_param("Parameter_VentilationTechnology_Lifetime.xlsx", col="max")
         self.p_ventilation_technology_energy_intensity = self.load_param("Parameter_VentilationTechnology_EnergyIntensity.xlsx")
