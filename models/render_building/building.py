@@ -1,5 +1,5 @@
 import random
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Dict
 
 import numpy as np
 from Melodie import Agent
@@ -18,15 +18,17 @@ if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
 
 
-def create_empty_arr():
-    return np.zeros((8760, ))
-
 ID_END_USE_APPLIANCE = 1
 ID_END_USE_SPACE_COOLING = 2
 ID_END_USE_SPACE_HEATING = 3
 ID_END_USE_HOT_WATER = 4
 ID_END_USE_VENTILATION = 5
 ID_ENERGY_CARRIER_ELECTRICITY = 1
+
+
+def create_empty_arr():
+    return np.zeros((8760, ))
+
 
 class Building(Agent):
     scenario: "BuildingScenario"
@@ -109,8 +111,8 @@ class Building(Agent):
         self.hot_water_demand_per_m2 = self.hot_water_demand / self.total_living_area
 
     def init_building_components_construction(self):
-        self.building_components: Optional[List[BuildingComponent]] = []
-        for id_building_component in self.scenario.building_components.keys():
+        self.building_components: Optional[Dict[str, BuildingComponent]] = {}
+        for id_building_component, component_name in self.scenario.building_components.items():
             component = BuildingComponent(self.rkey.make_copy(), self.scenario)
             component.rkey.id_building_component = id_building_component
             component.init_name()
@@ -120,7 +122,7 @@ class Building(Agent):
                 ratio=self.scenario.p_building_envelope_component_area_ratio.get_item(component.rkey)
             )
             component.construct()
-            self.building_components.append(component)
+            self.building_components[component_name] = component
 
     def init_radiator(self):
         self.radiator = Radiator(self.rkey.make_copy(), self.scenario)
@@ -129,7 +131,7 @@ class Building(Agent):
         self.radiator.init_installation_year()
 
     def init_building_renovation_history(self):
-        for component in self.building_components:
+        for component in self.building_components.values():
             while component.next_replace_year < self.rkey.year:
                 if random.uniform(0, 1) <= 0.70:
                     action_year = component.next_replace_year
@@ -229,14 +231,6 @@ class Building(Agent):
 
     def update_building_rc_params(self):
 
-        def get_building_component(component_name: str):
-            building_component: Optional["BuildingComponent"] = None
-            for component in self.building_components:
-                if component.name == component_name:
-                    building_component = component
-                    break
-            return building_component
-
         def get_infiltration_param(id_window_option_efficiency_class: int):
             if id_window_option_efficiency_class <= 2:
                 infiltration_param = 0.05
@@ -258,16 +252,16 @@ class Building(Agent):
         self.c_m = c_m * self.a_is  # total heat capacity of the thermal mass
 
         # h_tr_w --> heat transfer coefficient of glazed elements to external air (equation 18)
-        window = get_building_component("window")
+        window = self.building_components["window"]
         self.h_tr_w = window.area * window.u_value  # W/K
 
         # h_tr_op --> heat transfer coefficient of opaque elements to external air (equation 18)
         b_tr_wall = 1  # adjustment factor
         b_tr_roof = 1  # adjustment factor
         b_tr_basement = 0.5  # adjustment factor
-        wall = get_building_component("wall")
-        roof = get_building_component("roof")
-        basement = get_building_component("basement")
+        wall = self.building_components["wall"]
+        roof = self.building_components["roof"]
+        basement = self.building_components["basement"]
         self.h_tr_op = b_tr_wall * wall.area * wall.u_value + \
                        b_tr_roof * roof.area * roof.u_value + \
                        b_tr_basement * basement.area * basement.u_value
@@ -318,7 +312,7 @@ class Building(Agent):
             absorption_coefficient = 0.75
             # surface thermal resistence of the opaque part (m2K/W)
             resistance_coefficient = 0.04
-            component = get_building_component(component_name)
+            component = self.building_components[component_name]
             return component.area * component.u_value * resistance_coefficient * shading_factor * absorption_coefficient
 
         def get_opaque_sky_reflection_profile(component_name: str) -> np.ndarray:
@@ -333,7 +327,7 @@ class Building(Agent):
             outside_temperature = self.scenario.pr_weather_temperature.get_item(self.rkey)
             # external radiant heat transfer coefficient
             h_r = 4 * epsilon * sigma * ((outside_temperature + 273.15) ** 3)
-            component = get_building_component(component_name)
+            component = self.building_components[component_name]
             return component.area * component.u_value * resistance_coefficient * temp_diff * form_param[
                 component_name] * h_r
 
@@ -491,7 +485,7 @@ class Building(Agent):
         for col, action in sync_renovation_actions.items():
             if col.startswith("building_component") and action == 1:
                 id_building_component = int(col.split("_")[-1])
-                for component in self.building_components:
+                for component in self.building_components.values():
                     if component.rkey.id_building_component == id_building_component:
                         component.renovate(action_year=action_year)
 

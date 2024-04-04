@@ -42,6 +42,12 @@ class RenderDict(TabDict):
             keys = self._data.keys()
         return keys
 
+    def values(self):
+        return self._data.values()
+
+    def items(self):
+        return zip(self.keys(), self.values())
+
     @classmethod
     def create_empty_rdict(cls, key_cols: List[str], region_level: int = 3):
         rdict = cls.create_empty_data_tdict(key_cols)

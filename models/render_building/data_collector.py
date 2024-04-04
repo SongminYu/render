@@ -91,12 +91,6 @@ class BuildingDataCollector(RenderDataCollector):
         self.save_dataframe(df=df, df_name=f"building_profile_R{self.scenario.id_region}")
 
     def collect_building_stock(self, buildings: "AgentList[Building]"):
-        building_component_name = {
-            1: "wall",
-            2: "window",
-            3: "roof",
-            4: "basement"
-        }
         for building in buildings:
             building_dict = building.rkey.to_dict()
             building_dict["name"] = building.name
@@ -107,8 +101,7 @@ class BuildingDataCollector(RenderDataCollector):
                         if key not in ["id", "id_energy_carrier", "id_heating_technology", "id_end_use"]:
                             building_dict[key] = value
             # collect building components
-            for building_component in building.building_components:
-                component_name = building_component_name[building_component.rkey.id_building_component]
+            for component_name, building_component in building.building_components.items():
                 building_dict[f"{component_name}_id_component_option"] = building_component.rkey.id_building_component_option
                 building_dict[f"{component_name}_id_efficiency_class"] = building_component.rkey.id_building_component_option_efficiency_class
                 for component_key, component_value in building_component.__dict__.items():
