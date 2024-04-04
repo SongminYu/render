@@ -23,7 +23,7 @@ class BuildingModel(RenderModel):
         self.scenario.load_scenario_data()
         self.scenario.setup_results_containers()
         self.scenario.setup_agent_params()
-        self.scenario.setup_cost_data()
+        # self.scenario.setup_cost_data()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
         # self.export_initialization_info()
@@ -36,7 +36,7 @@ class BuildingModel(RenderModel):
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)
         self.data_collector.collect_building_stock(self.buildings)
-        # self.data_collector.collect_building_final_energy_demand(self.buildings)
+        self.data_collector.collect_building_final_energy_demand(self.buildings)
         # self.data_collector.collect_building_efficiency_class_count(self.buildings)
         # self.data_collector.collect_building_profile(self.buildings)
         ...
@@ -44,7 +44,7 @@ class BuildingModel(RenderModel):
     def export_building_info(self):
         # self.data_collector.export_building_floor_area()
         self.data_collector.export_building_stock()
-        # self.data_collector.export_building_final_energy_demand()
+        self.data_collector.export_building_final_energy_demand()
         # self.data_collector.export_building_efficiency_class_count()
         # self.data_collector.export_building_profile()
         # self.data_collector.export_renovation_rate()
