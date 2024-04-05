@@ -31,9 +31,10 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, title, dropdowns, x, y, 
 
         # Round every entry to no digits after the decimal point
         wide_df = wide_df.round(0)
+        wide_df = wide_df.fillna(0)
 
-        return [html.H6(f"{title}"), dash_table.DataTable(wide_df.to_dict('records'),
-                                    [{"name": i, "id": i} for i in wide_df.columns],
-                                    style_cell={'textAlign': 'left'})]
+        return [html.H6(f"{id_datatable}"), dash_table.DataTable(wide_df.to_dict('records'),
+                                                                 [{"name": i, "id": i} for i in wide_df.columns],
+                                                                 style_cell={'textAlign': 'left'})]
 
     return html.Div(className='table-container', id=id_datatable)
