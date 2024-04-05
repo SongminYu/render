@@ -128,7 +128,7 @@ class BuildingScenario(RenderScenario):
         self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
         self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
         self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0)
-        self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0)
+        self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_utility_power = self.load_scenario("Scenario_BuildingComponent_UtilityPower.xlsx", region_level=0)
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=0)
