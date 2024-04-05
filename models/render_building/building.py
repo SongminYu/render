@@ -461,8 +461,7 @@ class Building(Agent):
             self,
             component_name: str,
             id_building_component_option: int,
-            id_building_component_option_efficiency_class: int,
-            mark_renovation_action: Optional[bool] = True
+            id_building_component_option_efficiency_class: int
     ):
         self.building_components[component_name].renovate(
             id_building_component_option=id_building_component_option,
@@ -472,8 +471,6 @@ class Building(Agent):
         self.update_space_cooling_final_energy_demand()
         self.update_space_heating_final_energy_demand()
         self.update_total_energy_cost()
-        if mark_renovation_action:
-            self.building_components[component_name].mark_renovation_action()
 
 
 

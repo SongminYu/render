@@ -62,7 +62,7 @@ class RenderScenario(Scenario):
                 df.loc[:, "id_scenario"] = self.id
         if not all_years:
             df_index_cols = df[[col for col in df.columns if col.startswith(("id_", "unit"))]]
-            df_data_cols = df.loc[:, str(self.start_year):str(self.end_year)]
+            df_data_cols = df.loc[:, str(self.start_year):str(min(self.end_year, int(df.columns[-1])))]
             df = pd.concat([df_index_cols, df_data_cols], axis=1)
         rdict = RenderDict.from_dataframe(
             tdict_type="Data",

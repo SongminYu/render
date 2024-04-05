@@ -1,6 +1,6 @@
 import copy
 from typing import TYPE_CHECKING
-
+from tqdm import tqdm
 from models.render.model import RenderModel
 from models.render_building.building import Building
 from models.render_building.data_collector import BuildingDataCollector
@@ -24,12 +24,12 @@ class BuildingModel(RenderModel):
         self.scenario.setup_scenario_data()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
-        self.data_collector.export_initialization_data()
+        # self.data_collector.export_initialization_data()
 
     def run(self):
-        for year in range(self.scenario.start_year, self.scenario.end_year + 1):
+        for year in tqdm(range(self.scenario.start_year, self.scenario.end_year + 1), desc="Simulating years --> "):
+            # TODO: all represented buildings act together. Is this right?
             self.data_collector.collect_building_stock(self.buildings)
-            # self.environment.update_buildings_year(self.buildings)
             # self.environment.update_buildings_district_heating_availability(self.buildings)
             # self.environment.update_buildings_gas_availability(self.buildings)
             # self.environment.update_buildings_profile_appliance(self.buildings)
@@ -39,8 +39,9 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_radiator_lifecycle(self.buildings)
             # self.environment.update_buildings_technology_heating_lifecycle(self.buildings)
             # self.environment.update_buildings_technology_heating_mandatory(self.buildings)
-            # self.environment.update_buildings_renovation_lifecycle(self.buildings)
+            self.environment.update_buildings_renovation_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
             # self.environment.update_buildings_demolition(self.buildings)
             # self.environment.update_buildings_construction(self.buildings)
+            self.environment.update_buildings_year(self.buildings)
         self.data_collector.export()

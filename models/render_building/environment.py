@@ -5,7 +5,7 @@ from Melodie import Environment
 from tqdm import tqdm
 
 from utils.funcs import dict_normalize, dict_utility_sample
-
+from models.render_building import cons
 if TYPE_CHECKING:
     from Melodie import AgentList
     from models.render_building.scenario import BuildingScenario
@@ -48,7 +48,7 @@ class BuildingEnvironment(Environment):
                 unit.user.rkey.year += 1
 
         def update_components_year():
-            for component in building.building_components:
+            for _, component in building.building_components.items():
                 component.rkey.year += 1
 
         def update_radiator_year():
@@ -197,7 +197,11 @@ class BuildingEnvironment(Environment):
             for component_name, building_component in building.building_components.items():
                 if building_component.rkey.year == building_component.next_replace_year:
                     d_option_cost = {}
-                    rkey = building_component.rkey.make_copy()
+                    d_option_details = {}
+                    rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
+                    # mark status before renovation
+                    id_building_component_option_before = rkey.id_building_component_option
+                    id_building_component_option_efficiency_class_before = rkey.id_building_component_option_efficiency_class
                     for id_building_component_option in self.scenario.r_building_component_option.get_item(rkey):
                         rkey.id_building_component_option = id_building_component_option
                         for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
@@ -207,11 +211,18 @@ class BuildingEnvironment(Environment):
                                 building.renovate_component(
                                     component_name=component_name,
                                     id_building_component_option=id_building_component_option,
-                                    id_building_component_option_efficiency_class=id_building_component_option_efficiency_class,
-                                    mark_renovation_action=False
+                                    id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                                 )
                                 energy_cost_saving = total_energy_cost_before - building.total_energy_cost
                                 d_option_cost[(id_building_component_option, id_building_component_option_efficiency_class)] = capex - energy_cost_saving
+                                d_option_details[(id_building_component_option, id_building_component_option_efficiency_class)] = {
+                                    "id_building_component_option_before": id_building_component_option_before,
+                                    "id_building_component_option_efficiency_class_before": id_building_component_option_efficiency_class_before,
+                                    "total_energy_cost_before": total_energy_cost_before,
+                                    "total_energy_cost_after": building.total_energy_cost,
+                                    "capex": capex,
+                                    "labor_demand": self.scenario.s_building_component_input_labor.get_item(rkey) * building_component.area
+                                }
                     id_building_component_option, id_building_component_option_efficiency_class = dict_utility_sample(
                         options=dict_normalize(d_option_cost),
                         utility_power=self.scenario.s_building_component_utility_power.get_item(rkey)
@@ -221,6 +232,30 @@ class BuildingEnvironment(Environment):
                         id_building_component_option=id_building_component_option,
                         id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                     )
+                    self.record_renovation_action_info(
+                        rkey=building.building_components[component_name].rkey,
+                        details=d_option_details[(id_building_component_option, id_building_component_option_efficiency_class)]
+                    )
+
+    def record_renovation_action_info(self, rkey: "BuildingKey", details: dict):
+        self.scenario.renovation_action_info.append({
+            "id_scenario": rkey.id_scenario,
+            "id_sector": rkey.id_sector,
+            "id_subsector": rkey.id_subsector,
+            "id_subsector_agent": rkey.id_subsector_agent,
+            "id_building_type": rkey.id_building_type,
+            "id_building_construction_period": rkey.id_building_construction_period,
+            "id_building_component": rkey.id_building_component,
+            "year": rkey.year,
+            "id_building_component_option_before": details["id_building_component_option_before"],
+            "id_building_component_option_efficiency_class_before": details["id_building_component_option_efficiency_class_before"],
+            "id_building_component_option_after": rkey.id_building_component_option,
+            "id_building_component_option_efficiency_class_after": rkey.id_building_component_option_efficiency_class,
+            "total_energy_cost_before": details["total_energy_cost_before"],
+            "total_energy_cost_after": details["total_energy_cost_after"],
+            "capex": details["capex"],
+            "labor_demand": details["labor_demand"]
+        })
 
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:

@@ -489,6 +489,8 @@ class BuildingScenario(RenderScenario):
         ])
         # result data containers
         self.building_stock = []
+        self.renovation_action_info = []
+        self.heating_technology_replacement = []
         self.renovation_action_building = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",

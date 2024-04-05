@@ -2,6 +2,7 @@ import random
 from typing import TYPE_CHECKING, Optional
 
 from models.render_building.building_key import BuildingKey
+from models.render_building import cons
 from utils.funcs import dict_sample
 
 if TYPE_CHECKING:
@@ -46,7 +47,7 @@ class BuildingComponent:
         )
         self.installation_year = self.construction_year
         self.next_replace_year = self.construction_year + self.get_lifetime()
-        self.init_random_select(action_year=self.construction_year, id_building_action=1)
+        self.historical_random_select(action_year=self.construction_year, id_building_action=cons.ID_BUILDING_ACTION_CONSTRUCTION)
 
     def init_historical_renovation(self, action_year: int):
         minimum_lifetime = self.scenario.p_building_component_minimum_lifetime.get_item(self.rkey)
@@ -54,10 +55,9 @@ class BuildingComponent:
         if action_year - self.installation_year >= minimum_lifetime:
             self.installation_year = action_year
             self.next_replace_year = action_year + self.get_lifetime()
-            self.init_random_select(action_year=action_year, id_building_action=2)
-            self.mark_renovation_action(rkey=self.rkey.make_copy().set_id({"year": action_year}))
+            self.historical_random_select(action_year=action_year, id_building_action=cons.ID_BUILDING_ACTION_RENOVATION)
 
-    def init_random_select(self, action_year: int, id_building_action: int):
+    def historical_random_select(self, action_year: int, id_building_action: int):
         rkey = self.rkey.make_copy()
         rkey.year, rkey.id_building_action = action_year, id_building_action
         d = {}
@@ -66,13 +66,14 @@ class BuildingComponent:
             d[id_building_component_option_efficiency_class] = self.scenario.s_building_component_availability.get_item(rkey)
         self.rkey.id_building_component_option_efficiency_class = dict_sample(d)
         self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
+        self.record_historical_renovation_action(rkey=rkey)
 
-    def mark_renovation_action(self, rkey: Optional["BuildingKey"] = None):
-        if rkey is None:
-            rkey = self.rkey
+    def record_historical_renovation_action(self, rkey: Optional["BuildingKey"]):
         self.scenario.renovation_action_building.accumulate_item(rkey=rkey, value=1)
         self.scenario.renovation_action_component.accumulate_item(rkey=rkey, value=1)
-        # self.scenario.renovation_action_labor_demand.accumulate_item(rkey=rkey, value=self.scenario.s_building_component_input_labor.get_item(self.rkey))
+        self.scenario.renovation_action_labor_demand.accumulate_item(
+            rkey=rkey, value=self.scenario.s_building_component_input_labor.get_item(rkey)
+        )
 
     def renovate(self, id_building_component_option: int, id_building_component_option_efficiency_class: int):
         self.rkey.id_building_component_option = id_building_component_option
@@ -80,7 +81,6 @@ class BuildingComponent:
         self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
         self.installation_year = self.rkey.year
         self.next_replace_year = self.rkey.year + self.get_lifetime()
-
 
 
 
