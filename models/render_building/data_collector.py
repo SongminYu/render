@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
@@ -7,6 +7,7 @@ from models.render_building.building_key import BuildingKey
 
 if TYPE_CHECKING:
     from Melodie import AgentList
+    from models.render.render_dict import RenderDict
     from models.render_building.scenario import BuildingScenario
     from models.render_building.building import Building
 
@@ -14,76 +15,35 @@ if TYPE_CHECKING:
 class BuildingDataCollector(RenderDataCollector):
     scenario: "BuildingScenario"
 
-    def setup(self):
-        # define table names (move constants.py here)
-        ...
+    def export(self):
+        self.export_building_stock()
+        self.export_renovation_rate()
 
-    def export_scenario_cost(self):
-        self.save_dataframe(df=self.scenario.building_component_capex.to_dataframe(), df_name=f"BuildingComponentCapex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.heating_technology_capex.to_dataframe(), df_name=f"HeatingTechnologyCapex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.heating_technology_opex.to_dataframe(), df_name=f"HeatingTechnologyOpex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.radiator_capex.to_dataframe(), df_name=f"RadiatorCapex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.cooling_technology_capex.to_dataframe(), df_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.cooling_technology_opex.to_dataframe(), df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
-        # self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
+    def export_rdict(self, rdict: "RenderDict", file_name: str, unit: Optional[str] = None):
+        df = rdict.to_dataframe()
+        if unit is not None:
+            unit_position = max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1
+            df.insert(unit_position, "unit", unit)
+        self.save_dataframe(df=df, df_name=file_name)
 
-    def export_heating_technology_main_initial_adoption(self):
-        self.save_dataframe(
-            df=self.scenario.heating_technology_main_initial_adoption.to_dataframe(),
-            df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}"
-        )
+    """
+    Initialization data
+    """
+    def export_initialization_data(self):
+        self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, file_name=f"FinalEnergyPrice_R{self.scenario.id_region}", unit="euro/kWh")
+        self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, file_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}", unit="count")
+        self.export_rdict(rdict=self.scenario.building_component_capex, file_name=f"BuildingComponentCapex_R{self.scenario.id_region}", unit="euro/m2")
+        self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, file_name=f"HeatingTechnologyEnergyCost_R{self.scenario.id_region}", unit="euro/kWh")
+        # self.export_rdict(rdict=self.scenario.radiator_capex, file_name=f"RadiatorCapex_R{self.scenario.id_region}", unit="euro/m2")
+        # self.export_rdict(rdict=self.scenario.cooling_technology_capex, file_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}", unit="euro/kW")
+        # self.export_rdict(rdict=self.scenario.cooling_technology_opex, file_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}", unit="euro/kWh")
+        # self.export_rdict(rdict=self.scenario.ventilation_technology_capex, file_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}", unit="euro/m2")
+        # self.export_rdict(rdict=self.scenario.ventilation_technology_opex, file_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}", unit="euro/m2")
 
-    def export_location_infrastructure(self):
-        self.save_dataframe(
-            df=self.scenario.location_building_num.to_dataframe(),
-            df_name=f"LocationBuildingNum_R{self.scenario.id_region}"
-        )
-        self.save_dataframe(
-            df=self.scenario.location_building_num_heating_tech_district_heating.to_dataframe(),
-            df_name=f"LocationBuildingNum_DistrictHeating_R{self.scenario.id_region}"
-        )
-        self.save_dataframe(
-            df=self.scenario.location_building_num_heating_tech_gas.to_dataframe(),
-            df_name=f"LocationBuildingNum_GasBoiler_R{self.scenario.id_region}"
-        )
-
-    def collect_building_floor_area(self, buildings: "AgentList[Building]"):
-        for building in buildings:
-            self.scenario.building_floor_area.accumulate_item(
-                building.rkey,
-                building.unit_area * building.unit_number *
-                self.scenario.get_building_num_scaling(building.rkey)
-            )
-
-    def export_building_floor_area(self):
-        df = self.scenario.building_floor_area.to_dataframe()
-        df.insert(self.get_unit_position(df), "unit", "m2")
-        self.save_dataframe(df=df, df_name=f"floor_area_R{self.scenario.id_region}")
-
-    def collect_building_profile(self, buildings: "AgentList[Building]"):
-        for building in buildings:
-            for profile_name in ["heating_demand_profile", "cooling_demand_profile"]:
-                building_dict = building.rkey.to_dict()
-                building_dict["profile_name"] = profile_name
-                for index, value in enumerate(building.__dict__[profile_name]):
-                    building_dict[f'h{index + 1}'] = value
-                self.scenario.building_profile.append(building_dict)
-
-    def export_building_profile(self):
-        def match_unit(profile_name: str):
-            if profile_name.startswith("temp"):
-                unit = "Celsius degree"
-            else:
-                unit = "W"
-            return unit
-
-        df = pd.DataFrame(self.scenario.building_profile)
-        unit_values = df['profile_name'].apply(match_unit)
-        unit_position = df.columns.get_loc("profile_name") + 1
-        df.insert(unit_position, "unit", unit_values)
-        self.save_dataframe(df=df, df_name=f"building_profile_R{self.scenario.id_region}")
-
+    """
+    Results
+    """
+    # Building stock
     def collect_building_stock(self, buildings: "AgentList[Building]"):
         for building in buildings:
             building_dict = building.rkey.to_dict()
@@ -103,7 +63,8 @@ class BuildingDataCollector(RenderDataCollector):
                         if isinstance(component_value, int) or isinstance(component_value, float):
                             building_dict[f"{component_name}_{component_key}"] = component_value
             # collect building number
-            building_dict["building_number"] = self.scenario.get_building_num_scaling(building.rkey)
+            building_dict["building_number"] = (self.scenario.building_num_total.get_item(building.rkey) /
+                                                self.scenario.building_num_model.get_item(building.rkey))
             # collect building heating system
             building_dict["id_heating_system"] = building.heating_system.rkey.id_heating_system
             building_dict["district_heating_available"] = building.heating_system.district_heating_available
@@ -177,36 +138,12 @@ class BuildingDataCollector(RenderDataCollector):
     def export_building_stock(self):
         self.save_dataframe(df=pd.DataFrame(self.scenario.building_stock), df_name=f"building_stock_R{self.scenario.id_region}")
 
-    def collect_building_final_energy_demand(self, buildings: "AgentList[Building]"):
-        for building in buildings:
-            rkey = building.rkey.make_copy()
-            scaling = self.scenario.get_building_num_scaling(rkey)
-            for id_end_use, end_use_energy_intensities in building.final_energy_demand.items():
-                for id_energy_carrier, final_energy_demand in end_use_energy_intensities:
-                    rkey.set_id({"id_end_use": id_end_use, "id_energy_carrier": id_energy_carrier})
-                    self.scenario.final_energy_demand.accumulate_item(rkey, value=final_energy_demand * scaling)
-
-    def export_building_final_energy_demand(self):
-        df = self.scenario.final_energy_demand.to_dataframe()
-        df.insert(self.get_unit_position(df), "unit", "kWh")
-        self.save_dataframe(df=df, df_name=f"final_energy_demand_R{self.scenario.id_region}")
-
-    def collect_building_efficiency_class_count(self, buildings: "AgentList[Building]"):
-        for building in buildings:
-            self.scenario.building_efficiency_class_count.accumulate_item(
-                rkey=building.rkey,
-                value=self.scenario.get_building_num_scaling(building.rkey)
-            )
-
-    def export_building_efficiency_class_count(self):
-        df = self.scenario.building_efficiency_class_count.to_dataframe()
-        df.insert(self.get_unit_position(df), "unit", "count")
-        self.save_dataframe(df=df, df_name=f"building_efficiency_class_count_R{self.scenario.id_region}")
-
+    # Renovation action
     def export_renovation_rate(self):
 
         def export_to_csv(df: pd.DataFrame, file_name: str):
-            df.insert(self.get_unit_position(df), "unit", "count")
+            unit_position = max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1
+            df.insert(unit_position, "unit", "count")
             self.save_dataframe(df=df, df_name=f"{file_name}_R{self.scenario.id_region}")
 
         def get_construction_period_percentage(row_rkey: "BuildingKey"):
@@ -326,7 +263,3 @@ class BuildingDataCollector(RenderDataCollector):
 
         building_weighted = create_renovation_rate_building_weighted(component_processed)
         export_to_csv(df=building_weighted, file_name="renovation_rate_building")
-
-    @staticmethod
-    def get_unit_position(df: pd.DataFrame):
-        return max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1

@@ -11,8 +11,6 @@ if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
 
 
-
-
 class HeatingSystem:
 
     def __init__(self, rkey: "BuildingKey", scenario: "BuildingScenario"):

@@ -21,39 +21,14 @@ class BuildingModel(RenderModel):
         self.data_collector: "BuildingDataCollector" = self.create_data_collector(BuildingDataCollector)
 
     def setup(self):
-        self.scenario.load_scenario_data()
-        self.scenario.setup_results_containers()
-        self.scenario.setup_agent_params()
-        self.scenario.setup_cost_data()
+        self.scenario.setup_scenario_data()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
-        self.export_initialization_info()
-
-    def export_initialization_info(self):
-        self.data_collector.export_scenario_cost()
-        # self.data_collector.export_heating_technology_main_initial_adoption()
-        # self.data_collector.export_location_infrastructure()
-
-    def collect_building_info(self):
-        # self.data_collector.collect_building_floor_area(self.buildings)
-        self.data_collector.collect_building_stock(self.buildings)
-        self.data_collector.collect_building_final_energy_demand(self.buildings)
-        # self.data_collector.collect_building_efficiency_class_count(self.buildings)
-        # self.data_collector.collect_building_profile(self.buildings)
-        ...
-
-    def export_building_info(self):
-        # self.data_collector.export_building_floor_area()
-        self.data_collector.export_building_stock()
-        self.data_collector.export_building_final_energy_demand()
-        # self.data_collector.export_building_efficiency_class_count()
-        # self.data_collector.export_building_profile()
-        # self.data_collector.export_renovation_rate()
-        ...
+        self.data_collector.export_initialization_data()
 
     def run(self):
         for year in range(self.scenario.start_year, self.scenario.end_year + 1):
-            self.collect_building_info()
+            self.data_collector.collect_building_stock(self.buildings)
             # self.environment.update_buildings_year(self.buildings)
             # self.environment.update_buildings_district_heating_availability(self.buildings)
             # self.environment.update_buildings_gas_availability(self.buildings)
@@ -68,4 +43,4 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
             # self.environment.update_buildings_demolition(self.buildings)
             # self.environment.update_buildings_construction(self.buildings)
-        self.export_building_info()
+        self.data_collector.export()

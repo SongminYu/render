@@ -3,7 +3,8 @@ import os
 from Melodie import Config
 
 from models.render_building.main import run_building_model
-from utils import table_processor
+from models.render_building.toolkit import post_processor
+from utils import data_toolkit
 
 
 def get_config(project_name: str):
@@ -17,24 +18,26 @@ def get_config(project_name: str):
     )
 
 
-def run_tool(cfg: "Config"):
-    prefixes = [
-        # "building_efficiency_class_count",
-        # "building_stock",
-        "final_energy_demand",
-        # "floor_area",
+def run_post_processor(cfg: "Config"):
+    l = [
+        "building_stock",
         # "renovation_rate_building",
         # "renovation_rate_component",
     ]
-    for prefix in prefixes:
-        table_processor.concat_region_tables(cfg=cfg, file_name_prefix=prefix)
-    # table_processor.find_id(cfg=cfg, id_name="id_building_action")
-    # table_processor.extract_id_data(cfg=cfg, id_name="id_region", id_value=9010101)
-    # table_processor.pack_sqlite(cfg=cfg)
+    # post_processor.concat_region_tables(cfg=cfg, file_name_prefix_list=l)
+    post_processor.gen_final_energy_demand_from_building_stock(cfg=cfg, input_table="building_stock_R9010101.csv")
+    post_processor.gen_building_stock_summary(cfg=cfg, input_table="building_stock_R9010101.csv")
+
+
+def run_toolkit(cfg: "Config"):
+    data_toolkit.find_id(cfg=cfg, id_name="id_building_action")
+    data_toolkit.extract_id_data(cfg=cfg, id_name="id_region", id_value=9010101)
+    data_toolkit.pack_sqlite(cfg=cfg)
 
 
 if __name__ == "__main__":
     config = get_config("test_building")
-    # run_building_model(cfg=config, cores=10)
-    run_tool(cfg=config)
+    run_building_model(cfg=config, cores=1)
+    # run_toolkit(cfg=config)
+    run_post_processor(cfg=config)
 

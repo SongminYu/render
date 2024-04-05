@@ -1,5 +1,7 @@
 import os
+import os.path
 import sqlite3
+
 import pandas as pd
 from Melodie import Config
 
@@ -17,28 +19,6 @@ def get_data_files(folder: str):
         file for file in os.listdir(folder) if
         file.endswith(".xlsx") or file.endswith(".csv")
     ]
-
-
-def concat_region_tables(cfg: "Config", file_name_prefix: str):
-    print(f'Concating {file_name_prefix} tables...')
-    df_list = []
-    region_ids = read_dataframe(os.path.join(cfg.input_folder, "ID_Region.xlsx"))["id_region"].to_list()
-    for id_region in region_ids:
-        file_path = os.path.join(os.path.join(cfg.output_folder, f'{file_name_prefix}_R{id_region}.csv'))
-        if os.path.exists(file_path):
-            df_list.append(read_dataframe(file_path))
-    df = pd.concat(df_list)
-    df.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}.csv"), index=False)
-    if "id_sector" in df.columns:
-        for id_sector in df["id_sector"].unique():
-            df_sector = df.loc[df["id_sector"] == id_sector]
-            if file_name_prefix == "final_energy_demand":
-                df_sector.loc[:, "value"] = df_sector["value"]/10**9
-                df_sector.loc[:, "unit"] = "TWh"
-                for id_end_use in [1, 2, 3, 4, 5]:
-                    df_sector_end_use = df_sector.loc[df_sector["id_end_use"] == id_end_use]
-                    df_sector_end_use.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}_Sector{id_sector}_EndUse{id_end_use}.csv"), index=False)
-            df_sector.to_csv(os.path.join(cfg.output_folder, f"{file_name_prefix}_Sector{id_sector}.csv"), index=False)
 
 
 def get_id_relevant_tables(cfg: "Config", id_name: str):

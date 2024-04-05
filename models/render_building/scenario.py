@@ -1,12 +1,9 @@
-import random
-
 import pandas as pd
 
 from models.render.render_dict import RenderDict
 from models.render.scenario import RenderScenario
 from models.render_building.building_key import BuildingKey
 from utils.decorators import timer
-from utils.funcs import dict_sample
 
 
 class BuildingScenario(RenderScenario):
@@ -26,7 +23,16 @@ class BuildingScenario(RenderScenario):
         self.renovation_mandatory = 0
         self.heating_technology_mandatory = 0
 
-    def load_scenario_data(self):
+    def setup_scenario_data(self):
+        self.load_input_data()
+        self.setup_agent_params()
+        self.setup_cost_data()
+        self.create_data_containers()
+
+    """
+    load input data
+    """
+    def load_input_data(self):
         self.load_framework()
         self.load_ids()
         self.load_relations()
@@ -99,16 +105,16 @@ class BuildingScenario(RenderScenario):
         self.p_heating_technology_second_contribution_space_heating = self.load_param("Parameter_HeatingTechnology_Second_Contribution.xlsx", col="space_heating")
         self.p_heating_technology_second_contribution_hot_water = self.load_param("Parameter_HeatingTechnology_Second_Contribution.xlsx", col="hot_water")
         self.p_heating_technology_supply_temperature_efficiency_adjustment = self.load_param("Parameter_HeatingTechnology_SupplyTemperatureEfficiencyAdjustment.xlsx")
-        self.p_heating_technology_cost_multiplier_material = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="multiplier_material_cost")
-        self.p_heating_technology_cost_exponent_material = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="exponent_material_cost")
-        self.p_heating_technology_cost_share_multiplier_material = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="multiplier_material_share")
-        self.p_heating_technology_cost_share_exponent_material = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="exponent_material_share")
-        self.p_heating_technology_cost_learning_coefficient = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="learning_coefficient")
-        self.p_heating_technology_cost_multiplier_om = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="multiplier_om_cost")
-        self.p_heating_technology_cost_exponent_om = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="exponent_om_cost")
-        self.p_heating_technology_cost_criterion_small = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="criterion_small")
-        self.p_heating_technology_cost_pp_index = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="pp_index")
-        self.p_heating_technology_cost_wages_index = self.load_scenario("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="wages_index")
+        self.p_heating_technology_cost_multiplier_material = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="multiplier_material_cost")
+        self.p_heating_technology_cost_exponent_material = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="exponent_material_cost")
+        self.p_heating_technology_cost_share_multiplier_material = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="multiplier_material_share")
+        self.p_heating_technology_cost_share_exponent_material = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="exponent_material_share")
+        self.p_heating_technology_cost_learning_coefficient = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="learning_coefficient")
+        self.p_heating_technology_cost_multiplier_om = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="multiplier_om_cost")
+        self.p_heating_technology_cost_exponent_om = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="exponent_om_cost")
+        self.p_heating_technology_cost_criterion_small = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="criterion_small")
+        self.p_heating_technology_cost_pp_index = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="pp_index")
+        self.p_heating_technology_cost_wages_index = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="wages_index")
         self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
         self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
         self.p_cooling_technology_efficiency = self.load_param("Parameter_CoolingTechnology_EfficiencyCoefficient.xlsx")
@@ -179,110 +185,19 @@ class BuildingScenario(RenderScenario):
         # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 
-    def setup_results_containers(self):
-        self.building_profile = []
-        self.building_stock = []
-        self.building_num_model = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type"
-            ])
-        self.building_num_total = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type"
-            ])
-        self.renovation_action_building = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
-                "id_building_construction_period",
-                "year"
-            ])
-        self.renovation_action_component = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
-                "id_building_construction_period",
-                "id_building_component",
-                "year"
-            ])
-        self.renovation_action_labor_demand = RenderDict.create_empty_rdict(key_cols=[
+    """
+    setup agent params
+    """
+    def setup_agent_params(self):
+        building_num_key_cols = [
             "id_scenario",
             "id_region",
             "id_sector",
             "id_subsector",
-            "id_building_type",
-            "id_building_construction_period",
-            "id_building_component",
-            "year"
-        ])
-        self.building_floor_area = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
-                "id_building_construction_period",
-                "year"
-            ])
-        self.final_energy_demand = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
-                "id_building_construction_period",
-                "id_end_use",
-                "id_energy_carrier",
-                "year"
-            ])
-        self.building_efficiency_class_count = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
-                "id_building_construction_period",
-                "id_building_efficiency_class",
-                "year"
-            ])
-        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_building_location",
-                "id_heating_system",
-                "id_heating_technology",
-                "year"
-            ])
-        self.location_building_num = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_building_location",
-                "year"
-            ])
-        self.location_building_num_heating_tech_district_heating = RenderDict.create_empty_rdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_building_location",
-            "year"
-        ])
-        self.location_building_num_heating_tech_gas = RenderDict.create_empty_rdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_building_location",
-            "year"
-        ])
-
-    def setup_agent_params(self):
+            "id_building_type"
+        ]
+        self.building_num_model = RenderDict.create_empty_rdict(key_cols=building_num_key_cols)
+        self.building_num_total = RenderDict.create_empty_rdict(key_cols=building_num_key_cols)
         df = self.load_dataframe("SimulatorCoverage.xlsx")
         df = df.loc[df["id_region"] == self.id_region]
         agent_params = []
@@ -305,9 +220,9 @@ class BuildingScenario(RenderScenario):
                 })
         self.agent_params = pd.DataFrame(agent_params)
 
-    def get_building_num_scaling(self, rkey: "BuildingKey"):
-        return self.building_num_total.get_item(rkey)/self.building_num_model.get_item(rkey)
-
+    """
+    setup cost data
+    """
     def setup_cost_data(self):
         self.setup_building_component_cost()
         self.setup_heating_technology_cost()
@@ -328,11 +243,14 @@ class BuildingScenario(RenderScenario):
 
         def get_building_component_lifetime():
             df = rkey.filter_dataframe(self.p_building_component_lifetime)
-            d = {}
+            min_sum = 0
+            max_sum = 0
+            pdf_sum = 0
             for index, row in df.iterrows():
-                d[(row["min"], row["max"])] = row["pdf"]
-            lifetime_min, lifetime_max = dict_sample(d)
-            return random.randint(lifetime_min, lifetime_max)
+                min_sum += row["min"] * row["pdf"]
+                max_sum += row["max"] * row["pdf"]
+                pdf_sum += row["pdf"]
+            return 0.5 * (min_sum + max_sum) / pdf_sum
 
         self.building_component_capex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -389,7 +307,6 @@ class BuildingScenario(RenderScenario):
             "id_sector",
             "id_subsector",
             "id_heating_technology",
-            "id_heating_system_action",
             "year"
         ], region_level=0)  # unit: euro/kWh
 
@@ -400,12 +317,10 @@ class BuildingScenario(RenderScenario):
                 rkey.id_subsector = id_subsector
                 for id_heating_technology in self.heating_technologies.keys():
                     rkey.id_heating_technology = id_heating_technology
-                    for id_heating_system_action in self.heating_system_actions.keys():
-                        rkey.id_heating_system_action = id_heating_system_action
-                        for year in range(self.start_year, self.end_year + 1):
-                            rkey.year = year
-                            if self.s_heating_technology_availability.get_item(rkey):
-                                self.heating_technology_energy_cost.set_item(rkey=rkey, value=calc_heating_technology_energy_cost())
+                    for year in range(self.start_year, self.end_year + 1):
+                        rkey.year = year
+                        if self.s_heating_technology_availability.get_item(rkey):
+                            self.heating_technology_energy_cost.set_item(rkey=rkey, value=calc_heating_technology_energy_cost())
 
     @timer()
     def setup_radiator_cost(self):
@@ -540,4 +455,67 @@ class BuildingScenario(RenderScenario):
                                     energy_price=get_energy_price(),
                                     om_cost=self.s_ventilation_technology_cost_om.get_item(rkey)
                                 ))
+
+    """
+    create data containers
+    """
+    def create_data_containers(self):
+        # initialization data containers
+        self.heating_technology_main_initial_adoption = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_building_location",
+            "id_heating_system",
+            "id_heating_technology",
+            "year"
+        ])
+        self.location_building_num = RenderDict.create_empty_rdict(key_cols=[
+                "id_scenario",
+                "id_region",
+                "id_building_location",
+                "year"
+            ])
+        self.location_building_num_heating_tech_district_heating = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_building_location",
+            "year"
+        ])
+        self.location_building_num_heating_tech_gas = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_building_location",
+            "year"
+        ])
+        # result data containers
+        self.building_stock = []
+        self.renovation_action_building = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type",
+            "id_building_construction_period",
+            "year"
+        ])
+        self.renovation_action_component = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type",
+            "id_building_construction_period",
+            "id_building_component",
+            "year"
+        ])
+        self.renovation_action_labor_demand = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type",
+            "id_building_construction_period",
+            "id_building_component",
+            "year"
+        ])
 
