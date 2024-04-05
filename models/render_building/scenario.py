@@ -303,10 +303,10 @@ class BuildingScenario(RenderScenario):
 
     def setup_cost_data(self):
         self.setup_building_component_cost()
-        self.setup_heating_technology_cost()
-        self.setup_radiator_cost()
-        self.setup_cooling_technology_cost()
-        self.setup_ventilation_technology_cost()
+        # self.setup_heating_technology_cost()
+        # self.setup_radiator_cost()
+        # self.setup_cooling_technology_cost()
+        # self.setup_ventilation_technology_cost()
 
     @staticmethod
     def calc_capex(investment_cost: float, lifetime: float, interest_rate: float):

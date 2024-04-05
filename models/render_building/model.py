@@ -1,3 +1,4 @@
+import copy
 from typing import TYPE_CHECKING
 
 from models.render.model import RenderModel
@@ -5,6 +6,7 @@ from models.render_building.building import Building
 from models.render_building.data_collector import BuildingDataCollector
 from models.render_building.environment import BuildingEnvironment
 from models.render_building.scenario import BuildingScenario
+from utils.decorators import timer
 
 if TYPE_CHECKING:
     from Melodie import AgentList
@@ -23,15 +25,16 @@ class BuildingModel(RenderModel):
         self.scenario.load_scenario_data()
         self.scenario.setup_results_containers()
         self.scenario.setup_agent_params()
-        # self.scenario.setup_cost_data()
+        self.scenario.setup_cost_data()
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
-        # self.export_initialization_info()
+        self.export_initialization_info()
+        self.test_deepcopy()
 
     def export_initialization_info(self):
         self.data_collector.export_scenario_cost()
-        self.data_collector.export_heating_technology_main_initial_adoption()
-        self.data_collector.export_location_infrastructure()
+        # self.data_collector.export_heating_technology_main_initial_adoption()
+        # self.data_collector.export_location_infrastructure()
 
     def collect_building_info(self):
         # self.data_collector.collect_building_floor_area(self.buildings)
@@ -49,6 +52,11 @@ class BuildingModel(RenderModel):
         # self.data_collector.export_building_profile()
         # self.data_collector.export_renovation_rate()
         ...
+
+    @timer()
+    def test_deepcopy(self):
+        for i in range(0, 5):
+            building = copy.deepcopy(self.buildings[0])
 
     def run(self):
         for year in range(self.scenario.start_year, self.scenario.end_year + 1):
