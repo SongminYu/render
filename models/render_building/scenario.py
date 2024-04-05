@@ -128,7 +128,7 @@ class BuildingScenario(RenderScenario):
         self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
         self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
         self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0)
-        self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0)
+        self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_utility_power = self.load_scenario("Scenario_BuildingComponent_UtilityPower.xlsx", region_level=0)
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=0)
@@ -303,10 +303,10 @@ class BuildingScenario(RenderScenario):
 
     def setup_cost_data(self):
         self.setup_building_component_cost()
-        self.setup_heating_technology_cost()
-        self.setup_radiator_cost()
-        self.setup_cooling_technology_cost()
-        self.setup_ventilation_technology_cost()
+        # self.setup_heating_technology_cost()
+        # self.setup_radiator_cost()
+        # self.setup_cooling_technology_cost()
+        # self.setup_ventilation_technology_cost()
 
     @staticmethod
     def calc_capex(investment_cost: float, lifetime: float, interest_rate: float):

@@ -20,13 +20,13 @@ class BuildingDataCollector(RenderDataCollector):
 
     def export_scenario_cost(self):
         self.save_dataframe(df=self.scenario.building_component_capex.to_dataframe(), df_name=f"BuildingComponentCapex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.heating_technology_capex.to_dataframe(), df_name=f"HeatingTechnologyCapex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.heating_technology_opex.to_dataframe(), df_name=f"HeatingTechnologyOpex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.radiator_capex.to_dataframe(), df_name=f"RadiatorCapex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.cooling_technology_capex.to_dataframe(), df_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.cooling_technology_opex.to_dataframe(), df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
-        self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.heating_technology_capex.to_dataframe(), df_name=f"HeatingTechnologyCapex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.heating_technology_opex.to_dataframe(), df_name=f"HeatingTechnologyOpex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.radiator_capex.to_dataframe(), df_name=f"RadiatorCapex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.cooling_technology_capex.to_dataframe(), df_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.cooling_technology_opex.to_dataframe(), df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.ventilation_technology_capex.to_dataframe(), df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}")
+        # self.save_dataframe(df=self.scenario.ventilation_technology_opex.to_dataframe(), df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}")
 
     def export_heating_technology_main_initial_adoption(self):
         self.save_dataframe(
