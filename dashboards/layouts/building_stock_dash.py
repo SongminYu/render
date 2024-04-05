@@ -11,6 +11,7 @@ from dashboards.components import (
     data_table,
     dropdown,
     sub_dropdown,
+    compare_model_calibration_table,
 )
 
 # IDs for dashboard
@@ -31,19 +32,23 @@ SELECT_ALL_YEARS_BUTTON = "select-all-years-button"
 
 BAR_CHART = "bar-chart"
 
-END_USE_DATA_TABLE = "end-use-data-table"
-REFERENCE_DATA_TABLE = "reference-data-table"
+MODEL_DATA_TABLE = "Model Results"
+REFERENCE_DATA_TABLE = "Reference Data"
+ABSOLUTE_DIFF_TABLE = "Absolute difference"
+RELATIVE_DIFF_TABLE = "Relative difference"
+COMPARISON_DIFF_TABLE = "comparison-diff-table"
 
-DATA_PATH = "../data/building_stock_new_R9010101.csv"
-END_USE_PATH = "../data/building_stock_end_use.csv"
-REFERENCE_PATH = "../data/RENDER_CalibrationTarget.csv"
+DATA_PATH = "../data/building_stock.csv"
+END_USE_PATH = "../data/building_stock_preprocessed.csv"
+REFERENCE_PATH = "../data/CalibrationTarget.csv"
 
 
 def run_building_stock_dash() -> None:
-    # preprocessing step only necessary if data changed and/or there is no 'building_stock_end_use.csv' file in 'data'
-    # dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR, DataSchema.YEAR]
-    # data = loader.load_data(DATA_PATH)
-    # data = loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
+    # preprocessing step only necessary if data changed and/or there is no 'building_stock_preprocessed.csv' file in 'data'
+
+    #dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR, DataSchema.YEAR]
+    #data = loader.load_data(DATA_PATH)
+    #loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
 
     # load the data and create the data manager
     data = loader.load_data(END_USE_PATH)
@@ -57,15 +62,17 @@ def run_building_stock_dash() -> None:
 
 
 def create_layout(app: Dash, data: pd.DataFrame, reference_data) -> html.Div:
+    dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
+                 {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+                 {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                 {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
+                 {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ]
+
     end_use_table = data_table.render(app,
                                       data,
-                                      id_datatable=END_USE_DATA_TABLE,
+                                      id_datatable=MODEL_DATA_TABLE,
                                       title='Model Results:',
-                                      dropdowns=[{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
-                                                 {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
-                                                 {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                                 {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
-                                                 {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
+                                      dropdowns=dropdowns,
                                       x='end_use',
                                       y='energy_consumption',
                                       category='id_energy_carrier')
@@ -95,15 +102,13 @@ def create_layout(app: Dash, data: pd.DataFrame, reference_data) -> html.Div:
             stacked_bar_chart.render(app,
                                      data,
                                      id_barchart=BAR_CHART,
-                                     dropdowns=[{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
-                                                {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
-                                                {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
-                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
+                                     dropdowns=dropdowns,
                                      x='end_use',
                                      y='energy_consumption',
                                      category='id_energy_carrier'),
-            html.Div(className='flex-container', children=[end_use_table, reference_table])
+            html.Div(className='flex-container', children=[end_use_table, reference_table]),
+            compare_model_calibration_table.render(app, COMPARISON_DIFF_TABLE, MODEL_DATA_TABLE, REFERENCE_DATA_TABLE,
+                                                   ABSOLUTE_DIFF_TABLE, RELATIVE_DIFF_TABLE)
         ],
     )
 
