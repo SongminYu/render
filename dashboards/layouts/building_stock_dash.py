@@ -45,10 +45,9 @@ REFERENCE_PATH = "../data/CalibrationTarget.csv"
 
 def run_building_stock_dash() -> None:
     # preprocessing step only necessary if data changed and/or there is no 'building_stock_preprocessed.csv' file in 'data'
-
-    #dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR, DataSchema.YEAR]
-    #data = loader.load_data(DATA_PATH)
-    #loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
+    # dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR, DataSchema.YEAR]
+    # data = loader.load_data(DATA_PATH)
+    # loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
 
     # load the data and create the data manager
     data = loader.load_data(END_USE_PATH)

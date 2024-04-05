@@ -12,20 +12,24 @@ This document contains the development plan of the `RenderDash` tool.
 - add tables (end-use v.s. energy carrier) on the dashboard: 
   - [x] model results
   - [x] calibration targets (Sirin is updating the target value table)
-  - [ ] difference in absolute number -> different energy carriers with value in the two tables
-  - [ ] difference in percentage
+  - [x] difference in absolute number -> different energy carriers with value in the two tables
+  - [x] difference in percentage
 
 ### Apr. 3th, 2024
 
 - [ ] Add tab buttons on the same website, so we can easily switch between the dashboards --> Tutorial: https://dash.plotly.com/urls
 - [x] Tables for `id_end_use` and `id_energy_carrier`.
 - [x] `id_energy_carrier` for appliances?
-- [ ] Songmin will align the energy carrier inconsistency between model results and reference table and push the new calibration target table.
-- [ ] Songmin will confirm where ventilation goes, appliance or cooling, and change calibration target table accordingly.
+- [x] Songmin will align the energy carrier inconsistency between model results and reference table and push the new calibration target table.
+- [x] Songmin will confirm where ventilation goes, appliance or cooling, and change calibration target table accordingly.
 
-### Apr. 10th, 2024
+### Apr. 12th, 2024
 
-- [ ] To be added...
+- [ ] The model result table looks not right (try final energy demand table first in the call).
+- [ ] Two end-use columns are missing.
+- [ ] Add the total columns and rows.
+- [ ] When selecting `id_sector = 3` and `id_subsector = 31`, there is the zero row again.
+- [ ] Songmin develops the postprocessing functions to generate `final_energy_demand`, `floor_area`, `building_efficiency_class_count` tables based on the `building_stock` table.
 
 ### Later stage
 
