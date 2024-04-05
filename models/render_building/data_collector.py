@@ -19,26 +19,26 @@ class BuildingDataCollector(RenderDataCollector):
         self.export_building_stock()
         self.export_renovation_rate()
 
-    def export_rdict(self, rdict: "RenderDict", file_name: str, unit: Optional[str] = None):
+    def export_rdict(self, rdict: "RenderDict", df_name: str, unit: Optional[str] = None):
         df = rdict.to_dataframe()
         if unit is not None:
             unit_position = max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1
             df.insert(unit_position, "unit", unit)
-        self.save_dataframe(df=df, df_name=file_name)
+        self.save_dataframe(df=df, df_name=df_name)
 
     """
     Initialization data
     """
     def export_initialization_data(self):
-        self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, file_name=f"FinalEnergyPrice_R{self.scenario.id_region}", unit="euro/kWh")
-        self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, file_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}", unit="count")
-        self.export_rdict(rdict=self.scenario.building_component_capex, file_name=f"BuildingComponentCapex_R{self.scenario.id_region}", unit="euro/m2")
-        self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, file_name=f"HeatingTechnologyEnergyCost_R{self.scenario.id_region}", unit="euro/kWh")
-        # self.export_rdict(rdict=self.scenario.radiator_capex, file_name=f"RadiatorCapex_R{self.scenario.id_region}", unit="euro/m2")
-        # self.export_rdict(rdict=self.scenario.cooling_technology_capex, file_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}", unit="euro/kW")
-        # self.export_rdict(rdict=self.scenario.cooling_technology_opex, file_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}", unit="euro/kWh")
-        # self.export_rdict(rdict=self.scenario.ventilation_technology_capex, file_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}", unit="euro/m2")
-        # self.export_rdict(rdict=self.scenario.ventilation_technology_opex, file_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}", unit="euro/m2")
+        self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, df_name=f"FinalEnergyPrice_R{self.scenario.id_region}", unit="euro/kWh")
+        self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}", unit="count")
+        self.export_rdict(rdict=self.scenario.building_component_capex, df_name=f"BuildingComponentCapex_R{self.scenario.id_region}", unit="euro/m2")
+        self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, df_name=f"HeatingTechnologyEnergyCost_R{self.scenario.id_region}", unit="euro/kWh")
+        # self.export_rdict(rdict=self.scenario.radiator_capex, df_name=f"RadiatorCapex_R{self.scenario.id_region}", unit="euro/m2")
+        # self.export_rdict(rdict=self.scenario.cooling_technology_capex, df_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}", unit="euro/kW")
+        # self.export_rdict(rdict=self.scenario.cooling_technology_opex, df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}", unit="euro/kWh")
+        # self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}", unit="euro/m2")
+        # self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}", unit="euro/m2")
 
     """
     Results
