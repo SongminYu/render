@@ -6,7 +6,6 @@ from models.render_building.building import Building
 from models.render_building.data_collector import BuildingDataCollector
 from models.render_building.environment import BuildingEnvironment
 from models.render_building.scenario import BuildingScenario
-from utils.decorators import timer
 
 if TYPE_CHECKING:
     from Melodie import AgentList
@@ -29,7 +28,6 @@ class BuildingModel(RenderModel):
         self.buildings.setup_agents(agents_num=len(self.scenario.agent_params), params_df=self.scenario.agent_params)
         self.environment.setup_buildings(self.buildings)
         self.export_initialization_info()
-        self.test_deepcopy()
 
     def export_initialization_info(self):
         self.data_collector.export_scenario_cost()
@@ -52,11 +50,6 @@ class BuildingModel(RenderModel):
         # self.data_collector.export_building_profile()
         # self.data_collector.export_renovation_rate()
         ...
-
-    @timer()
-    def test_deepcopy(self):
-        for i in range(0, 5):
-            building = copy.deepcopy(self.buildings[0])
 
     def run(self):
         for year in range(self.scenario.start_year, self.scenario.end_year + 1):

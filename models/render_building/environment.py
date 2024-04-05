@@ -181,7 +181,7 @@ class BuildingEnvironment(Environment):
                             gas_available=building.heating_system.gas_available
                         )
                         heating_technology.select(
-                            heating_demand_peak=building.heating_demand_peak,
+                            total_heating_demand_peak=building.total_heating_demand_peak,
                             heating_demand=building.heating_demand,
                         )
                         heating_technology.install()
