@@ -28,7 +28,10 @@ def dict_normalize(options: Dict[Any, float]) -> Dict[Any, float]:
     value_min = min(options.values())
     value_max = max(options.values())
     for key, value in options.items():
-        options[key] = (value - value_min) / (value_max - value_min)
+        if value_max == value_min:
+            options[key] = 0.5
+        else:
+            options[key] = (value - value_min) / (value_max - value_min)
     return options
 
 
