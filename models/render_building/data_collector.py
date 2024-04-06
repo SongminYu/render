@@ -18,6 +18,7 @@ class BuildingDataCollector(RenderDataCollector):
     def export(self):
         self.export_building_stock()
         self.export_renovation_action_info()
+        self.export_heating_system_action_info()
 
     def export_rdict(self, rdict: "RenderDict", df_name: str, unit: Optional[str] = None):
         df = rdict.to_dataframe()
@@ -268,3 +269,6 @@ class BuildingDataCollector(RenderDataCollector):
     def export_renovation_action_info(self):
         self.save_dataframe(df=pd.DataFrame(self.scenario.renovation_action_info), df_name=f"renovation_action_info_R{self.scenario.id_region}")
 
+    # Heating system action info
+    def export_heating_system_action_info(self):
+        self.save_dataframe(df=pd.DataFrame(self.scenario.heating_system_action_info), df_name=f"heating_system_action_info_R{self.scenario.id_region}")
