@@ -146,7 +146,6 @@ class BuildingEnvironment(Environment):
             return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
 
         for building in buildings:
-            # TODO: check literature of ventilation, because maybe the "driver" should be m3 instead of m2
             not_adopted = not building.ventilation_system.is_adopted
             triggered_to_adopt = random.uniform(0, 1) <= get_ventilation_adoption_prob(building.rkey.make_copy())
             time_to_replace = building.ventilation_system.rkey.year == building.ventilation_system.next_replace_year
@@ -268,8 +267,6 @@ class BuildingEnvironment(Environment):
             "capex": self.scenario.building_component_capex.get_item(rkey) * building_component.area,
             "labor_demand": self.scenario.s_building_component_input_labor.get_item(rkey) * building_component.area
         })
-        # TODO: when checking the renovation action info table, following points are found:
-        #  (1) building component option 31 has area = 0 (input data)
 
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:

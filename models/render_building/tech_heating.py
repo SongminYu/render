@@ -125,7 +125,7 @@ class HeatingTechnology:
 
     def get_space_heating_efficiency_adjustment_factor(self):
         adjustment_parameter = self.scenario.p_heating_technology_supply_temperature_efficiency_adjustment.get_item(self.rkey)
-        adjustment_factor = ...  # TODO: depending on supply_temperature
+        adjustment_factor = ...  # depending on supply_temperature
         self.supply_temperature_space_heating = ... # used in this function
         return 1
 
@@ -184,7 +184,6 @@ class HeatingTechnology:
     def select(self, total_heating_demand_peak: float, heating_demand: float):
 
         def update_action_type():
-            # TODO: confirm the definition of "similar change"
             if rkey.id_heating_technology == self.rkey.id_heating_technology:
                 rkey.set_id({"id_heating_system_action": cons.ID_HEATING_SYSTEM_ACTION_SAME})
             else:

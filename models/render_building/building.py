@@ -497,7 +497,7 @@ class Building(Agent):
 
 
     def conduct_sync_renovation(self, trigger_type: str, trigger_id: str or int, action_year: int):
-        # TODO: We don't consider sync_renovation in initialization but in future projection.
+        # We don't consider sync_renovation in initialization but in future projection.
         sync_renovation_actions = self.get_sync_renovation_actions(trigger_type, trigger_id)
         for col, action in sync_renovation_actions.items():
             if col.startswith("building_component") and action == 1:
