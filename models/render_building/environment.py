@@ -191,17 +191,25 @@ class BuildingEnvironment(Environment):
             for building in buildings:
                 ...
 
+    @staticmethod
+    def update_buildings_total_energy_cost(buildings: "AgentList[Building]"):
+        for building in buildings:
+            building.update_total_energy_cost()
+
     def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
         for building in buildings:
-            total_energy_cost_before = building.total_energy_cost
             for component_name, building_component in building.building_components.items():
                 if building_component.rkey.year == building_component.next_replace_year:
-                    d_option_cost = {}
-                    d_option_details = {}
-                    rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
                     # mark status before renovation
-                    id_building_component_option_before = rkey.id_building_component_option
-                    id_building_component_option_efficiency_class_before = rkey.id_building_component_option_efficiency_class
+                    before_renovation_status = {
+                        "id_building_component_option_before": building_component.rkey.id_building_component_option,
+                        "id_building_component_option_efficiency_class_before": building_component.rkey.id_building_component_option_efficiency_class,
+                        "heating_demand_before": building.heating_demand,
+                        "cooling_demand_before": building.cooling_demand,
+                        "total_energy_cost_before": building.total_energy_cost,
+                    }
+                    d_option_cost = {}
+                    rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
                     for id_building_component_option in self.scenario.r_building_component_option.get_item(rkey):
                         rkey.id_building_component_option = id_building_component_option
                         for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
@@ -213,16 +221,9 @@ class BuildingEnvironment(Environment):
                                     id_building_component_option=id_building_component_option,
                                     id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                                 )
-                                energy_cost_saving = total_energy_cost_before - building.total_energy_cost
+                                energy_cost_saving = (before_renovation_status["total_energy_cost_before"] -
+                                                      building.total_energy_cost)
                                 d_option_cost[(id_building_component_option, id_building_component_option_efficiency_class)] = capex - energy_cost_saving
-                                d_option_details[(id_building_component_option, id_building_component_option_efficiency_class)] = {
-                                    "id_building_component_option_before": id_building_component_option_before,
-                                    "id_building_component_option_efficiency_class_before": id_building_component_option_efficiency_class_before,
-                                    "total_energy_cost_before": total_energy_cost_before,
-                                    "total_energy_cost_after": building.total_energy_cost,
-                                    "capex": capex,
-                                    "labor_demand": self.scenario.s_building_component_input_labor.get_item(rkey) * building_component.area
-                                }
                     id_building_component_option, id_building_component_option_efficiency_class = dict_utility_sample(
                         options=dict_normalize(d_option_cost),
                         utility_power=self.scenario.s_building_component_utility_power.get_item(rkey)
@@ -233,11 +234,14 @@ class BuildingEnvironment(Environment):
                         id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                     )
                     self.record_renovation_action_info(
-                        rkey=building.building_components[component_name].rkey,
-                        details=d_option_details[(id_building_component_option, id_building_component_option_efficiency_class)]
+                        building=building,
+                        component_name=component_name,
+                        before_renovation_status=before_renovation_status
                     )
 
-    def record_renovation_action_info(self, rkey: "BuildingKey", details: dict):
+    def record_renovation_action_info(self, building: "Building", component_name: str, before_renovation_status: dict):
+        building_component = building.building_components[component_name]
+        rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
         self.scenario.renovation_action_info.append({
             "id_scenario": rkey.id_scenario,
             "id_sector": rkey.id_sector,
@@ -247,15 +251,25 @@ class BuildingEnvironment(Environment):
             "id_building_construction_period": rkey.id_building_construction_period,
             "id_building_component": rkey.id_building_component,
             "year": rkey.year,
-            "id_building_component_option_before": details["id_building_component_option_before"],
-            "id_building_component_option_efficiency_class_before": details["id_building_component_option_efficiency_class_before"],
+            "id_building_component_option_before": before_renovation_status["id_building_component_option_before"],
             "id_building_component_option_after": rkey.id_building_component_option,
+            "id_building_component_option_efficiency_class_before": before_renovation_status["id_building_component_option_efficiency_class_before"],
             "id_building_component_option_efficiency_class_after": rkey.id_building_component_option_efficiency_class,
-            "total_energy_cost_before": details["total_energy_cost_before"],
-            "total_energy_cost_after": details["total_energy_cost_after"],
-            "capex": details["capex"],
-            "labor_demand": details["labor_demand"]
+            "efficiency_class_change": before_renovation_status["id_building_component_option_efficiency_class_before"] - rkey.id_building_component_option_efficiency_class,
+            "heating_demand_before": before_renovation_status["heating_demand_before"],
+            "heating_demand_after": building.heating_demand,
+            "heating_demand_change": before_renovation_status["heating_demand_before"] - building.heating_demand,
+            "cooling_demand_before": before_renovation_status["cooling_demand_before"],
+            "cooling_demand_after": building.cooling_demand,
+            "cooling_demand_change": before_renovation_status["cooling_demand_before"] - building.cooling_demand,
+            "total_energy_cost_before": before_renovation_status["total_energy_cost_before"],
+            "total_energy_cost_after": building.total_energy_cost,
+            "total_energy_cost_change": before_renovation_status["total_energy_cost_before"] - building.total_energy_cost,
+            "capex": self.scenario.building_component_capex.get_item(rkey) * building_component.area,
+            "labor_demand": self.scenario.s_building_component_input_labor.get_item(rkey) * building_component.area
         })
+        # TODO: when checking the renovation action info table, following points are found:
+        #  (1) building component option 31 has area = 0 (input data)
 
     def update_buildings_renovation_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.renovation_mandatory:

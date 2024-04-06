@@ -39,6 +39,7 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_radiator_lifecycle(self.buildings)
             # self.environment.update_buildings_technology_heating_lifecycle(self.buildings)
             # self.environment.update_buildings_technology_heating_mandatory(self.buildings)
+            self.environment.update_buildings_total_energy_cost(self.buildings)
             self.environment.update_buildings_renovation_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
             # self.environment.update_buildings_demolition(self.buildings)

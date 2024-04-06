@@ -21,7 +21,7 @@ def get_config(project_name: str):
 def run_post_processor(cfg: "Config"):
     l = [
         "building_stock",
-        # "renovation_rate_building",
+        # "renovation_action_info",
         # "renovation_rate_component",
     ]
     # post_processor.concat_region_tables(cfg=cfg, file_name_prefix_list=l)

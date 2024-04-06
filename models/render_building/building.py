@@ -337,20 +337,24 @@ class Building(Agent):
             self.set_temperature_min = np.ones((8760,)) * 20
             self.set_temperature_max = np.ones((8760,)) * 27
         else:
-            occupied_min = self.scenario.p_set_temperature_occupied_min.get_item(self.rkey)
-            occupied_max = self.scenario.p_set_temperature_occupied_max.get_item(self.rkey)
-            empty_min = self.scenario.p_set_temperature_empty_min.get_item(self.rkey)
-            empty_max = self.scenario.p_set_temperature_empty_max.get_item(self.rkey)
+            self.set_temperature_occupied_min = self.scenario.p_set_temperature_occupied_min.get_item(self.rkey)
+            self.set_temperature_occupied_max = self.scenario.p_set_temperature_occupied_max.get_item(self.rkey)
+            self.set_temperature_empty_min = self.scenario.p_set_temperature_empty_min.get_item(self.rkey)
+            self.set_temperature_empty_max = self.scenario.p_set_temperature_empty_max.get_item(self.rkey)
             self.set_temperature_min = np.ones((8760,))
             self.set_temperature_max = np.ones((8760,))
             # update set_temperature based on occupancy
             for hour in range(0, 8760):
-                if random.uniform(0, 1) < self.scenario.optimal_heating_behavior_prob:
-                    self.set_temperature_min[hour] = empty_min + (occupied_min - empty_min) * self.occupancy_profile[hour]
-                    self.set_temperature_max[hour] = empty_max - (empty_max - occupied_max) * self.occupancy_profile[hour]
+                if random.uniform(0, 1) <= self.scenario.optimal_heating_behavior_prob:
+                    self.set_temperature_min[hour] = (self.set_temperature_empty_min +
+                                                      (self.set_temperature_occupied_min - self.set_temperature_empty_min) *
+                                                      self.occupancy_profile[hour])
+                    self.set_temperature_max[hour] = (self.set_temperature_empty_max -
+                                                      (self.set_temperature_empty_max - self.set_temperature_occupied_max)
+                                                      * self.occupancy_profile[hour])
                 else:
-                    self.set_temperature_min[hour] = occupied_min
-                    self.set_temperature_max[hour] = occupied_max
+                    self.set_temperature_min[hour] = self.set_temperature_occupied_min
+                    self.set_temperature_max[hour] = self.set_temperature_occupied_max
 
     def conduct_r5c1_calculation(self):
 
