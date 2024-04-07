@@ -142,7 +142,7 @@ class Building(Agent):
         self.heating_system.init_system_type()
         self.heating_system.init_heating_technology_main()
         self.heating_system.init_heating_technology_second()
-        self.heating_system.technologies = [
+        self.heating_system.heating_technologies = [
             self.heating_system.heating_technology_main,
             self.heating_system.heating_technology_second
         ]
@@ -413,7 +413,7 @@ class Building(Agent):
 
     def update_space_heating_final_energy_demand(self):
         self.final_energy_demand[cons.ID_END_USE_SPACE_HEATING] = []
-        for heating_technology in self.heating_system.technologies:
+        for heating_technology in self.heating_system.heating_technologies:
             if heating_technology is not None:
                 for energy_intensity in heating_technology.space_heating_energy_intensities:
                     self.final_energy_demand[energy_intensity.id_end_use].append(
@@ -425,7 +425,7 @@ class Building(Agent):
 
     def update_hot_water_final_energy_demand(self):
         self.final_energy_demand[cons.ID_END_USE_HOT_WATER] = []
-        for heating_technology in self.heating_system.technologies:
+        for heating_technology in self.heating_system.heating_technologies:
             if heating_technology is not None:
                 for energy_intensity in heating_technology.hot_water_energy_intensities:
                     self.final_energy_demand[energy_intensity.id_end_use].append(

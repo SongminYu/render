@@ -20,7 +20,7 @@ class HeatingSystem:
         self.heating_technology_second: Optional["HeatingTechnology"] = None
         self.district_heating_available = False
         self.gas_available = False
-        self.technologies = []
+        self.heating_technologies = []
 
     def init_system_type(self):
         self.rkey.init_dimension(
