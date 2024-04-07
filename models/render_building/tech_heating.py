@@ -126,7 +126,7 @@ class HeatingTechnology:
     def get_space_heating_efficiency_adjustment_factor(self):
         adjustment_parameter = self.scenario.p_heating_technology_supply_temperature_efficiency_adjustment.get_item(self.rkey)
         adjustment_factor = ...  # depending on supply_temperature
-        self.supply_temperature_space_heating = ... # used in this function
+        # supply_temperature_space_heating is used in this function
         return 1
 
     def update_supply_temperature_space_heating(self):
