@@ -4,7 +4,6 @@ This is a new repo for the RENDER models based on `Melodie V1.0.1` and `tab2dict
 
 ### To-dos
  - Code changes: 
-   - add energy_cost_before column in the heating system action table.
    - we don't have diffusion of the "second heating technology" yet.
  - Questions: 
    - the heating system size might be overestimated, as most of them are "large".
