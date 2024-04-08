@@ -249,6 +249,7 @@ class HeatingTechnology:
                 d_option_cost[id_heating_technology] = investment_cost_annualized + energy_cost + om_cost
                 d_option_action_info[id_heating_technology] = {
                     "id_scenario": rkey.id_scenario,
+                    "id_region": rkey.id_region,
                     "id_sector": rkey.id_sector,
                     "id_subsector": rkey.id_subsector,
                     "id_subsector_agent": rkey.id_subsector_agent,
