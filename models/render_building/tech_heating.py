@@ -262,6 +262,8 @@ class HeatingTechnology:
                     "scale": scale,
                     "id_heating_technology_before": self.rkey.id_heating_technology,
                     "id_heating_technology_after": 0,
+                    "total_energy_cost_before": 0,
+                    "total_energy_cost_after": 0,
                     "id_heating_system_action": rkey.id_heating_system_action,
                     "investment_cost_per_kW": investment_cost_per_kW_annualized,
                     "energy_cost_per_kWh": energy_cost_per_kWh,
@@ -277,11 +279,7 @@ class HeatingTechnology:
             options=dict_normalize(d_option_cost),
             utility_power=self.scenario.s_heating_technology_utility_power.get_item(rkey)
         )
-        self.record_heating_system_action_info(d_option_action_info[self.rkey.id_heating_technology])
-
-    def record_heating_system_action_info(self, option_action_info):
-        option_action_info["id_heating_technology_after"] = self.rkey.id_heating_technology
-        self.scenario.heating_system_action_info.append(option_action_info)
+        return d_option_action_info[self.rkey.id_heating_technology]
 
     def install(self):
         self.update_energy_intensity_space_heating()

@@ -166,8 +166,7 @@ class BuildingEnvironment(Environment):
                     if heating_technology is not None:
                         heating_technology.update_due_to_radiator_change(id_radiator=building.radiator.rkey.id_radiator)
 
-    @staticmethod
-    def update_buildings_technology_heating_lifecycle(buildings: "AgentList[Building]"):
+    def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
         for building in buildings:
             for heating_technology in [
                 building.heating_system.heating_technology_main,
@@ -175,15 +174,23 @@ class BuildingEnvironment(Environment):
             ]:
                 if heating_technology is not None:
                     if heating_technology.rkey.year == heating_technology.next_replace_year:
+                        total_energy_cost_before = building.total_energy_cost
                         heating_technology.update_optional_heating_technologies(
                             district_heating_available=building.heating_system.district_heating_available,
                             gas_available=building.heating_system.gas_available
                         )
-                        heating_technology.select(
+                        option_action_info = heating_technology.select(
                             total_heating_demand_peak=building.total_heating_demand_peak,
                             heating_demand=building.heating_demand,
                         )
                         heating_technology.install()
+                        building.update_space_heating_final_energy_demand()
+                        building.update_hot_water_final_energy_demand()
+                        building.update_total_energy_cost()
+                        option_action_info["id_heating_technology_after"] = heating_technology.rkey.id_heating_technology
+                        option_action_info["total_energy_cost_before"] = total_energy_cost_before
+                        option_action_info["total_energy_cost_after"] = building.total_energy_cost
+                        self.scenario.heating_system_action_info.append(option_action_info)
 
     def update_buildings_technology_heating_mandatory(self, buildings: "AgentList[Building]"):
         if self.scenario.heating_technology_mandatory:
@@ -215,18 +222,16 @@ class BuildingEnvironment(Environment):
                             capex = self.scenario.building_component_capex.get_item(rkey) * building_component.area
                             building.renovate_component(
                                 component_name=component_name,
-                                id_building_component_option=id_building_component_option,
                                 id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                             )
                             energy_cost_saving = (before_renovation_status["total_energy_cost_before"] - building.total_energy_cost)
-                            d_option_cost[(id_building_component_option, id_building_component_option_efficiency_class)] = capex - energy_cost_saving
-                    id_building_component_option, id_building_component_option_efficiency_class = dict_utility_sample(
+                            d_option_cost[id_building_component_option_efficiency_class] = capex - energy_cost_saving
+                    id_building_component_option_efficiency_class = dict_utility_sample(
                         options=dict_normalize(d_option_cost),
                         utility_power=self.scenario.s_building_component_utility_power.get_item(rkey)
                     )
                     building.renovate_component(
                         component_name=component_name,
-                        id_building_component_option=id_building_component_option,
                         id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
                     )
                     self.record_renovation_action_info(

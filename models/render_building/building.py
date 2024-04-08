@@ -464,11 +464,9 @@ class Building(Agent):
     def renovate_component(
             self,
             component_name: str,
-            id_building_component_option: int,
             id_building_component_option_efficiency_class: int
     ):
         self.building_components[component_name].renovate(
-            id_building_component_option=id_building_component_option,
             id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
         )
         self.calc_building_heating_cooling_demand()

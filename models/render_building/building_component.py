@@ -75,8 +75,7 @@ class BuildingComponent:
             rkey=rkey, value=self.scenario.s_building_component_input_labor.get_item(rkey)
         )
 
-    def renovate(self, id_building_component_option: int, id_building_component_option_efficiency_class: int):
-        self.rkey.id_building_component_option = id_building_component_option
+    def renovate(self, id_building_component_option_efficiency_class: int):
         self.rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
         self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
         self.installation_year = self.rkey.year
