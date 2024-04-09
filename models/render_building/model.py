@@ -45,3 +45,7 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_construction(self.buildings)
             self.environment.update_buildings_year(self.buildings)
         self.data_collector.export()
+
+
+
+
