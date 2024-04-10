@@ -115,6 +115,7 @@ class BuildingScenario(RenderScenario):
         self.p_heating_technology_cost_criterion_small = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="criterion_small")
         self.p_heating_technology_cost_pp_index = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="pp_index")
         self.p_heating_technology_cost_wages_index = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="wages_index")
+        self.p_heating_technology_size_quantile = self.load_param("Parameter_HeatingTechnology_SizeQuantile.xlsx")
         self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
         self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
         self.p_cooling_technology_efficiency = self.load_param("Parameter_CoolingTechnology_EfficiencyCoefficient.xlsx")

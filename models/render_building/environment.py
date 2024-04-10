@@ -1,6 +1,6 @@
 import random
 from typing import TYPE_CHECKING
-
+import numpy as np
 from Melodie import Environment
 from tqdm import tqdm
 
@@ -167,6 +167,17 @@ class BuildingEnvironment(Environment):
                         heating_technology.update_due_to_radiator_change(id_radiator=building.radiator.rkey.id_radiator)
 
     def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
+
+        def get_heating_technology_size():
+            heating_technology_demand_profile = (heating_technology.space_heating_contribution * building.heating_demand_profile +
+                                                 heating_technology.hot_water_contribution * building.hot_water_profile)
+            heating_technology_size = np.quantile(
+                heating_technology_demand_profile,
+                1 - self.scenario.p_heating_technology_size_quantile.get_item(heating_technology.rkey)
+            )
+            # heating_technology_size = heating_technology_demand_profile.max() * 0.75  # taking multiplication instead of quantile
+            return heating_technology_size
+
         for building in buildings:
             for heating_technology in [
                 building.heating_system.heating_technology_main,
@@ -180,13 +191,14 @@ class BuildingEnvironment(Environment):
                             gas_available=building.heating_system.gas_available
                         )
                         option_action_info = heating_technology.select(
-                            total_heating_demand_peak=building.total_heating_demand_peak,
+                            heating_technology_size=get_heating_technology_size(),
                             heating_demand=building.heating_demand,
                         )
                         heating_technology.install()
                         building.update_space_heating_final_energy_demand()
                         building.update_hot_water_final_energy_demand()
                         building.update_total_energy_cost()
+                        option_action_info["total_heating_demand_peak"] = building.total_heating_demand_peak
                         option_action_info["id_heating_technology_after"] = heating_technology.rkey.id_heating_technology
                         option_action_info["total_energy_cost_before"] = total_energy_cost_before
                         option_action_info["total_energy_cost_after"] = building.total_energy_cost
