@@ -5,7 +5,6 @@ This is a new repo for the RENDER models based on `Melodie V1.0.1` and `tab2dict
 ### To-dos
  - Code changes: 
    - we don't have diffusion of the "second heating technology" yet.
-   - add a new table to specify the heating system size in percentage of the peak demand.
  - Questions: 
    - the heating system size might be overestimated, as most of them are "large".
    - check renovation and heating replacement rates --> too high maybe, needs limit
