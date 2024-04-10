@@ -28,18 +28,4 @@ def monitor_python_memory_usage(interval=1):
 
 
 if __name__ == "__main__":
-    # monitor_python_memory_usage()
-    import numpy as np
-
-    # Example numpy array
-    data = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-    shuffled_data = np.random.permutation(data)
-
-    print(shuffled_data)
-    # Calculate the 0.25 quantile
-    quantile_1 = np.quantile(data, 0.25)
-    quantile_2 = np.quantile(shuffled_data, 0.25)
-
-    # Output the quantile
-    print("0.25 quantile:", quantile_1)
-    print("0.25 quantile:", quantile_2)
+    monitor_python_memory_usage()
