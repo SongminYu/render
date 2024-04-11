@@ -13,7 +13,9 @@
 }
 
 .dropdown-container {
-    width: 83%
+    width: 83%;
+    max-height: 100px;
+    overflow-y: auto;
 }
 
 .button-container {
