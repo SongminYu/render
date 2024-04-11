@@ -27,7 +27,12 @@ def render(app: Dash, data: pd.DataFrame, id_barchart, dropdowns, x, y, category
         # get values for stacked bar chart
         grouped_data = filtered_data.groupby([x, category])[y].sum().reset_index()
 
-        fig = px.bar(grouped_data, x=x, y=y, color=category, labels={'x': 'End Use', 'y': 'Total demand'})
+        grouped_data.columns = grouped_data.columns.astype(str)
+        grouped_data['id_energy_carrier'] = grouped_data['id_energy_carrier'].astype(str)
+
+        fig = px.bar(grouped_data, x=x, y=y,
+                     color=category, color_discrete_sequence=px.colors.qualitative.Bold,
+                     labels={'x': 'End Use', 'y': 'Total demand'})
 
         return dcc.Graph(figure=fig)
 

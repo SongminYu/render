@@ -35,7 +35,7 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, categor
         end_use.remove('id_energy_carrier')
 
         sum_row = pd.DataFrame(wide_df[end_use].sum(axis=0)).T
-        sum_row.insert(loc=0, column='id_energy_carrier', value='total')
+        sum_row.insert(loc=0, column=category, value='total')
         # sum_row.at[0, 'id_energy_carrier'] = 'total'
         wide_df = pd.concat([wide_df, sum_row], ignore_index=True)
 
@@ -44,7 +44,8 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, categor
         wide_df = wide_df.fillna(0)
 
         # Ensure that column names are string, needed for dash DataTable
-        #wide_df.columns = wide_df.columns.astype(str)
+        wide_df.columns = wide_df.columns.astype(str)
+        wide_df['id_energy_carrier'] = wide_df['id_energy_carrier'].astype(str)
 
         return [html.H6(f"{id_datatable}"),
                 dash_table.DataTable(wide_df.to_dict('records'),
