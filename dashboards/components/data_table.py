@@ -2,7 +2,6 @@ import pandas as pd
 
 from dash import Dash, dash_table, html
 from dash.dependencies import Input, Output
-from dash.dash_table.Format import Format
 
 
 def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.Div:
@@ -31,12 +30,21 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, categor
         wide_df.reset_index(inplace=True)
         wide_df.columns.name = None
 
+        # Add the sum of columns
+        end_use = list(wide_df.columns)
+        end_use.remove('id_energy_carrier')
+
+        sum_row = pd.DataFrame(wide_df[end_use].sum(axis=0)).T
+        sum_row.insert(loc=0, column='id_energy_carrier', value='total')
+        # sum_row.at[0, 'id_energy_carrier'] = 'total'
+        wide_df = pd.concat([wide_df, sum_row], ignore_index=True)
+
         # Round every entry to no digits after the decimal point
         wide_df = wide_df.round(0)
         wide_df = wide_df.fillna(0)
 
         # Ensure that column names are string, needed for dash DataTable
-        wide_df.columns = wide_df.columns.astype(str)
+        #wide_df.columns = wide_df.columns.astype(str)
 
         return [html.H6(f"{id_datatable}"),
                 dash_table.DataTable(wide_df.to_dict('records'),
