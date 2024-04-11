@@ -118,7 +118,7 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     df = change_ventilation_to_appliances(df)
     print('Change ventilation to appliances finished.')
     df = change_ec_to_renewables(df)
-    print('Change to renewables finished. \n Safe Preprocessed Data...')
+    print('Change to renewables finished.')
     return df
 
 

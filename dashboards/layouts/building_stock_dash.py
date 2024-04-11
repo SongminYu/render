@@ -48,6 +48,12 @@ def run_building_stock_dash() -> None:
     data = loader.load_data(END_USE_PATH)
     reference_data = loader.load_data(REFERENCE_PATH)
 
+    data['id_end_use'] = data['id_end_use'].astype(str)
+    reference_data['id_end_use'] = reference_data['id_end_use'].astype(str)
+
+    data['id_energy_carrier'] = data['id_energy_carrier'].astype(str)
+    reference_data['id_energy_carrier'] = reference_data['id_energy_carrier'].astype(str)
+
     app = Dash(__name__, external_stylesheets=[BOOTSTRAP])
     app.title = "Building Stock Dashboard"
     app.layout = create_layout(app, data, reference_data)

@@ -3,7 +3,6 @@ import pandas as pd
 from dash import Dash, dash_table, html
 from dash.dependencies import Input, Output
 from dash.dash_table import FormatTemplate
-from dash.dash_table.Format import Format
 
 
 def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_relative) -> html.Div:
@@ -31,6 +30,7 @@ def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_rela
         relative.insert(loc=0, column='id_energy_carrier', value=data_df['id_energy_carrier'])
         # Round every entry to no digits after the decimal point
         relative = relative.fillna(0)
+        relative = relative.round(2)
 
         absolute_html = html.Div(className='table-container',
                                  id=id_absolute,
@@ -39,13 +39,12 @@ def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_rela
                                                                 [{"name": i, "id": i} for i in absolute.columns],
                                                                 style_cell={'textAlign': 'left'})])
 
+        column_dict = [{"name": 'id_energy_carrier', "id": 'id_energy_carrier'}]
+        column_dict.extend([{"name": i, "id": i, "type": 'numeric', 'format': FormatTemplate.percentage(2)} for i in end_use])
         relative_html = html.Div(className='table-container',
                                  id=id_relative,
                                  children=[html.H6(f"{id_relative}"),
-                                           dash_table.DataTable(relative.to_dict('records'),
-                                                                [{"name": i, "id": i, "type": 'numeric', 'format': FormatTemplate.percentage(0)} for i in relative.columns],
-                                                                style_cell={'textAlign': 'left'})])
-
+                                           dash_table.DataTable(relative.to_dict('records'), columns=column_dict, style_cell={'textAlign': 'left'})])
         return [absolute_html, relative_html]
 
     return html.Div(className='flex-container', id=id_comparison)
