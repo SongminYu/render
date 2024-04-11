@@ -45,6 +45,21 @@ class DataSchema_Building_Stock:
     VENTILATION = ["ventilation_system"]
 
 
+class DataSchema_Final_Energy:
+    ID_SCENARIO = "id_scenario"
+    ID_REGION = "id_region"
+    ID_SECTOR = "id_sector"
+    ID_SUBSECTOR = "id_subsector"
+    YEAR = "year"
+    ID_BUILDING_TYPE = "id_building_type"
+    ID_BUILDING = "id_building"
+    ID_BUILDING_CONSTRUCTION_PERIOD = "id_building_construction_period"
+
+    ID_END_USE = 'id_end_use'
+    VALUE = 'value'
+    ID_ENERGY_CARRIER = 'id_energy_carrier'
+
+
 def create_end_use_table(df: pd.DataFrame, general_columns, end_use, end_use_columns) -> pd.DataFrame:
     rename_col = ['id_energy_carrier', 'energy_consumption']
     end_use_dfs = []
@@ -114,17 +129,12 @@ def preprocess_building_stock(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
-    print('Preprocessing building stock data...')
     df = change_ventilation_to_appliances(df)
-    print('Change ventilation to appliances finished.')
     df = change_ec_to_renewables(df)
-    print('Change to renewables finished.')
     return df
 
 
 def load_data(path: str) -> pd.DataFrame:
-    print(f'Load data from {path} ...')
     # load the data from the CSV file
     data = pd.read_csv(path)
-    data = preprocess_data(data)
     return data
