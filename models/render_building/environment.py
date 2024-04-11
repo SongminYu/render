@@ -129,7 +129,7 @@ class BuildingEnvironment(Environment):
         for building in buildings:
             not_adopted = not building.cooling_system.is_adopted
             triggered_to_adopt = random.uniform(0, 1) <= get_cooling_adoption_prob(building.rkey.make_copy())
-            time_to_replace = building.cooling_system.rkey.year == building.cooling_system.next_replace_year
+            time_to_replace = building.cooling_system.rkey.year >= building.cooling_system.next_replace_year
             if (not_adopted and triggered_to_adopt) or time_to_replace:
                 building.cooling_system.select(
                     cooling_demand_peak=building.cooling_demand_peak,
@@ -148,7 +148,7 @@ class BuildingEnvironment(Environment):
         for building in buildings:
             not_adopted = not building.ventilation_system.is_adopted
             triggered_to_adopt = random.uniform(0, 1) <= get_ventilation_adoption_prob(building.rkey.make_copy())
-            time_to_replace = building.ventilation_system.rkey.year == building.ventilation_system.next_replace_year
+            time_to_replace = building.ventilation_system.rkey.year >= building.ventilation_system.next_replace_year
             if (not_adopted and triggered_to_adopt) or time_to_replace:
                 building.ventilation_system.select(total_living_area=building.total_living_area)
                 building.ventilation_system.install()
@@ -156,7 +156,7 @@ class BuildingEnvironment(Environment):
     @staticmethod
     def update_buildings_radiator_lifecycle(buildings: "AgentList[Building]"):
         for building in buildings:
-            if building.radiator.rkey.year == building.radiator.next_replace_year:
+            if building.radiator.rkey.year >= building.radiator.next_replace_year:
                 building.radiator.select(id_building_action=2)
                 building.radiator.install()
                 for heating_technology in [
@@ -184,7 +184,7 @@ class BuildingEnvironment(Environment):
                 building.heating_system.heating_technology_second
             ]:
                 if heating_technology is not None:
-                    if heating_technology.rkey.year == heating_technology.next_replace_year:
+                    if heating_technology.rkey.year >= heating_technology.next_replace_year:
                         total_energy_cost_before = building.total_energy_cost
                         heating_technology.update_optional_heating_technologies(
                             district_heating_available=building.heating_system.district_heating_available,
@@ -217,7 +217,7 @@ class BuildingEnvironment(Environment):
     def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
         for building in buildings:
             for component_name, building_component in building.building_components.items():
-                if building_component.rkey.year == building_component.next_replace_year:
+                if building_component.rkey.year >= building_component.next_replace_year:
                     # mark status before renovation
                     before_renovation_status = {
                         "id_building_component_option_before": building_component.rkey.id_building_component_option,
