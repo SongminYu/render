@@ -1,10 +1,10 @@
 import pandas as pd
 
-from dash import Dash, dash_table, html
+from dash import dash_table, html, callback
 from dash.dependencies import Input, Output
 
 
-def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.Div:
+def render(data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.Div:
     # dropdowns here: list of dictionary of dropdowns,
     # One dictionary has keys 'id' (of dropdown) and
     # 'column' (respective column in data in which the filter should be applied)
@@ -12,7 +12,7 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, categor
     # Extract dropdown ids from list of dictionary of dropdowns
     dropdown_ids = [dropdown['id'] for dropdown in dropdowns]
 
-    @app.callback(
+    @callback(
         Output(id_datatable, "children"),
         [Input(id, "value") for id in dropdown_ids],
     )
@@ -32,11 +32,10 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, categor
 
         # Add the sum of columns
         end_use = list(wide_df.columns)
-        end_use.remove('id_energy_carrier')
+        end_use.remove(category)
 
         sum_row = pd.DataFrame(wide_df[end_use].sum(axis=0)).T
         sum_row.insert(loc=0, column=category, value='total')
-        # sum_row.at[0, 'id_energy_carrier'] = 'total'
         wide_df = pd.concat([wide_df, sum_row], ignore_index=True)
 
         # Round every entry to no digits after the decimal point
@@ -45,7 +44,7 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, categor
 
         # Ensure that column names are string, needed for dash DataTable
         wide_df.columns = wide_df.columns.astype(str)
-        wide_df['id_energy_carrier'] = wide_df['id_energy_carrier'].astype(str)
+        wide_df[category] = wide_df[category].astype(str)
 
         return [html.H6(f"{id_datatable}"),
                 dash_table.DataTable(wide_df.to_dict('records'),

@@ -1,3 +1,0 @@
-
-def run_building_dashboard():
-    ...

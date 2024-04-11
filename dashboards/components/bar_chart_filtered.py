@@ -1,10 +1,11 @@
 import pandas as pd
 import plotly.express as px
-from dash import Dash, dcc, html
+
+from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 
 
-def render(app: Dash, data: pd.DataFrame, id_barchart, dropdowns, x, y) -> html.Div:
+def render(data: pd.DataFrame, id_barchart, dropdowns, x, y) -> html.Div:
     # dropdowns here: list of dictionary of dropdowns,
     # One dictionary has keys 'id' (of dropdown) and
     # 'column' (respective column in data in which the filter should be applied)
@@ -12,7 +13,7 @@ def render(app: Dash, data: pd.DataFrame, id_barchart, dropdowns, x, y) -> html.
     # Extract dropdown ids from list of dictionary of dropdowns
     dropdown_ids = [dropdown['id'] for dropdown in dropdowns]
 
-    @app.callback(
+    @callback(
         Output(id_barchart, "children"),
         [Input(id, "value") for id in dropdown_ids],
     )

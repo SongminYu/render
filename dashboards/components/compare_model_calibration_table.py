@@ -1,20 +1,22 @@
 import pandas as pd
 
-from dash import Dash, dash_table, html
+from dash import dash_table, html, callback
 from dash.dependencies import Input, Output
 from dash.dash_table import FormatTemplate
 
 
-def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_relative) -> html.Div:
-    @app.callback(
+def render(id_comparison, id_data, id_reference, id_absolute, id_relative) -> html.Div:
+    @callback(
         Output(id_comparison, "children"),
         [Input(id_data, "children"), Input(id_reference, "children")]
     )
     def update_data_table(data, reference):
-        # TODO: handle no selected data and different columns
-
         data_df = pd.DataFrame(data[1]['props']['data'])
         reference_df = pd.DataFrame(reference[1]['props']['data'])
+
+        if data_df.shape[0] == 0:
+            return ""
+
         end_use = list(data_df.columns)
         end_use.remove('id_energy_carrier')
 
