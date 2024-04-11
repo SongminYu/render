@@ -76,6 +76,11 @@ def create_appliances_table(df: pd.DataFrame, general_columns) -> pd.DataFrame:
     return appliances
 
 
+def change_ventilation_to_appliances(df: pd.DataFrame) -> pd.DataFrame:
+    df.loc[df['id_end_use'] == 5, ['id_end_use']] = 1
+    return df
+
+
 def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
     # to compare model data with calibration target we change for id_sector=6 the ec 14, 15, 19 to 24
     df.loc[(df['id_sector'] == 3) & (df['id_energy_carrier'].isin([14, 15, 19])), ['id_energy_carrier']] = 24
@@ -85,8 +90,13 @@ def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def preprocessing_building_stock_data(df: pd.DataFrame, general_columns, path: str) -> pd.DataFrame:
-    print('Preprocessing building stock data...')
+def preprocess_building_stock(df: pd.DataFrame) -> pd.DataFrame:
+    general_columns = [DataSchema_Building_Stock.ID_SCENARIO,
+                       DataSchema_Building_Stock.ID_REGION,
+                       DataSchema_Building_Stock.ID_SECTOR,
+                       DataSchema_Building_Stock.ID_SUBSECTOR,
+                       DataSchema_Building_Stock.YEAR]
+
     space_heating = create_end_use_table(df, general_columns, 'space heating', DataSchema_Building_Stock.SPACE_HEATING)
     print('Space heating finished')
     hot_water = create_end_use_table(df, general_columns, 'domestic hot water', DataSchema_Building_Stock.HOT_WATER)
@@ -100,13 +110,21 @@ def preprocessing_building_stock_data(df: pd.DataFrame, general_columns, path: s
 
     end_use = pd.concat([space_heating, hot_water, cooling, ventilation, appliances], ignore_index=True)
     print('End use finished')
-    end_use = change_ec_to_renewables(end_use)
-    print('Change to renewables finished. \n Safe Preprocessed Data...')
-    end_use.to_csv(path, index=False)
     return end_use
 
 
+def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
+    print('Preprocessing building stock data...')
+    df = change_ventilation_to_appliances(df)
+    print('Change ventilation to appliances finished.')
+    df = change_ec_to_renewables(df)
+    print('Change to renewables finished. \n Safe Preprocessed Data...')
+    return df
+
+
 def load_data(path: str) -> pd.DataFrame:
+    print(f'Load data from {path} ...')
     # load the data from the CSV file
     data = pd.read_csv(path)
+    data = preprocess_data(data)
     return data

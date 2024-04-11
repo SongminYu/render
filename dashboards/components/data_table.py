@@ -1,9 +1,11 @@
 import pandas as pd
+
 from dash import Dash, dash_table, html
 from dash.dependencies import Input, Output
+from dash.dash_table.Format import Format
 
 
-def render(app: Dash, data: pd.DataFrame, id_datatable, title, dropdowns, x, y, category) -> html.Div:
+def render(app: Dash, data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.Div:
     # dropdowns here: list of dictionary of dropdowns,
     # One dictionary has keys 'id' (of dropdown) and
     # 'column' (respective column in data in which the filter should be applied)
@@ -33,8 +35,12 @@ def render(app: Dash, data: pd.DataFrame, id_datatable, title, dropdowns, x, y, 
         wide_df = wide_df.round(0)
         wide_df = wide_df.fillna(0)
 
-        return [html.H6(f"{id_datatable}"), dash_table.DataTable(wide_df.to_dict('records'),
-                                                                 [{"name": i, "id": i} for i in wide_df.columns],
-                                                                 style_cell={'textAlign': 'left'})]
+        # Ensure that column names are string, needed for dash DataTable
+        wide_df.columns = wide_df.columns.astype(str)
+
+        return [html.H6(f"{id_datatable}"),
+                dash_table.DataTable(wide_df.to_dict('records'),
+                                     [{"name": i, "id": i} for i in wide_df.columns],
+                                     style_cell={'textAlign': 'left'})]
 
     return html.Div(className='table-container', id=id_datatable)

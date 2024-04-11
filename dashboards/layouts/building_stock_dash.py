@@ -39,19 +39,13 @@ RELATIVE_DIFF_TABLE = "Relative difference"
 COMPARISON_DIFF_TABLE = "comparison-diff-table"
 
 DATA_PATH = "../data/building_stock.csv"
-END_USE_PATH = "../data/building_stock_preprocessed.csv"
+END_USE_PATH = "../data/final_energy_demand.csv"
 REFERENCE_PATH = "../data/CalibrationTarget.csv"
 
 
 def run_building_stock_dash() -> None:
-    # preprocessing step only necessary if data changed and/or there is no 'building_stock_preprocessed.csv' file in 'data'
-    # dropdowns = [DataSchema.ID_SCENARIO, DataSchema.ID_REGION, DataSchema.ID_SECTOR, DataSchema.ID_SUBSECTOR, DataSchema.YEAR]
-    # data = loader.load_data(DATA_PATH)
-    # loader.preprocessing_building_stock_data(data, dropdowns, END_USE_PATH)
-
     # load the data and create the data manager
     data = loader.load_data(END_USE_PATH)
-
     reference_data = loader.load_data(REFERENCE_PATH)
 
     app = Dash(__name__, external_stylesheets=[BOOTSTRAP])
@@ -67,25 +61,27 @@ def create_layout(app: Dash, data: pd.DataFrame, reference_data) -> html.Div:
                  {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
                  {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ]
 
+    x = 'id_end_use'
+    y = 'value'
+    category = 'id_energy_carrier'
+
     end_use_table = data_table.render(app,
                                       data,
                                       id_datatable=MODEL_DATA_TABLE,
-                                      title='Model Results:',
                                       dropdowns=dropdowns,
-                                      x='end_use',
-                                      y='energy_consumption',
-                                      category='id_energy_carrier')
+                                      x=x,
+                                      y=y,
+                                      category=category)
 
     reference_table = data_table.render(app,
                                         reference_data,
                                         id_datatable=REFERENCE_DATA_TABLE,
-                                        title='Reference Data:',
                                         dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
                                                    {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
                                                    {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
-                                        x='end_use',
+                                        x=x,
                                         y='value',
-                                        category='id_energy_carrier')
+                                        category=category)
 
     return html.Div(
         className="app-div",
@@ -102,9 +98,9 @@ def create_layout(app: Dash, data: pd.DataFrame, reference_data) -> html.Div:
                                      data,
                                      id_barchart=BAR_CHART,
                                      dropdowns=dropdowns,
-                                     x='end_use',
-                                     y='energy_consumption',
-                                     category='id_energy_carrier'),
+                                     x=x,
+                                     y=y,
+                                     category=category),
             html.Div(className='flex-container', children=[end_use_table, reference_table]),
             compare_model_calibration_table.render(app, COMPARISON_DIFF_TABLE, MODEL_DATA_TABLE, REFERENCE_DATA_TABLE,
                                                    ABSOLUTE_DIFF_TABLE, RELATIVE_DIFF_TABLE)

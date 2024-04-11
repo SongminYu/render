@@ -1,6 +1,9 @@
 import pandas as pd
+
 from dash import Dash, dash_table, html
 from dash.dependencies import Input, Output
+from dash.dash_table import FormatTemplate
+from dash.dash_table.Format import Format
 
 
 def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_relative) -> html.Div:
@@ -24,10 +27,9 @@ def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_rela
 
         relative = pd.DataFrame()
         for column in end_use:
-            relative[column] = (data_df[column] - reference_df[column]).div(reference_df[column]) * 100
+            relative[column] = (data_df[column] - reference_df[column]).div(reference_df[column])
         relative.insert(loc=0, column='id_energy_carrier', value=data_df['id_energy_carrier'])
         # Round every entry to no digits after the decimal point
-        relative = relative.round(0)
         relative = relative.fillna(0)
 
         absolute_html = html.Div(className='table-container',
@@ -41,7 +43,7 @@ def render(app: Dash, id_comparison, id_data, id_reference, id_absolute, id_rela
                                  id=id_relative,
                                  children=[html.H6(f"{id_relative}"),
                                            dash_table.DataTable(relative.to_dict('records'),
-                                                                [{"name": i, "id": i} for i in relative.columns],
+                                                                [{"name": i, "id": i, "type": 'numeric', 'format': FormatTemplate.percentage(0)} for i in relative.columns],
                                                                 style_cell={'textAlign': 'left'})])
 
         return [absolute_html, relative_html]
