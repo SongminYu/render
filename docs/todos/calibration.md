@@ -9,6 +9,11 @@
 - [ ] energy balance data at both region and country levels (2010-2022) (Weijia)
 - [ ] energy carrier price tables
 
+## Extract model indicators
+
+- [ ] extract the factor between `heating_demand_norm` and `heating_demand` for comparing with literature --> data can be extracted from reports
+
 ## Visualization
-- [ ] dashboard (more or less ready) or pivot tables in excel (can be created)
-- [ ] plot history deviation by end-use and energy carrier, then we start the calibration systematically
+- [ ] dashboard (more or less ready) or pivot tables in Excel (can be created)
+- [ ] plot history deviation by end-use and energy carrier
+

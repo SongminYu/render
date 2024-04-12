@@ -8,7 +8,7 @@
 
 ### renovation
 
-- [ ] Possibility to apply the non-renovation probability at building level (so, before iterating through components)
+- [ ] possibility to apply the non-renovation probability at building level (so, before iterating through components)
 - [ ] limit the probability of lifecycle renovation being triggered (maybe too high now)
 
 ### both
@@ -20,9 +20,18 @@
 
 ## Heating system
 
-- [ ] more detailed modeling of combined technologies, e.g., HP + gas as an option for the "main technology"
+- [ ] more detailed modeling of combined technologies, e.g., HP as a main technology and supported by a secondary gas boiler (extending the second technology table, also with reasonable limits)
 - [ ] contribution factor depends on the type of main heating technology and building efficiency class?
 - [ ] use better COP of HP to show the impact of smart management (in general, use results of optimization model as input parameters for the RENDER-Building model, to reflect prosumaging / SEMS scenarios)
 
 ## Heating demand
+
+- [ ] extract the factor between `heating_demand_norm` and `heating_demand` for comparing with literature --> data can be extracted from reports
+
+## Post processor
+
+- [ ] Add distribution of `id_building_efficiency_class` (or just intensity number, kWh/m2) as an output, 
+  - [ ] summing up space and water heating, for comparability with dena.
+  - [ ] only space heating
+
 
