@@ -204,21 +204,19 @@ class BuildingScenario(RenderScenario):
         agent_params = []
         for index, row in df.iterrows():
             rkey = BuildingKey(id_scenario=self.id, year=self.start_year).from_dict(row.to_dict())
-            real_building_num = int(self.s_building.get_item(rkey))
-            if real_building_num <= self.building_num_min:
-                agent_num = real_building_num
-            else:
-                agent_num = max(min(int(real_building_num * row["value"]), self.building_num_max), self.building_num_min)
-            self.building_num_model.set_item(rkey, agent_num)
-            self.building_num_total.set_item(rkey, real_building_num)
-            for id_subsector_agent in range(1, agent_num + 1):
-                agent_params.append({
-                    "id_region": int(row["id_region"]),
-                    "id_sector": int(row["id_sector"]),
-                    "id_subsector": int(row["id_subsector"]),
-                    "id_building_type": int(row["id_building_type"]),
-                    "id_subsector_agent": id_subsector_agent
-                })
+            real_building_num = self.s_building.get_item(rkey)
+            if real_building_num > 0:
+                agent_num = max(round(real_building_num * row["value"]), 1)
+                self.building_num_model.set_item(rkey, agent_num)
+                self.building_num_total.set_item(rkey, real_building_num)
+                for id_subsector_agent in range(1, agent_num + 1):
+                    agent_params.append({
+                        "id_region": int(row["id_region"]),
+                        "id_sector": int(row["id_sector"]),
+                        "id_subsector": int(row["id_subsector"]),
+                        "id_building_type": int(row["id_building_type"]),
+                        "id_subsector_agent": id_subsector_agent
+                    })
         self.agent_params = pd.DataFrame(agent_params)
 
     """
