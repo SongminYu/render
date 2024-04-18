@@ -8,6 +8,7 @@
 * Does the new scaling logic produce similar final energy demand result? We can try 9010101 quickly. If so, we can 
   * merge the branch to main
   * remove the two min and max parameters from scenario.
+  * send building stock data to Nico
 * Updates on the designing of building demolition and construction
 * Updates on meetings with Hannah and Weijia
 * Discussion on the open points
