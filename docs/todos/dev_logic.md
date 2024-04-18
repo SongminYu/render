@@ -18,6 +18,16 @@
 - [ ] endogenous price change of heating technology, biomass, etc. due to demand change
 - [ ] consider willingness-to-pay: as the on-top money that may change the order of the options in the last step
 
+## Building demolition
+
+- [ ] material recycling by connecting the work by Thurid
+- [ ] craftsman demand
+
+## Building construction
+
+- [ ] material demand by connecting the work by Thurid
+- [ ] craftsman demand
+
 ## Heating system
 
 - [ ] more detailed modeling of combined technologies, e.g., HP as a main technology and supported by a secondary gas boiler (extending the second technology table, also with reasonable limits)

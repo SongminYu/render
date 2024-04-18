@@ -36,6 +36,7 @@ class Building(Agent):
         self.id_subsector = 0
         self.id_building_type = 0
         self.id_subsector_agent = 0
+        self.exists = True
 
     def init_rkey(self):
 
@@ -48,8 +49,6 @@ class Building(Agent):
             id_subsector_agent=self.id_subsector_agent,
             year=self.scenario.start_year
         )
-
-        self.name = f'R{self.id_region}S{self.id_subsector}B{self.id_building_type}N{self.id_subsector_agent}'
 
         self.rkey.init_dimension(
             dimension_name="id_building_construction_period",
@@ -68,6 +67,12 @@ class Building(Agent):
             dimension_ids=self.scenario.r_building_type_height.get_item(self.rkey),
             rdict=self.scenario.s_building_height
         )
+
+    def __repr__(self):
+        return (f"Building - <Region-{self.rkey.id_region}_"
+                f"Sector-{self.rkey.id_sector}_"
+                f"Subsector-{self.rkey.id_subsector}_"
+                f"Agent-{self.rkey.id_subsector_agent}>")
 
     def init_units(self):
         self.units: Optional[List[Unit]] = []
@@ -103,7 +108,16 @@ class Building(Agent):
         self.storey_living_area = self.unit_area * (self.unit_number / self.height)
         self.hot_water_demand_per_m2 = self.hot_water_demand / self.total_living_area
 
-    def init_building_components_construction(self):
+    def init_building_construction(self):
+        self.construction_year = random.randint(
+            self.scenario.p_building_construction_year_min.get_item(self.rkey),
+            self.scenario.p_building_construction_year_max.get_item(self.rkey)
+        )
+        self.lifetime = random.randint(
+            self.scenario.p_building_lifetime_min.get_item(self.rkey),
+            self.scenario.p_building_lifetime_max.get_item(self.rkey)
+        )
+        self.demolish_year = self.construction_year + self.lifetime
         self.building_components: Optional[Dict[str, BuildingComponent]] = {}
         for id_building_component, component_name in self.scenario.building_components.items():
             component = BuildingComponent(self.rkey.make_copy(), self.scenario)
@@ -114,14 +128,8 @@ class Building(Agent):
                 ref_area=self.__dict__[self.scenario.p_building_envelope_component_area_ref.get_item(component.rkey)],
                 ratio=self.scenario.p_building_envelope_component_area_ratio.get_item(component.rkey)
             )
-            component.init_construction()
+            component.init_construction(building_construction_year=self.construction_year)
             self.building_components[component_name] = component
-
-    def init_radiator(self):
-        self.radiator = Radiator(self.rkey.make_copy(), self.scenario)
-        self.radiator.init_option()
-        self.rkey.id_radiator = self.radiator.rkey.id_radiator
-        self.radiator.init_installation_year()
 
     def init_building_renovation_history(self):
         for component in self.building_components.values():
@@ -131,6 +139,12 @@ class Building(Agent):
                     component.init_historical_renovation(action_year=action_year)
                 else:
                     break
+
+    def init_radiator(self):
+        self.radiator = Radiator(self.rkey.make_copy(), self.scenario)
+        self.radiator.init_option()
+        self.rkey.id_radiator = self.radiator.rkey.id_radiator
+        self.radiator.init_installation_year()
 
     def init_building_cooling_system(self):
         self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)

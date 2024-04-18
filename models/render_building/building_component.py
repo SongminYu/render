@@ -40,14 +40,14 @@ class BuildingComponent:
         lifetime_min, lifetime_max = dict_sample(d)
         return random.randint(lifetime_min, lifetime_max)
 
-    def init_construction(self):
-        self.construction_year = random.randint(
-            self.scenario.p_building_construction_year_min.get_item(self.rkey),
-            self.scenario.p_building_construction_year_max.get_item(self.rkey)
+    def init_construction(self, building_construction_year):
+        self.construction_year = building_construction_year
+        self.installation_year = building_construction_year
+        self.next_replace_year = building_construction_year + self.get_lifetime()
+        self.historical_random_select(
+            action_year=building_construction_year,
+            id_building_action=cons.ID_BUILDING_ACTION_CONSTRUCTION
         )
-        self.installation_year = self.construction_year
-        self.next_replace_year = self.construction_year + self.get_lifetime()
-        self.historical_random_select(action_year=self.construction_year, id_building_action=cons.ID_BUILDING_ACTION_CONSTRUCTION)
 
     def init_historical_renovation(self, action_year: int):
         minimum_lifetime = self.scenario.p_building_component_minimum_lifetime.get_item(self.rkey)
