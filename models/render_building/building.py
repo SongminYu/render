@@ -69,7 +69,7 @@ class Building(Agent):
         )
 
     def __repr__(self):
-        return (f"Building - <Region-{self.rkey.id_region}_"
+        return (f"Building<Region-{self.rkey.id_region}_"
                 f"Sector-{self.rkey.id_sector}_"
                 f"Subsector-{self.rkey.id_subsector}_"
                 f"Agent-{self.rkey.id_subsector_agent}>")
@@ -205,19 +205,25 @@ class Building(Agent):
     """
 
     def calc_building_heating_cooling_demand(self):
-
-        def init_building_efficiency_class():
-            self.update_r5c1_params()
-            self.update_r5c1_temperature(norm=True)
-            self.conduct_r5c1_calculation()
-            self.heating_demand_norm = self.heating_demand_profile.sum()
-            self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
-            self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
-            self.assign_building_efficiency_class()
-
-        init_building_efficiency_class()
+        self.init_building_efficiency_class()
         self.update_r5c1_temperature()
         self.conduct_r5c1_calculation()
+        self.reality_norm_factor = self.heating_demand_per_m2 / self.heating_demand_per_m2_norm
+
+    def init_building_efficiency_class(self):
+        self.update_r5c1_params()
+        self.update_r5c1_temperature(norm=True)
+        self.conduct_r5c1_calculation()
+        self.heating_demand_norm = self.heating_demand_profile.sum()
+        self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
+        self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
+        self.assign_building_efficiency_class()
+
+    def assign_building_efficiency_class(self):
+        for _, row in self.scenario.p_building_efficiency_class_intensity.iterrows():
+            if row["min"] <= self.heating_demand_per_m2 <= row["max"]:
+                self.rkey.id_building_efficiency_class = row["id_building_efficiency_class"]
+                break
 
     def update_r5c1_params(self):
 
@@ -390,11 +396,6 @@ class Building(Agent):
         self.cooling_demand_peak = self.cooling_demand_profile.max()
         self.cooling_demand_per_m2 = self.cooling_demand / self.total_living_area
 
-    def assign_building_efficiency_class(self):
-        for _, row in self.scenario.p_building_efficiency_class_intensity.iterrows():
-            if row["min"] <= self.heating_demand_per_m2 <= row["max"]:
-                self.rkey.id_building_efficiency_class = row["id_building_efficiency_class"]
-                break
 
     """
     Calculate final energy demand

@@ -191,7 +191,7 @@ class HeatingTechnology:
 
         def get_annuity_factor():
             interest_rate = self.scenario.s_interest_rate.get_item(rkey)
-            lifetime = 0.5 * (self.scenario.p_heating_technology_lifetime_min.get_item(rkey) + self.scenario.p_heating_technology_lifetime_max.get_item(rkey))
+            lifetime = self.scenario.p_heating_technology_cost_payback_time.get_item(rkey)
             return interest_rate / (1 - (1 + interest_rate) ** (- lifetime))
 
         def calc_investment_cost(small_scale: bool):
