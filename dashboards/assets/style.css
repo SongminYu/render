@@ -10,8 +10,11 @@
 
 .dropdown-container {
     width: 83%;
+}
+
+.Select-multi-value-wrapper {
     max-height: 100px;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .button-container {
