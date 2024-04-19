@@ -39,6 +39,9 @@ reference_data = loader.load_data(REFERENCE_PATH)
 reference_data = loader.preprocess_data(reference_data)
 
 # -------------------- VARIABLES --------------------
+id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
+id_energy_carriers.sort()
+
 dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
              {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
@@ -54,6 +57,7 @@ end_use_table = data_table.render(data,
                                   id_datatable="Model Results in TWh",
                                   dropdowns=dropdowns,
                                   x=x,
+                                  x_options=id_energy_carriers,
                                   y=y,
                                   category=category)
 
@@ -63,6 +67,7 @@ reference_table = data_table.render(reference_data,
                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
                                     x=x,
+                                    x_options=id_energy_carriers,
                                     y=y,
                                     category=category)
 

@@ -4,7 +4,7 @@ from dash import dash_table, html, callback
 from dash.dependencies import Input, Output
 
 
-def render(data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.Div:
+def render(data: pd.DataFrame, id_datatable, dropdowns, x, x_options, y, category) -> html.Div:
     # dropdowns here: list of dictionary of dropdowns,
     # One dictionary has keys 'id' (of dropdown) and
     # 'column' (respective column in data in which the filter should be applied)
@@ -29,6 +29,16 @@ def render(data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.
         # Reset index to make 'energy_carrier' a column again
         wide_df.reset_index(inplace=True)
         wide_df.columns.name = None
+
+        # ensure every energy carrier is listed in data table, in case as zero consumption
+        for idx in x_options:
+            if idx not in wide_df[category].values:
+                # Create a row of zeros with index equal to missing index
+                zeros_row = pd.DataFrame([[idx] + [0] * (len(wide_df.columns) - 1)], columns=wide_df.columns)
+                # Find the position to insert the row
+                insert_position = sum(wide_df[category] < idx)
+                # Insert the row at the appropriate position based on the index column
+                wide_df = pd.concat([wide_df.iloc[:insert_position], zeros_row, wide_df.iloc[insert_position:]], ignore_index=True)
 
         # Add the sum of columns
         end_use = list(wide_df.columns)
