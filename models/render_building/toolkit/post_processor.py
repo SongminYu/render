@@ -123,6 +123,7 @@ def gen_final_energy_demand_from_building_stock(
 
     l = []
     building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
+    building_stock = building_stock.loc[building_stock["exists"] == 1]
     for index, row in building_stock.iterrows():
         l += get_appliance_electricity()
         l += get_space_cooling()
@@ -143,6 +144,7 @@ def gen_building_stock_summary(
 ):
     info_cols = {
         'total_living_area': 'sum',
+        'unit_number': 'sum',
         'population': 'sum',
         'appliance_electricity_demand_per_person': 'mean',
         'cooling_demand_per_m2': 'mean',
@@ -151,8 +153,9 @@ def gen_building_stock_summary(
         'hot_water_demand_per_m2': 'mean',
     }
     l = []
-    df = pd.read_csv(os.path.join(cfg.output_folder, input_table))
-    for index, row in df.iterrows():
+    building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
+    building_stock = building_stock.loc[building_stock["exists"] == 1]
+    for index, row in building_stock.iterrows():
         d = get_base_d(row=row)
         d["building_number"] = row["building_number"]
         for col_name, col_calc in info_cols.items():
@@ -164,4 +167,6 @@ def gen_building_stock_summary(
     aggregated_df.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
 
 
-
+def gen_building_demolition_and_construction():
+    # by processing the last year dataframe of the building stock, the results should be able to be generated.
+    ...

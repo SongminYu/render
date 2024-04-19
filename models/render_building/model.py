@@ -41,7 +41,7 @@ class BuildingModel(RenderModel):
             self.environment.update_buildings_total_energy_cost(self.buildings)
             self.environment.update_buildings_renovation_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
-            # self.environment.update_buildings_demolition(self.buildings)
+            self.environment.update_buildings_demolition(self.buildings)
             # self.environment.update_buildings_construction(self.buildings)
             self.environment.update_buildings_year(self.buildings)
         self.data_collector.export()

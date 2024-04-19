@@ -174,12 +174,12 @@ class BuildingDataCollector(RenderDataCollector):
     def collect_building_stock(self, buildings: "AgentList[Building]"):
         for building in buildings:
             building_dict = building.rkey.to_dict()
-            building_dict["name"] = building.name
+            building_dict["exists"] = building.exists
             # collect building parameters
             for key, value in building.__dict__.items():
                 if value is not None:
                     if isinstance(value, int) or isinstance(value, float):
-                        if key not in ["id", "id_energy_carrier", "id_heating_technology", "id_end_use"]:
+                        if key not in ["id", "id_energy_carrier", "id_heating_technology", "id_end_use", "exists"]:
                             building_dict[key] = value
             # collect building components
             for component_name, building_component in building.building_components.items():

@@ -86,6 +86,8 @@ class BuildingScenario(RenderScenario):
         self.p_building_supply_temperature_hot_water = self.load_param("Parameter_Building_SupplyTemperature.xlsx", col="hot_water")
         self.p_building_construction_year_min = self.load_param("Parameter_Building_ConstructionYear.xlsx", col="min")
         self.p_building_construction_year_max = self.load_param("Parameter_Building_ConstructionYear.xlsx", col="max")
+        self.p_building_lifetime_min = self.load_param("Parameter_Building_Lifetime.xlsx", col="min", region_level=0)
+        self.p_building_lifetime_max = self.load_param("Parameter_Building_Lifetime.xlsx", col="max", region_level=0)
         self.p_building_component_minimum_lifetime = self.load_param("Parameter_BuildingComponent_MinimumLifetime.xlsx")
         self.p_building_envelope_component_area_ref = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='reference', region_level=0)
         self.p_building_envelope_component_area_ratio = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='ratio', region_level=0)
@@ -115,6 +117,7 @@ class BuildingScenario(RenderScenario):
         self.p_heating_technology_cost_criterion_small = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="criterion_small")
         self.p_heating_technology_cost_pp_index = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="pp_index")
         self.p_heating_technology_cost_wages_index = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="wages_index")
+        self.p_heating_technology_cost_payback_time = self.load_param("Parameter_HeatingTechnology_Cost.xlsx", region_level=0, col="payback_time")
         self.p_heating_technology_size_quantile = self.load_param("Parameter_HeatingTechnology_SizeQuantile.xlsx")
         self.p_cooling_technology_lifetime_min = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="min")
         self.p_cooling_technology_lifetime_max = self.load_param("Parameter_CoolingTechnology_Lifetime.xlsx", col="max")
@@ -145,6 +148,7 @@ class BuildingScenario(RenderScenario):
         self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
         self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0)
         self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0, all_years=True)
+        self.s_building_component_cost_payback_time = self.load_scenario("Scenario_BuildingComponent_Cost_PaybackTime.xlsx", region_level=0)
         self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_utility_power = self.load_scenario("Scenario_BuildingComponent_UtilityPower.xlsx", region_level=0)
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=0)
@@ -160,6 +164,7 @@ class BuildingScenario(RenderScenario):
         self.s_radiator_availability = self.load_scenario("Scenario_Radiator_Availability.xlsx", region_level=0)
         self.s_radiator_cost_material = self.load_scenario("Scenario_Radiator_Cost_Material.xlsx", region_level=0)
         self.s_radiator_cost_labor = self.load_scenario("Scenario_Radiator_Cost_Labor.xlsx", region_level=0)
+        self.s_radiator_cost_payback_time = self.load_scenario("Scenario_Radiator_Cost_PaybackTime.xlsx", region_level=0)
         self.s_radiator_input_labor = self.load_scenario("Scenario_Radiator_Input_Labor.xlsx", region_level=0)
         self.s_radiator_utility_power = self.load_scenario("Scenario_Radiator_UtilityPower.xlsx", region_level=0)
         self.s_cooling_penetration_rate = self.load_scenario("Scenario_Cooling_PenetrationRate.xlsx", region_level=0)
@@ -169,6 +174,7 @@ class BuildingScenario(RenderScenario):
         self.s_cooling_technology_cost_material = self.load_scenario("Scenario_CoolingTechnology_Cost_Material.xlsx", region_level=0)
         self.s_cooling_technology_cost_om = self.load_scenario("Scenario_CoolingTechnology_Cost_OM.xlsx", region_level=0)
         self.s_cooling_technology_cost_labor = self.load_scenario("Scenario_CoolingTechnology_Cost_Labor.xlsx", region_level=0)
+        self.s_cooling_technology_cost_payback_time = self.load_scenario("Scenario_CoolingTechnology_Cost_PaybackTime.xlsx", region_level=0)
         self.s_cooling_technology_input_labor = self.load_scenario("Scenario_CoolingTechnology_Input_Labor.xlsx", region_level=0)
         self.s_cooling_technology_utility_power = self.load_scenario("Scenario_CoolingTechnology_UtilityPower.xlsx", region_level=0)
         self.s_ventilation_penetration_rate = self.load_scenario("Scenario_Ventilation_PenetrationRate.xlsx", region_level=0)
@@ -178,6 +184,7 @@ class BuildingScenario(RenderScenario):
         self.s_ventilation_technology_cost_material = self.load_scenario("Scenario_VentilationTechnology_Cost_Material.xlsx", region_level=0)
         self.s_ventilation_technology_cost_om = self.load_scenario("Scenario_VentilationTechnology_Cost_OM.xlsx", region_level=0)
         self.s_ventilation_technology_cost_labor = self.load_scenario("Scenario_VentilationTechnology_Cost_Labor.xlsx", region_level=0)
+        self.s_ventilation_technology_cost_payback_time = self.load_scenario("Scenario_VentilationTechnology_Cost_PaybackTime.xlsx", region_level=0)
         self.s_ventilation_technology_input_labor = self.load_scenario("Scenario_VentilationTechnology_Input_Labor.xlsx", region_level=0)
         self.s_ventilation_technology_utility_power = self.load_scenario("Scenario_VentilationTechnology_UtilityPower.xlsx", region_level=0)
         self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
@@ -232,8 +239,8 @@ class BuildingScenario(RenderScenario):
         # self.setup_ventilation_technology_cost()
 
     @staticmethod
-    def calc_capex(investment_cost: float, lifetime: float, interest_rate: float):
-        return investment_cost * interest_rate / (1 - (1 + interest_rate) ** (- lifetime))
+    def calc_capex(investment_cost: float, period_num: float, interest_rate: float):
+        return investment_cost * interest_rate / (1 - (1 + interest_rate) ** (- period_num))
 
     @staticmethod
     def calc_opex(energy_intensity: float, energy_price: float, om_cost: float):
@@ -241,17 +248,6 @@ class BuildingScenario(RenderScenario):
 
     @timer()
     def setup_building_component_cost(self):
-
-        def get_building_component_lifetime():
-            df = rkey.filter_dataframe(self.p_building_component_lifetime)
-            min_sum = 0
-            max_sum = 0
-            pdf_sum = 0
-            for index, row in df.iterrows():
-                min_sum += row["min"] * row["pdf"]
-                max_sum += row["max"] * row["pdf"]
-                pdf_sum += row["pdf"]
-            return 0.5 * (min_sum + max_sum) / pdf_sum
 
         self.building_component_capex = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
@@ -286,7 +282,7 @@ class BuildingScenario(RenderScenario):
                                         if self.s_building_component_availability.get_item(rkey):
                                             self.building_component_capex.set_item(rkey=rkey, value=self.calc_capex(
                                                 investment_cost=self.s_building_component_cost_material.get_item(rkey) + self.s_building_component_input_labor.get_item(rkey) * self.s_building_component_cost_labor.get_item(rkey),
-                                                lifetime=get_building_component_lifetime(),
+                                                period_num=self.s_building_component_cost_payback_time.get_item(rkey),
                                                 interest_rate=self.s_interest_rate.get_item(rkey)
                                             ))
 
@@ -353,7 +349,7 @@ class BuildingScenario(RenderScenario):
                                 if self.s_radiator_availability.get_item(rkey):
                                     self.radiator_capex.set_item(rkey=rkey, value=self.calc_capex(
                                         investment_cost=self.s_radiator_cost_material.get_item(rkey) + self.s_radiator_input_labor.get_item(rkey) * self.s_radiator_cost_labor.get_item(rkey),
-                                        lifetime=0.5 * (self.p_radiator_lifetime_min.get_item(rkey) + self.p_radiator_lifetime_max.get_item(rkey)),
+                                        period_num=self.s_radiator_cost_payback_time.get_item(rkey),
                                         interest_rate=self.s_interest_rate.get_item(rkey)
                                     ))
 
@@ -398,7 +394,7 @@ class BuildingScenario(RenderScenario):
                             if self.s_cooling_technology_availability.get_item(rkey):
                                 self.cooling_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
                                     investment_cost=self.s_cooling_technology_cost_material.get_item(rkey) + self.s_cooling_technology_input_labor.get_item(rkey) * self.s_cooling_technology_cost_labor.get_item(rkey),
-                                    lifetime=0.5 * (self.p_cooling_technology_lifetime_min.get_item(rkey) + self.p_cooling_technology_lifetime_max.get_item(rkey)),
+                                    period_num=self.s_cooling_technology_cost_payback_time.get_item(rkey),
                                     interest_rate=self.s_interest_rate.get_item(rkey)
                                 ))
                                 self.cooling_technology_opex.set_item(rkey=rkey, value=self.calc_opex(
@@ -448,7 +444,7 @@ class BuildingScenario(RenderScenario):
                             if self.s_ventilation_technology_availability.get_item(rkey):
                                 self.ventilation_technology_capex.set_item(rkey=rkey, value=self.calc_capex(
                                     investment_cost=self.s_ventilation_technology_cost_material.get_item(rkey) + self.s_ventilation_technology_input_labor.get_item(rkey) * self.s_ventilation_technology_cost_labor.get_item(rkey),
-                                    lifetime=0.5 * (self.p_ventilation_technology_lifetime_min.get_item(rkey) + self.p_ventilation_technology_lifetime_max.get_item(rkey)),
+                                    period_num=self.s_ventilation_technology_cost_payback_time.get_item(rkey),
                                     interest_rate=self.s_interest_rate.get_item(rkey)
                                 ))
                                 self.ventilation_technology_opex.set_item(rkey=rkey, value=self.calc_opex(
