@@ -37,9 +37,10 @@ def render(data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.
         sum_row = pd.DataFrame(wide_df[end_use].sum(axis=0)).T
         sum_row.insert(loc=0, column=category, value='total')
         wide_df = pd.concat([wide_df, sum_row], ignore_index=True)
+        wide_df['total'] = wide_df[wide_df.columns[1:]].sum(axis=1)
 
         # Round every entry to no digits after the decimal point
-        wide_df = wide_df.round(0)
+        wide_df = wide_df.round(2)
         wide_df = wide_df.fillna(0)
 
         # Ensure that column names are string, needed for dash DataTable
@@ -49,6 +50,7 @@ def render(data: pd.DataFrame, id_datatable, dropdowns, x, y, category) -> html.
         return [html.H6(f"{id_datatable}"),
                 dash_table.DataTable(wide_df.to_dict('records'),
                                      [{"name": i, "id": i} for i in wide_df.columns],
-                                     style_cell={'textAlign': 'left'})]
+                                     style_cell_conditional=[{'if': {'column_id': category},'textAlign': 'left'}],)
+                ]
 
     return html.Div(className='table-container', id=id_datatable)

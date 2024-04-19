@@ -164,4 +164,3 @@ temp/
 utils/*.csv
 
 /dashboards/data/building_stock.csv
-/dashboards/data/building_stock_preprocessed.csv
