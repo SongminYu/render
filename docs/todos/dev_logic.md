@@ -13,7 +13,7 @@
 
 ### both
 
-- [ ] capex calculation: payback time is not lifetime but other values (similar perspective but different calculation: the pay in the first year might influence the decision)
+- [x] capex calculation: lifetime is replaced with payback time for all investment decisions
 - [ ] impact of unit user properties: income group, age group
 - [ ] endogenous price change of heating technology, biomass, etc. due to demand change
 - [ ] consider willingness-to-pay: as the on-top money that may change the order of the options in the last step
@@ -34,14 +34,11 @@
 - [ ] contribution factor depends on the type of main heating technology and building efficiency class?
 - [ ] use better COP of HP to show the impact of smart management (in general, use results of optimization model as input parameters for the RENDER-Building model, to reflect prosumaging / SEMS scenarios)
 
-## Heating demand
-
-- [ ] extract the factor between `heating_demand_norm` and `heating_demand` for comparing with literature --> data can be extracted from reports
-
 ## Post processor
 
-- [ ] Add distribution of `id_building_efficiency_class` (or just intensity number, kWh/m2) as an output, 
-  - [ ] summing up space and water heating, for comparability with dena.
-  - [ ] only space heating
+- [x] Add distribution of `id_building_efficiency_class` (or kWh/m2) as an output, 
+  - [x] space&water heating intensity
+  - [x] space heating intensity
+  - [x] efficiency class
 
 

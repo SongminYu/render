@@ -9,8 +9,18 @@
   * merge the branch to main
   * remove the two min and max parameters from scenario.
   * send building stock data to Nico
-* Updates on the designing of building demolition and construction
-* Updates on meetings with Hannah and Weijia
+* Updates on the logic development
+  * designing of building demolition and construction
+  * go over `dev_logic.md`
+* Updates on meetings with 
+  * Hannah likes working on coding and data processing...
+    * pv_gis data
+    * beautify dashboards
+    * timeseries plotting?
+    * geo-visualization in the dashboard?
+  * Weijia
+    * energy balance of regions
+    * cost data?
 * Discussion on the open points
   * Regarding population...
     * What data do we have regarding "population/employee", at what geo-level (e.g., region, location, etc.)?  
@@ -18,7 +28,7 @@
     * We should first organize this, if necessary, update unit user logic, then continue with building construction logic.
   * Regarding 2019 takes longer...
     * Many building components are renovated or demolished in 2019. 
-    * We need to find a way to smooth this.
+    * We need to find a way to smooth this --> logic of `next_replace_year`, e.g., be postponed?
 * Plan next meetings
 
 ### Songmin

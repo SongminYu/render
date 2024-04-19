@@ -11,7 +11,9 @@
 
 ## Extract model indicators
 
-- [ ] extract the factor between `heating_demand_norm` and `heating_demand` for comparing with literature --> data can be extracted from reports
+- [x] extract the factor between `heating_demand_norm` and `heating_demand`
+  - [x] extracted as the `reality_norm_factor` in the building stock table 
+  - [ ] compare it with literature --> data can be extracted from reports
 
 ## Visualization
 - [ ] dashboard (more or less ready) or pivot tables in Excel (can be created)
