@@ -11,11 +11,12 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative) -> ht
         [Input(id_data, "children"), Input(id_reference, "children")]
     )
     def update_data_table(data, reference):
+        # If no data is selected, return empty string
+        if len(data) == 0:
+            return ""
+
         data_df = pd.DataFrame(data[1]['props']['data'])
         reference_df = pd.DataFrame(reference[1]['props']['data'])
-
-        if data_df.shape[0] == 0:
-            return ""
 
         end_use = list(data_df.columns)
         end_use.remove('id_energy_carrier')

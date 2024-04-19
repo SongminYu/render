@@ -32,8 +32,8 @@ This document contains the development plan of the `RenderDash` tool.
 - [x] Add the total columns (sum of energy carrier) in the four tables.
 - [x] Change the unit to TWh and align to 100.00 TWh.
 - [x] All numbers in the table to the right.
-- [ ] When selecting `id_sector = 3` and `id_subsector = 31`, there is the zero row.
-- [ ] Dropdown menu does work right?
+- [x] When selecting `id_sector = 3` and `id_subsector = 31`, there is the zero row.
+- [x] Dropdown menu does work right?
 
 ### Apr. 17th. 2024
 
