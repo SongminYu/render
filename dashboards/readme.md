@@ -42,8 +42,9 @@ This document contains the development plan of the `RenderDash` tool.
   - [ ] see if post-processing to convert input data format directly is possible (wide format for hour, regions listed vertically)
 
 ### Later stage
-
+- beautify dashboards
+- geo-visualization (new dashboard)
+- timeseries plotting for calibration (new dashboard)
 - new dashboard for Building efficiency class analysis, renovation rate etc.
-- geographic visualization
 - GHSL data processing to distribute NUTS3 and location results to 100m x 100m grid cell (hectare) level.
 
