@@ -12,6 +12,9 @@
 * Updates on the logic development
   * designing of building demolition and construction
   * go over `dev_logic.md`
+  * Regarding 2019 takes longer...
+    * Many building components are renovated or demolished in 2019. 
+    * We need to find a way to smooth this --> logic of `next_replace_year`, e.g., be postponed?
 * Updates on meetings with 
   * Hannah likes working on coding and data processing...
     * pv_gis data
@@ -26,9 +29,6 @@
     * What data do we have regarding "population/employee", at what geo-level (e.g., region, location, etc.)?  
     * Should the residential and non-residential population roughly equal to each other? We can check.
     * We should first organize this, if necessary, update unit user logic, then continue with building construction logic.
-  * Regarding 2019 takes longer...
-    * Many building components are renovated or demolished in 2019. 
-    * We need to find a way to smooth this --> logic of `next_replace_year`, e.g., be postponed?
 * Plan next meetings
 
 ### Songmin
