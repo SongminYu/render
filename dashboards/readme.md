@@ -38,9 +38,12 @@ This document contains the development plan of the `RenderDash` tool.
 ### Apr. 17th. 2024
 
 - [ ] NUTS3 weather data download (Songmin has some previous code)
+  - [ ] check which data is missing & complete (radiation, temperature, PV generation)
+  - [ ] see if post-processing to convert input data format directly is possible (wide format for hour, regions listed vertically)
 
 ### Later stage
 
+- new dashboard for Building efficiency class analysis, renovation rate etc.
 - geographic visualization
 - GHSL data processing to distribute NUTS3 and location results to 100m x 100m grid cell (hectare) level.
 
