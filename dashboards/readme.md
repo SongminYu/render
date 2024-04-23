@@ -28,12 +28,12 @@ This document contains the development plan of the `RenderDash` tool.
 - [x] Songmin develops the postprocessing functions to generate `final_energy_demand`, `floor_area`, `building_efficiency_class_count` tables based on the `building_stock` table.
 - [x] The model result table looks not right (try final energy demand table first in the call).
 - [x] Two end-use columns are missing.
-- [ ] Some functions in the `loader.py` file are not used anymore?
-- [ ] Add the total columns (sum of energy carrier) in the four tables.
-- [ ] Change the unit to TWh and align to 100.00 TWh.
-- [ ] All numbers in the table to the right.
-- [ ] When selecting `id_sector = 3` and `id_subsector = 31`, there is the zero row.
-- [ ] Dropdown menu does work right?
+- [x] Some functions in the `loader.py` file are not used anymore?
+- [x] Add the total columns (sum of energy carrier) in the four tables.
+- [x] Change the unit to TWh and align to 100.00 TWh.
+- [x] All numbers in the table to the right.
+- [x] When selecting `id_sector = 3` and `id_subsector = 31`, there is the zero row.
+- [x] Dropdown menu does work right?
 
 ### Apr. 17th. 2024
 
