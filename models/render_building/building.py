@@ -134,7 +134,7 @@ class Building(Agent):
     def init_building_renovation_history(self):
         for component in self.building_components.values():
             while component.next_replace_year < self.rkey.year:
-                if random.uniform(0, 1) <= 0.70:
+                if random.uniform(0, 1) <= cons.PROB_POSTPONING_RENOVATION:
                     action_year = component.next_replace_year
                     component.init_historical_renovation(action_year=action_year)
                 else:
