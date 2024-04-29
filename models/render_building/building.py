@@ -138,8 +138,7 @@ class Building(Agent):
                     action_year = component.next_replace_year
                     component.init_historical_renovation(action_year=action_year)
                 else:
-                    # TODO: component.next_replace_year += 10? Or, we start the model from 2010 for smooth. We can test.
-                    break
+                    component.next_replace_year += 10
 
     def init_radiator(self):
         self.radiator = Radiator(self.rkey.make_copy(), self.scenario)

@@ -40,9 +40,10 @@ class BuildingDataCollector(RenderDataCollector):
         # self.export_rdict(rdict=self.scenario.cooling_technology_opex, df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}", unit="euro/kWh")
         # self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}", unit="euro/m2")
         # self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}", unit="euro/m2")
-        self.export_rdict(rdict=self.scenario.building_num_model, df_name=f"BuildingNumModel_R{self.scenario.id_region}", unit="count")
-        self.export_rdict(rdict=self.scenario.building_num_total, df_name=f"BuildingNumTotal_R{self.scenario.id_region}", unit="count")
+        # self.export_rdict(rdict=self.scenario.building_num_model, df_name=f"BuildingNumModel_R{self.scenario.id_region}", unit="count")
+        # self.export_rdict(rdict=self.scenario.building_num_total, df_name=f"BuildingNumTotal_R{self.scenario.id_region}", unit="count")
         # self.export_historical_renovation_rate()
+        ...
 
     def export_historical_renovation_rate(self):
 

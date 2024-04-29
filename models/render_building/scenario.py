@@ -12,8 +12,6 @@ class BuildingScenario(RenderScenario):
         self.start_year = 0
         self.end_year = 0
         self.id_region = 0
-        self.building_num_min = 0
-        self.building_num_max = 0
         self.optimal_heating_behavior_prob = 0
         self.id_scenario_energy_price_wholesale = 0
         self.id_scenario_energy_price_tax_rate = 0

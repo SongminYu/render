@@ -8,14 +8,16 @@
 
 ### Songmin
 
-- [ ] merge the branch to main
-- [ ] remove the two min and max parameters from scenario.
+- [x] merge the branch to main
+- [x] remove the two min and max parameters from scenario.
+- [ ] logic of `next_replace_year` --> be postponed as a test
+  - [x] add to renovation history
+  - [ ] add to renovation projection
 - [ ] Send building stock data to Nico
 - [ ] process population data
   - eurostat dataset (NUTS3 regions): https://ec.europa.eu/eurostat/web/main/data/database
   - GHSL dataset (100m level and can be mapped to NUTS3 regions and locations)
   - validation: residential and non-residential population comparison
-- [ ] logic of `next_replace_year` --> be postponed as a test
 - [ ] Develop the main logics for construction, based on the population data development
 
 ### Sirin
