@@ -138,7 +138,7 @@ class Building(Agent):
                     action_year = component.next_replace_year
                     component.init_historical_renovation(action_year=action_year)
                 else:
-                    component.next_replace_year += 10
+                    component.next_replace_year += self.scenario.p_building_component_postponing_lifetime.get_item(component.rkey)
 
     def init_radiator(self):
         self.radiator = Radiator(self.rkey.make_copy(), self.scenario)

@@ -87,6 +87,7 @@ class BuildingScenario(RenderScenario):
         self.p_building_lifetime_min = self.load_param("Parameter_Building_Lifetime.xlsx", col="min", region_level=0)
         self.p_building_lifetime_max = self.load_param("Parameter_Building_Lifetime.xlsx", col="max", region_level=0)
         self.p_building_component_minimum_lifetime = self.load_param("Parameter_BuildingComponent_MinimumLifetime.xlsx")
+        self.p_building_component_postponing_lifetime = self.load_param("Parameter_BuildingComponent_PostponingLifetime.xlsx")
         self.p_building_envelope_component_area_ref = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='reference', region_level=0)
         self.p_building_envelope_component_area_ratio = self.load_param("Parameter_Building_Envelope_ComponentArea.xlsx", col='ratio', region_level=0)
         self.p_building_envelope_window_area_orientation = self.load_param("Parameter_Building_Envelope_WindowAreaOrientation.xlsx", region_level=0)
