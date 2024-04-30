@@ -113,11 +113,14 @@ class Building(Agent):
             self.scenario.p_building_construction_year_min.get_item(self.rkey),
             self.scenario.p_building_construction_year_max.get_item(self.rkey)
         )
-        self.lifetime = random.randint(
-            self.scenario.p_building_lifetime_min.get_item(self.rkey),
+        self.demolish_year = random.randint(
+            max(
+                self.scenario.start_year,
+                self.construction_year + self.scenario.p_building_lifetime_min.get_item(self.rkey)
+            ),
             self.scenario.p_building_lifetime_max.get_item(self.rkey)
         )
-        self.demolish_year = self.construction_year + self.lifetime
+        self.lifetime = self.demolish_year - self.construction_year
         self.building_components: Optional[Dict[str, BuildingComponent]] = {}
         for id_building_component, component_name in self.scenario.building_components.items():
             component = BuildingComponent(self.rkey.make_copy(), self.scenario)
