@@ -13,7 +13,8 @@
 - [x] logic of `next_replace_year` --> be postponed as a test
   - [x] add to renovation history
   - [x] add to renovation projection
-- [ ] Send building stock data to Nico
+  - [x] update building lifetime and demolition year
+- [x] Send building stock data to Nico
 - [ ] process population data
   - eurostat dataset (NUTS3 regions): https://ec.europa.eu/eurostat/web/main/data/database
   - GHSL dataset (100m level and can be mapped to NUTS3 regions and locations)
