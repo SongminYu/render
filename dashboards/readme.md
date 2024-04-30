@@ -46,7 +46,7 @@ This document contains the development plan of the `RenderDash` tool.
 
 ### Apr. 25th. 2024
 
-- [ ] implement color coding for the degree of deviation in tables: Absolute difference and relative difference.
+- [x] implement color coding for the degree of deviation in tables: Absolute difference and relative difference.
   - the darker color for higher numbers
 
 
