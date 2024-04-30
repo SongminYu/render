@@ -38,15 +38,15 @@ This document contains the development plan of the `RenderDash` tool.
 ### Apr. 17th. 2024
 
 - [ ] NUTS3 weather data download (Songmin has some previous code)
-  - [x] check which data is missing & complete (radiation, temperature, PV generation): why?
-    - [ ] also, which other years are there?
-  - [ ] see if post-processing to convert input data format directly is possible (wide format for hour, regions listed vertically)
+  - [ ] check which data is missing & complete (radiation, temperature, PV generation): why?
+    - [x] also, which other years are there? (2005 - 2016)
+  - [x] see if post-processing to convert input data format directly is possible (wide format for hour, regions listed vertically)
     - you can use ..\RenderNew\docs\data_prep\weather_files for preparation code and output file
     - the weather profile and ID tables are here: ..\RenderNew\projects\test_building\input
 
 ### Apr. 25th. 2024
 
-- [ ] implement color coding for the degree of deviation in tables: Absolute difference and relative difference.
+- [x] implement color coding for the degree of deviation in tables: Absolute difference and relative difference.
   - the darker color for higher numbers
 
 
