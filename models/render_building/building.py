@@ -118,7 +118,7 @@ class Building(Agent):
                 self.scenario.start_year,
                 self.construction_year + self.scenario.p_building_lifetime_min.get_item(self.rkey)
             ),
-            self.scenario.p_building_lifetime_max.get_item(self.rkey)
+            self.construction_year + self.scenario.p_building_lifetime_max.get_item(self.rkey)
         )
         self.lifetime = self.demolish_year - self.construction_year
         self.building_components: Optional[Dict[str, BuildingComponent]] = {}
