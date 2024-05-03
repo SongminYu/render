@@ -4,7 +4,9 @@
 
 ### Meeting
 
-* 
+* Updates about Weijia's and Hannah's work
+* Meeting with the RokiG person
+* Full run to generate the building stock for Nico: 1h22min
 
 ### Songmin
 
