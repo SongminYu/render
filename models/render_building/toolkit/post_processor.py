@@ -170,3 +170,14 @@ def gen_building_stock_summary(
 def gen_building_demolition_and_construction():
     # by processing the last year dataframe of the building stock, the results should be able to be generated.
     ...
+
+
+def extract_cols(
+    cfg: "Config",
+    cols: List[str],
+    input_table: str = "building_stock.csv",
+    output_table: str = "building_stock_cols.csv"
+):
+    building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
+    building_stock_cols = building_stock.loc[:, cols]
+    building_stock_cols.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
