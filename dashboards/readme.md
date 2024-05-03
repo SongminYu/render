@@ -37,9 +37,9 @@ This document contains the development plan of the `RenderDash` tool.
 
 ### Apr. 17th. 2024
 
-- [ ] NUTS3 weather data download (Songmin has some previous code)
+- [x] NUTS3 weather data download (Songmin has some previous code)
   - [ ] check which data is missing & complete (radiation, temperature, PV generation): why?
-    - [x] also, which other years are there? (2005 - 2016)
+    - [x] also, which other years are there? (2005 - 2019)
   - [x] see if post-processing to convert input data format directly is possible (wide format for hour, regions listed vertically)
     - you can use ..\RenderNew\docs\data_prep\weather_files for preparation code and output file
     - the weather profile and ID tables are here: ..\RenderNew\projects\test_building\input
@@ -49,6 +49,12 @@ This document contains the development plan of the `RenderDash` tool.
 - [x] implement color coding for the degree of deviation in tables: Absolute difference and relative difference.
   - the darker color for higher numbers
 
+## May 3rd, 2024
+- [ ] NUTS3 weather data download
+  - [ ] check why data is missing & complete (radiation, temperature, PV generation)
+  - [ ] download and process other years: start from 2015
+  - file size ~19 MB for temp and PV gen, but ~70 MB for radiation for 1 year. if more years added, will be bigger. (~linear) do we use separate files for different years
+- [ ] adjust color coding scale to be within 'end-use' columns (also within total)
 
 ### Later stage
 - beautify dashboards
