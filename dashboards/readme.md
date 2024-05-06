@@ -50,11 +50,12 @@ This document contains the development plan of the `RenderDash` tool.
   - the darker color for higher numbers
 
 ## May 3rd, 2024
-- [ ] NUTS3 weather data download
+- [ ] NUTS1 and NUTS2 weather data download
   - [ ] check why data is missing & complete (radiation, temperature, PV generation)
-  - [ ] download and process other years: start from 2015
+  - [ ] download and process other years: start from 2010
   - file size ~19 MB for temp and PV gen, but ~70 MB for radiation for 1 year. if more years added, will be bigger. (~linear) do we use separate files for different years
 - [ ] adjust color coding scale to be within 'end-use' columns (also within total)
+- [ ] ask Hannah if the dashboard works without the combination of EC and end-use (for regional use. also ask for 3 drop-down tabs: NUTS 1,2,3)
 
 ### Later stage
 - beautify dashboards
