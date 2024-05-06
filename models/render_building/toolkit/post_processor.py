@@ -20,7 +20,8 @@ KEY_COLS = [
 
 def get_region_table_names(cfg: "Config", file_name_prefix: str):
     region_table_names = []
-    region_ids = pd.read_excel(os.path.join(cfg.input_folder, "ID_Region.xlsx"))["id_region"].to_list()
+    df = pd.read_excel(os.path.join(cfg.input_folder, "ID_Region.xlsx"))
+    region_ids = df.loc[df["region_level"] == 3]["id_region"].to_list()
     for id_region in region_ids:
         region_table_name = f'{file_name_prefix}_R{id_region}'
         file_path = os.path.join(os.path.join(cfg.output_folder, f'{file_name_prefix}_R{id_region}.csv'))
