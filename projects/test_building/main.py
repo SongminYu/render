@@ -19,6 +19,12 @@ def get_config(project_name: str):
     )
 
 
+def run_toolkit(cfg: "Config"):
+    data_toolkit.find_id(cfg=cfg, id_name="id_unit_user_type")
+    # data_toolkit.extract_id_data(cfg=cfg, id_name="id_region", id_value=9010101)
+    # data_toolkit.pack_sqlite(cfg=cfg)
+
+
 def run_post_processor(cfg: "Config"):
     # post_processor.concat_region_tables(cfg=cfg, file_name_prefix_list=[
     #     "building_stock",
@@ -43,16 +49,10 @@ def run_plotter(cfg: "Config"):
     plotter.plot_hist_heating_demand_per_m2(cfg, year=2019, input_table="building_stock_R9010101.csv")
 
 
-def run_toolkit(cfg: "Config"):
-    data_toolkit.find_id(cfg=cfg, id_name="id_building_action")
-    data_toolkit.extract_id_data(cfg=cfg, id_name="id_region", id_value=9010101)
-    data_toolkit.pack_sqlite(cfg=cfg)
-
-
 if __name__ == "__main__":
     config = get_config("test_building")
+    run_toolkit(cfg=config)
     # run_building_model(cfg=config, cores=8)
-    # run_toolkit(cfg=config)
-    run_post_processor(cfg=config)
+    # run_post_processor(cfg=config)
     # run_plotter(cfg=config)
 

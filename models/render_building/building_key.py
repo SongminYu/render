@@ -25,6 +25,7 @@ class BuildingKey(RenderKey):
         id_building_efficiency_class: Optional[int] = None,
         id_orientation: Optional[int] = None,
         id_unit_user_type: Optional[int] = None,
+        id_ownership: Optional[int] = None,
         id_heating_system: Optional[int] = None,
         id_heating_system_action: Optional[int] = None,
         id_heating_technology: Optional[int] = None,
@@ -55,6 +56,7 @@ class BuildingKey(RenderKey):
         self.id_building_efficiency_class = id_building_efficiency_class
         self.id_orientation = id_orientation
         self.id_unit_user_type = id_unit_user_type
+        self.id_ownership = id_ownership
         self.id_heating_system = id_heating_system
         self.id_heating_system_action = id_heating_system_action
         self.id_heating_technology = id_heating_technology
