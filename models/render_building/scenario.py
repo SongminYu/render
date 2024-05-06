@@ -51,6 +51,7 @@ class BuildingScenario(RenderScenario):
         self.end_uses = self.load_id("ID_EndUse.xlsx")
         self.orientations = self.load_id("ID_Orientation.xlsx")
         self.unit_user_types = self.load_id("ID_UnitUserType.xlsx")
+        self.ownerships = self.load_id("ID_Ownership.xlsx")
         self.heating_systems = self.load_id("ID_HeatingSystem.xlsx")
         self.heating_system_actions = self.load_id("ID_HeatingSystem_Action.xlsx")
         self.heating_technologies = self.load_id("ID_HeatingTechnology.xlsx")

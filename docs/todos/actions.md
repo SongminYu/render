@@ -4,7 +4,11 @@
 
 ### Meeting
 
-* 
+* `Scenario_UnitUser_Ownership.xlsx`
+  * should also depend on `id_building_type`?
+  * missing good assumptions for non-residential buildings.
+* `Parameter_UnitUser_PersonNumber.xlsx`
+  * assumptions on the number of children are made for `id_unit_user_type = 3, 4`
 
 ### Songmin
 
@@ -13,12 +17,13 @@
   - generate the building stock and summary files, then verify 
     - total population of each NUTS3 region
     - the distribution percentages by id_region and id_location, then compare with GHSL data
+- [ ] behavior profiles of new household types need to be updated
 - [ ] Develop the main logics for construction, based on the population data development
   - we have regional population, then number of buildings that are necessary to be built in each period will be calculated
 
 ### Sirin
 
-- [ ] add region ids (NUTS1 and NUTS2)
+- [x] add region ids (NUTS1 and NUTS2)
 - [ ] meet Hannah
   - [ ] download NUTS1 weather data
   - [ ] discuss how to integrate NUTS1 calibration data (maybe we need dropdowns for 3 levels of id_region in the dashboard)

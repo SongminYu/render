@@ -28,6 +28,11 @@ class UnitUser:
             dimension_ids=self.scenario.r_subsector_unit_user_type.get_item(self.rkey),
             rdict=self.scenario.s_unit_user
         )
+        self.rkey.init_dimension(
+            dimension_name="id_ownership",
+            dimension_ids=self.scenario.ownerships.keys(),
+            rdict=self.scenario.s_unit_user_ownership
+        )
 
     def init_person_num(self):
         if self.scenario.p_unit_user_person_number_area_relevance.get_item(self.rkey) == 0:
