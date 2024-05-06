@@ -85,8 +85,6 @@ class Building(Agent):
             self.population += unit.user.person_num
             self.units.append(unit)
 
-        # self.rkey.ownership = ...
-
     def init_building_profiles(self):
 
         def sum_unit_profile(unit_profile_name: str):

@@ -12,14 +12,17 @@
 
 ### Songmin
 
-- [ ] update the Scenario_UnitUser table
+- [x] update the Scenario_UnitUser table
   - add id_region (NUTS2 level) based on https://ec.europa.eu/eurostat/databrowser/view/cens_11htts_r2/default/table?lang=en&category=reg.reg_dem.reg_cens_11r.cens_11rdf
   - generate the building stock and summary files, then verify 
     - total population of each NUTS3 region
     - the distribution percentages by id_region and id_location, then compare with GHSL data
-- [ ] behavior profiles of new household types need to be updated
+- [ ] behavior profiles need to be updated
+  - [ ] for households, the occupancy/app/hot-water profiles all need to be averaged/smoothed, and the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
+  - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
 - [ ] Develop the main logics for construction, based on the population data development
   - we have regional population, then number of buildings that are necessary to be built in each period will be calculated
+- [ ] link renovation action to ownership --> currently `id_ownership` is initialized only for unit-users.
 
 ### Sirin
 

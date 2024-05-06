@@ -18,6 +18,7 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_mark_up = 0
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
+        self.id_scenario_teleworking = 0
         self.renovation_mandatory = 0
         self.heating_technology_mandatory = 0
 
@@ -96,8 +97,6 @@ class BuildingScenario(RenderScenario):
         self.p_radiator_lifetime_min = self.load_param("Parameter_Radiator_Lifetime.xlsx", col="min")
         self.p_radiator_lifetime_max = self.load_param("Parameter_Radiator_Lifetime.xlsx", col="max")
         self.p_unit_user_person_number = self.load_param("Parameter_UnitUser_PersonNumber.xlsx")
-        self.p_unit_user_person_number_area_relevance = self.load_param("Parameter_UnitUser_PersonNumber_AreaRelevance.xlsx")
-        self.p_unit_demand_profile_person_number_relevance = self.load_param("Parameter_UnitDemandProfile_PersonNumberRelevance.xlsx")
         self.p_set_temperature_occupied_min = self.load_param("Parameter_SetTemperature.xlsx", col="occupied_min")
         self.p_set_temperature_occupied_max = self.load_param("Parameter_SetTemperature.xlsx", col="occupied_max")
         self.p_set_temperature_empty_min = self.load_param("Parameter_SetTemperature.xlsx", col="empty_min")
@@ -131,9 +130,9 @@ class BuildingScenario(RenderScenario):
         self.p_renovation_sync_probability = self.load_dataframe("Parameter_Renovation_SyncProbability.xlsx")
 
     def load_profiles(self):
-        self.pr_building_occupancy = self.load_profile("Profile_BuildingOccupancy.xlsx")
-        self.pr_appliance_electricity = self.load_profile("Profile_ApplianceElectricity.xlsx")
-        self.pr_hot_water = self.load_profile("Profile_HotWater.xlsx")
+        self.pr_building_occupancy = self.load_profile("Profile_BuildingOccupancy.xlsx", scenario_filter="id_scenario_teleworking")
+        self.pr_appliance_electricity = self.load_profile("Profile_ApplianceElectricity.xlsx", scenario_filter="id_scenario_teleworking")
+        self.pr_hot_water = self.load_profile("Profile_HotWater.xlsx", scenario_filter="id_scenario_teleworking")
         self.pr_weather_temperature = self.load_profile("Profile_WeatherTemperature.xlsx", region_level=0)
         self.pr_weather_radiation = self.load_profile("Profile_WeatherRadiation.xlsx", region_level=0)
 

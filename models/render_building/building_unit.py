@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from models.render_building.building_key import BuildingKey
-
+from models.render_building import cons
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
 
@@ -35,25 +35,20 @@ class UnitUser:
         )
 
     def init_person_num(self):
-        if self.scenario.p_unit_user_person_number_area_relevance.get_item(self.rkey) == 0:
+        if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
             self.person_num = self.scenario.p_unit_user_person_number.get_item(self.rkey)
         else:
-            self.person_num = int(self.scenario.s_building_unit_area.get_item(self.rkey) / self.scenario.p_unit_user_person_number.get_item(self.rkey))
+            self.person_num = (self.scenario.s_building_unit_area.get_item(self.rkey) /
+                               self.scenario.p_unit_user_person_number.get_item(self.rkey))
 
     @property
     def hot_water_profile(self):
-        if self.scenario.p_unit_demand_profile_person_number_relevance.get_item(self.rkey) == 0:
-            hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey)
-        else:
-            hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey) * self.person_num
+        hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey) * self.person_num
         return hot_water_profile
 
     @property
     def appliance_electricity_profile(self):
-        if self.scenario.p_unit_demand_profile_person_number_relevance.get_item(self.rkey) == 0:
-            appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey)
-        else:
-            appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey) * self.person_num
+        appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey) * self.person_num
         return appliance_electricity_profile
 
     @property

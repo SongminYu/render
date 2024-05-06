@@ -76,11 +76,20 @@ class RenderScenario(Scenario):
     def load_profile(
             self,
             file_name: str,
+            scenario_filter: Optional[str] = None,
             region_level: Optional[int] = None,
     ) -> RenderDict:
+        df = self.load_dataframe(file_name)
+        if scenario_filter is not None:
+            df = df.loc[df["id_scenario"] == self.__dict__[scenario_filter]]
+            df.loc[:, "id_scenario"] = self.id
+        else:
+            if "id_scenario" in df.columns:
+                df = df.loc[df["id_scenario"] == df["id_scenario"].unique()[0]]
+                df.loc[:, "id_scenario"] = self.id
         rdict = RenderDict.from_profile_dataframe(
             tdict_type="Data",
-            df=self.load_dataframe(file_name)
+            df=df
         )
         if region_level is not None:
             rdict.region_level = region_level
