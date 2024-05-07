@@ -67,16 +67,15 @@ def get_styles_for_data_table(df):
     # Select numeric columns
     numeric_columns = df.select_dtypes(include='number')
 
-    # Get min and max values
-    min_val = numeric_columns.min().min()
-    max_val = numeric_columns.max().max()
-    extreme_val = max(abs(min_val), abs(max_val))
-
     # Define the colormap
     colormap = px.colors.sequential.RdBu[::-1]  # Reverse and truncate for proper interpolation
 
     styles = []
     for column in numeric_columns:
+        # Get min and max values
+        min_val = df[column].min()
+        max_val = df[column].max()
+        extreme_val = max(abs(min_val), abs(max_val))
         for i, value in df[column].items():
             if pd.notna(value):  # Exclude NaN values
                 color = get_interpolated_color(colormap, value, -1*extreme_val, extreme_val)
