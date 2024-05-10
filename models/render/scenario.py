@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict
 
 from Melodie import Scenario
 import pandas as pd
@@ -15,10 +15,14 @@ class RenderScenario(Scenario):
     end_year: int
 
     @load_timer()
-    def load_id(self, file_name: str) -> RenderDict:
+    def load_id(self, file_name: str, id_filter: Optional[dict] = None) -> RenderDict:
+        df = self.load_dataframe(file_name)
+        if id_filter is not None:
+            for column, value in id_filter.items():
+                df = df.loc[df[column] == value]
         return RenderDict.from_dataframe(
             tdict_type="ID",
-            df=self.load_dataframe(file_name)
+            df=df
         )
 
     @load_timer()
@@ -96,7 +100,7 @@ class RenderScenario(Scenario):
         return rdict
 
     def load_framework(self):
-        self.regions = self.load_id("ID_Region.xlsx")
+        self.regions = self.load_id("ID_Region.xlsx", id_filter={"region_level": 3})
         self.sectors = self.load_id("ID_Sector.xlsx")
         self.subsectors = self.load_id("ID_SubSector.xlsx")
         self.energy_carriers = self.load_id("ID_EnergyCarrier.xlsx")

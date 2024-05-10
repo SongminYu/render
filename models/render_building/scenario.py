@@ -222,7 +222,8 @@ class BuildingScenario(RenderScenario):
                         "id_sector": int(row["id_sector"]),
                         "id_subsector": int(row["id_subsector"]),
                         "id_building_type": int(row["id_building_type"]),
-                        "id_subsector_agent": id_subsector_agent
+                        "id_subsector_agent": id_subsector_agent,
+                        "building_number":real_building_num/agent_num,
                     })
         self.agent_params = pd.DataFrame(agent_params)
 
@@ -482,6 +483,11 @@ class BuildingScenario(RenderScenario):
             "id_building_location",
             "year"
         ])
+        self.household_number = RenderDict.create_empty_rdict(key_cols=[
+            "id_region",
+            "id_unit_user_type",
+            "year"
+        ])
         # result data containers
         self.building_stock = []
         self.renovation_action_info = []
@@ -516,3 +522,7 @@ class BuildingScenario(RenderScenario):
             "year"
         ])
 
+    def get_new_building_id_subsector_agent(self, rkey: "BuildingKey"):
+        id_subsector_agent = self.building_num_model.get_item(rkey) + 1
+        self.building_num_model.set_item(rkey, id_subsector_agent)
+        return id_subsector_agent

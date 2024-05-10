@@ -36,7 +36,33 @@ class Building(Agent):
         self.id_subsector = 0
         self.id_building_type = 0
         self.id_subsector_agent = 0
+        self.building_number = 0
         self.exists = True
+
+    def init_new_construction(self, construction_year: int):
+
+        self.rkey = BuildingKey(
+            id_scenario=self.scenario.id,
+            id_region=self.id_region,
+            id_sector=self.id_sector,
+            id_subsector=self.id_subsector,
+            id_building_type=self.id_building_type,
+            id_subsector_agent=self.id_subsector_agent,
+            year=construction_year,
+            id_building_construction_period=cons.ID_BUILDING_CONSTRUCTION_PERIOD_NEW_BUILDING,
+        )
+
+        self.rkey.init_dimension(
+            dimension_name="id_building_location",
+            dimension_ids=self.scenario.building_locations.keys(),
+            rdict=self.scenario.s_building_location
+        )
+
+        self.rkey.init_dimension(
+            dimension_name="id_building_height",
+            dimension_ids=self.scenario.r_building_type_height.get_item(self.rkey),
+            rdict=self.scenario.s_building_height
+        )
 
     def init_rkey(self):
 
@@ -80,6 +106,8 @@ class Building(Agent):
         self.unit_area = self.scenario.s_building_unit_area.get_item(self.rkey)
         self.unit_number = random.randint(self.scenario.p_building_unit_number_min.get_item(self.rkey),
                                           self.scenario.p_building_unit_number_max.get_item(self.rkey))
+        if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
+            self.scenario.household_number.accumulate_item(self.rkey, self.unit_number * self.building_number)
         for id_unit in range(0, self.unit_number):
             unit = Unit(self.rkey.make_copy(), self.scenario)
             self.population += unit.user.person_num

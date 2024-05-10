@@ -192,9 +192,6 @@ class BuildingDataCollector(RenderDataCollector):
                     if component_value is not None:
                         if isinstance(component_value, int) or isinstance(component_value, float):
                             building_dict[f"{component_name}_{component_key}"] = component_value
-            # collect building number
-            building_dict["building_number"] = (self.scenario.building_num_total.get_item(building.rkey) /
-                                                self.scenario.building_num_model.get_item(building.rkey))
             # collect building heating system
             building_dict["id_heating_system"] = building.heating_system.rkey.id_heating_system
             building_dict["district_heating_available"] = building.heating_system.district_heating_available

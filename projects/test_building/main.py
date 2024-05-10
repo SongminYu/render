@@ -26,15 +26,15 @@ def run_toolkit(cfg: "Config"):
 
 
 def run_post_processor(cfg: "Config"):
-    # post_processor.concat_region_tables(cfg=cfg, file_name_prefix_list=[
-    #     "building_stock",
-    #     "renovation_action_info",
-    #     "renovation_rate_component",
-    # ])
-    # post_processor.gen_final_energy_demand_from_building_stock(cfg=cfg)
+    post_processor.concat_region_tables(cfg=cfg, file_name_prefix_list=[
+        "building_stock",
+        # "renovation_action_info",
+        # "renovation_rate_component",
+    ])
+    post_processor.gen_final_energy_demand_from_building_stock(cfg=cfg)
     # post_processor.gen_final_energy_demand_from_building_stock(cfg=cfg, input_table="building_stock_R9010101.csv")
-    # post_processor.gen_building_stock_summary(cfg=cfg)
-    post_processor.gen_building_stock_summary(cfg=cfg, input_table="building_stock_R9010101.csv")
+    post_processor.gen_building_stock_summary(cfg=cfg)
+    # post_processor.gen_building_stock_summary(cfg=cfg, input_table="building_stock_R9010101.csv")
     # post_processor.extract_cols(cfg=cfg, cols=[
     #     "id_region",
     #     "demolish_year",
@@ -52,7 +52,7 @@ def run_plotter(cfg: "Config"):
 if __name__ == "__main__":
     config = get_config("test_building")
     # run_toolkit(cfg=config)
-    run_building_model(cfg=config, cores=1)
+    run_building_model(cfg=config, cores=8)
     run_post_processor(cfg=config)
     # run_plotter(cfg=config)
 

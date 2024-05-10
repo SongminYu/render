@@ -4,11 +4,13 @@
 
 ### Meeting
 
-* `Scenario_UnitUser_Ownership.xlsx`
-  * should also depend on `id_building_type`?
-  * missing good assumptions for non-residential buildings.
-* `Parameter_UnitUser_PersonNumber.xlsx`
-  * assumptions on the number of children are made for `id_unit_user_type = 3, 4`
+* Go over `data_prep/population/building_stock_summary_06052024`
+  * population region and location
+* unit_user (household) redefined
+  * assumptions on the number of children are made for `id_unit_user_type = 3, 4` in `Parameter_UnitUser_PersonNumber.xlsx`
+  * `Scenario_UnitUser_Ownership.xlsx`
+    * should also depend on `id_building_type`?
+    * missing good assumptions for non-residential buildings.
 
 ### Songmin
 
@@ -17,12 +19,16 @@
   - generate the building stock and summary files, then verify 
     - total population of each NUTS3 region
     - the distribution percentages by id_region and id_location, then compare with GHSL data
-- [ ] behavior profiles need to be updated
-  - [ ] for households, the occupancy/app/hot-water profiles all need to be averaged/smoothed, and the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
-  - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
 - [ ] Develop the main logics for construction, based on the population data development
   - we have regional population, then number of buildings that are necessary to be built in each period will be calculated
-- [ ] link renovation action to ownership --> currently `id_ownership` is initialized only for unit-users.
+- [ ] link renovation action to ownership
+  - currently `id_ownership` is initialized only for unit-users.
+  - this will also limit the renovation rate?
+- [ ] during calibration, behavior profiles need to be updated
+  - [ ] for households, 
+    - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
+    - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
+  - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
 
 ### Sirin
 

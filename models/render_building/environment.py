@@ -20,6 +20,9 @@ class BuildingEnvironment(Environment):
     scenario: "BuildingScenario"
     agent: "Building"
 
+    def setup(self):
+        self.year = 0
+
     @staticmethod
     def setup_buildings(buildings: "AgentList[Building]"):
 
@@ -42,8 +45,7 @@ class BuildingEnvironment(Environment):
             building.init_building_district_heating_availability()
             building.init_building_gas_availability()
 
-    @staticmethod
-    def update_buildings_year(buildings: "AgentList[Building]"):
+    def update_year(self, buildings: "AgentList[Building]"):
 
         def update_units_year():
             for unit in building.units:
@@ -69,6 +71,7 @@ class BuildingEnvironment(Environment):
         def update_ventilation_system_year():
             building.ventilation_system.rkey.year += 1
 
+        self.year += 1
         for building in buildings:
             if building.exists:
                 building.rkey.year += 1
@@ -310,32 +313,52 @@ class BuildingEnvironment(Environment):
                 self.demolished_buildings_current_year.append(building)
 
     def update_buildings_construction(self, buildings: "AgentList[Building]"):
-        # 1. The "building_num" info should also be transferred to the new building, for scaling up results.
-        # 2. For residential buildings, accumulate the population and construct new buildings to hold the population
 
+        def construct_new_building(params: dict):
+            new_building = buildings.add(params=params)
 
+        def update_unsettled_household_book_based_on_population_change():
 
-        # The following data is missing for developing the logic:
-        # 1. moving of people (population/unit_user by region and building location)
-        population_from_demolished_buildings = RenderDict.create_empty_rdict(key_cols=[
-            "id_region",
-            "id_building_location",
-        ])
+            def get_household_increase_rate():
+                rkey_copy = rkey.make_copy()
+                n_household_0 = self.scenario.s_unit_user.get_item(rkey_copy)
+                scenario_n_household_0 = self.scenario.household_number.get_item(rkey_copy)
+                rkey_copy.year += 1
+                n_household_1 = self.scenario.s_unit_user.get_item(rkey_copy)
+                self.scenario.household_number.set_item(
+                    rkey=rkey_copy,
+                    value=scenario_n_household_0 * (n_household_1 / n_household_0)
+                )
+                return (n_household_1 - n_household_0) / n_household_0
 
+            for id_region in self.scenario.regions.keys():
+                rkey = BuildingKey(id_region=id_region, id_sector=cons.ID_SECTOR_RESIDENTIAL, year=self.year)
+                for id_unit_user_type in self.scenario.r_subsector_unit_user_type.get_item(rkey):
+                    rkey.id_unit_user_type = id_unit_user_type
+                    unsettled_household_book.accumulate_item(
+                        rkey=rkey,
+                        value=round(self.scenario.household_number.get_item(rkey) * get_household_increase_rate())
+                    )
+
+        unsettled_household_book = RenderDict.create_empty_rdict(key_cols=["id_region", "id_unit_user_type"])
         for building in self.demolished_buildings_current_year:
             if building.rkey.id_sector == cons.ID_SECTOR_TERTIARY:
+                construct_new_building(params={
+                    "id_region": building.rkey.id_region,
+                    "id_sector": building.rkey.id_sector,
+                    "id_subsector": building.rkey.id_subsector,
+                    "id_building_type": building.rkey.id_building_type,
+                    "id_subsector_agent": self.scenario.get_new_building_id_subsector_agent(building.rkey),
+                    "building_number": building.building_number
+                })
+            else:
+                for unit in building.units:
+                    unsettled_household_book.accumulate_item(rkey=unit.user.rkey, value=building.building_number)
+        update_unsettled_household_book_based_on_population_change()
+        for (id_region, id_unit_user_type), unsettled_household_number in unsettled_household_book.items():
+            if unsettled_household_number > 0:
                 ...
-            elif building.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
-                population_from_demolished_buildings.accumulate_item(building.rkey, building.population)
-            # check which buildings are not active
-            # for non-residential buildings, construct a same one
-            #
-
-        # How is construction triggered?
-        # --> to cover the people from demolished buildings + population growth?
-        # --> moving of people? But it also means buildings are left empty somewhere.
-        # --> use Scenario_Building input (provided by GHSL until 2030 with population and urbanization change considered)
-
-        ...
+                # TODO: unsettled_household needs to be discounted first, for example, by 10%,
+                #  according to the SimulatorCoverage table. Maybe reduce the columns in the SimulatorCoverage table.
 
 
