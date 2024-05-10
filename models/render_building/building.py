@@ -106,10 +106,10 @@ class Building(Agent):
         self.unit_area = self.scenario.s_building_unit_area.get_item(self.rkey)
         self.unit_number = random.randint(self.scenario.p_building_unit_number_min.get_item(self.rkey),
                                           self.scenario.p_building_unit_number_max.get_item(self.rkey))
-        if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
-            self.scenario.household_number.accumulate_item(self.rkey, self.unit_number * self.building_number)
         for id_unit in range(0, self.unit_number):
             unit = Unit(self.rkey.make_copy(), self.scenario)
+            if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
+                self.scenario.household_number.accumulate_item(unit.user.rkey, self.building_number)
             self.population += unit.user.person_num
             self.units.append(unit)
 

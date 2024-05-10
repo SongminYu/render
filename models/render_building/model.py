@@ -1,6 +1,7 @@
-import copy
 from typing import TYPE_CHECKING
+
 from tqdm import tqdm
+
 from models.render.model import RenderModel
 from models.render_building.building import Building
 from models.render_building.data_collector import BuildingDataCollector
@@ -42,8 +43,8 @@ class BuildingModel(RenderModel):
             # self.environment.update_buildings_total_energy_cost(self.buildings)
             # self.environment.update_buildings_renovation_lifecycle(self.buildings)
             # self.environment.update_buildings_renovation_mandatory(self.buildings)
-            self.environment.update_buildings_demolition(self.buildings)
-            self.environment.update_buildings_construction(self.buildings)
+            # self.environment.update_buildings_demolition(self.buildings)
+            # self.environment.update_buildings_construction(self.buildings)
             # self.environment.update_year(self.buildings)
         self.data_collector.export()
 
