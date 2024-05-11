@@ -10,7 +10,7 @@ from models.render_building.building_key import BuildingKey
 from models.render_building.building_r5c1 import R5C1, spec
 from models.render_building.building_unit import Unit
 from models.render_building.tech_cooling import CoolingSystem
-from models.render_building.tech_heating import HeatingSystem
+from models.render_building.tech_heating import HeatingSystem, HeatingTechnology
 from models.render_building.tech_radiator import Radiator
 from models.render_building.tech_ventilation import VentilationSystem
 from utils.funcs import dict_sample
@@ -37,10 +37,45 @@ class Building(Agent):
         self.id_building_type = 0
         self.id_subsector_agent = 0
         self.building_number = 0
+        self.occupancy_rate = 1
         self.exists = True
 
-    def init_new_construction(self, construction_year: int):
+    def init_rkey(self):
+        self.rkey = BuildingKey(
+            id_scenario=self.scenario.id,
+            id_region=self.id_region,
+            id_sector=self.id_sector,
+            id_subsector=self.id_subsector,
+            id_building_type=self.id_building_type,
+            id_subsector_agent=self.id_subsector_agent,
+            year=self.scenario.start_year
+        )
+        self.init_rkey_id_building_construction_period()
+        self.init_rkey_id_building_location()
+        self.init_rkey_id_building_height()
 
+    def init_rkey_id_building_construction_period(self):
+        self.rkey.init_dimension(
+            dimension_name="id_building_construction_period",
+            dimension_ids=self.scenario.building_construction_periods.keys(),
+            rdict=self.scenario.s_building_construction_period
+        )
+
+    def init_rkey_id_building_location(self):
+        self.rkey.init_dimension(
+            dimension_name="id_building_location",
+            dimension_ids=self.scenario.building_locations.keys(),
+            rdict=self.scenario.s_building_location
+        )
+
+    def init_rkey_id_building_height(self):
+        self.rkey.init_dimension(
+            dimension_name="id_building_height",
+            dimension_ids=self.scenario.r_building_type_height.get_item(self.rkey),
+            rdict=self.scenario.s_building_height
+        )
+
+    def init_rkey_new_construction(self, construction_year: int):
         self.rkey = BuildingKey(
             id_scenario=self.scenario.id,
             id_region=self.id_region,
@@ -51,48 +86,8 @@ class Building(Agent):
             year=construction_year,
             id_building_construction_period=cons.ID_BUILDING_CONSTRUCTION_PERIOD_NEW_BUILDING,
         )
-
-        self.rkey.init_dimension(
-            dimension_name="id_building_location",
-            dimension_ids=self.scenario.building_locations.keys(),
-            rdict=self.scenario.s_building_location
-        )
-
-        self.rkey.init_dimension(
-            dimension_name="id_building_height",
-            dimension_ids=self.scenario.r_building_type_height.get_item(self.rkey),
-            rdict=self.scenario.s_building_height
-        )
-
-    def init_rkey(self):
-
-        self.rkey = BuildingKey(
-            id_scenario=self.scenario.id,
-            id_region=self.id_region,
-            id_sector=self.id_sector,
-            id_subsector=self.id_subsector,
-            id_building_type=self.id_building_type,
-            id_subsector_agent=self.id_subsector_agent,
-            year=self.scenario.start_year
-        )
-
-        self.rkey.init_dimension(
-            dimension_name="id_building_construction_period",
-            dimension_ids=self.scenario.building_construction_periods.keys(),
-            rdict=self.scenario.s_building_construction_period
-        )
-
-        self.rkey.init_dimension(
-            dimension_name="id_building_location",
-            dimension_ids=self.scenario.building_locations.keys(),
-            rdict=self.scenario.s_building_location
-        )
-
-        self.rkey.init_dimension(
-            dimension_name="id_building_height",
-            dimension_ids=self.scenario.r_building_type_height.get_item(self.rkey),
-            rdict=self.scenario.s_building_height
-        )
+        self.init_rkey_id_building_location()
+        self.init_rkey_id_building_height()
 
     def __repr__(self):
         return (f"Building<Region-{self.rkey.id_region}_"
@@ -108,7 +103,9 @@ class Building(Agent):
                                           self.scenario.p_building_unit_number_max.get_item(self.rkey))
         for id_unit in range(0, self.unit_number):
             unit = Unit(self.rkey.make_copy(), self.scenario)
-            if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
+            if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL and self.rkey.year == self.scenario.start_year:
+                # only record during building stock initialization, not new construction
+                self.scenario.dwelling_number.accumulate_item(self.rkey, self.building_number)
                 self.scenario.household_number.accumulate_item(unit.user.rkey, self.building_number)
             self.population += unit.user.person_num
             self.units.append(unit)
@@ -149,6 +146,16 @@ class Building(Agent):
             self.construction_year + self.scenario.p_building_lifetime_max.get_item(self.rkey)
         )
         self.lifetime = self.demolish_year - self.construction_year
+
+    def init_building_construction_new_construction(self):
+        self.construction_year = self.rkey.year
+        self.lifetime = random.randint(
+            self.scenario.p_building_lifetime_min.get_item(self.rkey),
+            self.scenario.p_building_lifetime_max.get_item(self.rkey)
+        )
+        self.demolish_year = self.construction_year + self.lifetime
+
+    def init_building_components(self):
         self.building_components: Optional[Dict[str, BuildingComponent]] = {}
         for id_building_component, component_name in self.scenario.building_components.items():
             component = BuildingComponent(self.rkey.make_copy(), self.scenario)
@@ -177,16 +184,54 @@ class Building(Agent):
         self.rkey.id_radiator = self.radiator.rkey.id_radiator
         self.radiator.init_installation_year()
 
+    def init_radiator_new_construction(self):
+        self.radiator = Radiator(self.rkey.make_copy(), self.scenario)
+        self.radiator.init_option()
+        self.rkey.id_radiator = self.radiator.rkey.id_radiator
+        self.radiator.installation_year = self.rkey.year
+        self.radiator.next_replace_year = self.rkey.year + self.radiator.get_lifetime()
+
     def init_building_cooling_system(self):
         self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)
         if random.uniform(0, 1) <= self.scenario.s_cooling_penetration_rate.get_item(self.rkey):
             self.cooling_system.init_adoption()
+
+    def init_building_cooling_system_new_construction(self):
+        self.cooling_system = CoolingSystem(self.rkey.make_copy(), self.scenario)
+        if random.uniform(0, 1) <= self.scenario.s_cooling_penetration_rate.get_item(self.rkey):
+            self.cooling_system.select(
+                cooling_demand_peak=self.cooling_demand_peak,
+                cooling_demand=self.cooling_demand,
+            )
+            self.cooling_system.install()
 
     def init_building_heating_system(self):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
         self.heating_system.init_system_type()
         self.heating_system.init_heating_technology_main()
         self.heating_system.init_heating_technology_second()
+        self.heating_system.heating_technologies = [
+            self.heating_system.heating_technology_main,
+            self.heating_system.heating_technology_second
+        ]
+
+    def init_building_heating_system_new_construction(self):
+        self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
+        self.heating_system.init_heating_technology_main_new_construction()
+        action_info = self.heating_system.heating_technology_main.select(
+            heating_technology_size=self.get_heating_technology_size(self.heating_system.heating_technology_main),
+            heating_demand=self.heating_demand,
+            new_construction=True
+        )
+        self.heating_system.heating_technology_main.install()
+        self.heating_system.rkey.id_heating_system = int(list(str(self.heating_system.heating_technology_main.rkey.id_heating_technology))[0])
+        self.init_final_energy_demand()
+        self.update_total_energy_cost()
+        action_info["total_heating_demand_peak"] = self.total_heating_demand_peak
+        action_info["id_heating_technology_after"] = self.heating_system.heating_technology_main.rkey.id_heating_technology
+        action_info["total_energy_cost_after"] = self.total_energy_cost
+        self.scenario.heating_system_action_info.append(action_info)
+        # TODO: second heating technology is left as None
         self.heating_system.heating_technologies = [
             self.heating_system.heating_technology_main,
             self.heating_system.heating_technology_second
@@ -209,6 +254,10 @@ class Building(Agent):
             if random.uniform(0, 1) <= get_district_heating_connection_prob():
                 self.heating_system.district_heating_available = True
 
+    def init_building_district_heating_availability_new_construction(self):
+        if random.uniform(0, 1) <= self.scenario.s_infrastructure_availability_district_heating.get_item(self.rkey):
+            self.heating_system.district_heating_available = True
+
     def init_building_gas_availability(self):
 
         def get_gas_connection_prob():
@@ -226,10 +275,20 @@ class Building(Agent):
             if random.uniform(0, 1) <= get_gas_connection_prob():
                 self.heating_system.gas_available = True
 
+    def init_building_gas_availability_new_construction(self):
+        if random.uniform(0, 1) <= self.scenario.s_infrastructure_availability_gas.get_item(self.rkey):
+            self.heating_system.gas_available = True
+
     def init_building_ventilation_system(self):
         self.ventilation_system = VentilationSystem(self.rkey.make_copy(), self.scenario)
         if random.uniform(0, 1) <= self.scenario.s_ventilation_penetration_rate.get_item(self.rkey):
             self.ventilation_system.init_adoption()
+
+    def init_building_ventilation_system_new_construction(self):
+        self.ventilation_system = VentilationSystem(self.rkey.make_copy(), self.scenario)
+        if random.uniform(0, 1) <= self.scenario.s_ventilation_penetration_rate.get_item(self.rkey):
+            self.ventilation_system.select(total_living_area=self.total_living_area)
+            self.ventilation_system.install()
 
     """
     heating and cooling demand calculation
@@ -506,6 +565,17 @@ class Building(Agent):
     """
     Future projection functions
     """
+
+    def get_heating_technology_size(self, heating_technology: "HeatingTechnology"):
+        heating_technology_demand_profile = (
+                    heating_technology.space_heating_contribution * self.heating_demand_profile +
+                    heating_technology.hot_water_contribution * self.hot_water_profile)
+        heating_technology_size = np.quantile(
+            heating_technology_demand_profile,
+            1 - self.scenario.p_heating_technology_size_quantile.get_item(heating_technology.rkey)
+        )
+        # heating_technology_size = heating_technology_demand_profile.max() * 0.75  # taking multiplication instead of quantile
+        return heating_technology_size
 
     def renovate_component(
             self,

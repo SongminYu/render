@@ -54,6 +54,17 @@ class HeatingSystem:
         self.heating_technology_main.update_energy_intensity_hot_water()
         mark_info()
 
+    def init_heating_technology_main_new_construction(self):
+        self.heating_technology_main = HeatingTechnology(
+            rkey=self.rkey.make_copy(),
+            scenario=self.scenario,
+            priority="main"
+        )
+        self.heating_technology_main.update_optional_heating_technologies(
+            district_heating_available=self.district_heating_available,
+            gas_available=self.gas_available,
+        )
+
     def init_heating_technology_second(self):
         df = self.scenario.s_heating_technology_second
         df = df.loc[
@@ -181,67 +192,39 @@ class HeatingTechnology:
         else:
             self.optional_heating_technologies = cons.SECOND_HEATING_TECHNOLOGIES
 
-    def select(self, heating_technology_size: float, heating_demand: float):
-
-        def update_action_type():
-            if rkey.id_heating_technology == self.rkey.id_heating_technology:
-                rkey.set_id({"id_heating_system_action": cons.ID_HEATING_SYSTEM_ACTION_SAME})
-            else:
-                rkey.set_id({"id_heating_system_action": cons.ID_HEATING_SYSTEM_ACTION_DIFFERENT})
-
-        def get_annuity_factor():
-            interest_rate = self.scenario.s_interest_rate.get_item(rkey)
-            lifetime = self.scenario.p_heating_technology_cost_payback_time.get_item(rkey)
-            return interest_rate / (1 - (1 + interest_rate) ** (- lifetime))
-
-        def calc_investment_cost(small_scale: bool):
-            criterion_small = self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey)
-            m_cost = self.scenario.p_heating_technology_cost_multiplier_material.get_item(rkey)
-            e_cost = self.scenario.p_heating_technology_cost_exponent_material.get_item(rkey)
-            m_share = self.scenario.p_heating_technology_cost_share_multiplier_material.get_item(rkey)
-            e_share = self.scenario.p_heating_technology_cost_share_exponent_material.get_item(rkey)
-            pp_index = self.scenario.p_heating_technology_cost_pp_index.get_item(rkey)
-            wage_index = self.scenario.p_heating_technology_cost_wages_index.get_item(rkey)
-            learning_coefficient = self.scenario.p_heating_technology_cost_learning_coefficient.get_item(rkey)
-            if small_scale:
-                cost_material = m_cost * criterion_small ** e_cost * m_share * heating_technology_size ** e_share * pp_index ** 0.5
-                cost_labor = m_cost * criterion_small ** e_cost * (1 - m_share * heating_technology_size ** e_share) * wage_index
-                inv_cost_per_kW_not_annualized = ((cost_material + cost_labor) *
-                                                  (1 - learning_coefficient) ** (rkey.year - 2012) *
-                                                  heating_technology_size / criterion_small)
-            else:
-                cost_material = m_cost * m_share * heating_technology_size ** (e_cost + e_share) * pp_index ** 0.5
-                cost_labor = m_cost * heating_technology_size ** e_cost - (m_cost * m_share) * heating_technology_size ** (e_cost + e_share) * wage_index
-                inv_cost_per_kW_not_annualized = ((cost_material + cost_labor) * (1 - learning_coefficient) ** (rkey.year - 2012))
-            return inv_cost_per_kW_not_annualized
-
-        def calc_om_cost(small_scale: bool):
-            criterion_small = self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey)
-            m_om = self.scenario.p_heating_technology_cost_multiplier_om.get_item(rkey)
-            e_om = self.scenario.p_heating_technology_cost_exponent_om.get_item(rkey)
-            wage_index = self.scenario.p_heating_technology_cost_wages_index.get_item(rkey)
-            if small_scale:
-                om_cost = m_om * criterion_small ** e_om * wage_index * heating_technology_size / criterion_small
-            else:
-                om_cost = m_om * heating_technology_size ** e_om * wage_index
-            return om_cost
-
+    def select(self, heating_technology_size: float, heating_demand: float, new_construction: bool = False):
         rkey = self.rkey.make_copy()
         d_option_cost = {}
         d_option_action_info = {}
         for id_heating_technology in self.optional_heating_technologies:
             rkey.id_heating_technology = id_heating_technology
+            rkey = self.update_action_type(rkey=rkey, new_construction=new_construction)
             if self.scenario.s_heating_technology_availability.get_item(rkey):
-                update_action_type()
                 if heating_technology_size < self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey):
                     scale = "small"
-                    investment_cost_per_kW_not_annualized = calc_investment_cost(small_scale=True)
-                    om_cost_per_kW = calc_om_cost(small_scale=True)
+                    investment_cost_per_kW_not_annualized = self.calc_investment_cost(
+                        rkey=rkey,
+                        heating_technology_size=heating_technology_size,
+                        small_scale=True
+                    )
+                    om_cost_per_kW = self.calc_om_cost(
+                        rkey=rkey,
+                        heating_technology_size=heating_technology_size,
+                        small_scale=True
+                    )
                 else:
                     scale = "large"
-                    investment_cost_per_kW_not_annualized = calc_investment_cost(small_scale=False)
-                    om_cost_per_kW = calc_om_cost(small_scale=False)
-                investment_cost_per_kW_annualized = investment_cost_per_kW_not_annualized * get_annuity_factor()
+                    investment_cost_per_kW_not_annualized = self.calc_investment_cost(
+                        rkey=rkey,
+                        heating_technology_size=heating_technology_size,
+                        small_scale=False
+                    )
+                    om_cost_per_kW = self.calc_om_cost(
+                        rkey=rkey,
+                        heating_technology_size=heating_technology_size,
+                        small_scale=False
+                    )
+                investment_cost_per_kW_annualized = investment_cost_per_kW_not_annualized * self.get_annuity_factor(rkey)
                 investment_cost_annualized = investment_cost_per_kW_annualized * heating_technology_size
                 om_cost = om_cost_per_kW * heating_technology_size
                 energy_cost_per_kWh = self.scenario.heating_technology_energy_cost.get_item(rkey)
@@ -275,7 +258,7 @@ class HeatingTechnology:
                     "energy_cost": energy_cost,
                     "om_cost": om_cost,
                     "investment_cost_not_annualized": investment_cost_per_kW_not_annualized * heating_technology_size,
-                    "annuity_factor": get_annuity_factor(),
+                    "annuity_factor": self.get_annuity_factor(rkey),
                     "labor_demand": self.scenario.s_heating_technology_input_labor.get_item(rkey),
                 }
         self.rkey.id_heating_technology = dict_utility_sample(
@@ -283,6 +266,56 @@ class HeatingTechnology:
             utility_power=self.scenario.s_heating_technology_utility_power.get_item(rkey)
         )
         return d_option_action_info[self.rkey.id_heating_technology]
+
+    def update_action_type(self, rkey: "BuildingKey", new_construction: bool = False):
+        if not new_construction:
+            if rkey.id_heating_technology == self.rkey.id_heating_technology:
+                rkey.set_id({"id_heating_system_action": cons.ID_HEATING_SYSTEM_ACTION_SAME})
+            else:
+                rkey.set_id({"id_heating_system_action": cons.ID_HEATING_SYSTEM_ACTION_DIFFERENT})
+        else:
+            rkey.set_id({"id_heating_system_action": cons.ID_HEATING_SYSTEM_ACTION_NEW})
+        return rkey
+
+    def get_annuity_factor(self, rkey: "BuildingKey"):
+        interest_rate = self.scenario.s_interest_rate.get_item(rkey)
+        lifetime = self.scenario.p_heating_technology_cost_payback_time.get_item(rkey)
+        return interest_rate / (1 - (1 + interest_rate) ** (- lifetime))
+
+    def calc_investment_cost(self, rkey: "BuildingKey", heating_technology_size: float, small_scale: bool):
+        criterion_small = self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey)
+        m_cost = self.scenario.p_heating_technology_cost_multiplier_material.get_item(rkey)
+        e_cost = self.scenario.p_heating_technology_cost_exponent_material.get_item(rkey)
+        m_share = self.scenario.p_heating_technology_cost_share_multiplier_material.get_item(rkey)
+        e_share = self.scenario.p_heating_technology_cost_share_exponent_material.get_item(rkey)
+        pp_index = self.scenario.p_heating_technology_cost_pp_index.get_item(rkey)
+        wage_index = self.scenario.p_heating_technology_cost_wages_index.get_item(rkey)
+        learning_coefficient = self.scenario.p_heating_technology_cost_learning_coefficient.get_item(rkey)
+        if small_scale:
+            cost_material = m_cost * criterion_small ** e_cost * m_share * heating_technology_size ** e_share * pp_index ** 0.5
+            cost_labor = m_cost * criterion_small ** e_cost * (
+                        1 - m_share * heating_technology_size ** e_share) * wage_index
+            inv_cost_per_kW_not_annualized = ((cost_material + cost_labor) *
+                                              (1 - learning_coefficient) ** (rkey.year - 2012) *
+                                              heating_technology_size / criterion_small)
+        else:
+            cost_material = m_cost * m_share * heating_technology_size ** (e_cost + e_share) * pp_index ** 0.5
+            cost_labor = m_cost * heating_technology_size ** e_cost - (m_cost * m_share) * heating_technology_size ** (
+                        e_cost + e_share) * wage_index
+            inv_cost_per_kW_not_annualized = (
+                        (cost_material + cost_labor) * (1 - learning_coefficient) ** (rkey.year - 2012))
+        return inv_cost_per_kW_not_annualized
+
+    def calc_om_cost(self, rkey: "BuildingKey", heating_technology_size: float, small_scale: bool):
+        criterion_small = self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey)
+        m_om = self.scenario.p_heating_technology_cost_multiplier_om.get_item(rkey)
+        e_om = self.scenario.p_heating_technology_cost_exponent_om.get_item(rkey)
+        wage_index = self.scenario.p_heating_technology_cost_wages_index.get_item(rkey)
+        if small_scale:
+            om_cost = m_om * criterion_small ** e_om * wage_index * heating_technology_size / criterion_small
+        else:
+            om_cost = m_om * heating_technology_size ** e_om * wage_index
+        return om_cost
 
     def install(self):
         self.update_energy_intensity_space_heating()

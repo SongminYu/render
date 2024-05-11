@@ -77,6 +77,7 @@ class VentilationSystem:
         )
 
     def install(self):
+        self.is_adopted = True
         self.update_energy_intensity()
         self.installation_year = self.rkey.year
         self.next_replace_year = self.rkey.year + self.get_lifetime()

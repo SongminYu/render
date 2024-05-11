@@ -17,6 +17,8 @@ class BuildingDataCollector(RenderDataCollector):
 
     def export(self):
         self.export_building_stock()
+        self.export_dwelling_number()
+        self.export_household_number()
         # self.export_renovation_action_info()
         # self.export_heating_system_action_info()
 
@@ -264,6 +266,14 @@ class BuildingDataCollector(RenderDataCollector):
 
     def export_building_stock(self):
         self.save_dataframe(df=pd.DataFrame(self.scenario.building_stock), df_name=f"building_stock_R{self.scenario.id_region}")
+
+    # Household number
+    def export_dwelling_number(self):
+        self.save_dataframe(df=self.scenario.dwelling_number.to_dataframe(), df_name=f"dwelling_number_R{self.scenario.id_region}")
+
+    # Household number
+    def export_household_number(self):
+        self.save_dataframe(df=self.scenario.household_number.to_dataframe(), df_name=f"household_number_R{self.scenario.id_region}")
 
     # Renovation action info
     def export_renovation_action_info(self):

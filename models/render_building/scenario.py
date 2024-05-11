@@ -140,6 +140,7 @@ class BuildingScenario(RenderScenario):
     def load_scenarios(self):
         # RenderDict
         self.s_building = self.load_scenario("Scenario_Building.xlsx")
+        self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
         self.s_building_construction_period = self.load_scenario("Scenario_Building_ConstructionPeriod.xlsx")
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")
@@ -487,7 +488,13 @@ class BuildingScenario(RenderScenario):
             "id_building_location",
             "year"
         ])
+        self.dwelling_number = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "year"
+        ])
         self.household_number = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
             "id_region",
             "id_unit_user_type",
             "year"

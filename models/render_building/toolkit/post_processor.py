@@ -56,13 +56,15 @@ def gen_final_energy_demand_from_building_stock(
     output_table: str = "final_energy_demand.csv"
 ):
 
+    # TODO: add the impact of "occupancy_rate" factor
+
     def get_appliance_electricity():
         d = get_base_d(row=row)
         d.update({
             "id_end_use": cons.ID_END_USE_APPLIANCE,
             "id_energy_carrier": cons.ID_ENERGY_CARRIER_ELECTRICITY,
             "unit": "kWh",
-            "value": row["appliance_electricity_demand"] * row["building_number"]
+            "value": row["appliance_electricity_demand"] * row["building_number"] * row["occupancy_rate"]
         })
         return [d]
 
@@ -74,7 +76,7 @@ def gen_final_energy_demand_from_building_stock(
                 "id_end_use": cons.ID_END_USE_SPACE_COOLING,
                 "id_energy_carrier": row["cooling_system_id_energy_carrier"],
                 "unit": "kWh",
-                "value": row["cooling_system_energy_consumption"] * row["building_number"]
+                "value": row["cooling_system_energy_consumption"] * row["building_number"] * row["occupancy_rate"]
             })
             l.append(d)
         return l_space_cooling
@@ -89,7 +91,7 @@ def gen_final_energy_demand_from_building_stock(
                         "id_end_use": cons.ID_END_USE_SPACE_HEATING,
                         "id_energy_carrier": row[f"heating_system_{tech}_space_heating_energy_carrier_{energy_carrier}_id_energy_carrier"],
                         "unit": "kWh",
-                        "value": row[f"heating_system_{tech}_space_heating_energy_carrier_{energy_carrier}_energy_consumption"] * row["building_number"]
+                        "value": row[f"heating_system_{tech}_space_heating_energy_carrier_{energy_carrier}_energy_consumption"] * row["building_number"] * row["occupancy_rate"]
                     })
                     l_space_heating.append(d)
         return l_space_heating
@@ -104,7 +106,7 @@ def gen_final_energy_demand_from_building_stock(
                         "id_end_use": cons.ID_END_USE_HOT_WATER,
                         "id_energy_carrier": row[f"heating_system_{tech}_hot_water_energy_carrier_{energy_carrier}_id_energy_carrier"],
                         "unit": "kWh",
-                        "value": row[f"heating_system_{tech}_hot_water_energy_carrier_{energy_carrier}_energy_consumption"] * row["building_number"]
+                        "value": row[f"heating_system_{tech}_hot_water_energy_carrier_{energy_carrier}_energy_consumption"] * row["building_number"] * row["occupancy_rate"]
                     })
                     l_hot_water.append(d)
         return l_hot_water
@@ -117,7 +119,7 @@ def gen_final_energy_demand_from_building_stock(
                 "id_end_use": cons.ID_END_USE_VENTILATION,
                 "id_energy_carrier": row["ventilation_system_id_energy_carrier"],
                 "unit": "kWh",
-                "value": row["ventilation_system_energy_consumption"] * row["building_number"]
+                "value": row["ventilation_system_energy_consumption"] * row["building_number"] * row["occupancy_rate"]
             })
             l_ventilation.append(d)
         return l_ventilation
