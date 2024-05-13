@@ -134,8 +134,8 @@ class BuildingScenario(RenderScenario):
         self.pr_building_occupancy = self.load_profile("Profile_BuildingOccupancy.xlsx", scenario_filter="id_scenario_teleworking")
         self.pr_appliance_electricity = self.load_profile("Profile_ApplianceElectricity.xlsx", scenario_filter="id_scenario_teleworking")
         self.pr_hot_water = self.load_profile("Profile_HotWater.xlsx", scenario_filter="id_scenario_teleworking")
-        self.pr_weather_temperature = self.load_profile("Profile_WeatherTemperature.xlsx", region_level=0)
-        self.pr_weather_radiation = self.load_profile("Profile_WeatherRadiation.xlsx", region_level=0)
+        self.pr_weather_temperature = self.load_profile("Profile_WeatherTemperature.xlsx", region_level=2)
+        self.pr_weather_radiation = self.load_profile("Profile_WeatherRadiation.xlsx", region_level=2)
 
     def load_scenarios(self):
         # RenderDict

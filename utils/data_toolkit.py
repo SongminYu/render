@@ -8,7 +8,7 @@ from Melodie import Config
 
 def read_dataframe(file_path: str):
     if file_path.endswith(".xlsx"):
-        df = pd.read_excel(file_path)
+        df = pd.read_excel(file_path, engine="openpyxl")
     else:
         df = pd.read_csv(file_path)
     return df
@@ -22,7 +22,6 @@ def get_data_files(folder: str):
 
 
 def get_id_relevant_tables(cfg: "Config", id_name: str):
-
     tables = {}
     for file_name in get_data_files(cfg.input_folder):
         df = read_dataframe(os.path.join(cfg.input_folder, file_name))
