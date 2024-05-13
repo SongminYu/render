@@ -17,6 +17,7 @@
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
+- [ ] modeling of PV, battery.
 
 ### Sirin
 

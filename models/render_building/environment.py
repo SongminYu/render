@@ -376,7 +376,7 @@ class BuildingEnvironment(Environment):
         household_number_next_year = get_total_household_number_next_year()
         if self.remaining_dwelling_number_this_year >= household_number_next_year:
             self.scenario.dwelling_number.set_item(rkey=rkey, value=self.remaining_dwelling_number_this_year)
-            occupancy_rate = self.scenario.household_number.get_item(rkey)/self.remaining_dwelling_number_this_year
+            occupancy_rate = household_number_next_year/self.remaining_dwelling_number_this_year
         else:
             final_dwelling_number_next_year = self.remaining_dwelling_number_this_year
             while final_dwelling_number_next_year < household_number_next_year:

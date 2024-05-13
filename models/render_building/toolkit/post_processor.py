@@ -154,6 +154,7 @@ def gen_building_stock_summary(
         'heating_demand_per_m2': 'mean',
         'hot_water_demand_per_person': 'mean',
         'hot_water_demand_per_m2': 'mean',
+        'occupancy_rate': 'mean',
     }
     l = []
     building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
