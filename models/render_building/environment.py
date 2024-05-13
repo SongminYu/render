@@ -1,18 +1,17 @@
 import random
 from typing import TYPE_CHECKING
 
-import numpy as np
 from Melodie import Environment
 from tqdm import tqdm
 
 from models.render_building import cons
+from models.render_building.building_key import BuildingKey
 from utils.funcs import dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
     from Melodie import AgentList
     from models.render_building.scenario import BuildingScenario
     from models.render_building.building import Building
-    from models.render_building.building_key import BuildingKey
 
 
 class BuildingEnvironment(Environment):
@@ -45,7 +44,8 @@ class BuildingEnvironment(Environment):
             building.init_building_district_heating_availability()
             building.init_building_gas_availability()
 
-    def update_year(self, buildings: "AgentList[Building]"):
+    @staticmethod
+    def update_buildings_year(buildings: "AgentList[Building]"):
 
         def update_units_year():
             for unit in building.units:
@@ -71,7 +71,6 @@ class BuildingEnvironment(Environment):
         def update_ventilation_system_year():
             building.ventilation_system.rkey.year += 1
 
-        self.year += 1
         for building in buildings:
             if building.exists:
                 building.rkey.year += 1
@@ -190,8 +189,8 @@ class BuildingEnvironment(Environment):
                                 gas_available=building.heating_system.gas_available
                             )
                             option_action_info = heating_technology.select(
-                                heating_technology_size=building.get_heating_technology_size(heating_technology),
-                                heating_demand=building.heating_demand,
+                                heating_demand_profile=building.heating_demand_profile,
+                                hot_water_profile=building.hot_water_profile,
                             )
                             heating_technology.install()
                             building.update_space_heating_final_energy_demand()
@@ -328,28 +327,24 @@ class BuildingEnvironment(Environment):
     def update_household_number(self):
 
         def get_household_changing_rate():
-            rkey_copy = rkey.make_copy()
-            n_household_0 = self.scenario.s_unit_user.get_item(rkey_copy)
-            rkey_copy.year += 1
-            n_household_1 = self.scenario.s_unit_user.get_item(rkey_copy)
-            return (n_household_1 - n_household_0) / n_household_0
+            n_household_this_year = self.scenario.s_unit_user.get_item(rkey_this_year)
+            n_household_next_year = self.scenario.s_unit_user.get_item(rkey_next_year)
+            return (n_household_next_year - n_household_this_year) / n_household_this_year
 
-        rkey = BuildingKey(
+        rkey_this_year = BuildingKey(
             id_scenario=self.scenario.id,
             id_region=self.scenario.id_region,
             id_sector=cons.ID_SECTOR_RESIDENTIAL,
             id_subsector=cons.ID_SUBSECTOR_RESIDENTIAL,
             year=self.year
         )
-        for id_unit_user_type in self.scenario.r_subsector_unit_user_type.get_item(rkey):
-            rkey.id_unit_user_type = id_unit_user_type
+        rkey_next_year = rkey_this_year.make_copy().set_id({"year": self.year + 1})
+        for id_unit_user_type in self.scenario.r_subsector_unit_user_type.get_item(rkey_this_year):
+            rkey_this_year.id_unit_user_type = id_unit_user_type
+            rkey_next_year.id_unit_user_type = id_unit_user_type
             changing_rate = get_household_changing_rate()
-            household_number_next_year = round(self.scenario.household_number.get_item(rkey) * (1 + changing_rate))
-            rkey.year += 1
-            self.scenario.household_number.accumulate_item(
-                rkey=rkey,
-                value=household_number_next_year
-            )
+            household_number_next_year = round(self.scenario.household_number.get_item(rkey_this_year) * (1 + changing_rate))
+            self.scenario.household_number.accumulate_item(rkey=rkey_next_year, value=household_number_next_year)
 
     def construct_new_residential_buildings(self, buildings: "AgentList[Building]"):
 
@@ -363,6 +358,13 @@ class BuildingEnvironment(Environment):
             )
             return rkey_copy.id_building_type
 
+        def get_total_household_number_next_year():
+            total_household_number_next_year = 0
+            for id_unit_user_type in cons.HOUSEHOLD_UNIT_USER_IDS:
+                rkey.id_unit_user_type = id_unit_user_type
+                total_household_number_next_year += self.scenario.household_number.get_item(rkey)
+            return total_household_number_next_year
+
         rkey = BuildingKey(
             id_scenario=self.scenario.id,
             id_region=self.scenario.id_region,
@@ -370,25 +372,26 @@ class BuildingEnvironment(Environment):
             id_subsector=cons.ID_SUBSECTOR_RESIDENTIAL,
             year=self.year + 1
         )
-        if self.remaining_dwelling_number_this_year >= self.scenario.household_number.get_item(rkey):
+        household_number_next_year = get_total_household_number_next_year()
+        if self.remaining_dwelling_number_this_year >= household_number_next_year:
             self.scenario.dwelling_number.set_item(rkey=rkey, value=self.remaining_dwelling_number_this_year)
             occupancy_rate = self.scenario.household_number.get_item(rkey)/self.remaining_dwelling_number_this_year
         else:
             final_dwelling_number_next_year = self.remaining_dwelling_number_this_year
-            while final_dwelling_number_next_year < self.scenario.household_number.get_item(rkey):
-                id_building_type = select_building_type()
+            while final_dwelling_number_next_year < household_number_next_year:
+                rkey.id_building_type = select_building_type()
                 building_number = 1 / self.scenario.p_building_coverage.get_item(rkey=rkey)
                 new_residential_building = self.construct_new_building(buildings=buildings, params={
                     "id_region": rkey.id_region,
                     "id_sector": rkey.id_sector,
                     "id_subsector": rkey.id_subsector,
-                    "id_building_type": id_building_type,
+                    "id_building_type": rkey.id_building_type,
                     "id_subsector_agent": self.scenario.get_new_building_id_subsector_agent(rkey),
                     "building_number": building_number
                 })
                 final_dwelling_number_next_year += new_residential_building.unit_number * building_number
             self.scenario.dwelling_number.set_item(rkey=rkey, value=final_dwelling_number_next_year)
-            occupancy_rate = self.scenario.household_number.get_item(rkey)/final_dwelling_number_next_year
+            occupancy_rate = household_number_next_year/final_dwelling_number_next_year
         # update `occupancy_rate` for all the buildings in the next year
         for building in buildings:
             if building.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
@@ -403,8 +406,6 @@ class BuildingEnvironment(Environment):
         new_building.init_building_construction_new_construction()
         new_building.init_building_components()
         new_building.init_radiator_new_construction()
-        new_building.init_building_district_heating_availability_new_construction()
-        new_building.init_building_gas_availability_new_construction()
         new_building.calc_building_heating_cooling_demand()
         new_building.init_building_cooling_system_new_construction()
         new_building.init_building_ventilation_system_new_construction()

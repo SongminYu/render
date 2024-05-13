@@ -2,6 +2,8 @@ import random
 from typing import Optional
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 from models.render_building import cons
 from models.render_building.building_key import BuildingKey
 from models.render_building.tech import EnergyIntensity
@@ -54,7 +56,7 @@ class HeatingSystem:
         self.heating_technology_main.update_energy_intensity_hot_water()
         mark_info()
 
-    def init_heating_technology_main_new_construction(self):
+    def init_heating_technology_main_new_construction(self, heating_demand_profile: np.array, hot_water_profile: np.array):
         self.heating_technology_main = HeatingTechnology(
             rkey=self.rkey.make_copy(),
             scenario=self.scenario,
@@ -64,6 +66,14 @@ class HeatingSystem:
             district_heating_available=self.district_heating_available,
             gas_available=self.gas_available,
         )
+        action_info = self.heating_technology_main.select(
+            heating_demand_profile=heating_demand_profile,
+            hot_water_profile=hot_water_profile,
+            new_construction=True
+        )
+        self.heating_technology_main.install()
+        self.rkey.id_heating_system = int(list(str(self.heating_technology_main.rkey.id_heating_technology))[0])
+        return action_info
 
     def init_heating_technology_second(self):
         df = self.scenario.s_heating_technology_second
@@ -192,8 +202,27 @@ class HeatingTechnology:
         else:
             self.optional_heating_technologies = cons.SECOND_HEATING_TECHNOLOGIES
 
-    def select(self, heating_technology_size: float, heating_demand: float, new_construction: bool = False):
+    def select(
+            self,
+            heating_demand_profile: np.array,
+            hot_water_profile: np.array,
+            new_construction: bool = False
+    ):
+
+        def get_heating_technology_size():
+            heating_technology_demand_profile = (
+                    self.space_heating_contribution * heating_demand_profile +
+                    self.hot_water_contribution * hot_water_profile
+            )
+            return heating_technology_demand_profile.max() * 0.75  # taking multiplication instead of quantile
+            # return np.quantile(
+            #     heating_technology_demand_profile,
+            #     1 - self.scenario.p_heating_technology_size_quantile.get_item(self.rkey)
+            # )
+
         rkey = self.rkey.make_copy()
+        heating_technology_size = get_heating_technology_size()
+        total_heating_demand = np.sum(heating_demand_profile) + np.sum(hot_water_profile)
         d_option_cost = {}
         d_option_action_info = {}
         for id_heating_technology in self.optional_heating_technologies:
@@ -228,7 +257,7 @@ class HeatingTechnology:
                 investment_cost_annualized = investment_cost_per_kW_annualized * heating_technology_size
                 om_cost = om_cost_per_kW * heating_technology_size
                 energy_cost_per_kWh = self.scenario.heating_technology_energy_cost.get_item(rkey)
-                energy_cost = energy_cost_per_kWh * heating_demand
+                energy_cost = energy_cost_per_kWh * total_heating_demand
                 d_option_cost[id_heating_technology] = investment_cost_annualized + energy_cost + om_cost
                 d_option_action_info[id_heating_technology] = {
                     "id_scenario": rkey.id_scenario,
@@ -243,7 +272,7 @@ class HeatingTechnology:
                     "space_heating_contribution": self.space_heating_contribution,
                     "hot_water_contribution": self.hot_water_contribution,
                     "heating_technology_size": heating_technology_size,
-                    "heating_demand": heating_demand,
+                    "heating_demand": total_heating_demand,
                     "criterion_small": self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey),
                     "scale": scale,
                     "id_heating_technology_before": self.rkey.id_heating_technology,
@@ -318,8 +347,11 @@ class HeatingTechnology:
         return om_cost
 
     def install(self):
-        self.update_energy_intensity_space_heating()
-        self.update_energy_intensity_hot_water()
         self.installation_year = self.rkey.year
         self.next_replace_year = self.rkey.year + self.get_lifetime()
+        self.update_supply_temperature_space_heating()
+        self.update_supply_temperature_hot_water()
+        self.update_energy_intensity_space_heating()
+        self.update_energy_intensity_hot_water()
+
 

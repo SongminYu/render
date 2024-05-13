@@ -4,26 +4,15 @@
 
 ### Meeting
 
-* Go over `data_prep/population/building_stock_summary_06052024`
-  * population region and location
-* unit_user (household) redefined
-  * assumptions on the number of children are made for `id_unit_user_type = 3, 4` in `Parameter_UnitUser_PersonNumber.xlsx`
-  * `Scenario_UnitUser_Ownership.xlsx`
-    * should also depend on `id_building_type`?
-    * missing good assumptions for non-residential buildings.
-
 ### Songmin
 
-- [x] update the Scenario_UnitUser table
-  - add id_region (NUTS2 level) based on https://ec.europa.eu/eurostat/databrowser/view/cens_11htts_r2/default/table?lang=en&category=reg.reg_dem.reg_cens_11r.cens_11rdf
-  - generate the building stock and summary files, then verify 
-    - total population of each NUTS3 region
-    - the distribution percentages by id_region and id_location, then compare with GHSL data
-- [ ] Develop the main logics for construction, based on the population data development
-  - we have regional population, then number of buildings that are necessary to be built in each period will be calculated
+- [ ] solve the size problem of weather input
+  - add 2030/2040/2050 profiles for NUTS2
+  - hardcode mapping years to 2020/2030/2040/2050 in the projection years
 - [ ] link renovation action to ownership
   - currently `id_ownership` is initialized only for unit-users.
-  - this will also limit the renovation rate?
+  - this will also limit the renovation rate --> only for the future?
+  - Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
 - [ ] during calibration, behavior profiles need to be updated
   - [ ] for households, 
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
@@ -32,9 +21,8 @@
 
 ### Sirin
 
-- [x] add region ids (NUTS1 and NUTS2)
 - [ ] meet Hannah
-  - [ ] download NUTS1 weather data
+  - [x] download NUTS2 weather data
   - [ ] discuss how to integrate NUTS1 calibration data (maybe we need dropdowns for 3 levels of id_region in the dashboard)
   - [ ] there is the code mapping id_regions at different levels (line 62 in models/render/render_dict.py)
   - [ ] then design the table format for Weijia
@@ -46,10 +34,7 @@
     - [ ] dwelling number
   - [ ] renovation actions, incl. renovation rate calculation
   - [ ] heating system actions, incl. heating system size
-- [ ] Summarize data gap lists and prepare the workshop with Fraunhofer IBP (Timeline: around mid-May by email, then the end of May or early June, we have the workshop)
-  - building component lifetime, u-values, cost, etc.
-  - building lifetime
-  - ...
+
 
 ## Done
 
@@ -67,10 +52,18 @@
   - eurostat dataset (NUTS3 regions): https://ec.europa.eu/eurostat/web/main/data/database
   - GHSL dataset (100m level and can be mapped to NUTS3 regions and locations)
   - validation: residential and non-residential population comparison
+- [x] update the Scenario_UnitUser table
+  - add id_region (NUTS2 level) based on https://ec.europa.eu/eurostat/databrowser/view/cens_11htts_r2/default/table?lang=en&category=reg.reg_dem.reg_cens_11r.cens_11rdf
+  - generate the building stock and summary files, then verify 
+    - total population of each NUTS3 region
+    - the distribution percentages by id_region and id_location, then compare with GHSL data
+- [x] Develop the main logics for construction, based on the population data development
 
 ### Sirin
 
-- [x] Contact IT for server use, and before they replying to us, test `kamino`
+- [x] Contact IT for server use, and before them replying to us, test `kamino`
 - [x] Find tasks for Weijia
 - [x] design dashboards for Hannah to develop
 - [x] Create a ticket about server use for IT
+- [x] Summarize data gap lists and prepare the workshop with Fraunhofer IBP (Timeline: around mid-May by email, then the end of May or early June, we have the workshop)
+- [x] add region ids (NUTS1 and NUTS2)

@@ -152,7 +152,7 @@ class BuildingScenario(RenderScenario):
         self.s_building_component_cost_payback_time = self.load_scenario("Scenario_BuildingComponent_Cost_PaybackTime.xlsx", region_level=0)
         self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_utility_power = self.load_scenario("Scenario_BuildingComponent_UtilityPower.xlsx", region_level=0)
-        self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=2)
+        self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=2, all_years=True)
         self.s_unit_user_ownership = self.load_scenario("Scenario_UnitUser_Ownership.xlsx", region_level=2)
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
@@ -238,9 +238,9 @@ class BuildingScenario(RenderScenario):
     def setup_cost_data(self):
         self.setup_building_component_cost()
         self.setup_heating_technology_cost()
-        # self.setup_radiator_cost()
-        # self.setup_cooling_technology_cost()
-        # self.setup_ventilation_technology_cost()
+        self.setup_radiator_cost()
+        self.setup_cooling_technology_cost()
+        self.setup_ventilation_technology_cost()
 
     @staticmethod
     def calc_capex(investment_cost: float, period_num: float, interest_rate: float):
@@ -308,6 +308,7 @@ class BuildingScenario(RenderScenario):
             "id_sector",
             "id_subsector",
             "id_heating_technology",
+            "id_heating_system_action",
             "year"
         ], region_level=0)  # unit: euro/kWh
 
@@ -318,10 +319,12 @@ class BuildingScenario(RenderScenario):
                 rkey.id_subsector = id_subsector
                 for id_heating_technology in self.heating_technologies.keys():
                     rkey.id_heating_technology = id_heating_technology
-                    for year in range(self.start_year, self.end_year + 1):
-                        rkey.year = year
-                        if self.s_heating_technology_availability.get_item(rkey):
-                            self.heating_technology_energy_cost.set_item(rkey=rkey, value=calc_heating_technology_energy_cost())
+                    for id_heating_system_action in self.heating_system_actions.keys():
+                        rkey.id_heating_system_action = id_heating_system_action
+                        for year in range(self.start_year, self.end_year + 1):
+                            rkey.year = year
+                            if self.s_heating_technology_availability.get_item(rkey):
+                                self.heating_technology_energy_cost.set_item(rkey=rkey, value=calc_heating_technology_energy_cost())
 
     @timer()
     def setup_radiator_cost(self):

@@ -19,8 +19,8 @@ class BuildingDataCollector(RenderDataCollector):
         self.export_building_stock()
         self.export_dwelling_number()
         self.export_household_number()
-        # self.export_renovation_action_info()
-        # self.export_heating_system_action_info()
+        self.export_renovation_action_info()
+        self.export_heating_system_action_info()
 
     def export_rdict(self, rdict: "RenderDict", df_name: str, unit: Optional[str] = None):
         df = rdict.to_dataframe()

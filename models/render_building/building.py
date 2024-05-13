@@ -136,7 +136,7 @@ class Building(Agent):
     def init_building_construction(self):
         self.construction_year = random.randint(
             self.scenario.p_building_construction_year_min.get_item(self.rkey),
-            self.scenario.p_building_construction_year_max.get_item(self.rkey)
+            min(self.scenario.start_year - 1, self.scenario.p_building_construction_year_max.get_item(self.rkey))
         )
         self.demolish_year = random.randint(
             max(
@@ -217,25 +217,23 @@ class Building(Agent):
 
     def init_building_heating_system_new_construction(self):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
-        self.heating_system.init_heating_technology_main_new_construction()
-        action_info = self.heating_system.heating_technology_main.select(
-            heating_technology_size=self.get_heating_technology_size(self.heating_system.heating_technology_main),
-            heating_demand=self.heating_demand,
-            new_construction=True
+        self.init_building_district_heating_availability_new_construction()
+        self.init_building_gas_availability_new_construction()
+        action_info = self.heating_system.init_heating_technology_main_new_construction(
+            heating_demand_profile=self.heating_demand_profile,
+            hot_water_profile=self.hot_water_profile
         )
-        self.heating_system.heating_technology_main.install()
-        self.heating_system.rkey.id_heating_system = int(list(str(self.heating_system.heating_technology_main.rkey.id_heating_technology))[0])
+        # TODO: second heating technology is left as None for new buildings
+        self.heating_system.heating_technologies = [
+            self.heating_system.heating_technology_main,
+            self.heating_system.heating_technology_second
+        ]
         self.init_final_energy_demand()
         self.update_total_energy_cost()
         action_info["total_heating_demand_peak"] = self.total_heating_demand_peak
         action_info["id_heating_technology_after"] = self.heating_system.heating_technology_main.rkey.id_heating_technology
         action_info["total_energy_cost_after"] = self.total_energy_cost
         self.scenario.heating_system_action_info.append(action_info)
-        # TODO: second heating technology is left as None
-        self.heating_system.heating_technologies = [
-            self.heating_system.heating_technology_main,
-            self.heating_system.heating_technology_second
-        ]
 
     def init_building_district_heating_availability(self):
 
@@ -566,25 +564,12 @@ class Building(Agent):
     Future projection functions
     """
 
-    def get_heating_technology_size(self, heating_technology: "HeatingTechnology"):
-        heating_technology_demand_profile = (
-                    heating_technology.space_heating_contribution * self.heating_demand_profile +
-                    heating_technology.hot_water_contribution * self.hot_water_profile)
-        heating_technology_size = np.quantile(
-            heating_technology_demand_profile,
-            1 - self.scenario.p_heating_technology_size_quantile.get_item(heating_technology.rkey)
-        )
-        # heating_technology_size = heating_technology_demand_profile.max() * 0.75  # taking multiplication instead of quantile
-        return heating_technology_size
-
     def renovate_component(
             self,
             component_name: str,
             id_building_component_option_efficiency_class: int
     ):
-        self.building_components[component_name].renovate(
-            id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
-        )
+        self.building_components[component_name].renovate(id_building_component_option_efficiency_class=id_building_component_option_efficiency_class)
         self.calc_building_heating_cooling_demand()
         self.update_space_cooling_final_energy_demand()
         self.update_space_heating_final_energy_demand()

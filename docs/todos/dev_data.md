@@ -15,9 +15,10 @@
 - [ ] infrastructure expansion scenarios
 
 ## Population data
-- [ ] from Census, we have household size percentages by region. The id_unit_user_type will also be updated accordingly, then the behavior aspects (e.g., teleworking linked to working status) will be added through other tables.
 - [ ] relate income and age information at the same time (to be added to BuildingKey: id_income_group, id_age_group)
 - [ ] the role of owner or tenant (Sabine has some data)
+  * should also depend on `id_building_type`?
+  * missing good assumptions for non-residential buildings.
 - [ ] willingness-to-pay
 
 ## Later stage
