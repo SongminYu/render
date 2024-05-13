@@ -51,8 +51,8 @@ def run_plotter(cfg: "Config"):
 
 if __name__ == "__main__":
     config = get_config("test_building")
-    run_toolkit(cfg=config)
-    # run_building_model(cfg=config, cores=1)
-    # run_post_processor(cfg=config)
+    # run_toolkit(cfg=config)
+    run_building_model(cfg=config, cores=1)
+    run_post_processor(cfg=config)
     # run_plotter(cfg=config)
 

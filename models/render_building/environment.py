@@ -215,6 +215,7 @@ class BuildingEnvironment(Environment):
                 building.update_total_energy_cost()
 
     def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
+        self.update_buildings_total_energy_cost(buildings)
         for building in buildings:
             if building.exists:
                 for component_name, building_component in building.building_components.items():
