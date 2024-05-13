@@ -405,7 +405,7 @@ class Building(Agent):
             epsilon = 0.9  # emissivity of the thermal radiation of the outer surface
             # Stefan-Boltzmann constant: σ = 5.67 × 10-8 W/(m2⋅K4)
             sigma = 5.67 * 10 ** (-8)
-            outside_temperature = self.scenario.pr_weather_temperature.get_item(self.rkey)
+            outside_temperature = self.get_weather_temperature_profile(self.rkey)
             # external radiant heat transfer coefficient
             h_r = 4 * epsilon * sigma * ((outside_temperature + 273.15) ** 3)
             component = self.building_components[component_name]
@@ -415,7 +415,7 @@ class Building(Agent):
         rkey = self.rkey.make_copy()
         for id_orientation in self.scenario.orientations.keys():
             rkey.id_orientation = id_orientation
-            total_radiation += self.scenario.pr_weather_radiation.get_item(rkey)
+            total_radiation += self.get_weather_radiation_profile(rkey)
 
         self.solar_gain_opa = create_empty_arr()
         for component_name in ["roof", "wall"]:
@@ -432,7 +432,7 @@ class Building(Agent):
         for id_orientation in self.scenario.orientations.keys():
             rkey.id_orientation = id_orientation
             self.solar_gain_gla += correction_param * transmittance_factor * shading_factor * (1 - frame_share) * \
-                                   self.scenario.pr_weather_radiation.get_item(rkey) * \
+                                   self.get_weather_radiation_profile(rkey) * \
                                    self.scenario.p_building_envelope_window_area_orientation.get_item(rkey)
 
         # gains in total
@@ -440,7 +440,7 @@ class Building(Agent):
         self.solar_gain = self.solar_gain_opa + self.solar_gain_gla
 
     def update_r5c1_temperature(self, norm: Optional[bool] = False):
-        self.weather_temperature = self.scenario.pr_weather_temperature.get_item(self.rkey)
+        self.weather_temperature = self.get_weather_temperature_profile(self.rkey)
         if self.rkey.id_building_efficiency_class is None or norm:
             self.set_temperature_min = np.ones((8760,)) * 20
             self.set_temperature_max = np.ones((8760,)) * 27
@@ -463,6 +463,28 @@ class Building(Agent):
                 else:
                     self.set_temperature_min[hour] = self.set_temperature_occupied_min
                     self.set_temperature_max[hour] = self.set_temperature_occupied_max
+
+    @staticmethod
+    def adjust_rkey_year_for_weather_profiles(rkey_to_adjust_year: "BuildingKey"):
+        rkey_copy = rkey_to_adjust_year.make_copy()
+        if rkey_copy.year > 2020:
+            if rkey_copy.year <= 2025:
+                rkey_copy.year = 2020
+            elif 2025 < rkey_copy.year <= 2035:
+                rkey_copy.year = 2030
+            elif 2035 < rkey_copy.year <= 2045:
+                rkey_copy.year = 2040
+            elif 2045 < rkey_copy.year:
+                rkey_copy.year = 2050
+        return rkey_copy
+
+    def get_weather_temperature_profile(self, rkey_to_adjust_year: "BuildingKey"):
+        rkey_adjusted = self.adjust_rkey_year_for_weather_profiles(rkey_to_adjust_year)
+        return self.scenario.pr_weather_temperature.get_item(rkey_adjusted)
+
+    def get_weather_radiation_profile(self, rkey_to_adjust_year: "BuildingKey"):
+        rkey_adjusted = self.adjust_rkey_year_for_weather_profiles(rkey_to_adjust_year)
+        return self.scenario.pr_weather_radiation.get_item(rkey_adjusted)
 
     def conduct_r5c1_calculation(self):
 

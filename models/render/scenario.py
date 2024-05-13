@@ -77,6 +77,7 @@ class RenderScenario(Scenario):
             rdict.region_level = region_level
         return rdict
 
+    @load_timer()
     def load_profile(
             self,
             file_name: str,

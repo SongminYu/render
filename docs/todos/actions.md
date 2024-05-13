@@ -6,13 +6,12 @@
 
 ### Songmin
 
-- [ ] solve the size problem of weather input
+- [x] solve the size problem of weather input
   - add 2030/2040/2050 profiles for NUTS2
   - hardcode mapping years to 2020/2030/2040/2050 in the projection years
 - [ ] link renovation action to ownership
-  - currently `id_ownership` is initialized only for unit-users.
+  - currently `id_ownership` is initialized only for unit-users. Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
   - this will also limit the renovation rate --> only for the future?
-  - Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
 - [ ] during calibration, behavior profiles need to be updated
   - [ ] for households, 
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
