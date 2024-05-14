@@ -10,7 +10,7 @@ from models.render_building.building_key import BuildingKey
 from models.render_building.building_r5c1 import R5C1, spec
 from models.render_building.building_unit import Unit
 from models.render_building.tech_cooling import CoolingSystem
-from models.render_building.tech_heating import HeatingSystem, HeatingTechnology
+from models.render_building.tech_heating import HeatingSystem
 from models.render_building.tech_radiator import Radiator
 from models.render_building.tech_ventilation import VentilationSystem
 from utils.funcs import dict_sample
@@ -53,6 +53,7 @@ class Building(Agent):
         self.init_rkey_id_building_construction_period()
         self.init_rkey_id_building_location()
         self.init_rkey_id_building_height()
+        self.init_rkey_id_building_ownership()
 
     def init_rkey_id_building_construction_period(self):
         self.rkey.init_dimension(
@@ -66,6 +67,13 @@ class Building(Agent):
             dimension_name="id_building_location",
             dimension_ids=self.scenario.building_locations.keys(),
             rdict=self.scenario.s_building_location
+        )
+
+    def init_rkey_id_building_ownership(self):
+        self.rkey.init_dimension(
+            dimension_name="id_building_ownership",
+            dimension_ids=self.scenario.building_ownerships.keys(),
+            rdict=self.scenario.s_building_ownership
         )
 
     def init_rkey_id_building_height(self):
@@ -88,6 +96,7 @@ class Building(Agent):
         )
         self.init_rkey_id_building_location()
         self.init_rkey_id_building_height()
+        self.init_rkey_id_building_ownership()
 
     def __repr__(self):
         return (f"Building<Region-{self.rkey.id_region}_"

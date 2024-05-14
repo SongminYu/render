@@ -18,6 +18,7 @@ class BuildingKey(RenderKey):
         id_building_construction_period: Optional[int] = None,
         id_building_height: Optional[int] = None,
         id_building_location: Optional[int] = None,
+        id_building_ownership: Optional[int] = None,
         id_building_type: Optional[int] = None,
         id_building_component: Optional[int] = None,
         id_building_component_option: Optional[int] = None,
@@ -49,6 +50,7 @@ class BuildingKey(RenderKey):
         self.id_building_construction_period = id_building_construction_period
         self.id_building_height = id_building_height
         self.id_building_location = id_building_location
+        self.id_building_ownership = id_building_ownership
         self.id_building_type = id_building_type
         self.id_building_component = id_building_component
         self.id_building_component_option = id_building_component_option
