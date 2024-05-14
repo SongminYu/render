@@ -29,9 +29,9 @@ class UnitUser:
             rdict=self.scenario.s_unit_user
         )
         self.rkey.init_dimension(
-            dimension_name="id_ownership",
-            dimension_ids=self.scenario.ownerships.keys(),
-            rdict=self.scenario.s_unit_user_ownership
+            dimension_name="id_dwelling_ownership",
+            dimension_ids=self.scenario.dwelling_ownerships.keys(),
+            rdict=self.scenario.s_unit_user_dwelling_ownership
         )
 
     def init_person_num(self):
