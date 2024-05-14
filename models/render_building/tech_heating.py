@@ -267,6 +267,7 @@ class HeatingTechnology:
                     "id_subsector_agent": rkey.id_subsector_agent,
                     "id_building_type": rkey.id_building_type,
                     "id_building_construction_period": rkey.id_building_construction_period,
+                    "id_building_ownership": rkey.id_building_ownership,
                     "year": rkey.year,
                     "total_heating_demand_peak": 0,
                     "space_heating_contribution": self.space_heating_contribution,

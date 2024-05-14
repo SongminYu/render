@@ -55,6 +55,21 @@ class Building(Agent):
         self.init_rkey_id_building_height()
         self.init_rkey_id_building_ownership()
 
+    def init_rkey_new_construction(self, construction_year: int):
+        self.rkey = BuildingKey(
+            id_scenario=self.scenario.id,
+            id_region=self.id_region,
+            id_sector=self.id_sector,
+            id_subsector=self.id_subsector,
+            id_building_type=self.id_building_type,
+            id_subsector_agent=self.id_subsector_agent,
+            year=construction_year,
+            id_building_construction_period=cons.ID_BUILDING_CONSTRUCTION_PERIOD_NEW_BUILDING,
+        )
+        self.init_rkey_id_building_location()
+        self.init_rkey_id_building_height()
+        self.init_rkey_id_building_ownership()
+
     def init_rkey_id_building_construction_period(self):
         self.rkey.init_dimension(
             dimension_name="id_building_construction_period",
@@ -83,21 +98,6 @@ class Building(Agent):
             rdict=self.scenario.s_building_height
         )
 
-    def init_rkey_new_construction(self, construction_year: int):
-        self.rkey = BuildingKey(
-            id_scenario=self.scenario.id,
-            id_region=self.id_region,
-            id_sector=self.id_sector,
-            id_subsector=self.id_subsector,
-            id_building_type=self.id_building_type,
-            id_subsector_agent=self.id_subsector_agent,
-            year=construction_year,
-            id_building_construction_period=cons.ID_BUILDING_CONSTRUCTION_PERIOD_NEW_BUILDING,
-        )
-        self.init_rkey_id_building_location()
-        self.init_rkey_id_building_height()
-        self.init_rkey_id_building_ownership()
-
     def __repr__(self):
         return (f"Building<Region-{self.rkey.id_region}_"
                 f"Sector-{self.rkey.id_sector}_"
@@ -113,7 +113,6 @@ class Building(Agent):
         for id_unit in range(0, self.unit_number):
             unit = Unit(self.rkey.make_copy(), self.scenario)
             if self.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL and self.rkey.year == self.scenario.start_year:
-                # only record during building stock initialization, not new construction
                 self.scenario.dwelling_number.accumulate_item(self.rkey, self.building_number)
                 self.scenario.household_number.accumulate_item(unit.user.rkey, self.building_number)
             self.population += unit.user.person_num

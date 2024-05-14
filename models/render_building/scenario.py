@@ -79,6 +79,7 @@ class BuildingScenario(RenderScenario):
     def load_params(self):
         # RenderDict
         self.p_building_coverage = self.load_param("Parameter_Building_Coverage.xlsx")
+        self.p_building_action_probability = self.load_param("Parameter_Building_ActionProbability.xlsx")
         self.p_building_component_efficiency = self.load_param("Parameter_BuildingComponent_EfficiencyCoefficient.xlsx")
         self.p_building_height_min = self.load_param("Parameter_Building_Height.xlsx", col="min")
         self.p_building_height_max = self.load_param("Parameter_Building_Height.xlsx", col="max")

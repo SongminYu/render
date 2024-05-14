@@ -176,7 +176,7 @@ class BuildingEnvironment(Environment):
 
     def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
         for building in buildings:
-            if building.exists:
+            if building.exists and random.uniform(0, 1) <= self.scenario.p_building_action_probability.get_item(building.rkey):
                 for heating_technology in [
                     building.heating_system.heating_technology_main,
                     building.heating_system.heating_technology_second
@@ -217,7 +217,7 @@ class BuildingEnvironment(Environment):
     def update_buildings_renovation_lifecycle(self, buildings: "AgentList[Building]"):
         self.update_buildings_total_energy_cost(buildings)
         for building in buildings:
-            if building.exists:
+            if building.exists and random.uniform(0, 1) <= self.scenario.p_building_action_probability.get_item(building.rkey):
                 for component_name, building_component in building.building_components.items():
                     if building_component.rkey.year >= building_component.next_replace_year:
                         if random.uniform(0, 1) <= cons.PROB_POSTPONING_RENOVATION:
@@ -268,6 +268,7 @@ class BuildingEnvironment(Environment):
             "id_subsector_agent": rkey.id_subsector_agent,
             "id_building_type": rkey.id_building_type,
             "id_building_construction_period": rkey.id_building_construction_period,
+            "id_building_ownership": rkey.id_building_ownership,
             "id_building_component": rkey.id_building_component,
             "year": rkey.year,
             "id_building_component_option_before": before_renovation_status["id_building_component_option_before"],
