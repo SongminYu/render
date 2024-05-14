@@ -51,11 +51,17 @@ This document contains the development plan of the `RenderDash` tool.
 
 ## May 3rd, 2024
 - [x] NUTS1 and NUTS2 weather data download
-  - [ ] check why data is missing & complete (radiation, temperature, PV generation)
   - [x] download and process other years: start from 2010
   - file size ~19 MB for temp and PV gen, but ~70 MB for radiation for 1 year. if more years added, will be bigger. (~linear) do we use separate files for different years
 - [x] adjust color coding scale to be within 'end-use' columns (also within total)
-- [ ] ask Hannah if the dashboard works without the combination of EC and end-use (for regional use. also ask for 3 drop-down tabs: NUTS 1,2,3)
+
+## May 14th, 2024
+- [x] ask Hannah if the dashboard works without the combination of EC and end-use (for regional use. also ask for 3 drop-down tabs: NUTS 1,2,3)
+  - [ ] Hannah develops new/updated dashboard for regional (NUTS1-level) comparison. 
+    - There won't be end-use break-down, but total of energy carriers. 
+    - The graph can have regions on the x-axis, demand (TWh) on the y-axis. Legend is still energy carriers
+    - The model result and reference tables are dynamic according to region selection
+  - [x] Sirin provides regional "calibration target" file as example: RenderNew\dashboards\data\Energiebilanzen_Regional_Example.xlsx
 
 ### Later stage
 - beautify dashboards
