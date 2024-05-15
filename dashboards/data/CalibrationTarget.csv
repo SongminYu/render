@@ -1,4 +1,4 @@
-﻿id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_use,end_use,id_end_use_level2,end_use_level2,year,unit,value
+id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_use,end_use,id_end_use_level2,end_use_level2,year,unit,value
 3,GHD & Industry,31,agriculture,1,Electricity,1,appliance,1,lighting,2019,kWh,2132031521
 3,GHD & Industry,31,agriculture,1,Electricity,1,appliance,2,ICT,2019,kWh,421202295.1
 3,GHD & Industry,31,agriculture,1,Electricity,1,appliance,3,mechanical_energy,2019,kWh,2260751359
@@ -12,7 +12,7 @@
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,26623317604
 3,GHD & Industry,31,agriculture,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,18250076.35
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,94329292.74
-3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,3760531138
+3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,3804392507
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,31,agriculture,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,31,agriculture,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -28,7 +28,7 @@
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,234008490.5
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,351833208.2
-3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,6721850308
+3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,6677988938
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,31,agriculture,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -68,7 +68,7 @@
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,28086614711
 3,GHD & Industry,31,agriculture,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,26776528.84
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,139832711.9
-3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,5560824857
+3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,5594403177
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,31,agriculture,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,31,agriculture,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -84,7 +84,7 @@
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,237125927.2
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,356579393.1
-3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,6782885194
+3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,6749306873
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,31,agriculture,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -124,7 +124,7 @@
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,28282240366
 3,GHD & Industry,31,agriculture,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,22569305.94
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,117600113.6
-3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,4678842778
+3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,4712340277
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,31,agriculture,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,31,agriculture,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -140,7 +140,7 @@
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,242877078.9
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,365213895.7
-3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,6952797731
+3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,6919300232
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,31,agriculture,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -180,7 +180,7 @@
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,27811289720
 3,GHD & Industry,31,agriculture,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,10146931.42
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,52871820.27
-3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,2103560336
+3,GHD & Industry,31,agriculture,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,2131536026
 3,GHD & Industry,31,agriculture,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,31,agriculture,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,31,agriculture,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -196,7 +196,7 @@
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,243415483.7
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,366023494.2
-3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,6962614481
+3,GHD & Industry,31,agriculture,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,6934638792
 3,GHD & Industry,31,agriculture,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,31,agriculture,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,31,agriculture,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -235,8 +235,8 @@
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,222222222.2
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,195460233
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,11166666667
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,4405281287
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,48888888889
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,4412283035
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -251,8 +251,8 @@
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,6750920768
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,2821157689
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,2.19331E+11
-3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,27462919767
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,1.81609E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,27455918019
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -291,8 +291,8 @@
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,222222222.2
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,195856878.8
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,13833333333
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,5091713426
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,51777777778
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,5096790577
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -307,8 +307,8 @@
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,6500912058
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,2728542959
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,2.26752E+11
-3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,26021650012
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,1.88807E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,26016572861
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,32,manufacturing,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -347,8 +347,8 @@
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,222222222.2
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,167780702.9
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,11138888889
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,4566996408
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,50222222222
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,4572143235
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -363,8 +363,8 @@
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,7195394629
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,2757122621
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,2.35824E+11
-3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,27779864202
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,1.96741E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,27774717375
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -403,8 +403,8 @@
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,222222222.2
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,222671096.4
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,13472222222
-3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,3132618019
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,45944444444
+3,GHD & Industry,32,manufacturing,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,3136365370
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,32,manufacturing,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -419,8 +419,8 @@
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,6473076441
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,2514296873
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,2.03747E+11
-3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,23974022806
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,1.71275E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,23970275455
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,32,manufacturing,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -460,7 +460,7 @@
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,2655602225
 3,GHD & Industry,33,construction,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,5107898.218
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,0
-3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,1259268152
+3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,2920681524
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,33,construction,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,33,construction,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -476,7 +476,7 @@
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,280360704.5
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,4404307.308
-3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,4441584428
+3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,2780171056
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,33,construction,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -516,7 +516,7 @@
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,2794202862
 3,GHD & Industry,33,construction,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,7652082.727
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,0
-3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,1886494927
+3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,3184981369
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,33,construction,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,33,construction,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -532,7 +532,7 @@
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,289248300.7
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,4543926.392
-3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,4166790526
+3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,2868304084
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,33,construction,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -572,7 +572,7 @@
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,2816204507
 3,GHD & Industry,33,construction,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,6726726.803
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,0
-3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,1658363669
+3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,3007661365
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,33,construction,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,33,construction,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -588,7 +588,7 @@
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,308892314.6
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,4852522.686
-3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,4412399832
+3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,3063102136
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,33,construction,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -628,7 +628,7 @@
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,2769309590
 3,GHD & Industry,33,construction,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,2745058.139
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,0
-3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,676748858.9
+3,GHD & Industry,33,construction,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,1699588199
 3,GHD & Industry,33,construction,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,33,construction,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,33,construction,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -644,7 +644,7 @@
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,280995916.3
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,4414286.124
-3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,3809309415
+3,GHD & Industry,33,construction,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,2786470075
 3,GHD & Industry,33,construction,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,33,construction,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,33,construction,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -684,7 +684,7 @@
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,22492299.92
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,0
-3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,5200481676
+3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,9341058637
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,34,retail_wholesale,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -700,7 +700,7 @@
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,646896574.6
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,14828456.27
-3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,19522372668
+3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,15381795706
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,34,retail_wholesale,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -740,7 +740,7 @@
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,32812788.8
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,0
-3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,7593956467
+3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,10763117647
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,34,retail_wholesale,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -756,7 +756,7 @@
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,650638068.9
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,14945881.04
-3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,18635253171
+3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,15466091991
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,34,retail_wholesale,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -796,7 +796,7 @@
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,28272389.13
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,0
-3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,6543158935
+3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,9770983484
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,34,retail_wholesale,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -812,7 +812,7 @@
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,681037443.9
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,15644188.53
-3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,19416529545
+3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,16188704996
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,34,retail_wholesale,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -852,7 +852,7 @@
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,11702798.69
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,0
-3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,2699713620
+3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,5197072822
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,34,retail_wholesale,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,34,retail_wholesale,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -868,7 +868,7 @@
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,626696796.6
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,14422573.85
-3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,17354735153
+3,GHD & Industry,34,retail_wholesale,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,14857375952
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,34,retail_wholesale,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,34,retail_wholesale,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -906,9 +906,9 @@
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,1667207195
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,1684596.043
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,1687039.512
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,0
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,805259056.7
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,805426496.8
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -922,9 +922,9 @@
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,318902408.6
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,318899965.2
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,8558289.275
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,1966974702
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,1966807262
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,35,transporting_storage,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -962,9 +962,9 @@
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,974113261.7
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,627619.8848
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,628094.8155
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,0
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,1061695767
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,1061728312
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -978,9 +978,9 @@
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,265308845.7
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,265308370.8
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,5737658.338
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,1203706799
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,1203674254
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,35,transporting_storage,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -1018,9 +1018,9 @@
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,1553759192
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,683115.3453
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,683726.391
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,0
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,932483718.7
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,932525590.9
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -1034,9 +1034,9 @@
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,286538316.5
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,286537705.5
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,6277094.168
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,1370832964
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,1370791091
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,35,transporting_storage,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -1074,9 +1074,9 @@
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,1385560386
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,573016.5042
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,573968.6396
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,0
-3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,352936763.6
+3,GHD & Industry,35,transporting_storage,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,353002009.2
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -1090,9 +1090,9 @@
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,289896782.2
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,289895830.1
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,7075250.981
-3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,1597070205
+3,GHD & Industry,35,transporting_storage,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,1597004960
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,35,transporting_storage,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -1802,9 +1802,9 @@
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,5555037.501
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,6844729.694
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,318239965.8
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,327221915.7
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -1818,9 +1818,9 @@
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,52634940.75
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,51345248.56
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,976130.3092
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,1021668042
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,1012686092
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,39,Real estate and housing,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -1858,9 +1858,9 @@
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,8659288.254
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,9685555.558
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,499124080.5
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,506271430.5
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -1874,9 +1874,9 @@
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,56521691.6
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,55495424.29
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,1061356.8
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,1111849145
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,1104701795
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,39,Real estate and housing,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -1914,9 +1914,9 @@
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,7603849.181
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,8669115.06
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,438288242.5
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,445707194.8
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -1930,9 +1930,9 @@
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,60265118.72
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,59199852.85
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,1132204.45
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,1185861762
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,1178442810
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,39,Real estate and housing,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -1970,9 +1970,9 @@
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,3085923.928
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,3909708.838
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,0
-3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,178529599.7
+3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,184266778.6
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -1986,9 +1986,9 @@
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,54622921.33
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,53799136.42
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,1033219.325
-3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,1083131411
+3,GHD & Industry,39,Real estate and housing,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,1077394232
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,39,Real estate and housing,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -2026,9 +2026,9 @@
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,35671007.17
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,53549658.35
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,2001708746
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,2126223069
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -2042,9 +2042,9 @@
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,344201674.8
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,326323023.6
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,6190800.039
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,6459787830
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,6335273507
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,310,professional_tech_science,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -2082,9 +2082,9 @@
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,53417241.43
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,67046692.68
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,3017187963
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,3112109099
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -2098,9 +2098,9 @@
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,352466343.9
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,338836892.7
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,6465878.942
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,6736471186
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,6641550050
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,310,professional_tech_science,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -2138,9 +2138,9 @@
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,46906470.32
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,61053846.27
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,2649437407
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,2747965585
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -2154,9 +2154,9 @@
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,375602296.6
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,361454920.7
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,6897489.059
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,7183414737
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,7084886559
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,310,professional_tech_science,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -2194,9 +2194,9 @@
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,19059195.73
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,29999558.19
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,0
-3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,1079845581
+3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,1156038791
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -2210,9 +2210,9 @@
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,339674925.2
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,328734562.8
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,6298133.083
-3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,6555675873
+3,GHD & Industry,310,professional_tech_science,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,6479482663
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,310,professional_tech_science,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -2250,9 +2250,9 @@
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,580261865.6
-3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,46607197.15
+3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,56441548.2
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,0
-3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,2803160683
+3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,2871651171
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,311,administrative,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -2266,9 +2266,9 @@
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,448753680.7
+3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,438919329.7
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,7443332.745
-3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,7933985758
+3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,7865495269
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,311,administrative,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -2306,9 +2306,9 @@
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,630625832.6
-3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,66472445.4
+3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,73587418.36
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,0
-3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,4030968352
+3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,4080519967
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,311,administrative,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -2322,9 +2322,9 @@
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,441327813.7
+3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,434212840.7
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,7358243.71
-3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,7857995928
+3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,7808444314
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,311,administrative,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -2362,9 +2362,9 @@
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,654945656.8
-3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,58315805.61
+3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,65701150.44
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,0
-3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,3534811394
+3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,3586245991
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,311,administrative,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -2378,9 +2378,9 @@
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,470072818.9
+3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,462687474.1
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,7849420.928
-3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,8379564888
+3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,8328130292
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,311,administrative,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -2418,9 +2418,9 @@
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,573453360.2
-3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,23635796.99
+3,GHD & Industry,311,administrative,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,29346986.8
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,0
-3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,1436365273
+3,GHD & Industry,311,administrative,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,1476140361
 3,GHD & Industry,311,administrative,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,311,administrative,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,311,administrative,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -2434,9 +2434,9 @@
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,425331410.5
+3,GHD & Industry,311,administrative,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,419620220.7
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,7163170.385
-3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,7650328772
+3,GHD & Industry,311,administrative,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,7610553684
 3,GHD & Industry,311,administrative,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,311,administrative,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,311,administrative,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -3146,9 +3146,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,10478785.15
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,11880690.15
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,109376.9297
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,345929209
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,355692655.4
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -3162,9 +3162,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,81930145.87
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,80528240.87
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,5,process_heating,2019,kWh,222190060.2
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2019,kWh,1173908216
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2019,kWh,1164144770
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -3202,9 +3202,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,14696432.19
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,15719127.93
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,149449.9823
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,497387056.7
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,504509532.9
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -3218,9 +3218,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,79582169.93
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,78559474.19
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,5,process_heating,2020,kWh,209138503
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2020,kWh,1167589265
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2020,kWh,1160466788
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -3258,9 +3258,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,12905154.62
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,13966713.22
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,131234.2414
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,436762936.2
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,444156069.4
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -3274,9 +3274,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,84865031.97
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,83803473.37
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,5,process_heating,2021,kWh,223098908.8
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2021,kWh,1245323359
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2021,kWh,1237930225
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -3314,9 +3314,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,5031237.561
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,5852155.581
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,48181.74271
-3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,177908290.9
+3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,183625503.6
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -3330,9 +3330,9 @@
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,0
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,74737733.82
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,73916815.8
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,5,process_heating,2022,kWh,182696617.5
-3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2022,kWh,1131404621
+3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,3,space heating,6,space_heating,2022,kWh,1125687409
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,315,"art, entertainment and recreation",12,Biomass solid,1,appliance,1,lighting,2022,kWh,0
@@ -3370,9 +3370,9 @@
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,3,mechanical_energy,2019,kWh,108023058
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,16728951.71
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2019,kWh,20612849.6
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,5,process_heating,2019,kWh,89310762.04
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,1029309146
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2019,kWh,1056358218
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,3,Hard coal,1,appliance,1,lighting,2019,kWh,0
@@ -3386,9 +3386,9 @@
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,1,lighting,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,104778994.7
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,201215322.2
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,197331424.3
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,247423929.7
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,3255524654
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,3228475583
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,316,other tertiary sectors,12,Biomass solid,1,appliance,1,lighting,2019,kWh,0
@@ -3426,9 +3426,9 @@
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,3,mechanical_energy,2020,kWh,143986501.6
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,24541602.02
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2020,kWh,27450183.31
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,5,process_heating,2020,kWh,119044437.5
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,1509132549
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2020,kWh,1529389112
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,3,Hard coal,1,appliance,1,lighting,2020,kWh,0
@@ -3442,9 +3442,9 @@
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,1,lighting,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,96182440.26
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,199392016.4
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,196483435.1
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,227433723.6
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,3315243374
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,3294986810
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,316,other tertiary sectors,12,Biomass solid,1,appliance,1,lighting,2020,kWh,0
@@ -3482,9 +3482,9 @@
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,3,mechanical_energy,2021,kWh,126436678.2
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,21550343.97
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2021,kWh,24569452.53
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,5,process_heating,2021,kWh,104534682.6
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,1325191628
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2021,kWh,1346217949
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,3,Hard coal,1,appliance,1,lighting,2021,kWh,0
@@ -3498,9 +3498,9 @@
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,1,lighting,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,102602807
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,212618198.8
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,209599090.2
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,242615371.3
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,3535959972
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,3514933651
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,316,other tertiary sectors,12,Biomass solid,1,appliance,1,lighting,2021,kWh,0
@@ -3538,9 +3538,9 @@
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,3,mechanical_energy,2022,kWh,47697434.84
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,8745928.614
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,4,domestic hot water,4,hot_water,2022,kWh,11080647.22
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,5,process_heating,2022,kWh,39435045.93
-3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,537297121.2
+3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,3,space heating,6,space_heating,2022,kWh,553557067.4
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,2,Light fuel oil,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,3,Hard coal,1,appliance,1,lighting,2022,kWh,0
@@ -3554,9 +3554,9 @@
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,1,lighting,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,86283218.52
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,189975938
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,187641219.3
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,204255794.1
-3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,3216962834
+3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,3200702888
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,12,Biomass solid,1,appliance,1,lighting,2022,kWh,0

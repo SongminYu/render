@@ -28,12 +28,12 @@
 
 ### Sirin
 
-- [ ] meet Hannah
+- [x] meet Hannah
   - [x] download NUTS2 weather data
-  - [ ] discuss how to integrate NUTS1 calibration data (maybe we need dropdowns for 3 levels of id_region in the dashboard)
-  - [ ] there is the code mapping id_regions at different levels (line 62 in models/render/render_dict.py)
-  - [ ] then design the table format for Weijia
-- [ ] update calibration target table (fluss gas)
+  - [x] discuss how to integrate NUTS1 calibration data (maybe we need dropdowns for 3 levels of id_region in the dashboard)
+  - [x] there is the code mapping id_regions at different levels (line 62 in models/render/render_dict.py)
+  - [x] then design the table format for Weijia
+- [x] update calibration target table (fluss gas)
 - [ ] Verify results
   - [ ] building stock
     - [x] final energy demand
@@ -41,7 +41,8 @@
     - [ ] dwelling number
   - [ ] renovation actions, incl. renovation rate calculation
   - [ ] heating system actions, incl. heating system size
-
+- [ ] presentation of Reference scenario in the Modultreffen (18.06)? Also via the "scenario generator" (this means we give RWTH-IT the results.)
+- [ ] do we want to publish the slides of the workshop on the website?
 
 ## Done
 
