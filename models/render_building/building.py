@@ -10,7 +10,7 @@ from models.render_building.building_key import BuildingKey
 from models.render_building.building_r5c1 import R5C1, spec
 from models.render_building.building_unit import Unit
 from models.render_building.tech_cooling import CoolingSystem
-from models.render_building.tech_heating import HeatingSystem
+from models.render_building.tech_heating import HeatingSystem, HeatingTechnology
 from models.render_building.tech_radiator import Radiator
 from models.render_building.tech_ventilation import VentilationSystem
 from utils.funcs import dict_sample, dict_normalize, dict_utility_sample
@@ -238,6 +238,7 @@ class Building(Agent):
         ]
         self.init_final_energy_demand()
         self.update_total_energy_cost()
+        self.update_heating_system_renewable_percentage()
         action_info["total_heating_demand_peak"] = self.total_heating_demand_peak
         action_info["id_heating_technology_after"] = self.heating_system.heating_technology_main.rkey.id_heating_technology
         action_info["total_energy_cost_after"] = self.total_energy_cost
@@ -591,6 +592,17 @@ class Building(Agent):
                 rkey = self.rkey.make_copy().set_id({"id_energy_carrier": id_energy_carrier})
                 self.total_energy_cost += final_energy_demand * self.scenario.s_final_energy_carrier_price.get_item(rkey)
 
+    def update_heating_system_renewable_percentage(self):
+        self.heating_system_renewable_percentage = 0
+        renewable_demand = 0
+        non_renewable_demand = 0
+        for id_energy_carrier, energy_demand in self.final_energy_demand[cons.ID_END_USE_HOT_WATER]:
+            if id_energy_carrier in cons.ID_ENERGY_CARRIER_RENEWABLES:
+                renewable_demand += energy_demand
+            else:
+                non_renewable_demand += energy_demand
+        self.heating_system_renewable_percentage = renewable_demand / (renewable_demand + non_renewable_demand)
+
     def update_final_energy_demand_and_cost(self):
         self.calc_building_heating_cooling_demand()
         self.update_appliance_electricity_final_energy_demand()
@@ -599,6 +611,7 @@ class Building(Agent):
         self.update_hot_water_final_energy_demand()
         self.update_ventilation_final_energy_demand()
         self.update_total_energy_cost()
+        self.update_heating_system_renewable_percentage()
 
     """
     Future projection functions
@@ -643,9 +656,39 @@ class Building(Agent):
         self.update_space_cooling_final_energy_demand()
         self.update_space_heating_final_energy_demand()
         self.update_total_energy_cost()
+        self.update_heating_system_renewable_percentage()
 
-
-
+    def update_heating_technology(
+            self,
+            heating_technology: "HeatingTechnology",
+            reason: str,
+            limit_to: Optional[List[str]] = None
+    ):
+        self.update_final_energy_demand_and_cost()
+        total_energy_cost_before = self.total_energy_cost
+        heating_system_renewable_percentage_before = self.heating_system_renewable_percentage
+        heating_technology.update_optional_heating_technologies(
+            district_heating_available=self.heating_system.district_heating_available,
+            gas_available=self.heating_system.gas_available,
+            limit_to=limit_to
+        )
+        option_action_info = heating_technology.select(
+            heating_demand_profile=self.heating_demand_profile,
+            hot_water_profile=self.hot_water_profile,
+            reason=reason
+        )
+        heating_technology.install()
+        self.update_space_heating_final_energy_demand()
+        self.update_hot_water_final_energy_demand()
+        self.update_total_energy_cost()
+        self.update_heating_system_renewable_percentage()
+        option_action_info["total_heating_demand_peak"] = self.total_heating_demand_peak
+        option_action_info["id_heating_technology_after"] = heating_technology.rkey.id_heating_technology
+        option_action_info["heating_system_renewable_percentage_before"] = heating_system_renewable_percentage_before
+        option_action_info["heating_system_renewable_percentage_after"] = self.heating_system_renewable_percentage
+        option_action_info["total_energy_cost_before"] = total_energy_cost_before
+        option_action_info["total_energy_cost_after"] = self.total_energy_cost
+        self.scenario.heating_system_action_info.append(option_action_info)
 
 
 

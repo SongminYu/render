@@ -1,5 +1,5 @@
 import random
-from typing import Optional
+from typing import Optional, List
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -69,7 +69,8 @@ class HeatingSystem:
         action_info = self.heating_technology_main.select(
             heating_demand_profile=heating_demand_profile,
             hot_water_profile=hot_water_profile,
-            new_construction=True
+            new_construction=True,
+            reason="new_construction"
         )
         self.heating_technology_main.install()
         self.rkey.id_heating_system = int(list(str(self.heating_technology_main.rkey.id_heating_technology))[0])
@@ -95,8 +96,8 @@ class HeatingSystem:
                 priority="second"
             )
             self.heating_technology_second.init_installation_year()
-            self.heating_technology_main.update_supply_temperature_space_heating()
-            self.heating_technology_main.update_supply_temperature_hot_water()
+            self.heating_technology_second.update_supply_temperature_space_heating()
+            self.heating_technology_second.update_supply_temperature_hot_water()
             self.heating_technology_second.space_heating_contribution = self.scenario.p_heating_technology_second_contribution_space_heating.get_item(rkey)
             self.heating_technology_second.hot_water_contribution = self.scenario.p_heating_technology_second_contribution_hot_water.get_item(rkey)
             self.heating_technology_second.update_energy_intensity_space_heating()
@@ -191,21 +192,27 @@ class HeatingTechnology:
         self.update_supply_temperature_space_heating()
         self.update_energy_intensity_space_heating()
 
-    def update_optional_heating_technologies(self, district_heating_available: bool, gas_available: bool):
-        if self.priority == "main":
-            l = list(set(self.scenario.heating_technologies.keys()) - set(cons.SECOND_HEATING_TECHNOLOGIES))
-            if not district_heating_available:
-                l = list(set(l) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
-            if not gas_available:
-                l = list(set(l) - set(cons.GAS_HEATING_TECHNOLOGIES))
-            self.optional_heating_technologies = l
+    def update_optional_heating_technologies(self, district_heating_available: bool, gas_available: bool, limit_to: Optional[List[int]] = None):
+        if limit_to is None:
+            if self.priority == "main":
+                l = list(set(self.scenario.heating_technologies.keys()) - set(cons.SECOND_HEATING_TECHNOLOGIES))
+                if not district_heating_available:
+                    l = list(set(l) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
+                if not gas_available:
+                    l = list(set(l) - set(cons.GAS_HEATING_TECHNOLOGIES))
+                self.optional_heating_technologies = l
+            else:
+                self.optional_heating_technologies = cons.SECOND_HEATING_TECHNOLOGIES
         else:
-            self.optional_heating_technologies = cons.SECOND_HEATING_TECHNOLOGIES
+            if not district_heating_available:
+                limit_to = list(set(limit_to) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
+            self.optional_heating_technologies = limit_to
 
     def select(
             self,
             heating_demand_profile: np.array,
             hot_water_profile: np.array,
+            reason: str,
             new_construction: bool = False
     ):
 
@@ -269,6 +276,8 @@ class HeatingTechnology:
                     "id_building_construction_period": rkey.id_building_construction_period,
                     "id_building_ownership": rkey.id_building_ownership,
                     "year": rkey.year,
+                    "heating_technology": self.priority,
+                    "reason": reason,
                     "total_heating_demand_peak": 0,
                     "space_heating_contribution": self.space_heating_contribution,
                     "hot_water_contribution": self.hot_water_contribution,
@@ -278,6 +287,8 @@ class HeatingTechnology:
                     "scale": scale,
                     "id_heating_technology_before": self.rkey.id_heating_technology,
                     "id_heating_technology_after": 0,
+                    "heating_system_renewable_percentage_before": 0,
+                    "heating_system_renewable_percentage_after": 0,
                     "total_energy_cost_before": 0,
                     "total_energy_cost_after": 0,
                     "id_heating_system_action": rkey.id_heating_system_action,

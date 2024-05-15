@@ -159,6 +159,7 @@ class BuildingScenario(RenderScenario):
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=2, all_years=True)
         self.s_unit_user_dwelling_ownership = self.load_scenario("Scenario_UnitUser_DwellingOwnership.xlsx", region_level=2)
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
+        self.s_heating_system_minimum_renewable_percentage = self.load_scenario("Scenario_HeatingSystem_MinimumRenewablePercentage.xlsx", region_level=0)
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
         self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
         self.s_heating_technology_availability = self.load_scenario("Scenario_HeatingTechnology_Availability.xlsx", region_level=0)

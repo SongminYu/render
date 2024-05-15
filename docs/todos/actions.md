@@ -4,6 +4,11 @@
 
 ### Meeting
 
+- arrange a meeting to record detailed code walk-through
+- Open questions:
+  - renovation rate validation: always run from 2010, so we don't save "historical renovation actions" (code to be removed)
+  - when "mandatory" --> peak number of actions in the first year
+
 ### Songmin
 
 - [x] solve the size problem of weather input
@@ -12,14 +17,14 @@
 - [x] link renovation action to ownership
   - [x] currently `id_ownership` is initialized only for unit-users. Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
   - [x] `Parameter_Building_ActionProbability` added?
-- [ ] mandatory renovation and heating system
-- [ ] modeling of PV and battery.
+- [x] mandatory renovation
+- [x] mandatory heating system modernization
+- [ ] modeling of PV and battery
 - [ ] during calibration, behavior profiles need to be updated
-  - [ ] for households, 
+  - [ ] for households,
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
-- [ ] meeting to record code walk-through
 
 ### Sirin
 

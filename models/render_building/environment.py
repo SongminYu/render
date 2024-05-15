@@ -38,6 +38,7 @@ class BuildingEnvironment(Environment):
             building.init_building_ventilation_system()
             building.init_final_energy_demand()
             building.update_total_energy_cost()
+            building.update_heating_system_renewable_percentage()
 
         for building in tqdm(buildings, desc="Setting up infrastructure availability --> "):
             building.init_building_district_heating_availability()
@@ -85,7 +86,7 @@ class BuildingEnvironment(Environment):
         for building in buildings:
             building.update_final_energy_demand_and_cost()
 
-    def update_buildings_district_heating_availability(self, buildings: "AgentList[Building]"):
+    def update_buildings_infrastructure_district_heating(self, buildings: "AgentList[Building]"):
 
         def get_district_heating_connection_prob(rkey: "BuildingKey"):
             connection_rate_1 = self.scenario.s_infrastructure_availability_district_heating.get_item(rkey)
@@ -98,7 +99,7 @@ class BuildingEnvironment(Environment):
                 if random.uniform(0, 1) <= get_district_heating_connection_prob(building.rkey.make_copy()):
                     building.heating_system.district_heating_available = True
 
-    def update_buildings_gas_availability(self, buildings: "AgentList[Building]"):
+    def update_buildings_infrastructure_gas_grid(self, buildings: "AgentList[Building]"):
 
         def get_gas_connection_prob(rkey: "BuildingKey"):
             connection_rate_1 = self.scenario.s_infrastructure_availability_gas.get_item(rkey)
@@ -166,7 +167,7 @@ class BuildingEnvironment(Environment):
                 building.ventilation_system.install()
 
     @staticmethod
-    def update_buildings_radiator_lifecycle(buildings: "AgentList[Building]"):
+    def update_buildings_radiator(buildings: "AgentList[Building]"):
         for building in buildings:
             if building.exists and building.radiator.rkey.year >= building.radiator.next_replace_year:
                 building.radiator.select(id_building_action=2)
@@ -178,41 +179,36 @@ class BuildingEnvironment(Environment):
                     if heating_technology is not None:
                         heating_technology.update_due_to_radiator_change(id_radiator=building.radiator.rkey.id_radiator)
 
-    def update_buildings_technology_heating_lifecycle(self, buildings: "AgentList[Building]"):
-        for building in buildings:
-            collective_agreement = random.uniform(0, 1) <= self.scenario.p_building_action_probability.get_item(building.rkey)
-            if building.exists and collective_agreement:
-                building.update_final_energy_demand_and_cost()
-                for heating_technology in [
-                    building.heating_system.heating_technology_main,
-                    building.heating_system.heating_technology_second
-                ]:
-                    if heating_technology is not None:
-                        if heating_technology.rkey.year >= heating_technology.next_replace_year:
-                            total_energy_cost_before = building.total_energy_cost
-                            heating_technology.update_optional_heating_technologies(
-                                district_heating_available=building.heating_system.district_heating_available,
-                                gas_available=building.heating_system.gas_available
-                            )
-                            option_action_info = heating_technology.select(
-                                heating_demand_profile=building.heating_demand_profile,
-                                hot_water_profile=building.hot_water_profile,
-                            )
-                            heating_technology.install()
-                            building.update_space_heating_final_energy_demand()
-                            building.update_hot_water_final_energy_demand()
-                            building.update_total_energy_cost()
-                            option_action_info["total_heating_demand_peak"] = building.total_heating_demand_peak
-                            option_action_info["id_heating_technology_after"] = heating_technology.rkey.id_heating_technology
-                            option_action_info["total_energy_cost_before"] = total_energy_cost_before
-                            option_action_info["total_energy_cost_after"] = building.total_energy_cost
-                            self.scenario.heating_system_action_info.append(option_action_info)
+    def update_buildings_technology_heating(self, buildings: "AgentList[Building]"):
 
-    def update_buildings_technology_heating_mandatory(self, buildings: "AgentList[Building]"):
+        # mandatory modernization of the main heating technology due to requirement of renewable percentage
         if self.scenario.heating_technology_mandatory:
             for building in buildings:
-                if building.exists:
-                    ...
+                triggered_by_renewable_percentage_requirement = (
+                        building.heating_system_renewable_percentage <
+                        self.scenario.s_heating_system_minimum_renewable_percentage.get_item(building.rkey)
+                )
+                if building.exists and triggered_by_renewable_percentage_requirement:
+                    building.update_heating_technology(
+                        heating_technology=building.heating_system.heating_technology_main,
+                        reason="renewable_percentage_requirement",
+                        limit_to=cons.RENEWABLE_MAIN_HEATING_TECHNOLOGIES
+                    )
+
+        # lifecycle-triggered modernization
+        for building in buildings:
+            collective_agreement = (random.uniform(0, 1) <=
+                                    self.scenario.p_building_action_probability.get_item(building.rkey))
+            if building.exists and collective_agreement:
+                for heating_technology in building.heating_system.heating_technologies:
+                    if heating_technology is not None:
+                        if heating_technology.rkey.year >= heating_technology.next_replace_year:
+                            building.update_heating_technology(
+                                heating_technology=heating_technology,
+                                reason="lifecycle"
+                            )
+
+
 
     def update_buildings_renovation(self, buildings: "AgentList[Building]"):
         for building in buildings:
