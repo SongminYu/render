@@ -143,6 +143,7 @@ class BuildingScenario(RenderScenario):
         # RenderDict
         self.s_building = self.load_scenario("Scenario_Building.xlsx")
         self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
+        self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0)
         self.s_building_construction_period = self.load_scenario("Scenario_Building_ConstructionPeriod.xlsx")
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")

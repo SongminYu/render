@@ -13,7 +13,7 @@ from models.render_building.tech_cooling import CoolingSystem
 from models.render_building.tech_heating import HeatingSystem
 from models.render_building.tech_radiator import Radiator
 from models.render_building.tech_ventilation import VentilationSystem
-from utils.funcs import dict_sample
+from utils.funcs import dict_sample, dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
     from models.render_building.scenario import BuildingScenario
@@ -310,9 +310,11 @@ class Building(Agent):
         self.update_r5c1_params()
         self.update_r5c1_temperature(norm=True)
         self.conduct_r5c1_calculation()
-        self.heating_demand_norm = self.heating_demand_profile.sum()
+        self.heating_demand_norm = self.heating_demand
         self.heating_demand_per_m2_norm = self.heating_demand_norm / self.total_living_area
         self.total_heating_per_m2_norm = self.heating_demand_per_m2_norm + self.hot_water_demand_per_m2
+        self.cooling_demand_norm = self.cooling_demand
+        self.cooling_demand_per_m2_norm = self.cooling_demand_per_m2
         self.assign_building_efficiency_class()
 
     def assign_building_efficiency_class(self):
@@ -520,7 +522,6 @@ class Building(Agent):
     """
 
     def init_final_energy_demand(self):
-
         self.final_energy_demand: dict = {}  # {key: id_end_use, value: [(id_energy_carrier, final_energy_demand)]}
         self.update_appliance_electricity_final_energy_demand()
         self.update_space_cooling_final_energy_demand()
@@ -530,7 +531,7 @@ class Building(Agent):
 
     def update_appliance_electricity_final_energy_demand(self):
         self.final_energy_demand[cons.ID_END_USE_APPLIANCE] = [
-            (cons.ID_ENERGY_CARRIER_ELECTRICITY, self.appliance_electricity_profile.sum())
+            (cons.ID_ENERGY_CARRIER_ELECTRICITY, self.appliance_electricity_demand)
         ]
 
     def update_space_cooling_final_energy_demand(self):
@@ -538,7 +539,7 @@ class Building(Agent):
             self.final_energy_demand[cons.ID_END_USE_SPACE_COOLING] = [
                 (
                     self.cooling_system.energy_intensity.id_energy_carrier,
-                    self.cooling_system.energy_intensity.value * abs(self.cooling_demand_profile.sum())
+                    self.cooling_system.energy_intensity.value * abs(self.cooling_demand)
                 )
             ]
         else:
@@ -552,7 +553,7 @@ class Building(Agent):
                     self.final_energy_demand[energy_intensity.id_end_use].append(
                         (
                             energy_intensity.id_energy_carrier,
-                            energy_intensity.value * self.heating_demand_profile.sum()
+                            energy_intensity.value * self.heating_demand
                         )
                     )
 
@@ -564,7 +565,7 @@ class Building(Agent):
                     self.final_energy_demand[energy_intensity.id_end_use].append(
                         (
                             energy_intensity.id_energy_carrier,
-                            energy_intensity.value * self.hot_water_profile.sum()
+                            energy_intensity.value * self.hot_water_demand
                         )
                     )
 
@@ -590,9 +591,47 @@ class Building(Agent):
                 rkey = self.rkey.make_copy().set_id({"id_energy_carrier": id_energy_carrier})
                 self.total_energy_cost += final_energy_demand * self.scenario.s_final_energy_carrier_price.get_item(rkey)
 
+    def update_final_energy_demand_and_cost(self):
+        self.calc_building_heating_cooling_demand()
+        self.update_appliance_electricity_final_energy_demand()
+        self.update_space_cooling_final_energy_demand()
+        self.update_space_heating_final_energy_demand()
+        self.update_hot_water_final_energy_demand()
+        self.update_ventilation_final_energy_demand()
+        self.update_total_energy_cost()
+
     """
     Future projection functions
     """
+
+    def select_component(self, component_name: str):
+        building_component = self.building_components[component_name]
+        before_renovation_status = {
+            "id_building_component_option_before": building_component.rkey.id_building_component_option,
+            "id_building_component_option_efficiency_class_before": building_component.rkey.id_building_component_option_efficiency_class,
+            "heating_demand_before": self.heating_demand,
+            "heating_demand_per_m2_before": self.heating_demand_per_m2,
+            "cooling_demand_before": self.cooling_demand,
+            "cooling_demand_per_m2_before": self.cooling_demand_per_m2,
+            "total_energy_cost_before": self.total_energy_cost,
+        }
+        d_option_cost = {}
+        rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
+        for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
+            rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
+            if self.scenario.s_building_component_availability.get_item(rkey):
+                capex = self.scenario.building_component_capex.get_item(rkey) * building_component.area
+                self.renovate_component(
+                    component_name=component_name,
+                    id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
+                )
+                energy_cost_saving = (before_renovation_status["total_energy_cost_before"] - self.total_energy_cost)
+                d_option_cost[id_building_component_option_efficiency_class] = capex - energy_cost_saving
+        id_building_component_option_efficiency_class = dict_utility_sample(
+            options=dict_normalize(d_option_cost),
+            utility_power=self.scenario.s_building_component_utility_power.get_item(rkey)
+        )
+        return before_renovation_status, id_building_component_option_efficiency_class
 
     def renovate_component(
             self,

@@ -106,11 +106,11 @@ class RenderScenario(Scenario):
         self.subsectors = self.load_id("ID_SubSector.xlsx")
         self.energy_carriers = self.load_id("ID_EnergyCarrier.xlsx")
         self.r_sector_subsector = self.load_relation("Relation_Sector_SubSector.xlsx")
-        self.s_emission_factor = self.load_scenario("Scenario_EnergyCarrier_EmissionFactor.xlsx", scenario_filter="id_scenario_energy_emission_factor")
-        self.s_energy_carrier_price_wholesale = self.load_scenario("Scenario_EnergyCarrier_Price_Wholesale.xlsx", scenario_filter="id_scenario_energy_price_wholesale")
-        self.s_energy_carrier_price_tax_rate = self.load_scenario("Scenario_EnergyCarrier_Price_TaxRate.xlsx", scenario_filter="id_scenario_energy_price_tax_rate")
-        self.s_energy_carrier_price_markup = self.load_scenario("Scenario_EnergyCarrier_Price_MarkUp.xlsx", scenario_filter="id_scenario_energy_price_mark_up")
-        self.s_energy_carrier_price_co2_emission = self.load_scenario("Scenario_EnergyCarrier_Price_CO2Emission.xlsx", scenario_filter="id_scenario_energy_price_co2_emission")
+        self.s_emission_factor = self.load_scenario("Scenario_EnergyCarrier_EmissionFactor.xlsx", scenario_filter="id_scenario_energy_emission_factor", all_years=True)
+        self.s_energy_carrier_price_wholesale = self.load_scenario("Scenario_EnergyCarrier_Price_Wholesale.xlsx", scenario_filter="id_scenario_energy_price_wholesale", all_years=True)
+        self.s_energy_carrier_price_tax_rate = self.load_scenario("Scenario_EnergyCarrier_Price_TaxRate.xlsx", scenario_filter="id_scenario_energy_price_tax_rate", all_years=True)
+        self.s_energy_carrier_price_markup = self.load_scenario("Scenario_EnergyCarrier_Price_MarkUp.xlsx", scenario_filter="id_scenario_energy_price_mark_up", all_years=True)
+        self.s_energy_carrier_price_co2_emission = self.load_scenario("Scenario_EnergyCarrier_Price_CO2Emission.xlsx", scenario_filter="id_scenario_energy_price_co2_emission", all_years=True)
         self.setup_final_energy_carrier_price()
 
     def setup_final_energy_carrier_price(self):
@@ -126,7 +126,8 @@ class RenderScenario(Scenario):
         # markup table has the most detailed index columns and can cover the possible rkeys in other tables:
         # wholesale, tax_rate, and co2_emission
         for index, row in markup.iterrows():
-            for year in range(self.start_year, self.end_year + 1):
+            for year in range(self.start_year, self.end_year + 2):
+                # self.end_year + 2 --> until 2051, for the updating total energy cost in the last year
                 rkey = RenderKey(id_scenario=self.id).from_dict({
                     "id_region": row["id_region"],
                     "id_sector": row["id_sector"],
