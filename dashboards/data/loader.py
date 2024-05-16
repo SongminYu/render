@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 
 
 class DataSchema_Floor_Area:
@@ -48,6 +49,22 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     df = change_ventilation_to_appliances(df)
     df = change_ec_to_renewables(df)
     df['value_in_TWh'] = df['value'] / 1000000000
+    return df
+
+
+def convert_TJ_to_TWh(df: pd.DataFrame) -> pd.DataFrame:
+    df['value_in_TWh'] = df['value'] / 3600
+    return df
+
+
+def convert_id_region(rkey_id_region: int):
+    rkey_id_region_list = list(str(rkey_id_region))
+    rkey_region_level = math.ceil(len(rkey_id_region_list) / 2) - 1
+    return int("".join(rkey_id_region_list[:- 2 * (rkey_region_level - 1)]))
+
+
+def aggregate_to_nuts1(df: pd.DataFrame) -> pd.DataFrame:
+    df['id_region'] = df['id_region'].apply(convert_id_region)
     return df
 
 
