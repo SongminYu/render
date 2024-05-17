@@ -57,17 +57,23 @@ This document contains the development plan of the `RenderDash` tool.
 
 ## May 14th, 2024
 - [x] ask Hannah if the dashboard works without the combination of EC and end-use (for regional use. also ask for 3 drop-down tabs: NUTS 1,2,3)
-  - [ ] Hannah develops new/updated dashboard for regional (NUTS1-level) comparison. 
+  - [x] Hannah develops new dashboard for regional (NUTS1-level) comparison. 
     - There won't be end-use break-down, but total of energy carriers. 
     - The graph can have regions on the x-axis, demand (TWh) on the y-axis. Legend is still energy carriers
     - The model result and reference tables are dynamic according to region selection
   - [x] Sirin provides regional "calibration target" file as example: RenderNew\dashboards\data\Energiebilanzen_Regional_Example.xlsx
+
+## May 17th, 2024
+- [ ] Hannah adds data tables to the region analysis dashboard
+- [ ] Sirin checks DWD for future year weather profile.
+- (new dashboard) plotting timeseries for historic comparison. it's a "mixed-plot" where model results are bars, reference is line
+
 
 ### Later stage
 - beautify dashboards
 - geo-visualization (new dashboard)
 - enhance Floor Area dashboard
 - new dashboard for building_efficiency_class
-- timeseries plotting for calibration (new dashboard)
+
 - GHSL data processing to distribute NUTS3 and location results to 100m x 100m grid cell (hectare) level.
 
