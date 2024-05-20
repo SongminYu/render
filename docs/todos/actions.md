@@ -4,10 +4,15 @@
 
 ### Meeting
 
-- arrange a meeting to record detailed code walk-through
+- Progress updates:
+  - meeting with Hannah, Weijia
+  - recent developments
 - Open questions:
   - renovation rate validation: always run from 2010, so we don't save "historical renovation actions" (code to be removed)
   - when "mandatory" --> peak number of actions in the first year
+  - modeling of PV (and battery?) --> go through relevant the RokiG scenario aspects
+- Summarize next steps (focusing on calibration)
+- arrange a meeting to record detailed code walk-through
 
 ### Songmin
 
@@ -16,7 +21,7 @@
   - hardcode mapping years to 2020/2030/2040/2050 in the projection years
 - [x] link renovation action to ownership
   - [x] currently `id_ownership` is initialized only for unit-users. Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
-  - [x] `Parameter_Building_ActionProbability` added?
+  - [x] `Parameter_Building_ActionProbability` added
 - [x] mandatory renovation
 - [x] mandatory heating system modernization
 - [ ] modeling of PV and battery

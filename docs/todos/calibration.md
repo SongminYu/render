@@ -5,7 +5,7 @@
 
 ## Prepare data
 
-- [ ] NUTS3 weather data (Hannah): temperature, radiation, pv generation (2010-2022). For years up to 2050, temperature scenarios are also needed
+- [x] NUTS3 weather data (Hannah): temperature, radiation, pv generation (2010-2022). For years up to 2050, temperature scenarios are also needed
 - [ ] energy balance data at both region and country levels (2010-2022) (Weijia)
 - [ ] energy carrier price tables
 

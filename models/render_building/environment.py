@@ -208,8 +208,6 @@ class BuildingEnvironment(Environment):
                                 reason="lifecycle"
                             )
 
-
-
     def update_buildings_renovation(self, buildings: "AgentList[Building]"):
         for building in buildings:
             collective_agreement = random.uniform(0, 1) <= self.scenario.p_building_action_probability.get_item(building.rkey)

@@ -4,12 +4,15 @@
 
 ### heating system
 
-- [ ] diffusion of second-technology?
+- [ ] modeling second heating technology?
+  - diffusion?
+  - in the new buildings (ignored at the moment)
+  - more complicated combinations, e.g., HP and gas --> 65% requirement effective
 
 ### renovation
 
-- [ ] possibility to apply the non-renovation probability at building level (so, before iterating through components)
-- [ ] limit the probability of lifecycle renovation being triggered (maybe too high now)
+- [x] limit the probability of lifecycle renovation being triggered (maybe too high now)
+  - done by adding the action probability related to the building ownership types
 
 ### both
 

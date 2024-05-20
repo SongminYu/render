@@ -16,10 +16,12 @@
 
 ## Population data
 - [ ] relate income and age information at the same time (to be added to BuildingKey: id_income_group, id_age_group)
-- [ ] the role of owner or tenant (Sabine has some data)
-  * should also depend on `id_building_type`?
-  * missing good assumptions for non-residential buildings.
+- [x] the ownership information (Sabine has some data)
+  * unit users: ownership or tenant, which is not used yet
+  * buildings: more types of ownership, which impacts the probability of renovation
 - [ ] willingness-to-pay
 
 ## Later stage
-- Data on material demand for new construction (and then differentiation of green/sustainable materials such as green cement, steel etc.) This will be relevant only during new construction
+- Data on material demand for new construction
+  - differentiate green/sustainable materials such as green cement, steel etc.
+  - This will be relevant only during new construction
