@@ -8,7 +8,7 @@ from dashboards.components import (
     data_table,
     dropdown,
     sub_dropdown,
-    compare_model_calibration_table,
+    comparison_table,
 )
 
 dash.register_page(__name__, path='/', name="End Use Analysis")
@@ -28,6 +28,11 @@ SELECT_ALL_SUBSECTORS_BUTTON = "select-all-subsectors-button-enduse"
 
 YEAR_DROPDOWN = "year-dropdown-enduse"
 SELECT_ALL_YEARS_BUTTON = "select-all-years-button-enduse"
+
+BAR_CHART = "bar-chart-enduse"
+
+DATA_TABLE = "data-table-enduse"
+DATA_TABLE_REFERENCE = "data-table-reference-enduse"
 
 END_USE_PATH = "data/final_energy_demand.csv"
 REFERENCE_PATH = "data/CalibrationTarget.csv"
@@ -54,7 +59,8 @@ category = DataSchema.ID_ENERGY_CARRIER
 
 # -------------------- DATA TABLES --------------------
 end_use_table = data_table.render(data,
-                                  id_datatable="Model Results in TWh",
+                                  id_datatable=DATA_TABLE,
+                                  title='Model Results in TWh',
                                   dropdowns=dropdowns,
                                   x=x,
                                   x_options=id_energy_carriers,
@@ -62,7 +68,8 @@ end_use_table = data_table.render(data,
                                   category=category)
 
 reference_table = data_table.render(reference_data,
-                                    id_datatable="Reference Data in TWh",
+                                    id_datatable=DATA_TABLE_REFERENCE,
+                                    title='Reference Data in TWh',
                                     dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
@@ -73,20 +80,19 @@ reference_table = data_table.render(reference_data,
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
-        dropdown.render(data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
-        dropdown.render(data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
-        dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
-        sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
-                            DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
-        dropdown.render(data, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
-        stacked_bar_chart.render(data,
-                                 id_barchart="bar-chart-enduse",
-                                 dropdowns=dropdowns,
-                                 x=x,
-                                 y=y,
-                                 category=category),
-        html.Div(className='flex-container', children=[end_use_table, reference_table]),
-        compare_model_calibration_table.render("comparison-diff-table", "Model Results in TWh", "Reference Data in TWh",
-                                               "Absolute difference in TWh", "Relative difference")
-    ],
-)
+    dropdown.render(data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
+    dropdown.render(data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
+    dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
+    sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
+                        DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
+    dropdown.render(data, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
+    stacked_bar_chart.render(data,
+                             id_barchart=BAR_CHART,
+                             dropdowns=dropdowns,
+                             x=x,
+                             y=y,
+                             category=category),
+    html.Div(className='flex-container', children=[end_use_table, reference_table]),
+    comparison_table.render("comparison-table-enduse", DATA_TABLE, DATA_TABLE_REFERENCE,
+                            "absolute-diff-table-enduse", "relative-diff-table-enduse", x=category)
+], )
