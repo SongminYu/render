@@ -7,7 +7,8 @@
 - [ ] modeling second heating technology?
   - diffusion?
   - in the new buildings (ignored at the moment)
-  - more complicated combinations, e.g., HP and gas --> 65% requirement effective
+  - more complicated combinations (should be reasonable), e.g., HP and gas --> 65% requirement effective
+  - discontinued after reaching lifetime (checking penetration rate table)
 
 ### renovation
 

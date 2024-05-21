@@ -70,6 +70,7 @@ This document contains the development plan of the `RenderDash` tool.
 
 
 ### Later stage
+- new dashboard: timeseries data from simulation and statistics, e.g., 2010-2020
 - beautify dashboards
 - geo-visualization (new dashboard)
 - enhance Floor Area dashboard

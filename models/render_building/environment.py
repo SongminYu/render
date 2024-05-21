@@ -234,7 +234,9 @@ class BuildingEnvironment(Environment):
             for building in buildings:
                 max_heating_intensity = self.scenario.s_renovation_maximum_heating_intensity.get_item(building.rkey)
                 if building.exists and building.heating_demand_per_m2 > max_heating_intensity:
-                    # TODO: a bit problematic --> it may be triggered by a cold winter (e.g., 2010)
+                    # TODO: a bit problematic -->
+                    #  it may be triggered by a cold winter (e.g., 2010), so we should consider maybe multiple years.
+                    #  this should be considered when developing the threshold values in the scenario table.
                     # select the building component to be renovated
                     selected_component_name = ""
                     selected_component_next_replace_year = 9999

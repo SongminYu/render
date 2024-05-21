@@ -601,6 +601,11 @@ class Building(Agent):
                 renewable_demand += energy_demand
             else:
                 non_renewable_demand += energy_demand
+        for id_energy_carrier, energy_demand in self.final_energy_demand[cons.ID_END_USE_SPACE_HEATING]:
+            if id_energy_carrier in cons.ID_ENERGY_CARRIER_RENEWABLES:
+                renewable_demand += energy_demand
+            else:
+                non_renewable_demand += energy_demand
         self.heating_system_renewable_percentage = renewable_demand / (renewable_demand + non_renewable_demand)
 
     def update_final_energy_demand_and_cost(self):

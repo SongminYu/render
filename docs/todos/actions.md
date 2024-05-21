@@ -4,27 +4,16 @@
 
 ### Meeting
 
-- Progress updates:
-  - meeting with Hannah, Weijia
-  - recent developments
-- Open questions:
-  - renovation rate validation: always run from 2010, so we don't save "historical renovation actions" (code to be removed)
-  - when "mandatory" --> peak number of actions in the first year
-  - modeling of PV (and battery?) --> go through relevant the RokiG scenario aspects
-- Summarize next steps (focusing on calibration)
 - arrange a meeting to record detailed code walk-through
 
 ### Songmin
 
-- [x] solve the size problem of weather input
-  - add 2030/2040/2050 profiles for NUTS2
-  - hardcode mapping years to 2020/2030/2040/2050 in the projection years
-- [x] link renovation action to ownership
-  - [x] currently `id_ownership` is initialized only for unit-users. Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
-  - [x] `Parameter_Building_ActionProbability` added
-- [x] mandatory renovation
-- [x] mandatory heating system modernization
+- [ ] remove previous code on renvation rate
+- [ ] when "mandatory" --> peak number of actions in the first year --> a year selected within the window (delay logic)
+- [ ] save building stock every year to the csv for memory saving?
 - [ ] modeling of PV and battery
+  - do we model at hourly resolution? depending on if we contribute load profiles from our model
+  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
 - [ ] during calibration, behavior profiles need to be updated
   - [ ] for households,
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
@@ -33,21 +22,17 @@
 
 ### Sirin
 
-- [x] meet Hannah
-  - [x] download NUTS2 weather data
-  - [x] discuss how to integrate NUTS1 calibration data (maybe we need dropdowns for 3 levels of id_region in the dashboard)
-  - [x] there is the code mapping id_regions at different levels (line 62 in models/render/render_dict.py)
-  - [x] then design the table format for Weijia
-- [x] update calibration target table (fluss gas)
-- [ ] Verify results
-  - [ ] building stock
-    - [x] final energy demand
-    - [ ] floor area
-    - [ ] dwelling number
-  - [ ] renovation actions, incl. renovation rate calculation
-  - [ ] heating system actions, incl. heating system size
-- [ ] presentation of Reference scenario in the Modultreffen (18.06)? Also via the "scenario generator" (this means we give RWTH-IT the results.)
-- [ ] do we want to publish the slides of the workshop on the website?
+- [ ] send slides to RokiG meeting to publish
+- [ ] presentation of Reference scenario in the Modultreffen (18.06)
+  - For JF on June 3rd
+    - update slides to introduce how qualitative input from IBP are used to develop scenarios
+    - show IBP how the scenarios are quantified in the model (show the related tables)
+    - overview of the data gap and ask them to fill in
+  - Independently, for the meeting on June 18th
+    - we calibrate 2010-2020
+    - quantify the reference scenario in the tables
+    - run the model and process results
+    - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
 
 ## Done
 
@@ -71,6 +56,14 @@
     - total population of each NUTS3 region
     - the distribution percentages by id_region and id_location, then compare with GHSL data
 - [x] Develop the main logics for construction, based on the population data development
+- [x] solve the size problem of weather input
+  - add 2030/2040/2050 profiles for NUTS2
+  - hardcode mapping years to 2020/2030/2040/2050 in the projection years
+- [x] link renovation action to ownership
+  - [x] currently `id_ownership` is initialized only for unit-users. Use "EIGENTUM.xlsx" to add ownership info to the building, then the renovation decisions can be impacted by this.
+  - [x] `Parameter_Building_ActionProbability` added
+- [x] mandatory renovation
+- [x] mandatory heating system modernization
 
 ### Sirin
 
@@ -80,3 +73,9 @@
 - [x] Create a ticket about server use for IT
 - [x] Summarize data gap lists and prepare the workshop with Fraunhofer IBP (Timeline: around mid-May by email, then the end of May or early June, we have the workshop)
 - [x] add region ids (NUTS1 and NUTS2)
+- [x] meet Hannah
+  - [x] download NUTS2 weather data
+  - [x] discuss how to integrate NUTS1 calibration data (maybe we need dropdowns for 3 levels of id_region in the dashboard)
+  - [x] there is the code mapping id_regions at different levels (line 62 in models/render/render_dict.py)
+  - [x] then design the table format for Weijia
+- [x] update calibration target table (fluss gas)
