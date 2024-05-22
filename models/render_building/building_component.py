@@ -66,14 +66,6 @@ class BuildingComponent:
             d[id_building_component_option_efficiency_class] = self.scenario.s_building_component_availability.get_item(rkey)
         self.rkey.id_building_component_option_efficiency_class = dict_sample(d)
         self.u_value = self.scenario.p_building_component_efficiency.get_item(self.rkey)
-        self.record_historical_renovation_action(rkey=rkey)
-
-    def record_historical_renovation_action(self, rkey: Optional["BuildingKey"]):
-        self.scenario.renovation_action_building.accumulate_item(rkey=rkey, value=1)
-        self.scenario.renovation_action_component.accumulate_item(rkey=rkey, value=1)
-        self.scenario.renovation_action_labor_demand.accumulate_item(
-            rkey=rkey, value=self.scenario.s_building_component_input_labor.get_item(rkey)
-        )
 
     def renovate(self, id_building_component_option_efficiency_class: int):
         self.rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class

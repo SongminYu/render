@@ -4,13 +4,18 @@
 
 ### Meeting
 
+- Updates
+  - meeting with Hannah
+  - meeting with Weijia
+  - Code development
 - arrange a meeting to record detailed code walk-through
 
 ### Songmin
 
-- [ ] remove previous code on renvation rate
-- [ ] when "mandatory" --> peak number of actions in the first year --> a year selected within the window (delay logic)
-- [ ] save building stock every year to the csv for memory saving?
+- [x] remove previous code on renovation rate
+- [x] save building stock every year to the csv for memory saving?
+- [ ] when "mandatory" --> peak number of actions in the first year
+  - delay logic: a year selected within the window
 - [ ] modeling of PV and battery
   - do we model at hourly resolution? depending on if we contribute load profiles from our model
   - or we consider a coupling approach with other model, then in Render we use self-consumption rate
@@ -23,16 +28,15 @@
 ### Sirin
 
 - [ ] send slides to RokiG meeting to publish
-- [ ] presentation of Reference scenario in the Modultreffen (18.06)
-  - For JF on June 3rd
+- [ ] For JF on June 3rd
     - update slides to introduce how qualitative input from IBP are used to develop scenarios
     - show IBP how the scenarios are quantified in the model (show the related tables)
     - overview of the data gap and ask them to fill in
-  - Independently, for the meeting on June 18th
-    - we calibrate 2010-2020
-    - quantify the reference scenario in the tables
-    - run the model and process results
-    - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
+- [ ] For the meeting on June 18th
+  - we calibrate 2010-2020
+  - quantify the reference scenario in the tables
+  - run the model and process results
+  - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
 
 ## Done
 

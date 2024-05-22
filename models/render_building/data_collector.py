@@ -1,9 +1,9 @@
+import os
 from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 
 from models.render.data_collector import RenderDataCollector
-from models.render_building.building_key import BuildingKey
 
 if TYPE_CHECKING:
     from Melodie import AgentList
@@ -15,168 +15,30 @@ if TYPE_CHECKING:
 class BuildingDataCollector(RenderDataCollector):
     scenario: "BuildingScenario"
 
-    def export(self):
-        self.export_building_stock()
-        # self.export_dwelling_number()
-        # self.export_household_number()
-        self.export_renovation_action_info()
-        self.export_heating_system_action_info()
-
-    def export_rdict(self, rdict: "RenderDict", df_name: str, unit: Optional[str] = None):
-        df = rdict.to_dataframe()
-        if unit is not None:
-            unit_position = max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1
-            df.insert(unit_position, "unit", unit)
-        self.save_dataframe(df=df, df_name=df_name)
-
     """
-    Initialization data
+    Export initialization data
     """
+
     def export_initialization_data(self):
-        # self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, df_name=f"FinalEnergyPrice_R{self.scenario.id_region}", unit="euro/kWh")
-        # self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, df_name=f"HeatingTechnologyMainInitialAdoption_R{self.scenario.id_region}", unit="count")
-        # self.export_rdict(rdict=self.scenario.building_component_capex, df_name=f"BuildingComponentCapex_R{self.scenario.id_region}", unit="euro/m2")
-        # self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, df_name=f"HeatingTechnologyEnergyCost_R{self.scenario.id_region}", unit="euro/kWh")
-        # self.export_rdict(rdict=self.scenario.radiator_capex, df_name=f"RadiatorCapex_R{self.scenario.id_region}", unit="euro/m2")
-        # self.export_rdict(rdict=self.scenario.cooling_technology_capex, df_name=f"CoolingTechnologyCapex_R{self.scenario.id_region}", unit="euro/kW")
-        # self.export_rdict(rdict=self.scenario.cooling_technology_opex, df_name=f"CoolingTechnologyOpex_R{self.scenario.id_region}", unit="euro/kWh")
-        # self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"VentilationTechnologyCapex_R{self.scenario.id_region}", unit="euro/m2")
-        # self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"VentilationTechnologyOpex_R{self.scenario.id_region}", unit="euro/m2")
-        # self.export_rdict(rdict=self.scenario.building_num_model, df_name=f"BuildingNumModel_R{self.scenario.id_region}", unit="count")
-        # self.export_rdict(rdict=self.scenario.building_num_total, df_name=f"BuildingNumTotal_R{self.scenario.id_region}", unit="count")
-        # self.export_historical_renovation_rate()
-        ...
-
-    def export_historical_renovation_rate(self):
-
-        def export_to_csv(df: pd.DataFrame, file_name: str):
-            unit_position = max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1
-            df.insert(unit_position, "unit", "count")
-            self.save_dataframe(df=df, df_name=f"{file_name}_R{self.scenario.id_region}")
-
-        def get_construction_period_percentage(row_rkey: "BuildingKey"):
-            df = self.scenario.load_dataframe("Scenario_Building_ConstructionPeriod.xlsx")
-            df1 = df.loc[
-                (df["id_region"] == row_rkey.id_region) &
-                (df["id_sector"] == row_rkey.id_sector) &
-                (df["id_building_type"] == row_rkey.id_building_type)
-            ]
-            df2 = df1.loc[df1["id_building_construction_period"] == row_rkey.id_building_construction_period]
-            return df2.iloc[0]["2019"] / df1["2019"].sum()
-
-        def create_renovation_rate_building_plain():
-            l = []
-            for _, row in renovation_action_building.iterrows():
-                rkey = BuildingKey().from_dict(row.to_dict())
-                d = row.to_dict()
-                d["num_building_renovation_model"] = d.pop("value")
-                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(rkey) * get_construction_period_percentage(row_rkey=rkey)
-                d["building_renovation_rate_construction_period"] = d["num_building_renovation_model"] / d["num_building_model_construction_period"]
-                d["num_building_model_type"] = self.scenario.building_num_model.get_item(rkey)
-                d["building_renovation_rate_type"] = d["num_building_renovation_model"] / d["num_building_model_type"]
-                l.append(d)
-            return pd.DataFrame(l)
-
-        def create_renovation_rate_building_component_plain():
-            l = []
-            for _, row in renovation_action_component.iterrows():
-                rkey = BuildingKey().from_dict(row.to_dict())
-                d = row.to_dict()
-                d["num_component_renovation_model"] = d.pop("value")
-                d["num_building_model_construction_period"] = self.scenario.building_num_model.get_item(rkey) * get_construction_period_percentage(row_rkey=rkey)
-                d["component_renovation_rate_construction_period"] = d["num_component_renovation_model"] / d["num_building_model_construction_period"]
-                d["num_building_model_type"] = self.scenario.building_num_model.get_item(rkey)
-                d["component_renovation_rate_type"] = d["num_component_renovation_model"] / d["num_building_model_type"]
-                l.append(d)
-            return pd.DataFrame(l)
-
-        def create_renovation_rate_building_component_processed(df: pd.DataFrame):
-            df_dropped = df.drop(columns=[
-                "num_building_model_construction_period",
-                "component_renovation_rate_construction_period",
-                "num_building_model_type",
-                "component_renovation_rate_type"
-            ])
-            grouped_df = df_dropped.groupby([
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_component",
-                "year"
-            ])['num_component_renovation_model'].sum().reset_index()
-
-            def get_num_building_types(row):
-                num_building_types = 0
-                rkey = BuildingKey().from_dict(row.to_dict())
-                for id_building_type in self.scenario.r_subsector_building_type.get_item(rkey):
-                    rkey.id_building_type = id_building_type
-                    num_building_types += self.scenario.building_num_model.get_item(rkey)
-                return num_building_types
-
-            grouped_df["num_building_types"] = grouped_df.apply(get_num_building_types, axis=1)
-            grouped_df = grouped_df.assign(
-                renovation_rate=grouped_df["num_component_renovation_model"] / grouped_df["num_building_types"]
-            )
-            return grouped_df
-
-        def create_renovation_rate_building_weighted(df: pd.DataFrame):
-            df_dropped = df.drop(columns=[
-                "num_component_renovation_model",
-                "num_building_types"
-            ])
-
-            pivot_df = df_dropped.pivot_table(
-                index=[
-                    "id_scenario",
-                    "id_region",
-                    "id_sector",
-                    "id_subsector",
-                    "year",
-                ],
-                columns='id_building_component',
-                values='renovation_rate',
-                aggfunc='mean'
-            ).reset_index()
-
-            component_names = {
-                1: "wall",
-                2: "window",
-                3: "roof",
-                4: "basement"
-            }
-            for col in pivot_df.columns:
-                if col in [1, 2, 3, 4]:
-                    pivot_df.rename(columns={col: component_names[col]}, inplace=True)
-                    pivot_df[component_names[col]].fillna(0, inplace=True)
-
-            def weighted_renovation_rate(row):
-                return row["wall"] * 0.4 + row["window"] * 0.09 + row["roof"] * 0.28 + row["basement"] * 0.23
-
-            pivot_df["building_weighted_average_renovation_rate"] = pivot_df.apply(weighted_renovation_rate, axis=1)
-
-            return pivot_df
-
-        renovation_action_building = self.scenario.renovation_action_building.to_dataframe()
-        renovation_action_component = self.scenario.renovation_action_component.to_dataframe()
-
-        building_plain = create_renovation_rate_building_plain()
-        # export_to_csv(df=building_plain, file_name="historical_renovation_rate_building_plain")
-
-        component_plain = create_renovation_rate_building_component_plain()
-        # export_to_csv(df=component_plain, file_name="historical_renovation_rate_component_plain")
-
-        component_processed = create_renovation_rate_building_component_processed(component_plain)
-        export_to_csv(df=component_processed, file_name="historical_renovation_rate_component")
-
-        building_weighted = create_renovation_rate_building_weighted(component_processed)
-        export_to_csv(df=building_weighted, file_name="historical_renovation_rate_building")
+        self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, df_name=f"final_energy_price", unit="euro/kWh", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.building_component_capex, df_name=f"building_component_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, df_name=f"heating_technology_energy_cost", unit="euro/kWh", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.radiator_capex, df_name=f"radiator_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.cooling_technology_capex, df_name=f"cooling_technology_capex", unit="euro/kW", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.cooling_technology_opex, df_name=f"cooling_technology_opex", unit="euro/kWh", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"ventilation_technology_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"ventilation_technology_opex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, df_name=f"heating_tech_adoption", unit="count", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.location_building_num, df_name=f"infrastructure_building_num", unit="count", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_district_heating, df_name=f"infrastructure_building_num_dh_adoption", unit="count", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_gas, df_name=f"infrastructure_building_num_gas_adoption", unit="count", sub_folder="init_data", if_exists="pass")
 
     """
-    Results
+    Collect building stock data
     """
-    # Building stock
+
     def collect_building_stock(self, buildings: "AgentList[Building]"):
+        building_stock = []
         for building in buildings:
             building_dict = building.rkey.to_dict()
             building_dict["exists"] = building.exists
@@ -262,23 +124,77 @@ class BuildingDataCollector(RenderDataCollector):
                 building_dict[f"ventilation_system_energy_intensity"] = None
                 building_dict[f"ventilation_system_energy_consumption"] = None
             # save the building dict
-            self.scenario.building_stock.append(building_dict)
+            building_stock.append(building_dict)
+        self.save_dataframe(df=pd.DataFrame(building_stock), df_name=f"building_stock_R{self.scenario.id_region}")
 
-    def export_building_stock(self):
-        self.save_dataframe(df=pd.DataFrame(self.scenario.building_stock), df_name=f"building_stock_R{self.scenario.id_region}")
+    """
+    Export result data
+    """
 
-    # Household number
+    def export_result_data(self):
+        self.export_dwelling_number()
+        self.export_household_number()
+        self.export_renovation_action_info()
+        self.export_heating_system_action_info()
+
+    # Dwelling number
     def export_dwelling_number(self):
-        self.save_dataframe(df=self.scenario.dwelling_number.to_dataframe(), df_name=f"dwelling_number_R{self.scenario.id_region}")
+        self.export_rdict(rdict=self.scenario.dwelling_number, df_name=f"dwelling_number", unit="count")
 
     # Household number
     def export_household_number(self):
-        self.save_dataframe(df=self.scenario.household_number.to_dataframe(), df_name=f"household_number_R{self.scenario.id_region}")
+        self.export_rdict(rdict=self.scenario.household_number, df_name=f"household_number", unit="count")
 
     # Renovation action info
     def export_renovation_action_info(self):
-        self.save_dataframe(df=pd.DataFrame(self.scenario.renovation_action_info), df_name=f"renovation_action_info_R{self.scenario.id_region}")
+        self.save_dataframe(df=pd.DataFrame(self.scenario.renovation_action_info), df_name=f"renovation_actions")
 
     # Heating system action info
     def export_heating_system_action_info(self):
-        self.save_dataframe(df=pd.DataFrame(self.scenario.heating_system_action_info), df_name=f"heating_system_action_info_R{self.scenario.id_region}")
+        self.save_dataframe(df=pd.DataFrame(self.scenario.heating_system_action_info), df_name=f"heating_system_actions")
+
+    """
+    Export functions
+    """
+
+    def export_rdict(
+            self,
+            rdict: "RenderDict",
+            df_name: str,
+            if_exists="append",
+            unit: Optional[str] = None,
+            sub_folder: Optional[str] = None
+    ):
+        df = rdict.to_dataframe()
+        if len(df) > 0:
+            if unit is not None:
+                unit_position = max([i for i, col in enumerate(df.columns) if col.startswith("id_")]) + 1
+                df.insert(unit_position, "unit", unit)
+            self.save_dataframe(df=df, df_name=df_name, if_exists=if_exists, sub_folder=sub_folder)
+
+    def save_dataframe(
+            self,
+            df: pd.DataFrame,
+            df_name: str,
+            if_exists: str = "append",
+            sub_folder: Optional[str] = None
+    ):
+        if len(df) > 0:
+            if sub_folder is None:
+                path = os.path.join(self.config.output_folder, f"{df_name}.csv")
+            else:
+                os.makedirs(os.path.join(self.config.output_folder, sub_folder), exist_ok=True)
+                path = os.path.join(self.config.output_folder, sub_folder, f"{df_name}.csv")
+            if os.path.isfile(path):
+                if if_exists == "append":
+                    df.to_csv(path, mode="a", header=False, index=False)
+                elif if_exists == "replace":
+                    df.to_csv(path, index=False)
+                elif if_exists == "pass":
+                    pass
+                else:
+                    raise NotImplementedError(
+                        f"if_exists = {if_exists} --> not implemented."
+                    )
+            else:
+                df.to_csv(path, index=False)

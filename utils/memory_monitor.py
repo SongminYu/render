@@ -4,7 +4,7 @@ import time
 
 
 def monitor_python_memory_usage(interval=1):
-    output_file = f'memory_usage_{time.strftime("Y%YM%mD%dH%HM%MS%S", time.localtime())}.csv'
+    output_file = f'memory_usage_{time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())}.csv'
     with open(output_file, 'w', newline='') as csvfile:
         fieldnames = ['timestamp', 'memory_usage_gb', 'unit']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)

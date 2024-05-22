@@ -72,14 +72,13 @@ class BuildingEnvironment(Environment):
             building.ventilation_system.rkey.year += 1
 
         for building in buildings:
-            if building.exists:
-                building.rkey.year += 1
-                update_units_year()
-                update_components_year()
-                update_radiator_year()
-                update_heating_system_year()
-                update_cooling_system_year()
-                update_ventilation_system_year()
+            building.rkey.year += 1
+            update_units_year()
+            update_components_year()
+            update_radiator_year()
+            update_heating_system_year()
+            update_cooling_system_year()
+            update_ventilation_system_year()
 
     @staticmethod
     def update_buildings_energy_demand_and_cost(buildings: "AgentList[Building]"):
@@ -266,18 +265,21 @@ class BuildingEnvironment(Environment):
             "id_region": rkey.id_region,
             "id_sector": rkey.id_sector,
             "id_subsector": rkey.id_subsector,
-            "id_subsector_agent": rkey.id_subsector_agent,
             "id_building_type": rkey.id_building_type,
+            "id_subsector_agent": rkey.id_subsector_agent,
             "id_building_construction_period": rkey.id_building_construction_period,
             "id_building_ownership": rkey.id_building_ownership,
-            "id_building_component": rkey.id_building_component,
             "year": rkey.year,
             "reason": reason,
+            "id_building_component": rkey.id_building_component,
             "id_building_component_option_before": before_renovation_status["id_building_component_option_before"],
             "id_building_component_option_after": rkey.id_building_component_option,
+            "id_building_efficiency_class_before": before_renovation_status["id_building_efficiency_class_before"],
+            "id_building_efficiency_class_after": building.rkey.id_building_efficiency_class,
+            "building_efficiency_class_change": before_renovation_status["id_building_efficiency_class_before"] - building.rkey.id_building_efficiency_class,
             "id_building_component_option_efficiency_class_before": before_renovation_status["id_building_component_option_efficiency_class_before"],
             "id_building_component_option_efficiency_class_after": rkey.id_building_component_option_efficiency_class,
-            "efficiency_class_change": before_renovation_status["id_building_component_option_efficiency_class_before"] - rkey.id_building_component_option_efficiency_class,
+            "building_component_efficiency_class_change": before_renovation_status["id_building_component_option_efficiency_class_before"] - rkey.id_building_component_option_efficiency_class,
             "heating_demand_before": before_renovation_status["heating_demand_before"],
             "heating_demand_after": building.heating_demand,
             "heating_demand_change": before_renovation_status["heating_demand_before"] - building.heating_demand,

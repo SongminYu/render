@@ -625,6 +625,7 @@ class Building(Agent):
     def select_component(self, component_name: str):
         building_component = self.building_components[component_name]
         before_renovation_status = {
+            "id_building_efficiency_class_before": self.rkey.id_building_efficiency_class,
             "id_building_component_option_before": building_component.rkey.id_building_component_option,
             "id_building_component_option_efficiency_class_before": building_component.rkey.id_building_component_option_efficiency_class,
             "heating_demand_before": self.heating_demand,
