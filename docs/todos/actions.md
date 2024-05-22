@@ -14,8 +14,10 @@
 
 - [x] remove previous code on renovation rate
 - [x] save building stock every year to the csv for memory saving?
-- [ ] when "mandatory" --> peak number of actions in the first year
+- [x] when "mandatory" --> peak number of actions in the first year
   - delay logic: a year selected within the window
+- [ ] add function `post_processor.gen_renovation_rate`
+- [ ] add function `post_processor.gen_building_demolition_and_construction`
 - [ ] modeling of PV and battery
   - do we model at hourly resolution? depending on if we contribute load profiles from our model
   - or we consider a coupling approach with other model, then in Render we use self-consumption rate
@@ -27,11 +29,12 @@
 
 ### Sirin
 
-- [ ] send slides to RokiG meeting to publish
+- [ ] Overview the data gap
+- [ ] Send slides to RokiG meeting to publish
 - [ ] For JF on June 3rd
     - update slides to introduce how qualitative input from IBP are used to develop scenarios
     - show IBP how the scenarios are quantified in the model (show the related tables)
-    - overview of the data gap and ask them to fill in
+    - ask them to fill in the data gap
 - [ ] For the meeting on June 18th
   - we calibrate 2010-2020
   - quantify the reference scenario in the tables

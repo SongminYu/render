@@ -39,6 +39,8 @@ class Building(Agent):
         self.building_number = 0
         self.occupancy_rate = 1
         self.exists = True
+        self.mandatory_renovation_year = cons.MANDATORY_RENOVATION_YEAR_DEFAULT
+        self.mandatory_heating_system_modernization_year = cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_DEFAULT
 
     def init_rkey(self):
         self.rkey = BuildingKey(

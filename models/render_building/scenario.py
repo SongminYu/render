@@ -237,6 +237,11 @@ class BuildingScenario(RenderScenario):
                             })
         self.agent_params = pd.DataFrame(agent_params)
 
+    def get_new_building_id_subsector_agent(self, rkey: "BuildingKey"):
+        id_subsector_agent = self.building_num_model.get_item(rkey) + 1
+        self.building_num_model.set_item(rkey, id_subsector_agent)
+        return id_subsector_agent
+
     """
     setup cost data
     """
@@ -512,7 +517,4 @@ class BuildingScenario(RenderScenario):
             "year"
         ])
 
-    def get_new_building_id_subsector_agent(self, rkey: "BuildingKey"):
-        id_subsector_agent = self.building_num_model.get_item(rkey) + 1
-        self.building_num_model.set_item(rkey, id_subsector_agent)
-        return id_subsector_agent
+

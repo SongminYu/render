@@ -188,11 +188,15 @@ class BuildingEnvironment(Environment):
                         self.scenario.s_heating_system_minimum_renewable_percentage.get_item(building.rkey)
                 )
                 if building.exists and triggered_by_renewable_percentage_requirement:
-                    building.update_heating_technology(
-                        heating_technology=building.heating_system.heating_technology_main,
-                        reason="renewable_percentage_requirement",
-                        limit_to=cons.RENEWABLE_MAIN_HEATING_TECHNOLOGIES
-                    )
+                    if building.mandatory_heating_system_modernization_year == cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_DEFAULT:
+                        building.mandatory_heating_system_modernization_year = building.rkey.year + random.randint(0, cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_MAX_DELAY)
+                    if self.year >= building.mandatory_heating_system_modernization_year:
+                        building.mandatory_heating_system_modernization_year = cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_DEFAULT
+                        building.update_heating_technology(
+                            heating_technology=building.heating_system.heating_technology_main,
+                            reason="renewable_percentage_requirement",
+                            limit_to=cons.RENEWABLE_MAIN_HEATING_TECHNOLOGIES
+                        )
 
         # lifecycle-triggered modernization
         for building in buildings:
@@ -230,32 +234,39 @@ class BuildingEnvironment(Environment):
                             building_component.next_replace_year += self.scenario.p_building_component_postponing_lifetime.get_item(building_component.rkey)
 
         if self.scenario.renovation_mandatory:
+            # TODO:
+            #  The mandatory renovation may be triggered by a cold winter (e.g., 2010),
+            #  so we should consider maybe multiple years.
+            #  This may be considered when developing the threshold values in the scenario table?
+
             for building in buildings:
                 max_heating_intensity = self.scenario.s_renovation_maximum_heating_intensity.get_item(building.rkey)
                 if building.exists and building.heating_demand_per_m2 > max_heating_intensity:
-                    # TODO: a bit problematic -->
-                    #  it may be triggered by a cold winter (e.g., 2010), so we should consider maybe multiple years.
-                    #  this should be considered when developing the threshold values in the scenario table.
-                    # select the building component to be renovated
-                    selected_component_name = ""
-                    selected_component_next_replace_year = 9999
-                    for component_name, building_component in building.building_components.items():
-                        if building_component.next_replace_year < selected_component_next_replace_year:
-                            selected_component_name = component_name
-                            selected_component_next_replace_year = building_component.next_replace_year
-                    # renovated the selected building component
-                    before_renovation_status, id_building_component_option_efficiency_class = (
-                        building.select_component(component_name=selected_component_name))
-                    building.renovate_component(
-                        component_name=selected_component_name,
-                        id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
-                    )
-                    self.record_renovation_action_info(
-                        building=building,
-                        component_name=selected_component_name,
-                        before_renovation_status=before_renovation_status,
-                        reason="mandatory"
-                    )
+                    if building.mandatory_renovation_year == cons.MANDATORY_RENOVATION_YEAR_DEFAULT:
+                        building.mandatory_renovation_year = building.rkey.year + random.randint(0, cons.MANDATORY_RENOVATION_YEAR_MAX_DELAY)
+                    if self.year >= building.mandatory_renovation_year:
+                        building.mandatory_renovation_year = cons.MANDATORY_RENOVATION_YEAR_DEFAULT
+                        # select the building component to be renovated
+                        selected_component_name = ""
+                        selected_component_next_replace_year = 9999
+                        for component_name, building_component in building.building_components.items():
+                            if building_component.next_replace_year < selected_component_next_replace_year:
+                                selected_component_name = component_name
+                                selected_component_next_replace_year = building_component.next_replace_year
+
+                        # renovated the selected building component
+                        before_renovation_status, id_building_component_option_efficiency_class = (
+                            building.select_component(component_name=selected_component_name))
+                        building.renovate_component(
+                            component_name=selected_component_name,
+                            id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
+                        )
+                        self.record_renovation_action_info(
+                            building=building,
+                            component_name=selected_component_name,
+                            before_renovation_status=before_renovation_status,
+                            reason="mandatory"
+                        )
 
     def record_renovation_action_info(self, building: "Building", component_name: str, before_renovation_status: dict, reason: str):
         building_component = building.building_components[component_name]

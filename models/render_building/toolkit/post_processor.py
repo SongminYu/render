@@ -171,6 +171,10 @@ def gen_building_stock_summary(
     aggregated_df.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
 
 
+def gen_renovation_rate():
+    ...
+
+
 def gen_building_demolition_and_construction():
     # by processing the last year dataframe of the building stock, the results should be able to be generated.
     ...
@@ -178,10 +182,10 @@ def gen_building_demolition_and_construction():
 
 def extract_cols(
     cfg: "Config",
+    input_table: str,
     cols: List[str],
-    input_table: str = "building_stock.csv",
-    output_table: str = "building_stock_cols.csv"
 ):
+    output_table = f"{input_table.split(".")[0]}_cols.csv"
     building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
     building_stock_cols = building_stock.loc[:, cols]
     building_stock_cols.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
