@@ -39,6 +39,8 @@ class Building(Agent):
         self.building_number = 0
         self.occupancy_rate = 1
         self.exists = True
+        self.mandatory_renovation_year = cons.MANDATORY_RENOVATION_YEAR_DEFAULT
+        self.mandatory_heating_system_modernization_year = cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_DEFAULT
 
     def init_rkey(self):
         self.rkey = BuildingKey(
@@ -625,6 +627,7 @@ class Building(Agent):
     def select_component(self, component_name: str):
         building_component = self.building_components[component_name]
         before_renovation_status = {
+            "id_building_efficiency_class_before": self.rkey.id_building_efficiency_class,
             "id_building_component_option_before": building_component.rkey.id_building_component_option,
             "id_building_component_option_efficiency_class_before": building_component.rkey.id_building_component_option_efficiency_class,
             "heating_demand_before": self.heating_demand,

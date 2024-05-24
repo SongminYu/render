@@ -72,14 +72,13 @@ class BuildingEnvironment(Environment):
             building.ventilation_system.rkey.year += 1
 
         for building in buildings:
-            if building.exists:
-                building.rkey.year += 1
-                update_units_year()
-                update_components_year()
-                update_radiator_year()
-                update_heating_system_year()
-                update_cooling_system_year()
-                update_ventilation_system_year()
+            building.rkey.year += 1
+            update_units_year()
+            update_components_year()
+            update_radiator_year()
+            update_heating_system_year()
+            update_cooling_system_year()
+            update_ventilation_system_year()
 
     @staticmethod
     def update_buildings_energy_demand_and_cost(buildings: "AgentList[Building]"):
@@ -189,11 +188,15 @@ class BuildingEnvironment(Environment):
                         self.scenario.s_heating_system_minimum_renewable_percentage.get_item(building.rkey)
                 )
                 if building.exists and triggered_by_renewable_percentage_requirement:
-                    building.update_heating_technology(
-                        heating_technology=building.heating_system.heating_technology_main,
-                        reason="renewable_percentage_requirement",
-                        limit_to=cons.RENEWABLE_MAIN_HEATING_TECHNOLOGIES
-                    )
+                    if building.mandatory_heating_system_modernization_year == cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_DEFAULT:
+                        building.mandatory_heating_system_modernization_year = building.rkey.year + random.randint(0, cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_MAX_DELAY)
+                    if self.year >= building.mandatory_heating_system_modernization_year:
+                        building.mandatory_heating_system_modernization_year = cons.MANDATORY_HEATING_SYSTEM_MODERNIZATION_YEAR_DEFAULT
+                        building.update_heating_technology(
+                            heating_technology=building.heating_system.heating_technology_main,
+                            reason="renewable_percentage_requirement",
+                            limit_to=cons.RENEWABLE_MAIN_HEATING_TECHNOLOGIES
+                        )
 
         # lifecycle-triggered modernization
         for building in buildings:
@@ -231,32 +234,39 @@ class BuildingEnvironment(Environment):
                             building_component.next_replace_year += self.scenario.p_building_component_postponing_lifetime.get_item(building_component.rkey)
 
         if self.scenario.renovation_mandatory:
+            # TODO:
+            #  The mandatory renovation may be triggered by a cold winter (e.g., 2010),
+            #  so we should consider maybe multiple years.
+            #  This may be considered when developing the threshold values in the scenario table?
+
             for building in buildings:
                 max_heating_intensity = self.scenario.s_renovation_maximum_heating_intensity.get_item(building.rkey)
                 if building.exists and building.heating_demand_per_m2 > max_heating_intensity:
-                    # TODO: a bit problematic -->
-                    #  it may be triggered by a cold winter (e.g., 2010), so we should consider maybe multiple years.
-                    #  this should be considered when developing the threshold values in the scenario table.
-                    # select the building component to be renovated
-                    selected_component_name = ""
-                    selected_component_next_replace_year = 9999
-                    for component_name, building_component in building.building_components.items():
-                        if building_component.next_replace_year < selected_component_next_replace_year:
-                            selected_component_name = component_name
-                            selected_component_next_replace_year = building_component.next_replace_year
-                    # renovated the selected building component
-                    before_renovation_status, id_building_component_option_efficiency_class = (
-                        building.select_component(component_name=selected_component_name))
-                    building.renovate_component(
-                        component_name=selected_component_name,
-                        id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
-                    )
-                    self.record_renovation_action_info(
-                        building=building,
-                        component_name=selected_component_name,
-                        before_renovation_status=before_renovation_status,
-                        reason="mandatory"
-                    )
+                    if building.mandatory_renovation_year == cons.MANDATORY_RENOVATION_YEAR_DEFAULT:
+                        building.mandatory_renovation_year = building.rkey.year + random.randint(0, cons.MANDATORY_RENOVATION_YEAR_MAX_DELAY)
+                    if self.year >= building.mandatory_renovation_year:
+                        building.mandatory_renovation_year = cons.MANDATORY_RENOVATION_YEAR_DEFAULT
+                        # select the building component to be renovated
+                        selected_component_name = ""
+                        selected_component_next_replace_year = 9999
+                        for component_name, building_component in building.building_components.items():
+                            if building_component.next_replace_year < selected_component_next_replace_year:
+                                selected_component_name = component_name
+                                selected_component_next_replace_year = building_component.next_replace_year
+
+                        # renovated the selected building component
+                        before_renovation_status, id_building_component_option_efficiency_class = (
+                            building.select_component(component_name=selected_component_name))
+                        building.renovate_component(
+                            component_name=selected_component_name,
+                            id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
+                        )
+                        self.record_renovation_action_info(
+                            building=building,
+                            component_name=selected_component_name,
+                            before_renovation_status=before_renovation_status,
+                            reason="mandatory"
+                        )
 
     def record_renovation_action_info(self, building: "Building", component_name: str, before_renovation_status: dict, reason: str):
         building_component = building.building_components[component_name]
@@ -266,18 +276,21 @@ class BuildingEnvironment(Environment):
             "id_region": rkey.id_region,
             "id_sector": rkey.id_sector,
             "id_subsector": rkey.id_subsector,
-            "id_subsector_agent": rkey.id_subsector_agent,
             "id_building_type": rkey.id_building_type,
+            "id_subsector_agent": rkey.id_subsector_agent,
             "id_building_construction_period": rkey.id_building_construction_period,
             "id_building_ownership": rkey.id_building_ownership,
-            "id_building_component": rkey.id_building_component,
             "year": rkey.year,
             "reason": reason,
+            "id_building_component": rkey.id_building_component,
             "id_building_component_option_before": before_renovation_status["id_building_component_option_before"],
             "id_building_component_option_after": rkey.id_building_component_option,
+            "id_building_efficiency_class_before": before_renovation_status["id_building_efficiency_class_before"],
+            "id_building_efficiency_class_after": building.rkey.id_building_efficiency_class,
+            "building_efficiency_class_change": before_renovation_status["id_building_efficiency_class_before"] - building.rkey.id_building_efficiency_class,
             "id_building_component_option_efficiency_class_before": before_renovation_status["id_building_component_option_efficiency_class_before"],
             "id_building_component_option_efficiency_class_after": rkey.id_building_component_option_efficiency_class,
-            "efficiency_class_change": before_renovation_status["id_building_component_option_efficiency_class_before"] - rkey.id_building_component_option_efficiency_class,
+            "building_component_efficiency_class_change": before_renovation_status["id_building_component_option_efficiency_class_before"] - rkey.id_building_component_option_efficiency_class,
             "heating_demand_before": before_renovation_status["heating_demand_before"],
             "heating_demand_after": building.heating_demand,
             "heating_demand_change": before_renovation_status["heating_demand_before"] - building.heating_demand,

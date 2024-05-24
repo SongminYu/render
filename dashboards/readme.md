@@ -64,9 +64,20 @@ This document contains the development plan of the `RenderDash` tool.
   - [x] Sirin provides regional "calibration target" file as example: RenderNew\dashboards\data\Energiebilanzen_Regional_Example.xlsx
 
 ## May 17th, 2024
-- [ ] Hannah adds data tables to the region analysis dashboard
-- [ ] Sirin checks DWD for future year weather profile.
-- (new dashboard) plotting timeseries for historic comparison. it's a "mixed-plot" where model results are bars, reference is line
+- [x] Hannah adds data tables to the region analysis dashboard
+- [x] Sirin checks DWD for future year weather profile.
+
+
+## May 24th, 2024
+- [ ] Future year weather profiles: https://zenodo.org/records/7907883
+  - check if all years (2010-2050) exceed 100 MB. If so, reduce future years to 5 (or 10) steps like 2025,2030, etc.
+- [ ] new dashboard: plotting timeseries for historic comparison. it's a "mixed-plot" where model results are bars, reference is line
+  - years on x-axis
+  - one bar chart with energy carriers (in legend) accumulated for each year from model results.
+    line for the total coming from reference data years.
+  - one bar chart with end-uses (in legend) accumulated for each year from model results.
+    line for the total coming from reference data years.
+- [ ] Sirin updates the CalibrationTarget file with historic reference data.
 
 
 ### Later stage

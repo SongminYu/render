@@ -237,6 +237,11 @@ class BuildingScenario(RenderScenario):
                             })
         self.agent_params = pd.DataFrame(agent_params)
 
+    def get_new_building_id_subsector_agent(self, rkey: "BuildingKey"):
+        id_subsector_agent = self.building_num_model.get_item(rkey) + 1
+        self.building_num_model.set_item(rkey, id_subsector_agent)
+        return id_subsector_agent
+
     """
     setup cost data
     """
@@ -479,11 +484,11 @@ class BuildingScenario(RenderScenario):
             "year"
         ])
         self.location_building_num = RenderDict.create_empty_rdict(key_cols=[
-                "id_scenario",
-                "id_region",
-                "id_building_location",
-                "year"
-            ])
+            "id_scenario",
+            "id_region",
+            "id_building_location",
+            "year"
+        ])
         self.location_building_num_heating_tech_district_heating = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
@@ -496,6 +501,10 @@ class BuildingScenario(RenderScenario):
             "id_building_location",
             "year"
         ])
+
+        # result data containers
+        self.renovation_action_info = []
+        self.heating_system_action_info = []
         self.dwelling_number = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
@@ -507,41 +516,5 @@ class BuildingScenario(RenderScenario):
             "id_unit_user_type",
             "year"
         ])
-        # result data containers
-        self.building_stock = []
-        self.renovation_action_info = []
-        self.heating_system_action_info = []
-        self.renovation_action_building = RenderDict.create_empty_rdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type",
-            "id_building_construction_period",
-            "year"
-        ])
-        self.renovation_action_component = RenderDict.create_empty_rdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type",
-            "id_building_construction_period",
-            "id_building_component",
-            "year"
-        ])
-        self.renovation_action_labor_demand = RenderDict.create_empty_rdict(key_cols=[
-            "id_scenario",
-            "id_region",
-            "id_sector",
-            "id_subsector",
-            "id_building_type",
-            "id_building_construction_period",
-            "id_building_component",
-            "year"
-        ])
 
-    def get_new_building_id_subsector_agent(self, rkey: "BuildingKey"):
-        id_subsector_agent = self.building_num_model.get_item(rkey) + 1
-        self.building_num_model.set_item(rkey, id_subsector_agent)
-        return id_subsector_agent
+
