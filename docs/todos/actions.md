@@ -22,6 +22,14 @@
   - do we model at hourly resolution? depending on if we contribute load profiles from our model
   - or we consider a coupling approach with other model, then in Render we use self-consumption rate
 - [ ] hydrogen grid availability
+- [ ] update table names
+  - for some scenario tables, they are only used for initialization, or mixed used for initialization and new buildings
+  - decision: create a new group of buildings called "Initialization_xxx" --> cleaner
+- [ ] revise tables to be `id_scenario` dependent
+  - `renovation_mandatory`
+  - `heating_technology_mandatory`
+  - `gas_infrastructure_availability`
+  - `dh_infrastructure_availability`
 
 ### Sirin
 

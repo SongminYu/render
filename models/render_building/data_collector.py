@@ -29,9 +29,9 @@ class BuildingDataCollector(RenderDataCollector):
         self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"ventilation_technology_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
         self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"ventilation_technology_opex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
         self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, df_name=f"heating_tech_adoption", unit="count", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.location_building_num, df_name=f"infrastructure_building_num", unit="count", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_district_heating, df_name=f"infrastructure_building_num_dh_adoption", unit="count", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_gas, df_name=f"infrastructure_building_num_gas_adoption", unit="count", sub_folder="init_data", if_exists="pass")
+        self.export_rdict(rdict=self.scenario.location_building_num, df_name=f"infrastructure_building_num", unit="count", sub_folder="init_data")
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_district_heating, df_name=f"infrastructure_building_num_dh_adoption", unit="count", sub_folder="init_data")
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_gas, df_name=f"infrastructure_building_num_gas_adoption", unit="count", sub_folder="init_data")
 
     """
     Collect building stock data
