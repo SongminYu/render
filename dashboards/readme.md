@@ -77,10 +77,15 @@ This document contains the development plan of the `RenderDash` tool.
     line for the total coming from reference data years.
   - one bar chart with end-uses (in legend) accumulated for each year from model results.
     line for the total coming from reference data years.
+  - tables: 
+    - for each of the four end-uses, we will have the four tables (16 table in total)
+    - we rename the current page "national year calibration", the new page "national timeseries calibration"
 - [ ] Sirin updates the CalibrationTarget file with historic reference data.
 
 
 ### Later stage
+- rename dashboards:
+  - 
 - new dashboard: timeseries data from simulation and statistics, e.g., 2010-2020
 - beautify dashboards
 - geo-visualization (new dashboard)

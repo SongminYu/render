@@ -4,42 +4,38 @@
 
 ### Meeting
 
-- Updates
-  - meeting with Hannah
-  - meeting with Weijia
-  - Code development
 - arrange a meeting to record detailed code walk-through
 
 ### Songmin
 
-- [x] remove previous code on renovation rate
-- [x] save building stock every year to the csv for memory saving?
-- [x] when "mandatory" --> peak number of actions in the first year
-  - delay logic: a year selected within the window
 - [ ] add function `post_processor.gen_renovation_rate`
 - [ ] add function `post_processor.gen_building_demolition_and_construction`
-- [ ] modeling of PV and battery
-  - do we model at hourly resolution? depending on if we contribute load profiles from our model
-  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
-- [ ] during calibration, behavior profiles need to be updated
+- [ ] calibrate based on updated 2010-2022 results
+  - appliance
+  - space cooling: maybe update the penetration rate, or cooling temperature?
+  - behavior profiles need to be updated
   - [ ] for households,
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
+- [ ] modeling of PV and battery
+  - do we model at hourly resolution? depending on if we contribute load profiles from our model
+  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
+- [ ] hydrogen grid availability
 
 ### Sirin
 
 - [ ] Overview the data gap
 - [ ] Send slides to RokiG meeting to publish
+- [ ] for calibration and prepare for RokiG meeting on June 18th
+  - update energy price and availability tables
+  - re-run the model 2010-2022
+  - upload `final_energy_demand.csv` to drive and send to Songmin 
+  - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
 - [ ] For JF on June 3rd
     - update slides to introduce how qualitative input from IBP are used to develop scenarios
     - show IBP how the scenarios are quantified in the model (show the related tables)
     - ask them to fill in the data gap
-- [ ] For the meeting on June 18th
-  - we calibrate 2010-2020
-  - quantify the reference scenario in the tables
-  - run the model and process results
-  - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
 
 ## Done
 
@@ -71,6 +67,10 @@
   - [x] `Parameter_Building_ActionProbability` added
 - [x] mandatory renovation
 - [x] mandatory heating system modernization
+- [x] remove previous code on renovation rate
+- [x] save building stock every year to the csv for memory saving?
+- [x] when "mandatory" --> peak number of actions in the first year
+  - delay logic: a year selected within the window
 
 ### Sirin
 
