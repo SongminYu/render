@@ -285,7 +285,11 @@ class HeatingTechnology:
                         small_scale=False
                     )
                 investment_cost_per_kW_annualized = investment_cost_per_kW_not_annualized * self.get_annuity_factor(rkey)
-                investment_cost_annualized = investment_cost_per_kW_annualized * heating_technology_size
+                investment_cost_annualized = (
+                        investment_cost_per_kW_annualized *
+                        heating_technology_size *
+                        (1 - self.scenario.s_subsidy_heating_modernization.get_item(rkey=rkey))
+                )
                 om_cost = om_cost_per_kW * heating_technology_size
                 energy_cost_per_kWh = self.scenario.heating_technology_energy_cost.get_item(rkey)
                 energy_cost = energy_cost_per_kWh * total_heating_demand

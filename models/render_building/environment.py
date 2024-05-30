@@ -267,7 +267,8 @@ class BuildingEnvironment(Environment):
 
                         # renovated the selected building component
                         before_renovation_status, id_building_component_option_efficiency_class = (
-                            building.select_component(component_name=selected_component_name))
+                            building.select_component(component_name=selected_component_name)
+                        )
                         building.renovate_component(
                             component_name=selected_component_name,
                             id_building_component_option_efficiency_class=id_building_component_option_efficiency_class

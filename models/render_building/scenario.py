@@ -24,6 +24,8 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_dh_availability = 0
         self.id_scenario_gas_availability = 0
         self.id_scenario_hydrogen_availability = 0
+        self.id_scenario_subsidy_building_renovation = 0
+        self.id_scenario_subsidy_heating_modernization = 0
         self.id_scenario_renovation_mandatory = 0
         self.id_scenario_heating_technology_mandatory = 0
         self.renovation_mandatory = 0
@@ -149,9 +151,6 @@ class BuildingScenario(RenderScenario):
     def load_scenarios(self):
         # RenderDict
         self.s_building = self.load_scenario("Scenario_Building.xlsx")
-        self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
-        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx", region_level=0)
-        self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0, scenario_filter="id_scenario_renovation_mandatory")
         self.s_building_construction_period = self.load_scenario("Scenario_Building_ConstructionPeriod.xlsx")
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")
@@ -206,6 +205,12 @@ class BuildingScenario(RenderScenario):
         self.s_useful_energy_demand_index_appliance_electricity = self.load_scenario("Scenario_UsefulEnergyDemandIndex_ApplianceElectricity.xlsx", region_level=0)
         self.s_useful_energy_demand_index_hot_water = self.load_scenario("Scenario_UsefulEnergyDemandIndex_HotWater.xlsx", region_level=0)
         self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
+        self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
+        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx", region_level=0)
+        self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0, scenario_filter="id_scenario_renovation_mandatory")
+        self.s_subsidy_building_renovation = self.load_scenario("Scenario_Subsidy_BuildingRenovation.xlsx", region_level=0, scenario_filter="id_scenario_subsidy_building_renovation")
+        self.s_subsidy_heating_modernization = self.load_scenario("Scenario_Subsidy_HeatingModernization.xlsx", region_level=0, scenario_filter="id_scenario_subsidy_heating_modernization")
+
         # Dataframe
         self.s_heating_technology_second = self.load_dataframe("Scenario_HeatingTechnology_Second.xlsx")
 

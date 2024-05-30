@@ -663,7 +663,11 @@ class Building(Agent):
         for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
             rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
             if self.scenario.s_building_component_availability.get_item(rkey):
-                capex = self.scenario.building_component_capex.get_item(rkey) * building_component.area
+                capex = (
+                        self.scenario.building_component_capex.get_item(rkey) *
+                        building_component.area *
+                        (1 - self.scenario.s_subsidy_building_renovation.get_item(rkey))
+                )
                 self.renovate_component(
                     component_name=component_name,
                     id_building_component_option_efficiency_class=id_building_component_option_efficiency_class

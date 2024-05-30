@@ -30,12 +30,11 @@
   - grid initialization and diffusion
   - update of available technologies
 - [x] for new buildings: only renewable heating is allowed
-- [ ] subsidy programs for renovation and heat pump
-  - could depend on income group, so we need to add income group of unit users
-  - add a new "subsidy" table depending on some ids, for example, 
-    - `id_building_efficiency_class_after`
-    - `id_heating_technology`
-    - `id_income_group`
+- [x] subsidy program for `heating_modernization` --> `id_income_group` missing but also not sure how to add (multiple unit users)
+- [x] subsidy program for `building_renovation`
+  - code added
+  - scenario table --> ids to be decided
+  - `id_income_group` missing but also not sure how to add (multiple unit users)
 - [ ] modeling of PV and battery
   - do we model at hourly resolution? depending on if we contribute load profiles from our model
   - or we consider a coupling approach with other model, then in Render we use self-consumption rate
