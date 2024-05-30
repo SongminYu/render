@@ -53,10 +53,8 @@ def get_base_d(row):
 def gen_final_energy_demand_from_building_stock(
     cfg: "Config",
     input_table: str = "building_stock.csv",
-    output_table: str = "final_energy_demand.csv"
+    output_table: str = "final_energy_demand.csv",
 ):
-
-    # TODO: add the impact of "occupancy_rate" factor
 
     def get_appliance_electricity():
         d = get_base_d(row=row)
@@ -136,8 +134,39 @@ def gen_final_energy_demand_from_building_stock(
     df = pd.DataFrame(l)
     group_ids = copy.deepcopy(KEY_COLS)
     group_ids += ['id_end_use', 'id_energy_carrier', 'unit']
-    aggregated_df = df.groupby(group_ids).agg({'value': 'sum'}).reset_index()
-    aggregated_df.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
+    energy_demand_nuts3 = df.groupby(group_ids).agg({'value': 'sum'}).reset_index()
+    energy_demand_nuts3.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
+
+
+def aggregate_final_energy_demand(
+    cfg: "Config",
+    input_table: str = "final_energy_demand.csv",
+    nuts_level: int = 3,
+    group_by_cols: Optional[List[str]] = None
+):
+    assert nuts_level in [0, 1, 2, 3]
+    energy_demand_nuts3 = pd.read_csv(os.path.join(cfg.output_folder, input_table))
+    if nuts_level < 3:
+        region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
+        d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
+        energy_demand_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
+        energy_demand_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in energy_demand_nuts3["id_region_nuts3"]]
+    if group_by_cols is None:
+        group_by_cols = [
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_end_use",
+            "id_energy_carrier",
+            "year",
+            "unit",
+        ]
+    energy_demand_aggregated = energy_demand_nuts3.groupby(group_by_cols).agg({'value': 'sum'}).reset_index()
+    energy_demand_aggregated.to_csv(
+        os.path.join(cfg.output_folder, f"final_energy_demand_nuts{nuts_level}.csv"),
+        index=False
+    )
 
 
 def gen_building_stock_summary(
@@ -189,3 +218,4 @@ def extract_cols(
     building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
     building_stock_cols = building_stock.loc[:, cols]
     building_stock_cols.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
+

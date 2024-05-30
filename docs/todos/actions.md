@@ -4,11 +4,13 @@
 
 ### Meeting
 
+- upload ecemf results
 - arrange a meeting to record detailed code walk-through
 
 ### Songmin
 
 - [ ] add function `post_processor.gen_renovation_rate`
+- [ ] add function `post_processor.aggregation_nuts2`
 - [ ] add function `post_processor.gen_building_demolition_and_construction`
 - [ ] calibrate based on updated 2010-2022 results
   - appliance
@@ -30,6 +32,15 @@
   - `heating_technology_mandatory`
   - `gas_infrastructure_availability`
   - `dh_infrastructure_availability`
+- [ ] for new buildings
+  - we can define in the scenario, maybe only 100% renewable percentage is allowed
+  - PV adoption is mandatory
+- [ ] subsidy programs for renovation and heat pump
+  - could depend on income group, so we need to add income group of unit users
+  - add a new "subsidy" table depending on some ids, for example, 
+    - `id_building_efficiency_class_after`
+    - `id_heating_technology`
+    - `id_income_group`
 
 ### Sirin
 
