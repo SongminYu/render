@@ -229,6 +229,7 @@ class Building(Agent):
         self.heating_system = HeatingSystem(self.rkey.make_copy(), self.scenario)
         self.init_building_district_heating_availability_new_construction()
         self.init_building_gas_availability_new_construction()
+        self.init_building_hydrogen_availability_new_construction()
         action_info = self.heating_system.init_heating_technology_main_new_construction(
             heating_demand_profile=self.heating_demand_profile,
             hot_water_profile=self.hot_water_profile
@@ -287,6 +288,27 @@ class Building(Agent):
     def init_building_gas_availability_new_construction(self):
         if random.uniform(0, 1) <= self.scenario.s_infrastructure_availability_gas.get_item(self.rkey):
             self.heating_system.gas_available = True
+
+    def init_building_hydrogen_availability(self):
+
+        def get_hydrogen_connection_prob():
+            connection_prob = 0
+            n = self.scenario.location_building_num.get_item(self.rkey, not_found_default=0)
+            if n > 0:
+                m = self.scenario.location_building_num_heating_tech_hydrogen.get_item(self.rkey, not_found_default=0)
+                initial_ratio = m / n
+                target_ratio = self.scenario.s_infrastructure_availability_hydrogen.get_item(self.rkey)
+                if target_ratio > initial_ratio:
+                    connection_prob = (target_ratio - initial_ratio) / (1 - initial_ratio)
+            return connection_prob
+
+        if not self.heating_system.hydrogen_available:
+            if random.uniform(0, 1) <= get_hydrogen_connection_prob():
+                self.heating_system.hydrogen_available = True
+
+    def init_building_hydrogen_availability_new_construction(self):
+        if random.uniform(0, 1) <= self.scenario.s_infrastructure_availability_hydrogen.get_item(self.rkey):
+            self.heating_system.hydrogen_available = True
 
     def init_building_ventilation_system(self):
         self.ventilation_system = VentilationSystem(self.rkey.make_copy(), self.scenario)
@@ -678,6 +700,7 @@ class Building(Agent):
         heating_technology.update_optional_heating_technologies(
             district_heating_available=self.heating_system.district_heating_available,
             gas_available=self.heating_system.gas_available,
+            hydrogen_available=self.heating_system.hydrogen_available,
             limit_to=limit_to
         )
         option_action_info = heating_technology.select(

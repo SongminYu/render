@@ -43,6 +43,7 @@ class BuildingEnvironment(Environment):
         for building in tqdm(buildings, desc="Setting up infrastructure availability --> "):
             building.init_building_district_heating_availability()
             building.init_building_gas_availability()
+            building.init_building_hydrogen_availability()
 
     @staticmethod
     def update_buildings_year(buildings: "AgentList[Building]"):
@@ -110,6 +111,19 @@ class BuildingEnvironment(Environment):
             if building.exists and (not building.heating_system.gas_available):
                 if random.uniform(0, 1) <= get_gas_connection_prob(building.rkey.make_copy()):
                     building.heating_system.gas_available = True
+
+    def update_buildings_infrastructure_hydrogen_grid(self, buildings: "AgentList[Building]"):
+
+        def get_hydrogen_connection_prob(rkey: "BuildingKey"):
+            connection_rate_1 = self.scenario.s_infrastructure_availability_hydrogen.get_item(rkey)
+            rkey.year = rkey.year - 1
+            connection_rate_0 = self.scenario.s_infrastructure_availability_hydrogen.get_item(rkey)
+            return (connection_rate_1 - connection_rate_0) / (1 - connection_rate_0)
+
+        for building in buildings:
+            if building.exists and (not building.heating_system.hydrogen_available):
+                if random.uniform(0, 1) <= get_hydrogen_connection_prob(building.rkey.make_copy()):
+                    building.heating_system.hydrogen_available = True
 
     def update_buildings_profile_appliance(self, buildings: "AgentList[Building]"):
         for building in buildings:

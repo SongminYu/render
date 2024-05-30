@@ -32,6 +32,7 @@ class BuildingDataCollector(RenderDataCollector):
         self.export_rdict(rdict=self.scenario.location_building_num, df_name=f"infrastructure_building_num", unit="count", sub_folder="init_data")
         self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_district_heating, df_name=f"infrastructure_building_num_dh_adoption", unit="count", sub_folder="init_data")
         self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_gas, df_name=f"infrastructure_building_num_gas_adoption", unit="count", sub_folder="init_data")
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_hydrogen, df_name=f"infrastructure_building_num_hydrogen_adoption", unit="count", sub_folder="init_data")
 
     """
     Collect building stock data
@@ -60,6 +61,7 @@ class BuildingDataCollector(RenderDataCollector):
             building_dict["id_heating_system"] = building.heating_system.rkey.id_heating_system
             building_dict["district_heating_available"] = building.heating_system.district_heating_available
             building_dict["gas_available"] = building.heating_system.gas_available
+            building_dict["hydrogen_available"] = building.heating_system.hydrogen_available
             for ht_name, heating_technology in [
                 ["main", building.heating_system.heating_technology_main],
                 ["second", building.heating_system.heating_technology_second],

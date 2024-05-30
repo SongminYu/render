@@ -35,6 +35,7 @@ class BuildingModel(RenderModel):
             self.environment.update_buildings_radiator(self.buildings)
             self.environment.update_buildings_infrastructure_district_heating(self.buildings)
             self.environment.update_buildings_infrastructure_gas_grid(self.buildings)
+            self.environment.update_buildings_infrastructure_hydrogen_grid(self.buildings)
             self.environment.update_buildings_profile_appliance(self.buildings)
             self.environment.update_buildings_profile_hot_water(self.buildings)
             self.environment.update_buildings_technology_cooling(self.buildings)

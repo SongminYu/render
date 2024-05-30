@@ -22,6 +22,7 @@ class HeatingSystem:
         self.heating_technology_second: Optional["HeatingTechnology"] = None
         self.district_heating_available = False
         self.gas_available = False
+        self.hydrogen_available = False
         self.heating_technologies = []
 
     def init_system_type(self):
@@ -42,6 +43,9 @@ class HeatingSystem:
             elif self.heating_technology_main.rkey.id_heating_technology in cons.GAS_HEATING_TECHNOLOGIES:
                 self.gas_available = True
                 self.scenario.location_building_num_heating_tech_gas.accumulate_item(rkey=self.rkey, value=1)
+            elif self.heating_technology_main.rkey.id_heating_technology in cons.HYDROGEN_HEATING_TECHNOLOGIES:
+                self.hydrogen_available = True
+                self.scenario.location_building_num_heating_tech_hydrogen.accumulate_item(rkey=self.rkey, value=1)
 
         self.heating_technology_main = HeatingTechnology(
             rkey=self.rkey.make_copy(),
@@ -62,10 +66,19 @@ class HeatingSystem:
             scenario=self.scenario,
             priority="main"
         )
-        self.heating_technology_main.update_optional_heating_technologies(
-            district_heating_available=self.district_heating_available,
-            gas_available=self.gas_available,
-        )
+        if self.scenario.s_construction_mandatory_renewable_heating.get_item(self.rkey):
+            self.heating_technology_main.update_optional_heating_technologies(
+                district_heating_available=self.district_heating_available,
+                gas_available=self.gas_available,
+                hydrogen_available=self.hydrogen_available,
+                limit_to=cons.RENEWABLE_MAIN_HEATING_TECHNOLOGIES
+            )
+        else:
+            self.heating_technology_main.update_optional_heating_technologies(
+                district_heating_available=self.district_heating_available,
+                gas_available=self.gas_available,
+                hydrogen_available=self.hydrogen_available,
+            )
         action_info = self.heating_technology_main.select(
             heating_demand_profile=heating_demand_profile,
             hot_water_profile=hot_water_profile,
@@ -192,21 +205,32 @@ class HeatingTechnology:
         self.update_supply_temperature_space_heating()
         self.update_energy_intensity_space_heating()
 
-    def update_optional_heating_technologies(self, district_heating_available: bool, gas_available: bool, limit_to: Optional[List[int]] = None):
+    def update_optional_heating_technologies(
+        self,
+        district_heating_available: bool,
+        gas_available: bool,
+        hydrogen_available: bool,
+        limit_to: Optional[List[int]] = None
+    ):
+
+        def check_infrastructure_availability(tech_options):
+            if not district_heating_available:
+                tech_options = list(set(tech_options) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
+            if not gas_available:
+                tech_options = list(set(tech_options) - set(cons.GAS_HEATING_TECHNOLOGIES))
+            if not hydrogen_available:
+                tech_options = list(set(tech_options) - set(cons.HYDROGEN_HEATING_TECHNOLOGIES))
+            return tech_options
+
         if limit_to is None:
             if self.priority == "main":
-                l = list(set(self.scenario.heating_technologies.keys()) - set(cons.SECOND_HEATING_TECHNOLOGIES))
-                if not district_heating_available:
-                    l = list(set(l) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
-                if not gas_available:
-                    l = list(set(l) - set(cons.GAS_HEATING_TECHNOLOGIES))
-                self.optional_heating_technologies = l
+                self.optional_heating_technologies = check_infrastructure_availability(tech_options=list(
+                    set(self.scenario.heating_technologies.keys()) - set(cons.SECOND_HEATING_TECHNOLOGIES)
+                ))
             else:
                 self.optional_heating_technologies = cons.SECOND_HEATING_TECHNOLOGIES
         else:
-            if not district_heating_available:
-                limit_to = list(set(limit_to) - set(cons.DISTRICT_HEATING_TECHNOLOGIES))
-            self.optional_heating_technologies = limit_to
+            self.optional_heating_technologies = check_infrastructure_availability(tech_options=limit_to)
 
     def select(
             self,

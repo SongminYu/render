@@ -4,14 +4,43 @@
 
 ### Meeting
 
+- Updates
+  - meeting with Hannah
+  - meeting with Weijia
+  - Code developments
+- Open questions
+  - `renovation_rate` output
+  - `demolition` and `construction` output
 - upload ecemf results
 - arrange a meeting to record detailed code walk-through
 
 ### Songmin
-
-- [ ] add function `post_processor.gen_renovation_rate`
-- [ ] add function `post_processor.aggregation_nuts2`
-- [ ] add function `post_processor.gen_building_demolition_and_construction`
+- [x] add function `post_processor.aggregate_final_energy_demand`
+- [ ] update table names --> second thought: slower, consistency and maintenance, 2011 can be scenario values
+  - for some scenario tables, they are only used for initialization, or mixed used for initialization and new buildings
+  - decision: create a new group of buildings called "Initialization_xxx" --> cleaner
+- [x] revise tables to be `id_scenario` dependent
+  - `renovation_mandatory`
+  - `heating_technology_mandatory`
+  - `gas_infrastructure_availability`
+  - `dh_infrastructure_availability`
+- [x] hydrogen grid
+  - grid initialization and diffusion
+  - update of available technologies
+- [x] for new buildings: only renewable heating is allowed
+- [ ] subsidy programs for renovation and heat pump
+  - could depend on income group, so we need to add income group of unit users
+  - add a new "subsidy" table depending on some ids, for example, 
+    - `id_building_efficiency_class_after`
+    - `id_heating_technology`
+    - `id_income_group`
+- [ ] modeling of PV and battery
+  - do we model at hourly resolution? depending on if we contribute load profiles from our model
+  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
+  - mandatory for new buildings?
+- [ ] add function 
+  - `post_processor.gen_renovation_rate`
+  - `post_processor.gen_building_demolition_and_construction`
 - [ ] calibrate based on updated 2010-2022 results
   - appliance
   - space cooling: maybe update the penetration rate, or cooling temperature?
@@ -20,27 +49,8 @@
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
-- [ ] modeling of PV and battery
-  - do we model at hourly resolution? depending on if we contribute load profiles from our model
-  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
-- [ ] hydrogen grid availability
-- [ ] update table names
-  - for some scenario tables, they are only used for initialization, or mixed used for initialization and new buildings
-  - decision: create a new group of buildings called "Initialization_xxx" --> cleaner
-- [ ] revise tables to be `id_scenario` dependent
-  - `renovation_mandatory`
-  - `heating_technology_mandatory`
-  - `gas_infrastructure_availability`
-  - `dh_infrastructure_availability`
-- [ ] for new buildings
-  - we can define in the scenario, maybe only 100% renewable percentage is allowed
-  - PV adoption is mandatory
-- [ ] subsidy programs for renovation and heat pump
-  - could depend on income group, so we need to add income group of unit users
-  - add a new "subsidy" table depending on some ids, for example, 
-    - `id_building_efficiency_class_after`
-    - `id_heating_technology`
-    - `id_income_group`
+
+
 
 ### Sirin
 

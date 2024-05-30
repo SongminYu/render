@@ -19,6 +19,11 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
         self.id_scenario_teleworking = 0
+        self.id_scenario_dh_availability = 0
+        self.id_scenario_gas_availability = 0
+        self.id_scenario_hydrogen_availability = 0
+        self.id_scenario_renovation_mandatory = 0
+        self.id_scenario_heating_technology_mandatory = 0
         self.renovation_mandatory = 0
         self.heating_technology_mandatory = 0
 
@@ -143,7 +148,8 @@ class BuildingScenario(RenderScenario):
         # RenderDict
         self.s_building = self.load_scenario("Scenario_Building.xlsx")
         self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
-        self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0)
+        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx")
+        self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0, scenario_filter="id_scenario_renovation_mandatory")
         self.s_building_construction_period = self.load_scenario("Scenario_Building_ConstructionPeriod.xlsx")
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
         self.s_building_location = self.load_scenario("Scenario_Building_Location.xlsx")
@@ -159,14 +165,15 @@ class BuildingScenario(RenderScenario):
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=2, all_years=True)
         self.s_unit_user_dwelling_ownership = self.load_scenario("Scenario_UnitUser_DwellingOwnership.xlsx", region_level=2)
         self.s_heating_system = self.load_scenario("Scenario_HeatingSystem.xlsx")
-        self.s_heating_system_minimum_renewable_percentage = self.load_scenario("Scenario_HeatingSystem_MinimumRenewablePercentage.xlsx", region_level=0)
+        self.s_heating_system_minimum_renewable_percentage = self.load_scenario("Scenario_HeatingSystem_MinimumRenewablePercentage.xlsx", region_level=0, scenario_filter="id_scenario_heating_technology_mandatory")
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
         self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
         self.s_heating_technology_availability = self.load_scenario("Scenario_HeatingTechnology_Availability.xlsx", region_level=0)
         self.s_heating_technology_input_labor = self.load_scenario("Scenario_HeatingTechnology_Input_Labor.xlsx", region_level=0)
         self.s_heating_technology_utility_power = self.load_scenario("Scenario_HeatingTechnology_UtilityPower.xlsx", region_level=0)
-        self.s_infrastructure_availability_district_heating = self.load_scenario("Scenario_Infrastructure_Availability_DistrictHeating.xlsx", all_years=True)
-        self.s_infrastructure_availability_gas = self.load_scenario("Scenario_Infrastructure_Availability_Gas.xlsx", all_years=True)
+        self.s_infrastructure_availability_district_heating = self.load_scenario("Scenario_Infrastructure_Availability_DistrictHeating.xlsx", all_years=True, scenario_filter="id_scenario_dh_availability")
+        self.s_infrastructure_availability_gas = self.load_scenario("Scenario_Infrastructure_Availability_Gas.xlsx", all_years=True, scenario_filter="id_scenario_gas_availability")
+        self.s_infrastructure_availability_hydrogen = self.load_scenario("Scenario_Infrastructure_Availability_Hydrogen.xlsx", all_years=True, scenario_filter="id_scenario_hydrogen_availability")
         self.s_radiator = self.load_scenario("Scenario_Radiator.xlsx", region_level=0)
         self.s_radiator_availability = self.load_scenario("Scenario_Radiator_Availability.xlsx", region_level=0)
         self.s_radiator_cost_material = self.load_scenario("Scenario_Radiator_Cost_Material.xlsx", region_level=0)
@@ -496,6 +503,12 @@ class BuildingScenario(RenderScenario):
             "year"
         ])
         self.location_building_num_heating_tech_gas = RenderDict.create_empty_rdict(key_cols=[
+            "id_scenario",
+            "id_region",
+            "id_building_location",
+            "year"
+        ])
+        self.location_building_num_heating_tech_hydrogen = RenderDict.create_empty_rdict(key_cols=[
             "id_scenario",
             "id_region",
             "id_building_location",
