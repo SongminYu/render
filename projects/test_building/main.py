@@ -28,7 +28,8 @@ def run_toolkit(cfg: "Config"):
 def run_post_processor(cfg: "Config"):
     # individual region run
     post_processor.gen_final_energy_demand_from_building_stock(cfg=cfg, input_table="building_stock_R9010101.csv")
-    # post_processor.gen_building_stock_summary(cfg=cfg, input_table="building_stock_R9010101.csv")
+    post_processor.aggregate_final_energy_demand(cfg=cfg, nuts_level=3)
+    post_processor.gen_building_stock_summary(cfg=cfg, input_table="building_stock_R9010101.csv")
 
     # running all regions
     # post_processor.concat_region_tables(cfg=cfg, file_name_prefix_list=["building_stock"])

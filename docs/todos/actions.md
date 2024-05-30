@@ -31,15 +31,12 @@
   - update of available technologies
 - [x] for new buildings: only renewable heating is allowed
 - [x] subsidy program for `heating_modernization` --> `id_income_group` missing but also not sure how to add (multiple unit users)
-- [x] subsidy program for `building_renovation`
-  - code added
-  - scenario table --> ids to be decided
-  - `id_income_group` missing but also not sure how to add (multiple unit users)
+- [x] subsidy program for `building_renovation` --> ids to be decided, `id_income_group` missing but also not sure how to add (multiple unit users)
 - [ ] modeling of PV and battery
   - do we model at hourly resolution? depending on if we contribute load profiles from our model
   - or we consider a coupling approach with other model, then in Render we use self-consumption rate
   - mandatory for new buildings?
-- [ ] add function 
+- [ ] add function
   - `post_processor.gen_renovation_rate`
   - `post_processor.gen_building_demolition_and_construction`
 - [ ] calibrate based on updated 2010-2022 results
