@@ -24,6 +24,8 @@
   - `heating_technology_mandatory`
   - `gas_infrastructure_availability`
   - `dh_infrastructure_availability`
+  - `building_component_availability`
+  - `heating_technology_availability`
 - [x] hydrogen grid
   - grid initialization and diffusion
   - update of available technologies

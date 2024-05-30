@@ -233,7 +233,8 @@ class BuildingEnvironment(Environment):
                     if building_component.rkey.year >= building_component.next_replace_year:
                         if random.uniform(0, 1) <= cons.PROB_POSTPONING_RENOVATION:
                             before_renovation_status, id_building_component_option_efficiency_class = (
-                                building.select_component(component_name=component_name))
+                                building.select_component(component_name=component_name)
+                            )
                             building.renovate_component(
                                 component_name=component_name,
                                 id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
@@ -248,11 +249,7 @@ class BuildingEnvironment(Environment):
                             building_component.next_replace_year += self.scenario.p_building_component_postponing_lifetime.get_item(building_component.rkey)
 
         if self.scenario.renovation_mandatory:
-            # TODO:
-            #  The mandatory renovation may be triggered by a cold winter (e.g., 2010),
-            #  so we should consider maybe multiple years.
-            #  This may be considered when developing the threshold values in the scenario table?
-
+            # TODO: Mandatory renovation may be triggered by a cold winter (e.g., 2010)
             for building in buildings:
                 max_heating_intensity = self.scenario.s_renovation_maximum_heating_intensity.get_item(building.rkey)
                 if building.exists and building.heating_demand_per_m2 > max_heating_intensity:

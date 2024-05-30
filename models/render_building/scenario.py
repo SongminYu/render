@@ -19,6 +19,8 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_price_co2_emission = 0
         self.id_scenario_energy_emission_factor = 0
         self.id_scenario_teleworking = 0
+        self.id_scenario_building_component_availability = 0
+        self.id_scenario_heating_technology_availability = 0
         self.id_scenario_dh_availability = 0
         self.id_scenario_gas_availability = 0
         self.id_scenario_hydrogen_availability = 0
@@ -148,7 +150,7 @@ class BuildingScenario(RenderScenario):
         # RenderDict
         self.s_building = self.load_scenario("Scenario_Building.xlsx")
         self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
-        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx")
+        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx", region_level=0)
         self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0, scenario_filter="id_scenario_renovation_mandatory")
         self.s_building_construction_period = self.load_scenario("Scenario_Building_ConstructionPeriod.xlsx")
         self.s_building_height = self.load_scenario("Scenario_Building_Height.xlsx")
@@ -156,7 +158,7 @@ class BuildingScenario(RenderScenario):
         self.s_building_ownership = self.load_scenario("Scenario_Building_Ownership.xlsx")
         self.s_building_unit_area = self.load_scenario("Scenario_Building_UnitArea.xlsx", region_level=0)
         self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
-        self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True)
+        self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True, scenario_filter="id_scenario_building_component_availability")
         self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0)
         self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_cost_payback_time = self.load_scenario("Scenario_BuildingComponent_Cost_PaybackTime.xlsx", region_level=0)
@@ -168,7 +170,7 @@ class BuildingScenario(RenderScenario):
         self.s_heating_system_minimum_renewable_percentage = self.load_scenario("Scenario_HeatingSystem_MinimumRenewablePercentage.xlsx", region_level=0, scenario_filter="id_scenario_heating_technology_mandatory")
         self.s_heating_technology_main = self.load_scenario("Scenario_HeatingTechnology_Main.xlsx", region_level=0)
         self.s_heating_technology_efficiency = self.load_scenario("Scenario_HeatingTechnology_EfficiencyCoefficient.xlsx", all_years=True)
-        self.s_heating_technology_availability = self.load_scenario("Scenario_HeatingTechnology_Availability.xlsx", region_level=0)
+        self.s_heating_technology_availability = self.load_scenario("Scenario_HeatingTechnology_Availability.xlsx", region_level=0, scenario_filter="id_scenario_heating_technology_availability")
         self.s_heating_technology_input_labor = self.load_scenario("Scenario_HeatingTechnology_Input_Labor.xlsx", region_level=0)
         self.s_heating_technology_utility_power = self.load_scenario("Scenario_HeatingTechnology_UtilityPower.xlsx", region_level=0)
         self.s_infrastructure_availability_district_heating = self.load_scenario("Scenario_Infrastructure_Availability_DistrictHeating.xlsx", all_years=True, scenario_filter="id_scenario_dh_availability")
