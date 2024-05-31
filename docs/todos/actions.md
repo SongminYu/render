@@ -34,9 +34,11 @@
 
 ### Sirin
 
-- [ ] Overview the data gap
+- [x] Overview the data gap
+- [ ] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
+  - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
 - [ ] Send slides to RokiG meeting to publish
-- [ ] for calibration and prepare for RokiG meeting on June 18th
+- [x] for calibration and prepare for RokiG meeting on June 18th
   - update energy price and availability tables
   - re-run the model 2010-2022
   - upload `final_energy_demand.csv` to drive and send to Songmin 
