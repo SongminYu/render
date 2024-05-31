@@ -127,7 +127,7 @@ class RenderScenario(Scenario):
         # wholesale, tax_rate, and co2_emission
         for index, row in markup.iterrows():
             for year in range(self.start_year, self.end_year + 2):
-                # self.end_year + 2 --> until 2051, for the updating total energy cost in the last year
+                # self.end_year + 2 --> until 2051, for updating total energy cost in the last year
                 rkey = RenderKey(id_scenario=self.id).from_dict({
                     "id_region": row["id_region"],
                     "id_sector": row["id_sector"],
@@ -137,11 +137,12 @@ class RenderScenario(Scenario):
                 self.s_final_energy_carrier_price.set_item(
                     rkey,
                     (
-                            self.s_energy_carrier_price_wholesale.get_item(rkey) +
-                            self.s_energy_carrier_price_markup.get_item(rkey) +
-                            (
-                                    self.s_energy_carrier_price_co2_emission.get_item(rkey) *
-                                    self.s_emission_factor.get_item(rkey)
-                            )
-                    ) * (1 + self.s_energy_carrier_price_tax_rate.get_item(rkey))
+                        self.s_energy_carrier_price_wholesale.get_item(rkey) +
+                        self.s_energy_carrier_price_markup.get_item(rkey)
+                    ) *
+                    (1 + self.s_energy_carrier_price_tax_rate.get_item(rkey)) +
+                    (
+                        self.s_energy_carrier_price_co2_emission.get_item(rkey) *
+                        self.s_emission_factor.get_item(rkey)
+                    )
                 )
