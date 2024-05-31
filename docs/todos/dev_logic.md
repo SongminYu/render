@@ -14,11 +14,13 @@
 
 - [x] limit the probability of lifecycle renovation being triggered (maybe too high now)
   - done by adding the action probability related to the building ownership types
+- sync renovation
+  - subsidy program: depending on `id_building_efficiency_class` increase, different from "individual measure renovation subsidy".
 
 ### both
 
 - [x] capex calculation: lifetime is replaced with payback time for all investment decisions
-- [ ] impact of unit user properties: income group, age group
+- [ ] impact of unit user properties: `id_income_group`, `id_age_group`
 - [ ] endogenous price change of heating technology, biomass, etc. due to demand change
 - [ ] consider willingness-to-pay: as the on-top money that may change the order of the options in the last step
 

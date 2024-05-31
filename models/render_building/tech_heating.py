@@ -66,7 +66,7 @@ class HeatingSystem:
             scenario=self.scenario,
             priority="main"
         )
-        if self.scenario.s_construction_mandatory_renewable_heating.get_item(self.rkey):
+        if self.scenario.s_construction_mandatory_renewable_heating.get_item(self.rkey) == 1:
             self.heating_technology_main.update_optional_heating_technologies(
                 district_heating_available=self.district_heating_available,
                 gas_available=self.gas_available,

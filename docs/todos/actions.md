@@ -8,45 +8,29 @@
   - meeting with Hannah
   - meeting with Weijia
   - Code developments
-- Open questions
-  - `renovation_rate` output
-  - `demolition` and `construction` output
-- upload ecemf results
-- arrange a meeting to record detailed code walk-through
+- Arrange a meeting to record detailed code walk-through
 
 ### Songmin
-- [x] add function `post_processor.aggregate_final_energy_demand`
-- [ ] update table names --> second thought: slower, consistency and maintenance, 2011 can be scenario values
-  - for some scenario tables, they are only used for initialization, or mixed used for initialization and new buildings
-  - decision: create a new group of buildings called "Initialization_xxx" --> cleaner
-- [x] revise tables to be `id_scenario` dependent
-  - `renovation_mandatory`
-  - `heating_technology_mandatory`
-  - `gas_infrastructure_availability`
-  - `dh_infrastructure_availability`
-  - `building_component_availability`
-  - `heating_technology_availability`
-- [x] hydrogen grid
-  - grid initialization and diffusion
-  - update of available technologies
-- [x] for new buildings: only renewable heating is allowed
-- [x] subsidy program for `heating_modernization` --> `id_income_group` missing but also not sure how to add (multiple unit users)
-- [x] subsidy program for `building_renovation` --> ids to be decided, `id_income_group` missing but also not sure how to add (multiple unit users)
-- [ ] modeling of PV and battery
-  - do we model at hourly resolution? depending on if we contribute load profiles from our model
-  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
-  - mandatory for new buildings?
-- [ ] add function
-  - `post_processor.gen_renovation_rate`
-  - `post_processor.gen_building_demolition_and_construction`
+- [ ] collect capex of `heating_modernization` and `building_renovation` for both state and consumer
 - [ ] calibrate based on updated 2010-2022 results
-  - appliance
+  - add other energy carriers in appliance consumption and efficiency index
   - space cooling: maybe update the penetration rate, or cooling temperature?
   - behavior profiles need to be updated
   - [ ] for households,
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
+- [ ] add function
+  - `post_processor.gen_renovation_rate`
+    - component renovation rate = number of component renovated buildings / total number of buildings
+    - component area-weighted renovation rate = renovated component area / total component area in stock
+    - overall modernization rate = (area-weighted renovation rate wall * 0.4 + area-weighted renovation rate roof * 0.28 + area-weighted renovation rate basement * 0.23 + area-weighted renovation rate window * 0.09)
+  - `post_processor.gen_building_demolition_and_construction`
+    - number of demolished/constructed buildings / total number of buildings
+- [ ] modeling of PV and battery
+  - do we model at hourly resolution? depending on if we contribute load profiles from our model
+  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
+  - mandatory for new buildings?
 
 ### Sirin
 
@@ -96,6 +80,23 @@
 - [x] save building stock every year to the csv for memory saving?
 - [x] when "mandatory" --> peak number of actions in the first year
   - delay logic: a year selected within the window
+- [x] add function `post_processor.aggregate_final_energy_demand`
+- [ ] update table names --> second thought: slower, consistency and maintenance, 2011 can be scenario values
+  - for some scenario tables, they are only used for initialization, or mixed used for initialization and new buildings
+  - decision: create a new group of buildings called "Initialization_xxx" --> cleaner
+- [x] revise tables to be `id_scenario` dependent
+  - `renovation_mandatory`
+  - `heating_technology_mandatory`
+  - `gas_infrastructure_availability`
+  - `dh_infrastructure_availability`
+  - `building_component_availability`
+  - `heating_technology_availability`
+- [x] hydrogen grid
+  - grid initialization and diffusion
+  - update of available technologies
+- [x] for new buildings: only renewable heating is allowed
+- [x] subsidy program for `heating_modernization` --> `Scenario_Subsidy_HeatingModernization`
+- [x] subsidy program for `building_renovation` --> `Scenario_Subsidy_BuildingRenovation`
 
 ### Sirin
 
