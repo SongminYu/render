@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import pandas as pd
 
 from models.render.data_collector import RenderDataCollector
+from models.render_building import cons
 
 if TYPE_CHECKING:
     from Melodie import AgentList
@@ -20,19 +21,19 @@ class BuildingDataCollector(RenderDataCollector):
     """
 
     def export_initialization_data(self):
-        self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, df_name=f"final_energy_price", unit="euro/kWh", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.building_component_capex, df_name=f"building_component_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, df_name=f"heating_technology_energy_cost", unit="euro/kWh", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.radiator_capex, df_name=f"radiator_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.cooling_technology_capex, df_name=f"cooling_technology_capex", unit="euro/kW", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.cooling_technology_opex, df_name=f"cooling_technology_opex", unit="euro/kWh", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"ventilation_technology_capex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"ventilation_technology_opex", unit="euro/m2", sub_folder="init_data", if_exists="pass")
-        self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, df_name=f"heating_tech_adoption", unit="count", sub_folder="init_data")
-        self.export_rdict(rdict=self.scenario.location_building_num, df_name=f"infrastructure_building_num", unit="count", sub_folder="init_data")
-        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_district_heating, df_name=f"infrastructure_building_num_dh_adoption", unit="count", sub_folder="init_data")
-        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_gas, df_name=f"infrastructure_building_num_gas_adoption", unit="count", sub_folder="init_data")
-        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_hydrogen, df_name=f"infrastructure_building_num_hydrogen_adoption", unit="count", sub_folder="init_data")
+        self.export_rdict(rdict=self.scenario.s_final_energy_carrier_price, df_name=f"final_energy_price", unit="euro/kWh", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.building_component_capex, df_name=f"building_component_capex", unit="euro/m2", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.heating_technology_energy_cost, df_name=f"heating_technology_energy_cost", unit="euro/kWh", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.radiator_capex, df_name=f"radiator_capex", unit="euro/m2", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.cooling_technology_capex, df_name=f"cooling_technology_capex", unit="euro/kW", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.cooling_technology_opex, df_name=f"cooling_technology_opex", unit="euro/kWh", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.ventilation_technology_capex, df_name=f"ventilation_technology_capex", unit="euro/m2", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.ventilation_technology_opex, df_name=f"ventilation_technology_opex", unit="euro/m2", sub_folder=cons.INIT_DATA_SUBFOLDER, if_exists="pass")
+        self.export_rdict(rdict=self.scenario.heating_technology_main_initial_adoption, df_name=f"heating_tech_adoption", unit="count", sub_folder=cons.INIT_DATA_SUBFOLDER)
+        self.export_rdict(rdict=self.scenario.location_building_num, df_name=f"infrastructure_building_num", unit="count", sub_folder=cons.INIT_DATA_SUBFOLDER)
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_district_heating, df_name=f"infrastructure_building_num_dh_adoption", unit="count", sub_folder=cons.INIT_DATA_SUBFOLDER)
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_gas, df_name=f"infrastructure_building_num_gas_adoption", unit="count", sub_folder=cons.INIT_DATA_SUBFOLDER)
+        self.export_rdict(rdict=self.scenario.location_building_num_heating_tech_hydrogen, df_name=f"infrastructure_building_num_hydrogen_adoption", unit="count", sub_folder=cons.INIT_DATA_SUBFOLDER)
 
     """
     Collect building stock data
@@ -127,7 +128,11 @@ class BuildingDataCollector(RenderDataCollector):
                 building_dict[f"ventilation_system_energy_consumption"] = None
             # save the building dict
             building_stock.append(building_dict)
-        self.save_dataframe(df=pd.DataFrame(building_stock), df_name=f"building_stock_R{self.scenario.id_region}")
+        self.save_dataframe(
+            df=pd.DataFrame(building_stock),
+            df_name=f"building_stock_R{self.scenario.id_region}",
+            sub_folder=cons.REGION_DATA_SUBFOLDER
+        )
 
     """
     Export result data
