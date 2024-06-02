@@ -1,6 +1,6 @@
 import copy
 import os.path
-from typing import List, Optional
+from typing import List, Optional, Dict
 from Melodie import Config
 import pandas as pd
 from models.render_building import cons
@@ -20,6 +20,17 @@ KEY_COLS = [
     'id_building_location',
     'year',
 ]
+AGG_COLS = {
+    'total_living_area': 'sum',
+    'unit_number': 'sum',
+    'population': 'sum',
+    'appliance_electricity_demand_per_person': 'mean',
+    'cooling_demand_per_m2': 'mean',
+    'heating_demand_per_m2': 'mean',
+    'hot_water_demand_per_person': 'mean',
+    'hot_water_demand_per_m2': 'mean',
+    'occupancy_rate': 'mean',
+}
 
 
 def get_base_d(row):
@@ -64,7 +75,13 @@ def process_region_building_stock(cfg: "Config", nuts_level: int = 3):
         )
         gen_region_building_stock_summary(
             cfg=cfg,
-            building_stock=region_building_stock
+            building_stock=region_building_stock,
+            output_table_name=f'{BSS}_{region_table_name.split("_")[-1]}'
+        )
+        aggregate_region_building_stock_summary(
+            cfg=cfg,
+            region_building_stock_summary_file_name=f'{BSS}_{region_table_name.split("_")[-1]}',
+            nuts_level=nuts_level
         )
 
 
@@ -152,14 +169,24 @@ def gen_final_energy_demand_from_region_building_stock(
     group_ids = copy.deepcopy(KEY_COLS)
     group_ids += ['id_end_use', 'id_energy_carrier', 'unit']
     energy_demand_nuts3 = df.groupby(group_ids).agg({'value': 'sum'}).reset_index()
-    energy_demand_nuts3.to_csv(
-        os.path.join(
+    save_dataframe(
+        path=os.path.join(
             cfg.output_folder,
             cons.REGION_DATA_SUBFOLDER,
             f'{output_table_name}.csv'
         ),
-        index=False
+        df=energy_demand_nuts3,
+        if_exists="replace"
     )
+
+
+def aggregate_nuts_level(df_nuts3: pd.DataFrame, nuts_level: int, group_by_cols: List[str], agg_cols: Dict[str, str]):
+    if nuts_level < 3:
+        region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
+        d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
+        df_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
+        df_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in df_nuts3["id_region_nuts3"]]
+    return df_nuts3.groupby(group_by_cols).agg(agg_cols).reset_index()
 
 
 def aggregate_region_final_energy_demand(
@@ -173,25 +200,23 @@ def aggregate_region_final_energy_demand(
         cons.REGION_DATA_SUBFOLDER,
         f'{region_final_energy_demand_file_name}.csv'
     ))
-    if nuts_level < 3:
-        region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
-        d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
-        energy_demand_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
-        energy_demand_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in energy_demand_nuts3["id_region_nuts3"]]
-    group_by_cols = [
-        "id_scenario",
-        "id_region",
-        "id_sector",
-        "id_subsector",
-        "id_end_use",
-        "id_energy_carrier",
-        "year",
-        "unit",
-    ]
-    energy_demand_aggregated = energy_demand_nuts3.groupby(group_by_cols).agg({'value': 'sum'}).reset_index()
     save_dataframe(
         path=os.path.join(cfg.output_folder, f"{FED}_nuts{nuts_level}.csv"),
-        df=energy_demand_aggregated,
+        df=aggregate_nuts_level(
+            df_nuts3=energy_demand_nuts3,
+            nuts_level=nuts_level,
+            group_by_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_end_use",
+                "id_energy_carrier",
+                "year",
+                "unit",
+            ],
+            agg_cols={'value': 'sum'}
+        ),
         if_exists="append"
     )
 
@@ -199,32 +224,56 @@ def aggregate_region_final_energy_demand(
 def gen_region_building_stock_summary(
     cfg: "Config",
     building_stock: pd.DataFrame,
+    output_table_name: str
 ):
-    info_cols = {
-        'total_living_area': 'sum',
-        'unit_number': 'sum',
-        'population': 'sum',
-        'appliance_electricity_demand_per_person': 'mean',
-        'cooling_demand_per_m2': 'mean',
-        'heating_demand_per_m2': 'mean',
-        'hot_water_demand_per_person': 'mean',
-        'hot_water_demand_per_m2': 'mean',
-        'occupancy_rate': 'mean',
-    }
     l = []
     building_stock = building_stock.loc[building_stock["exists"] == 1]
     for index, row in building_stock.iterrows():
         d = get_base_d(row=row)
         d["building_number"] = row["building_number"]
-        for col_name, col_calc in info_cols.items():
+        for col_name, col_calc in AGG_COLS.items():
             d[col_name] = row[col_name] * row["building_number"] if col_calc == "sum" else row[col_name]
         l.append(d)
     df = pd.DataFrame(l)
-    info_cols["building_number"] = "sum"
-    aggregated_df = df.groupby(KEY_COLS).agg(info_cols).reset_index()
+    AGG_COLS["building_number"] = "sum"
+    aggregated_df = df.groupby(KEY_COLS).agg(AGG_COLS).reset_index()
     save_dataframe(
-        path=os.path.join(cfg.output_folder, f'{BSS}.csv'),
+        path=os.path.join(cfg.output_folder, cons.REGION_DATA_SUBFOLDER, f'{output_table_name}.csv'),
         df=aggregated_df,
+        if_exists="replace"
+    )
+
+
+def aggregate_region_building_stock_summary(
+    cfg: "Config",
+    region_building_stock_summary_file_name: str,
+    nuts_level: int
+):
+    assert nuts_level in [0, 1, 2, 3]
+    building_stock_summary_nuts3 = pd.read_csv(os.path.join(
+        cfg.output_folder,
+        cons.REGION_DATA_SUBFOLDER,
+        f'{region_building_stock_summary_file_name}.csv'
+    ))
+    AGG_COLS["building_number"] = "sum"
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, f"{BSS}_nuts{nuts_level}.csv"),
+        df=aggregate_nuts_level(
+            df_nuts3=building_stock_summary_nuts3,
+            nuts_level=nuts_level,
+            group_by_cols=[
+                "id_scenario",
+                "id_region",
+                "id_sector",
+                "id_subsector",
+                "id_building_type",
+                "id_building_construction_period",
+                "id_building_efficiency_class",
+                "id_building_location",
+                "year",
+            ],
+            agg_cols=AGG_COLS
+        ),
         if_exists="append"
     )
 
