@@ -26,7 +26,8 @@ def run_toolkit(cfg: "Config"):
 
 
 def run_post_processor(cfg: "Config"):
-    post_processor.process_region_building_stock(cfg=cfg, nuts_level=3)
+    post_processor.process_region_building_stock(cfg=cfg)
+    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
 
 
 def run_plotter(cfg: "Config"):

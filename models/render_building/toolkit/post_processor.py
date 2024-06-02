@@ -56,8 +56,11 @@ def get_region_table_names(cfg: "Config", file_name_prefix: str):
     return region_table_names
 
 
-def process_region_building_stock(cfg: "Config", nuts_level: int = 3):
-    for region_table_name in tqdm(get_region_table_names(cfg=cfg, file_name_prefix=BS), desc="processing region building stock"):
+def process_region_building_stock(cfg: "Config"):
+    for region_table_name in tqdm(
+        get_region_table_names(cfg=cfg, file_name_prefix=BS),
+        desc="processing region building stock"
+    ):
         region_building_stock = pd.read_csv(os.path.join(os.path.join(
             cfg.output_folder,
             cons.REGION_DATA_SUBFOLDER,
@@ -68,15 +71,22 @@ def process_region_building_stock(cfg: "Config", nuts_level: int = 3):
             building_stock=region_building_stock,
             output_table_name=f'{FED}_{region_table_name.split("_")[-1]}'
         )
-        aggregate_region_final_energy_demand(
-            cfg=cfg,
-            region_final_energy_demand_file_name=f'{FED}_{region_table_name.split("_")[-1]}',
-            nuts_level=nuts_level
-        )
         gen_region_building_stock_summary(
             cfg=cfg,
             building_stock=region_building_stock,
             output_table_name=f'{BSS}_{region_table_name.split("_")[-1]}'
+        )
+
+
+def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
+    for region_table_name in tqdm(
+        get_region_table_names(cfg=cfg, file_name_prefix=BS),
+        desc="processing region building stock"
+    ):
+        aggregate_region_final_energy_demand(
+            cfg=cfg,
+            region_final_energy_demand_file_name=f'{FED}_{region_table_name.split("_")[-1]}',
+            nuts_level=nuts_level
         )
         aggregate_region_building_stock_summary(
             cfg=cfg,
