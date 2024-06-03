@@ -126,18 +126,37 @@ class BuildingEnvironment(Environment):
                     building.heating_system.hydrogen_available = True
 
     def update_buildings_profile_appliance(self, buildings: "AgentList[Building]"):
+
+        def get_update_index():
+            appliance_electricity_rkey = building.rkey.make_copy().set_id({
+                "id_end_use": cons.ID_END_USE_APPLIANCE,
+                "id_energy_carrier": cons.ID_ENERGY_CARRIER_ELECTRICITY
+            })
+            demand_0 = self.scenario.s_end_use_demand_appliance.get_item(rkey=appliance_electricity_rkey)
+            appliance_electricity_rkey.year += 1
+            demand_1 = self.scenario.s_end_use_demand_appliance.get_item(rkey=appliance_electricity_rkey)
+            return demand_1 / demand_0
+
         for building in buildings:
             if building.exists:
-                index = self.scenario.s_useful_energy_demand_index_appliance_electricity.get_item(building.rkey)
+                index = get_update_index()
                 if index != 1:
                     building.appliance_electricity_profile = building.appliance_electricity_profile * index
                     building.appliance_electricity_demand = building.appliance_electricity_profile.sum()
                     building.appliance_electricity_demand_per_person = building.appliance_electricity_demand / building.population
 
     def update_buildings_profile_hot_water(self, buildings: "AgentList[Building]"):
+
+        def get_update_index():
+            hot_water_rkey = building.rkey.make_copy()
+            demand_0 = self.scenario.s_end_use_demand_hot_water.get_item(rkey=hot_water_rkey)
+            hot_water_rkey.year += 1
+            demand_1 = self.scenario.s_end_use_demand_hot_water.get_item(rkey=hot_water_rkey)
+            return demand_1 / demand_0
+
         for building in buildings:
             if building.exists:
-                index = self.scenario.s_useful_energy_demand_index_hot_water.get_item(building.rkey)
+                index = get_update_index()
                 if index != 1:
                     building.hot_water_profile = building.hot_water_profile * index
                     building.hot_water_demand = building.hot_water_profile.sum()

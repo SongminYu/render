@@ -43,12 +43,24 @@ class UnitUser:
 
     @property
     def hot_water_profile(self):
-        hot_water_profile = self.scenario.pr_hot_water.get_item(self.rkey) * self.person_num
+        hot_water_profile = (
+                self.scenario.pr_hot_water.get_item(self.rkey) *
+                self.person_num *
+                self.scenario.s_end_use_demand_hot_water.get_item(self.rkey)
+        )
         return hot_water_profile
 
     @property
     def appliance_electricity_profile(self):
-        appliance_electricity_profile = self.scenario.pr_appliance_electricity.get_item(self.rkey) * self.person_num
+        appliance_electricity_rkey = self.rkey.make_copy().set_id({
+            "id_end_use": cons.ID_END_USE_APPLIANCE,
+            "id_energy_carrier": cons.ID_ENERGY_CARRIER_ELECTRICITY
+        })
+        appliance_electricity_profile = (
+                self.scenario.pr_appliance_electricity.get_item(self.rkey) *
+                self.person_num *
+                self.scenario.s_end_use_demand_appliance.get_item(appliance_electricity_rkey)
+        )
         return appliance_electricity_profile
 
     @property

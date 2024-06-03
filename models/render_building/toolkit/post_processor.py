@@ -24,7 +24,6 @@ AGG_COLS = {
     'total_living_area': 'sum',
     'unit_number': 'sum',
     'population': 'sum',
-    'appliance_electricity_demand_per_person': 'mean',
     'cooling_demand_per_m2': 'mean',
     'heating_demand_per_m2': 'mean',
     'hot_water_demand_per_person': 'mean',
@@ -102,14 +101,19 @@ def gen_final_energy_demand_from_region_building_stock(
 ):
 
     def get_appliance_electricity():
-        d = get_base_d(row=row)
-        d.update({
-            "id_end_use": cons.ID_END_USE_APPLIANCE,
-            "id_energy_carrier": cons.ID_ENERGY_CARRIER_ELECTRICITY,
-            "unit": "kWh",
-            "value": row["appliance_electricity_demand"] * row["building_number"] * row["occupancy_rate"]
-        })
-        return [d]
+        l_appliance = []
+        for col in building_stock.columns:
+            if col.startswith("appliance_demand_energy_carrier"):
+                if row[col] > 0:
+                    d = get_base_d(row=row)
+                    d.update({
+                        "id_end_use": cons.ID_END_USE_APPLIANCE,
+                        "id_energy_carrier": int(col.split("_")[-1]),
+                        "unit": "kWh",
+                        "value": row[col] * row["building_number"] * row["occupancy_rate"]
+                    })
+                    l_appliance.append(d)
+        return l_appliance
 
     def get_space_cooling():
         l_space_cooling = []
@@ -121,7 +125,7 @@ def gen_final_energy_demand_from_region_building_stock(
                 "unit": "kWh",
                 "value": row["cooling_system_energy_consumption"] * row["building_number"] * row["occupancy_rate"]
             })
-            l.append(d)
+            l_space_cooling.append(d)
         return l_space_cooling
 
     def get_space_heating():

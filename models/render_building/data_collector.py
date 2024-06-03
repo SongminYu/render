@@ -40,6 +40,7 @@ class BuildingDataCollector(RenderDataCollector):
     """
 
     def collect_building_stock(self, buildings: "AgentList[Building]"):
+        appliance_energy_carrier_ids = self.scenario.s_end_use_demand_appliance_df["id_energy_carrier"].unique()
         building_stock = []
         for building in buildings:
             building_dict = building.rkey.to_dict()
@@ -58,6 +59,11 @@ class BuildingDataCollector(RenderDataCollector):
                     if component_value is not None:
                         if isinstance(component_value, int) or isinstance(component_value, float):
                             building_dict[f"{component_name}_{component_key}"] = component_value
+            # collect building appliances
+            for id_energy_carrier in appliance_energy_carrier_ids:
+                building_dict[f"appliance_demand_energy_carrier_{id_energy_carrier}"] = 0
+            for id_energy_carrier, final_energy_demand in building.final_energy_demand[cons.ID_END_USE_APPLIANCE]:
+                building_dict[f"appliance_demand_energy_carrier_{id_energy_carrier}"] = final_energy_demand
             # collect building heating system
             building_dict["id_heating_system"] = building.heating_system.rkey.id_heating_system
             building_dict["district_heating_available"] = building.heating_system.district_heating_available
@@ -114,7 +120,7 @@ class BuildingDataCollector(RenderDataCollector):
                 building_dict[f"cooling_system_id_energy_carrier"] = None
                 building_dict[f"cooling_system_energy_intensity"] = None
                 building_dict[f"cooling_system_energy_consumption"] = None
-            # collection building ventilation system
+            # collect building ventilation system
             building_dict[f"ventilation_system_id_ventilation_technology"] = building.ventilation_system.rkey.id_ventilation_technology
             building_dict[f"ventilation_system_installation_year"] = building.ventilation_system.installation_year
             building_dict[f"ventilation_system_next_replace_year"] = building.ventilation_system.next_replace_year

@@ -548,16 +548,26 @@ class Building(Agent):
 
     def init_final_energy_demand(self):
         self.final_energy_demand: dict = {}  # {key: id_end_use, value: [(id_energy_carrier, final_energy_demand)]}
-        self.update_appliance_electricity_final_energy_demand()
+        self.update_appliance_final_energy_demand()
         self.update_space_cooling_final_energy_demand()
         self.update_space_heating_final_energy_demand()
         self.update_hot_water_final_energy_demand()
         self.update_ventilation_final_energy_demand()
 
-    def update_appliance_electricity_final_energy_demand(self):
-        self.final_energy_demand[cons.ID_END_USE_APPLIANCE] = [
-            (cons.ID_ENERGY_CARRIER_ELECTRICITY, self.appliance_electricity_demand)
-        ]
+    def update_appliance_final_energy_demand(self):
+        self.final_energy_demand[cons.ID_END_USE_APPLIANCE] = []
+        df = self.scenario.s_end_use_demand_appliance_df
+        energy_carrier_ids = df.loc[df["id_subsector"] == self.rkey.id_subsector]["id_energy_carrier"]
+        rkey = self.rkey.make_copy()
+        for id_energy_carrier in energy_carrier_ids:
+            rkey.id_end_use = cons.ID_END_USE_APPLIANCE
+            rkey.id_energy_carrier = id_energy_carrier
+            self.final_energy_demand[cons.ID_END_USE_APPLIANCE].append(
+                (
+                    id_energy_carrier,
+                    self.scenario.s_end_use_demand_appliance.get_item(rkey) * self.population
+                )
+            )
 
     def update_space_cooling_final_energy_demand(self):
         if self.cooling_system.is_adopted:
@@ -634,7 +644,7 @@ class Building(Agent):
 
     def update_final_energy_demand_and_cost(self):
         self.calc_building_heating_cooling_demand()
-        self.update_appliance_electricity_final_energy_demand()
+        self.update_appliance_final_energy_demand()
         self.update_space_cooling_final_energy_demand()
         self.update_space_heating_final_energy_demand()
         self.update_hot_water_final_energy_demand()
