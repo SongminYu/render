@@ -285,15 +285,15 @@ class HeatingTechnology:
                         small_scale=False
                     )
                 investment_cost_per_kW_annualized = investment_cost_per_kW_not_annualized * self.get_annuity_factor(rkey)
-                investment_cost_annualized = (
-                        investment_cost_per_kW_annualized *
-                        heating_technology_size *
-                        (1 - self.scenario.s_subsidy_heating_modernization.get_item(rkey=rkey))
-                )
+                investment_cost_annualized = investment_cost_per_kW_annualized * heating_technology_size
+                subsidy_percentage = self.scenario.s_subsidy_heating_modernization.get_item(rkey=rkey)
                 om_cost = om_cost_per_kW * heating_technology_size
                 energy_cost_per_kWh = self.scenario.heating_technology_energy_cost.get_item(rkey)
                 energy_cost = energy_cost_per_kWh * total_heating_demand
-                d_option_cost[id_heating_technology] = investment_cost_annualized + energy_cost + om_cost
+                d_option_cost[id_heating_technology] = investment_cost_annualized * (1 - subsidy_percentage) + energy_cost + om_cost
+                total_investment = investment_cost_per_kW_not_annualized * heating_technology_size
+                total_investment_building = total_investment * (1 - subsidy_percentage)
+                total_investment_state = total_investment * subsidy_percentage
                 d_option_action_info[id_heating_technology] = {
                     "id_scenario": rkey.id_scenario,
                     "id_region": rkey.id_region,
@@ -323,12 +323,14 @@ class HeatingTechnology:
                     "investment_cost_per_kW": investment_cost_per_kW_annualized,
                     "energy_cost_per_kWh": energy_cost_per_kWh,
                     "om_cost_per_kW": om_cost_per_kW,
-                    "investment_cost": investment_cost_annualized,
                     "energy_cost": energy_cost,
                     "om_cost": om_cost,
-                    "investment_cost_not_annualized": investment_cost_per_kW_not_annualized * heating_technology_size,
-                    "annuity_factor": self.get_annuity_factor(rkey),
+                    "total_investment_cost_annualized": investment_cost_annualized,
+                    "total_investment": investment_cost_per_kW_not_annualized * heating_technology_size,
+                    "total_investment_building": total_investment_building,
+                    "total_investment_state": total_investment_state,
                     "labor_demand": self.scenario.s_heating_technology_input_labor.get_item(rkey),
+                    "annuity_factor": self.get_annuity_factor(rkey),
                 }
         self.rkey.id_heating_technology = dict_utility_sample(
             options=dict_normalize(d_option_cost),

@@ -302,6 +302,11 @@ class BuildingEnvironment(Environment):
     def record_renovation_action_info(self, building: "Building", component_name: str, before_renovation_status: dict, reason: str):
         building_component = building.building_components[component_name]
         rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
+        capex = self.scenario.building_component_capex.get_item(rkey) * building_component.area
+        total_investment = capex * self.scenario.s_building_component_cost_payback_time.get_item(rkey)
+        subsidy_percentage = self.scenario.s_subsidy_building_renovation.get_item(rkey)
+        building_investment = total_investment * (1 - subsidy_percentage)
+        state_investment = total_investment * subsidy_percentage
         self.scenario.renovation_action_info.append({
             "id_scenario": rkey.id_scenario,
             "id_region": rkey.id_region,
@@ -337,8 +342,12 @@ class BuildingEnvironment(Environment):
             "total_energy_cost_before": before_renovation_status["total_energy_cost_before"],
             "total_energy_cost_after": building.total_energy_cost,
             "total_energy_cost_change": before_renovation_status["total_energy_cost_before"] - building.total_energy_cost,
-            "capex": self.scenario.building_component_capex.get_item(rkey) * building_component.area,
-            "labor_demand": self.scenario.s_building_component_input_labor.get_item(rkey) * building_component.area
+            "capex": capex,
+            "total_investment": total_investment,
+            "building_investment": building_investment,
+            "state_investment": state_investment,
+            "labor_demand": self.scenario.s_building_component_input_labor.get_item(rkey) * building_component.area,
+            "building_number": building.building_number
         })
 
     def update_buildings_demolition(self, buildings: "AgentList[Building]"):

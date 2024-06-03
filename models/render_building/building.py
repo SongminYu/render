@@ -733,6 +733,7 @@ class Building(Agent):
         option_action_info["heating_system_renewable_percentage_after"] = self.heating_system_renewable_percentage
         option_action_info["total_energy_cost_before"] = total_energy_cost_before
         option_action_info["total_energy_cost_after"] = self.total_energy_cost
+        option_action_info["building_number"] = self.building_number
         self.scenario.heating_system_action_info.append(option_action_info)
 
 
