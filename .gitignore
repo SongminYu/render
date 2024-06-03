@@ -164,3 +164,5 @@ temp/
 utils/*.csv
 
 /dashboards/data/building_stock.csv
+/docs/data_prep/end_use_1_calibration/building_stock_summary_nuts0.csv
+/docs/data_prep/end_use_1_calibration/final_energy_demand_nuts0.csv

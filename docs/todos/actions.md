@@ -11,8 +11,6 @@
 - Arrange a meeting to record detailed code walk-through
 
 ### Songmin
-
-- [ ] collect capex of `heating_modernization` and `building_renovation` for both state and consumer
 - [ ] calibrate based on updated 2010-2022 results
   - add other energy carriers in appliance consumption and efficiency index
   - space cooling: maybe update the penetration rate, or cooling temperature?
@@ -21,6 +19,7 @@
     - the occupancy/app/hot-water profiles all need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
+- [ ] collect capex of `heating_modernization` and `building_renovation` for both state and consumer
 - [ ] add function
   - `post_processor.gen_renovation_rate`
     - component renovation rate = number of component renovated buildings / total number of buildings
