@@ -15,12 +15,12 @@
   - add other energy carriers in appliance consumption and efficiency index
   - space cooling: maybe update the penetration rate, or cooling temperature? --> found and fixed bug in cooling demand collection
   - behavior profiles need to be updated
+- [x] collect investment cost of `heating_modernization` and `building_renovation` by both building and state
 - [ ] update profiles
   - [ ] for households,
     - the occupancy profiles need to be replaced with smooth synthetic profiles
     - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
   - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
-- [ ] collect capex of `heating_modernization` and `building_renovation` for both state and consumer
 - [ ] add function
   - `post_processor.gen_renovation_rate`
     - component renovation rate = number of component renovated buildings / total number of buildings
