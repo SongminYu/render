@@ -38,16 +38,8 @@
 - [x] Overview the data gap
 - [ ] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
   - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
-- [ ] Send slides to RokiG meeting to publish
-- [x] for calibration and prepare for RokiG meeting on June 18th
-  - update energy price and availability tables
-  - re-run the model 2010-2022
-  - upload `final_energy_demand.csv` to drive and send to Songmin 
-  - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
-- [ ] For JF on June 3rd
-    - update slides to introduce how qualitative input from IBP are used to develop scenarios
-    - show IBP how the scenarios are quantified in the model (show the related tables)
-    - ask them to fill in the data gap
+- [ ] Check first scenario results and see if further improvements are necessary
+
 
 ## Done
 
@@ -115,3 +107,13 @@
   - [x] there is the code mapping id_regions at different levels (line 62 in models/render/render_dict.py)
   - [x] then design the table format for Weijia
 - [x] update calibration target table (fluss gas)
+- - [x] Send slides to RokiG meeting to publish
+- [x] for calibration and prepare for RokiG meeting on June 18th
+  - update energy price and availability tables
+  - re-run the model 2010-2022
+  - upload `final_energy_demand.csv` to drive and send to Songmin 
+  - check with Mahsa if we provide results to RWTH beforehand to show the "scenario generator"
+- [x] For JF on June 3rd
+    - update slides to introduce how qualitative input from IBP are used to develop scenarios
+    - show IBP how the scenarios are quantified in the model (show the related tables)
+    - ask them to fill in the data gap
