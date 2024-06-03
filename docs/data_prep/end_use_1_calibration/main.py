@@ -60,6 +60,7 @@ def pivot_demand_per_person():
         values='value'
     ).reset_index()
     pivot_df[2051] = pivot_df[2050] + (pivot_df[2050] - pivot_df[2049])
+    pivot_df[2052] = pivot_df[2051] + (pivot_df[2051] - pivot_df[2050])
     pivot_df.to_csv("demand_per_person_pivot.csv", index=False)
 
 
