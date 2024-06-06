@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 from dash.dash_table import FormatTemplate
 
 
-def render(id_comparison, id_data, id_reference, id_absolute, id_relative, x, coloring='column') -> html.Div:
+def render(id_comparison, id_data, id_reference, id_absolute, id_relative, category, coloring='column') -> html.Div:
     @callback(
         Output(id_comparison, "children"),
         [Input(id_data, "children"), Input(id_reference, "children")]
@@ -19,10 +19,10 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, x, co
         reference_df = pd.DataFrame(reference[1]['props']['data'])
 
         end_use = list(data_df.columns)
-        end_use.remove(x)
+        end_use.remove(category)
 
         absolute = data_df[end_use] - reference_df[end_use]
-        absolute.insert(loc=0, column=x, value=data_df[x])
+        absolute.insert(loc=0, column=category, value=data_df[category])
         # Round every entry to no digits after the decimal point
         absolute = absolute.round(2)
         absolute = absolute.fillna(0)
@@ -30,7 +30,7 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, x, co
         relative = pd.DataFrame()
         for column in end_use:
             relative[column] = (data_df[column] - reference_df[column]).div(reference_df[column])
-        relative.insert(loc=0, column=x, value=data_df[x])
+        relative.insert(loc=0, column=category, value=data_df[category])
         # Round every entry to no digits after the decimal point
         relative = relative.fillna(0)
         relative = relative.round(4)
@@ -51,12 +51,12 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, x, co
                                            dash_table.DataTable(absolute.to_dict('records'),
                                                                 [{"name": i, "id": i} for i in absolute.columns],
                                                                 style_cell_conditional=[
-                                                                    {'if': {'column_id': x},
+                                                                    {'if': {'column_id': category},
                                                                      'textAlign': 'left'}],
                                                                 style_data_conditional=absolute_styles)
                                            ])
 
-        column_dict = [{"name": x, "id": x}]
+        column_dict = [{"name": category, "id": category}]
         column_dict.extend(
             [{"name": i, "id": i, "type": 'numeric', 'format': FormatTemplate.percentage(2)} for i in end_use])
         relative_html = html.Div(className='table-container',
@@ -65,7 +65,7 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, x, co
                                            dash_table.DataTable(relative.to_dict('records'),
                                                                 columns=column_dict,
                                                                 style_cell_conditional=[
-                                                                    {'if': {'column_id': x},
+                                                                    {'if': {'column_id': category},
                                                                      'textAlign': 'left'}],
                                                                 style_data_conditional=relative_styles)
                                            ])

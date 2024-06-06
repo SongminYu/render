@@ -11,7 +11,7 @@ from dashboards.components import (
     comparison_table,
 )
 
-dash.register_page(__name__, path='/', name="End Use Analysis")
+dash.register_page(__name__, path='/', name="National Year Calibration")
 
 # -------------------- IDs --------------------
 SCENARIO_DROPDOWN = "scenario-dropdown-enduse"
@@ -34,7 +34,7 @@ BAR_CHART = "bar-chart-enduse"
 DATA_TABLE = "data-table-enduse"
 DATA_TABLE_REFERENCE = "data-table-reference-enduse"
 
-END_USE_PATH = "data/final_energy_demand.csv"
+END_USE_PATH = "data/final_energy_demand_multiple_years.csv"
 REFERENCE_PATH = "data/CalibrationTarget.csv"
 
 # -------------------- LOAD DATASET --------------------
@@ -47,6 +47,9 @@ reference_data = loader.preprocess_data(reference_data)
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
 id_energy_carriers.sort()
 
+enduses= list(data[DataSchema.ID_END_USE].unique())
+enduses.sort()
+
 dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
              {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
@@ -54,8 +57,10 @@ dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ]
 
 x = DataSchema.ID_END_USE
+x_options = enduses
 y = DataSchema.VALUE_TWh
 category = DataSchema.ID_ENERGY_CARRIER
+category_options = id_energy_carriers
 
 # -------------------- DATA TABLES --------------------
 end_use_table = data_table.render(data,
@@ -63,9 +68,10 @@ end_use_table = data_table.render(data,
                                   title='Model Results in TWh',
                                   dropdowns=dropdowns,
                                   x=x,
-                                  x_options=id_energy_carriers,
+                                  x_options=x_options,
                                   y=y,
-                                  category=category)
+                                  category=category,
+                                  category_options=category_options)
 
 reference_table = data_table.render(reference_data,
                                     id_datatable=DATA_TABLE_REFERENCE,
@@ -74,9 +80,10 @@ reference_table = data_table.render(reference_data,
                                                {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
                                                {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ],
                                     x=x,
-                                    x_options=id_energy_carriers,
+                                    x_options=x_options,
                                     y=y,
-                                    category=category)
+                                    category=category,
+                                    category_options=category_options)
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
@@ -94,5 +101,5 @@ layout = html.Div(children=[
                              category=category),
     html.Div(className='flex-container', children=[end_use_table, reference_table]),
     comparison_table.render("comparison-table-enduse", DATA_TABLE, DATA_TABLE_REFERENCE,
-                            "absolute-diff-table-enduse", "relative-diff-table-enduse", x=category)
+                            "absolute-diff-table-enduse", "relative-diff-table-enduse", category=category)
 ], )
