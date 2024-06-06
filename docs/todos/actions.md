@@ -11,6 +11,7 @@
 - Arrange a meeting to record detailed code walk-through
 
 ### Songmin
+
 - [x] calibrate based on updated 2010-2022 results
   - add other energy carriers in appliance consumption and efficiency index
   - space cooling: maybe update the penetration rate, or cooling temperature? --> found and fixed bug in cooling demand collection
