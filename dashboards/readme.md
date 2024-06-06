@@ -86,6 +86,13 @@ This document contains the development plan of the `RenderDash` tool.
     - we rename the "end-use analysis" to "national year calibration"
 - [ ] Sirin updates the CalibrationTarget file with historic reference data.
 
+## Next time
+- [ ] Global radiation (solar radiation flux on horizontal surface) and direct normal irradiance (for perpendicular surfaces) are given
+  - (if?) which one do we want to use? I guess it is possible to calculate the different orientations but I am confused about the units (W or W/m^2?)
+  - if we have 4 orientations, file size will exceed 100 MB, for temperature it is okay
+- [ ] Which scenario do we want to choose? RCP 4.5 or RCP 8.5
+- [ ] End use as dropdown?
+
 
 ### Later stage
 - rename dashboards:
