@@ -96,6 +96,67 @@ def create_weather_profile() -> pd.DataFrame:
     radiation.to_csv(f'Profile_WeatherRadiation.csv')
 
 
-if __name__ == '__main__':
-    create_weather_profile()
+def build_year_hour_columns(df: pd.DataFrame) -> pd.DataFrame:
+    time_column = df.columns[0]
+    # Extract year
+    df['year'] = df[time_column].str[:4]
 
+    # Convert datetime to pandas datetime
+    df[time_column] = pd.to_datetime(df[time_column], format='%Y-%m-%d-%H')
+
+    # Calculate cumulative hours since the first datetime
+    df['hour'] = df.groupby('year')[time_column].transform(lambda x: (x - x.min()).astype('timedelta64[h]') + 1)
+    return df
+
+def extract_country_columns(df: pd.DataFrame, country = 'DE') -> pd.DataFrame:
+    # Filtering columns that contain 'DE'
+    columns_with_de = [col for col in df.columns if 'DE' in col]
+    # Selecting only those columns
+    df_filtered = df[['year', 'hour'] + columns_with_de]
+    return df_filtered
+
+def pivot_region_hour_columns(df: pd.DataFrame) -> pd.DataFrame:
+    # Melt the DataFrame to transform region columns into rows
+    melted_df = pd.melt(df, id_vars=['year', 'hour'], var_name='id_region', value_name='value')
+
+    # Pivot the melted DataFrame
+    pivot_df = melted_df.pivot_table(index=['id_region', 'year'], columns='hour', values='value')
+
+    # Reset index to convert back to a plain DataFrame
+    pivot_df.reset_index(inplace=True)
+    pivot_df.set_index('id_region', inplace=True)
+
+    return pivot_df
+
+
+def prep_future_data():
+    print('Load future weather data...')
+    df = pd.read_csv('T2M_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv')
+
+    print('Build year and hour columns...')
+    df = build_year_hour_columns(df)
+
+    print('Extract columns for Germany...')
+    df = extract_country_columns(df)
+
+    print('Save dataframe...')
+    df.to_csv('T2M_DE_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv', index=False)
+
+
+def create_future_weather_profile():
+    print('Load prepped future weather data...')
+    df = pd.read_csv('T2M_DE_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv')
+
+    print('Pivot region and hour columns...')
+    df = pivot_region_hour_columns(df)
+
+    df = map_nuts_to_region_id(df)
+    df.insert(df.columns.get_loc(1), 'unit', '°C')
+
+    print('Save dataframe...')
+    df.to_csv('Profile_WeatherTemperature_Future.csv')
+
+
+if __name__ == '__main__':
+    prep_future_data()
+    create_future_weather_profile()
