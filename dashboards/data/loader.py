@@ -62,6 +62,11 @@ def convert_id_region(rkey_id_region: int):
     rkey_region_level = math.ceil(len(rkey_id_region_list) / 2) - 1
     return int("".join(rkey_id_region_list[:- 2 * (rkey_region_level - 1)]))
 
+def make_ec_int(df):
+    if 'id_energy_carrier' in df.columns:
+        df['id_energy_carrier'] = df['id_energy_carrier'].astype(int)
+    return df
+
 
 def aggregate_to_nuts1(df: pd.DataFrame) -> pd.DataFrame:
     df['id_region'] = df['id_region'].apply(convert_id_region)
@@ -71,4 +76,5 @@ def aggregate_to_nuts1(df: pd.DataFrame) -> pd.DataFrame:
 def load_data(path: str) -> pd.DataFrame:
     # load the data from the CSV file
     data = pd.read_csv(path)
+    data = make_ec_int(data)
     return data
