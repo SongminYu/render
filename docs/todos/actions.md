@@ -8,6 +8,8 @@
   - meeting with Hannah
   - meeting with Weijia
   - Code developments
+- Questions
+  - id_region: 9160008 and 9160024 are skipped (also in toolkit.region_mapping)
 - Arrange a meeting to record detailed code walk-through
 
 ### Songmin

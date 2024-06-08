@@ -27,17 +27,15 @@ def run_toolkit(cfg: "Config"):
 
 def run_post_processor(cfg: "Config"):
     post_processor.process_region_building_stock(cfg=cfg)
-    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
-
-
-def run_plotter(cfg: "Config"):
-    plotter.plot_hist_heating_demand_per_m2(cfg, year=2019, input_table="building_stock_R9010101.csv")
+    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=0)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=1)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=2)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
 
 
 if __name__ == "__main__":
     config = get_config("test_building")
     # run_toolkit(cfg=config)
     run_building_model(cfg=config, cores=8)
-    # run_post_processor(cfg=config)
-    # run_plotter(cfg=config)
+    run_post_processor(cfg=config)
 
