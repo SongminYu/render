@@ -68,4 +68,5 @@ if __name__ == "__main__":
     # gen_population()
     # gen_person_average_demand()
     pivot_demand_per_person()
+    # add light fuel oil for households in appliance (equal to natural gas)
 
