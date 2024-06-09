@@ -71,16 +71,27 @@ This document contains the development plan of the `RenderDash` tool.
 ## May 24th, 2024
 - [ ] Future year weather profiles: https://zenodo.org/records/7907883
   - check if all years (2010-2050) exceed 100 MB. If so, reduce future years to 5 (or 10) steps like 2025,2030, etc.
-- [ ] new dashboard: plotting timeseries for historic comparison. it's a "mixed-plot" where model results are bars, reference is line
+  - check how PVGIS creates NUTS2 region temperature. Accordingly, we will decide if we use spatial mean or population mean
+  - what type of radiation does PVGIS give? (global irradiation or direct normal irradiation)
+  - if there is a way to generate orientation-specific radiation from one global or one direct normal irradiation?
+- [ ] new dashboard (named "national timeseries calibration"): 
+      plotting timeseries for historic comparison. it's a "mixed-plot" where model results are bars, reference is line
   - years on x-axis
   - one bar chart with energy carriers (in legend) accumulated for each year from model results.
-    line for the total coming from reference data years.
+    line (or data points connected via dashed line) for the total coming from reference data years.
   - one bar chart with end-uses (in legend) accumulated for each year from model results.
-    line for the total coming from reference data years.
+    line (or data points connected via dashed line) for the total coming from reference data years.
   - tables: 
     - for each of the four end-uses, we will have the four tables (16 table in total)
-    - we rename the current page "national year calibration", the new page "national timeseries calibration"
+    - we rename the "end-use analysis" to "national year calibration"
 - [ ] Sirin updates the CalibrationTarget file with historic reference data.
+
+## Next time
+- [ ] Global radiation (solar radiation flux on horizontal surface) and direct normal irradiance (for perpendicular surfaces) are given
+  - (if?) which one do we want to use? I guess it is possible to calculate the different orientations but I am confused about the units (W or W/m^2?)
+  - if we have 4 orientations, file size will exceed 100 MB, for temperature it is okay
+- [ ] Which scenario do we want to choose? RCP 4.5 or RCP 8.5
+- [ ] End use as dropdown?
 
 
 ### Later stage

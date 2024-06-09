@@ -4,7 +4,7 @@ from dash import dash_table, html, callback
 from dash.dependencies import Input, Output
 
 
-def render(data: pd.DataFrame, id_datatable, title, dropdowns, x, x_options, y, category) -> html.Div:
+def render(data: pd.DataFrame, id_datatable, title, dropdowns, x, x_options, y, category, category_options) -> html.Div:
     # dropdowns here: list of dictionary of dropdowns,
     # One dictionary has keys 'id' (of dropdown) and
     # 'column' (respective column in data in which the filter should be applied)
@@ -31,7 +31,7 @@ def render(data: pd.DataFrame, id_datatable, title, dropdowns, x, x_options, y, 
         wide_df.columns.name = None
 
         # ensure every energy carrier is listed in data table, in case as zero consumption
-        for idx in x_options:
+        for idx in category_options:
             if idx not in wide_df[category].values:
                 # Create a row of zeros with index equal to missing index
                 zeros_row = pd.DataFrame([[idx] + [0] * (len(wide_df.columns) - 1)], columns=wide_df.columns)
@@ -39,6 +39,24 @@ def render(data: pd.DataFrame, id_datatable, title, dropdowns, x, x_options, y, 
                 insert_position = sum(wide_df[category] < idx)
                 # Insert the row at the appropriate position based on the index column
                 wide_df = pd.concat([wide_df.iloc[:insert_position], zeros_row, wide_df.iloc[insert_position:]], ignore_index=True)
+
+        for idx in x_options:
+            if idx not in wide_df:
+                def find_insert_position(sorted_list, value_to_insert):
+                    """
+                    Finds the position where the value should be inserted into the sorted list.
+                    """
+                    for i, num in enumerate(sorted_list):
+                        if type(num) != int:
+                            break
+                        print(num)
+                        print(value_to_insert)
+                        if num > value_to_insert:
+                            return i
+                    return len(sorted_list)
+
+                insert_position = find_insert_position(wide_df.columns, idx)
+                wide_df.insert(insert_position, idx, [0] * (len(wide_df)))
 
         # Add the sum of columns
         end_use = list(wide_df.columns)

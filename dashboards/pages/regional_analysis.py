@@ -30,7 +30,7 @@ BAR_CHART = "bar-chart-region"
 DATA_TABLE = "data-table-region"
 DATA_TABLE_REFERENCE = "data-table-reference-region"
 
-EEV_PATH = "data/final_energy_demand.csv"
+EEV_PATH = "data/final_energy_demand_multiple_years.csv"
 REFERENCE_PATH = "data/Energiebilanzen_Regional_Example.csv"
 
 # -------------------- LOAD DATASET --------------------
@@ -44,6 +44,7 @@ reference = loader.convert_TJ_to_TWh(reference)
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
 id_energy_carriers.sort()
+
 regions = list(data[DataSchema.ID_REGION].unique())
 regions.sort()
 
@@ -53,8 +54,10 @@ dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ]
 
 x = DataSchema.ID_REGION
+x_options = regions
 y = DataSchema.VALUE_TWh
 category = DataSchema.ID_ENERGY_CARRIER
+category_options = id_energy_carriers
 
 # -------------------- DATA TABLES --------------------
 region_table = data_table.render(data,
@@ -62,9 +65,10 @@ region_table = data_table.render(data,
                                  title='Model Results in TWh',
                                  dropdowns=dropdowns,
                                  x=category,
-                                 x_options=regions,
+                                 x_options=category_options,
                                  y=y,
-                                 category=x)
+                                 category=x,
+                                 category_options=x_options)
 
 reference_table = data_table.render(reference,
                                     id_datatable=DATA_TABLE_REFERENCE,
@@ -72,9 +76,10 @@ reference_table = data_table.render(reference,
                                     dropdowns=[{'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
                                                {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR}, ],
                                     x=category,
-                                    x_options=regions,
+                                    x_options=category_options,
                                     y=y,
-                                    category=x)
+                                    category=x,
+                                    category_options=x_options)
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
@@ -101,5 +106,5 @@ layout = html.Div(children=[
                              category=category),
     html.Div(className='flex-container', children=[region_table, reference_table]),
     comparison_table.render("comparison-table-region", DATA_TABLE, DATA_TABLE_REFERENCE,
-                            "absolute-diff-table-region", "relative-diff-table-region", x=x, coloring='row')
+                            "absolute-diff-table-region", "relative-diff-table-region", category=x, coloring='row')
 ], )
