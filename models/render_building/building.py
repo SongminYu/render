@@ -667,6 +667,7 @@ class Building(Agent):
             "cooling_demand_before": self.cooling_demand,
             "cooling_demand_per_m2_before": self.cooling_demand_per_m2,
             "total_energy_cost_before": self.total_energy_cost,
+            "component_area": building_component.area
         }
         d_option_cost = {}
         rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})

@@ -147,6 +147,7 @@ class BuildingDataCollector(RenderDataCollector):
     def export_result_data(self):
         self.export_dwelling_number()
         self.export_household_number()
+        self.export_building_number()
         self.export_renovation_action_info()
         self.export_heating_system_action_info()
 
@@ -157,6 +158,12 @@ class BuildingDataCollector(RenderDataCollector):
     # Household number
     def export_household_number(self):
         self.export_rdict(rdict=self.scenario.household_number, df_name=f"household_number", unit="count")
+
+    # Building number, incl. demolition and construction
+    def export_building_number(self):
+        self.export_rdict(rdict=self.scenario.building_number, df_name=f"building_number", unit="count")
+        self.export_rdict(rdict=self.scenario.building_demolition_number, df_name=f"building_demolition_number", unit="count")
+        self.export_rdict(rdict=self.scenario.building_construction_number, df_name=f"building_construction_number", unit="count")
 
     # Renovation action info
     def export_renovation_action_info(self):

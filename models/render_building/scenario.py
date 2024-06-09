@@ -537,5 +537,16 @@ class BuildingScenario(RenderScenario):
             "id_unit_user_type",
             "year"
         ])
+        building_count_key_cols = [
+            "id_scenario",
+            "id_region",
+            "id_sector",
+            "id_subsector",
+            "id_building_type",
+            "year"
+        ]
+        self.building_number = RenderDict.create_empty_rdict(key_cols=building_count_key_cols)
+        self.building_construction_number = RenderDict.create_empty_rdict(key_cols=building_count_key_cols)
+        self.building_demolition_number = RenderDict.create_empty_rdict(key_cols=building_count_key_cols)
 
 

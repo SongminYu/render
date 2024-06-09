@@ -26,21 +26,29 @@
   - space cooling: maybe update the penetration rate, or cooling temperature? --> found and fixed bug in cooling demand collection
   - behavior profiles need to be updated
 - [x] collect investment cost of `heating_modernization` and `building_renovation` by both building and state
-- [ ] Understand why cooling is underestimated
-- [ ] add light fuel oil consumption in the appliance use of residential sector
-- [ ] calibrate hot water demand
-- [ ] update profiles
-  - [ ] for households,
-    - the occupancy profiles need to be replaced with smooth synthetic profiles
-    - the "teleworking" scenario profiles should be weighted-average based on an assumption of a share of the teleworking ratio
-  - [ ] for tertiary sectors, the profiles (especially occupancy profiles) should be carefully updated
+- [x] Understand why cooling is underestimated
+  - now it is about 4% of the statistics
+  - checked energy intensity (0.3-0.4) --> looks fine
+  - checked the output tables and aggregation --> no mistake
+  - compared with the 5R1C model results in FLEX, taking useful energy demand of one building as example
+    - flex ratio: cooling/heating = 145437/45471288 = 0.003198436 --> considering the adoption rate and technology efficiency, this number can be reduced --> close to render ratio
+    - render ratio: 0.000923967
+    - statistics ratio: 0.022491748
+      - maybe RC model is not a good approach? 
+      - Sonja's results are likely to be calculated with operation hours and power according to the questions in the survey. 
+      - We should check literature on cooling demand.
 - [ ] add function
   - `post_processor.gen_renovation_rate`
-    - component renovation rate = number of component renovated buildings / total number of buildings
-    - component area-weighted renovation rate = renovated component area / total component area in stock
-    - overall modernization rate = (area-weighted renovation rate wall * 0.4 + area-weighted renovation rate roof * 0.28 + area-weighted renovation rate basement * 0.23 + area-weighted renovation rate window * 0.09)
+    - definitions
+      - component renovation rate = number of component renovated buildings / total number of buildings
+      - component area-weighted renovation rate = renovated component area / total component area in stock
+      - overall modernization rate = (area-weighted renovation rate wall * 0.4 + area-weighted renovation rate roof * 0.28 + area-weighted renovation rate basement * 0.23 + area-weighted renovation rate window * 0.09)
+    - progress
+      - added `component_area` in the renovation table
+      - steps designed
   - `post_processor.gen_building_demolition_and_construction`
-    - number of demolished/constructed buildings / total number of buildings
+    - definition: number of demolished/constructed buildings / total number of buildings
+    - progress: data collection code added, will add the function in post_processor and calculate results after next run
 - [ ] modeling of PV and battery
   - do we model at hourly resolution? depending on if we contribute load profiles from our model
   - or we consider a coupling approach with other model, then in Render we use self-consumption rate
@@ -89,7 +97,7 @@
 - [x] when "mandatory" --> peak number of actions in the first year
   - delay logic: a year selected within the window
 - [x] add function `post_processor.aggregate_final_energy_demand`
-- [ ] update table names --> second thought: slower, consistency and maintenance, 2011 can be scenario values
+- [x] update table names --> second thought: slower, consistency and maintenance, 2011 can be scenario values
   - for some scenario tables, they are only used for initialization, or mixed used for initialization and new buildings
   - decision: create a new group of buildings called "Initialization_xxx" --> cleaner
 - [x] revise tables to be `id_scenario` dependent

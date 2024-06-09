@@ -6,6 +6,12 @@ import pandas as pd
 from models.render_building import cons
 from tqdm import tqdm
 
+
+"""
+Building stock --> final energy demand, building stock summary
+"""
+
+
 BS = "building_stock"
 BSS = "building_stock_summary"
 FED = "final_energy_demand"
@@ -24,6 +30,10 @@ AGG_COLS = {
     'total_living_area': 'sum',
     'unit_number': 'sum',
     'population': 'sum',
+    'wall_area': 'sum',
+    'window_area': 'sum',
+    'roof_area': 'sum',
+    'basement_area': 'sum',
     'cooling_demand_per_m2': 'mean',
     'heating_demand_per_m2': 'mean',
     'hot_water_demand_per_person': 'mean',
@@ -292,15 +302,6 @@ def aggregate_region_building_stock_summary(
     )
 
 
-def gen_renovation_rate():
-    ...
-
-
-def gen_building_demolition_and_construction():
-    # by processing the last year dataframe of the building stock, the results should be able to be generated.
-    ...
-
-
 def concat_region_tables(cfg: "Config", file_name_prefix_list: Optional[List[str]]):
     for file_name_prefix in file_name_prefix_list:
         print(f'Concating {file_name_prefix} tables...')
@@ -327,6 +328,42 @@ def extract_cols(
     building_stock_cols.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
 
 
+"""
+Renovation actions
+"""
+
+
+def gen_renovation_rate(cfg: "Config"):
+    """
+    (1) Create the building summary file
+    (2) Aggregate the summary file:
+        (2.1) keep the ids that are consistent with expected output of renovation rate table
+        (2.2) aggregate the values of building number and building component area
+    (3) Calculate the renovation rate per definition
+    """
+    df = pd.read_csv(os.path.join(cfg.output_folder, "renovation_actions.csv"))
+
+
+"""
+Heating system modernization actions
+"""
+
+
+"""
+Building demolition and construction
+"""
+
+
+def gen_building_demolition_and_construction():
+    # by processing the last year dataframe of the building stock, the results should be able to be generated.
+    ...
+
+
+
+
+"""
+Save data
+"""
 def save_dataframe(
     path,
     df: pd.DataFrame,
@@ -345,3 +382,5 @@ def save_dataframe(
             )
     else:
         df.to_csv(path, index=False)
+
+

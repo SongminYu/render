@@ -81,6 +81,11 @@ class BuildingEnvironment(Environment):
             update_cooling_system_year()
             update_ventilation_system_year()
 
+    def count_buildings(self, buildings: "AgentList[Building]"):
+        for building in buildings:
+            if building.exists:
+                self.scenario.building_number.accumulate_item(building.rkey, building.building_number)
+
     @staticmethod
     def update_buildings_energy_demand_and_cost(buildings: "AgentList[Building]"):
         for building in buildings:
@@ -319,6 +324,7 @@ class BuildingEnvironment(Environment):
             "year": rkey.year,
             "reason": reason,
             "id_building_component": rkey.id_building_component,
+            "component_area": before_renovation_status["component_area"],
             "id_building_component_option_before": before_renovation_status["id_building_component_option_before"],
             "id_building_component_option_after": rkey.id_building_component_option,
             "id_building_efficiency_class_before": before_renovation_status["id_building_efficiency_class_before"],
@@ -360,6 +366,7 @@ class BuildingEnvironment(Environment):
         for building in buildings:
             if building.exists and building.rkey.year >= building.demolish_year:
                 building.exists = False
+                self.scenario.building_demolition_number.accumulate_item(building.rkey, building.building_number)
                 self.demolished_buildings_this_year.append(building)
                 if building.rkey.id_sector == cons.ID_SECTOR_RESIDENTIAL:
                     self.remaining_dwelling_number_this_year -= building.unit_number * building.building_number
@@ -380,6 +387,10 @@ class BuildingEnvironment(Environment):
                     "id_subsector_agent": self.scenario.get_new_building_id_subsector_agent(building.rkey),
                     "building_number": building.building_number
                 })
+                self.scenario.building_construction_number.accumulate_item(
+                    new_tertiary_building.rkey,
+                    new_tertiary_building.building_number
+                )
 
     def update_household_number(self):
 
@@ -446,6 +457,10 @@ class BuildingEnvironment(Environment):
                     "id_subsector_agent": self.scenario.get_new_building_id_subsector_agent(rkey),
                     "building_number": building_number
                 })
+                self.scenario.building_construction_number.accumulate_item(
+                    new_residential_building.rkey,
+                    new_residential_building.building_number
+                )
                 final_dwelling_number_next_year += new_residential_building.unit_number * building_number
             self.scenario.dwelling_number.set_item(rkey=rkey, value=final_dwelling_number_next_year)
             occupancy_rate = household_number_next_year/final_dwelling_number_next_year

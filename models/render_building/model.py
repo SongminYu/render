@@ -31,6 +31,7 @@ class BuildingModel(RenderModel):
         self.data_collector.collect_building_stock(self.buildings)
         for year in tqdm(range(self.scenario.start_year, self.scenario.end_year + 1), desc="Simulating years --> "):
             self.environment.year = year
+            self.environment.count_buildings(self.buildings)
             self.environment.update_buildings_renovation(self.buildings)
             self.environment.update_buildings_radiator(self.buildings)
             self.environment.update_buildings_infrastructure_district_heating(self.buildings)
