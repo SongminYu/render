@@ -5,11 +5,18 @@
 ### Meeting
 
 - Updates
+  - meeting with RokiG partners
   - meeting with Hannah
   - meeting with Weijia
   - Code developments
 - Questions
   - id_region: 9160008 and 9160024 are skipped (also in toolkit.region_mapping)
+- Heads up on calibration
+  - The calibration was done by starting the model from 2010 with 10% coverage.
+  - This decides the building and employee number in the tertiary sectors, because there is only demolished buildings replaced by new buildings
+  - This further decides the calibration of appliance and hot water demand per person. 
+  - As a result, if the model is started from 2019. The deviation in 2019 will be larger. 
+  - Changing coverage percentage may also impact but not that much.
 - Arrange a meeting to record detailed code walk-through
 
 ### Songmin
@@ -19,6 +26,9 @@
   - space cooling: maybe update the penetration rate, or cooling temperature? --> found and fixed bug in cooling demand collection
   - behavior profiles need to be updated
 - [x] collect investment cost of `heating_modernization` and `building_renovation` by both building and state
+- [ ] Understand why cooling is underestimated
+- [ ] add light fuel oil consumption in the appliance use of residential sector
+- [ ] calibrate hot water demand
 - [ ] update profiles
   - [ ] for households,
     - the occupancy profiles need to be replaced with smooth synthetic profiles
