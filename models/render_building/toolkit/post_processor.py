@@ -1,11 +1,17 @@
 import copy
 import os.path
 from typing import List, Optional, Dict
-from Melodie import Config
+
 import pandas as pd
-from models.render_building import cons
+from Melodie import Config
+from joblib import Parallel
+from joblib import delayed
 from tqdm import tqdm
 
+from models.render_building import cons
+from utils.logger import get_logger
+
+log = get_logger(__name__)
 
 """
 Building stock --> final energy demand, building stock summary
@@ -65,11 +71,10 @@ def get_region_table_names(cfg: "Config", file_name_prefix: str):
     return region_table_names
 
 
-def process_region_building_stock(cfg: "Config"):
-    for region_table_name in tqdm(
-        get_region_table_names(cfg=cfg, file_name_prefix=BS),
-        desc="processing region building stock"
-    ):
+def process_region_building_stock(cfg: "Config", cores: int = 4):
+
+    def process_region(region_table_name):
+        log.info(f"processing {region_table_name}")
         region_building_stock = pd.read_csv(os.path.join(os.path.join(
             cfg.output_folder,
             cons.REGION_DATA_SUBFOLDER,
@@ -85,6 +90,14 @@ def process_region_building_stock(cfg: "Config"):
             building_stock=region_building_stock,
             output_table_name=f'{BSS}_{region_table_name.split("_")[-1]}'
         )
+
+    tasks = [
+        {
+            "region_table_name": region_table_name
+        }
+        for region_table_name in get_region_table_names(cfg=cfg, file_name_prefix=BS)
+    ]
+    Parallel(n_jobs=cores)(delayed(process_region)(**task) for task in tasks)
 
 
 def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
