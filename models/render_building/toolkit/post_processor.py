@@ -103,7 +103,7 @@ def process_region_building_stock(cfg: "Config", cores: int = 4):
 def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
     for region_table_name in tqdm(
         get_region_table_names(cfg=cfg, file_name_prefix=BS),
-        desc="processing region building stock"
+        desc="aggregating region building stock"
     ):
         aggregate_region_final_energy_demand(
             cfg=cfg,
