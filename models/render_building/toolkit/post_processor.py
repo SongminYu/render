@@ -13,10 +13,10 @@ from utils.logger import get_logger
 
 log = get_logger(__name__)
 
-"""
-Building stock --> final energy demand, building stock summary
-"""
 
+"""
+Process region building stock --> final energy demand, building stock summary
+"""
 
 BS = "building_stock"
 BSS = "building_stock_summary"
@@ -98,23 +98,6 @@ def process_region_building_stock(cfg: "Config", cores: int = 4):
         for region_table_name in get_region_table_names(cfg=cfg, file_name_prefix=BS)
     ]
     Parallel(n_jobs=cores)(delayed(process_region)(**task) for task in tasks)
-
-
-def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
-    for region_table_name in tqdm(
-        get_region_table_names(cfg=cfg, file_name_prefix=BS),
-        desc="aggregating region building stock"
-    ):
-        aggregate_region_final_energy_demand(
-            cfg=cfg,
-            region_final_energy_demand_file_name=f'{FED}_{region_table_name.split("_")[-1]}',
-            nuts_level=nuts_level
-        )
-        aggregate_region_building_stock_summary(
-            cfg=cfg,
-            region_building_stock_summary_file_name=f'{BSS}_{region_table_name.split("_")[-1]}',
-            nuts_level=nuts_level
-        )
 
 
 def gen_final_energy_demand_from_region_building_stock(
@@ -217,47 +200,6 @@ def gen_final_energy_demand_from_region_building_stock(
     )
 
 
-def aggregate_nuts_level(df_nuts3: pd.DataFrame, nuts_level: int, group_by_cols: List[str], agg_cols: Dict[str, str]):
-    if nuts_level < 3:
-        region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
-        d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
-        df_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
-        df_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in df_nuts3["id_region_nuts3"]]
-    return df_nuts3.groupby(group_by_cols).agg(agg_cols).reset_index()
-
-
-def aggregate_region_final_energy_demand(
-    cfg: "Config",
-    region_final_energy_demand_file_name: str,
-    nuts_level: int
-):
-    assert nuts_level in [0, 1, 2, 3]
-    energy_demand_nuts3 = pd.read_csv(os.path.join(
-        cfg.output_folder,
-        cons.REGION_DATA_SUBFOLDER,
-        f'{region_final_energy_demand_file_name}.csv'
-    ))
-    save_dataframe(
-        path=os.path.join(cfg.output_folder, f"{FED}_nuts{nuts_level}.csv"),
-        df=aggregate_nuts_level(
-            df_nuts3=energy_demand_nuts3,
-            nuts_level=nuts_level,
-            group_by_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_end_use",
-                "id_energy_carrier",
-                "year",
-                "unit",
-            ],
-            agg_cols={'value': 'sum'}
-        ),
-        if_exists="append"
-    )
-
-
 def gen_region_building_stock_summary(
     cfg: "Config",
     building_stock: pd.DataFrame,
@@ -281,9 +223,100 @@ def gen_region_building_stock_summary(
     )
 
 
+"""
+Aggregate region building stock
+"""
+
+AGG_FED_KEY_COLS = [
+    "id_scenario",
+    "id_region",
+    "id_sector",
+    "id_subsector",
+    "id_end_use",
+    "id_energy_carrier",
+    "year",
+    "unit",
+]
+
+AGG_FED_AGG_COLS = {'value': 'sum'}
+
+
+def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
+    fed_output = f"{FED}_nuts{nuts_level}.csv"
+    bss_output = f"{BSS}_nuts{nuts_level}.csv"
+    # regional aggregation
+    for region_table_name in tqdm(
+        get_region_table_names(cfg=cfg, file_name_prefix=BS),
+        desc="aggregating region building stock"
+    ):
+        aggregate_region_final_energy_demand(
+            cfg=cfg,
+            region_final_energy_demand_file_name=f'{FED}_{region_table_name.split("_")[-1]}',
+            output_file_name=fed_output,
+            nuts_level=nuts_level
+        )
+        aggregate_region_building_stock_summary(
+            cfg=cfg,
+            region_building_stock_summary_file_name=f'{BSS}_{region_table_name.split("_")[-1]}',
+            output_file_name=bss_output,
+            nuts_level=nuts_level
+        )
+    # final aggregation
+    if nuts_level < 3:
+        fed_path = os.path.join(cfg.output_folder, fed_output)
+        df_fed = pd.read_csv(fed_path)
+        save_dataframe(
+            path=fed_path,
+            df=df_fed.groupby(AGG_FED_KEY_COLS).agg(AGG_FED_AGG_COLS).reset_index(),
+            if_exists="replace"
+        )
+        bss_path = os.path.join(cfg.output_folder, bss_output)
+        df_bss = pd.read_csv(bss_path)
+        save_dataframe(
+            path=bss_path,
+            df=df_bss.groupby(KEY_COLS).agg(AGG_COLS).reset_index(),
+            if_exists="replace"
+        )
+
+
+def aggregate_nuts_level(df_nuts3: pd.DataFrame, nuts_level: int, group_by_cols: List[str], agg_cols: Dict[str, str]):
+    if nuts_level < 3:
+        region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
+        d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
+        df_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
+        df_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in df_nuts3["id_region_nuts3"]]
+        df_nuts3.drop(columns=["id_region_nuts3"], inplace=True)
+    return df_nuts3.groupby(group_by_cols).agg(agg_cols).reset_index()
+
+
+def aggregate_region_final_energy_demand(
+    cfg: "Config",
+    region_final_energy_demand_file_name: str,
+    output_file_name: str,
+    nuts_level: int
+):
+    assert nuts_level in [0, 1, 2, 3]
+    energy_demand_nuts3 = pd.read_csv(os.path.join(
+        cfg.output_folder,
+        cons.REGION_DATA_SUBFOLDER,
+        f'{region_final_energy_demand_file_name}.csv'
+    ))
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, output_file_name),
+        df=aggregate_nuts_level(
+            df_nuts3=energy_demand_nuts3,
+            nuts_level=nuts_level,
+            group_by_cols=AGG_FED_KEY_COLS,
+            agg_cols=AGG_FED_AGG_COLS
+        ),
+        if_exists="append"
+    )
+
+
 def aggregate_region_building_stock_summary(
     cfg: "Config",
     region_building_stock_summary_file_name: str,
+    output_file_name: str,
     nuts_level: int
 ):
     assert nuts_level in [0, 1, 2, 3]
@@ -294,21 +327,11 @@ def aggregate_region_building_stock_summary(
     ))
     AGG_COLS["building_number"] = "sum"
     save_dataframe(
-        path=os.path.join(cfg.output_folder, f"{BSS}_nuts{nuts_level}.csv"),
+        path=os.path.join(cfg.output_folder, output_file_name),
         df=aggregate_nuts_level(
             df_nuts3=building_stock_summary_nuts3,
             nuts_level=nuts_level,
-            group_by_cols=[
-                "id_scenario",
-                "id_region",
-                "id_sector",
-                "id_subsector",
-                "id_building_type",
-                "id_building_construction_period",
-                "id_building_efficiency_class",
-                "id_building_location",
-                "year",
-            ],
+            group_by_cols=KEY_COLS,
             agg_cols=AGG_COLS
         ),
         if_exists="append"
