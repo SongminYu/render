@@ -37,10 +37,10 @@
       - maybe RC model is not a good approach? 
       - Sonja's results are likely to be calculated with operation hours and power according to the questions in the survey. 
       - We should check literature on cooling demand.
-- [ ] add function
+- [x] add function
   - `post_processor.gen_renovation_rate`
     - definitions
-      - component renovation rate = number of component renovated buildings / total number of buildings
+      - not added --> component renovation rate = number of component renovated buildings / total number of buildings
       - component area-weighted renovation rate = renovated component area / total component area in stock
       - overall modernization rate = (area-weighted renovation rate wall * 0.4 + area-weighted renovation rate roof * 0.28 + area-weighted renovation rate basement * 0.23 + area-weighted renovation rate window * 0.09)
     - progress
