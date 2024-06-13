@@ -28,10 +28,11 @@ def run_toolkit(cfg: "Config"):
 def run_post_processor(cfg: "Config"):
     # post_processor.process_region_building_stock(cfg=cfg, cores=8)
     # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=0)
-    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=1)
-    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=2)
-    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=1)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=2)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
     # post_processor.gen_renovation_rate(cfg=cfg)
+    post_processor.gen_demolition_rate(cfg=cfg)
 
 
 if __name__ == "__main__":

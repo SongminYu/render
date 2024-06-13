@@ -279,13 +279,18 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
         )
 
 
+def replace_nuts3_region_id(df_nuts3: pd.DataFrame, nuts_level: int):
+    region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
+    d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
+    df_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
+    df_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in df_nuts3["id_region_nuts3"]]
+    df = df_nuts3.drop(columns=["id_region_nuts3"])
+    return df
+
+
 def aggregate_nuts_level(df_nuts3: pd.DataFrame, nuts_level: int, group_by_cols: List[str], agg_cols: Dict[str, str]):
     if nuts_level < 3:
-        region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
-        d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
-        df_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
-        df_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in df_nuts3["id_region_nuts3"]]
-        df_nuts3.drop(columns=["id_region_nuts3"], inplace=True)
+        df_nuts3 = replace_nuts3_region_id(df_nuts3, nuts_level)
     return df_nuts3.groupby(group_by_cols).agg(agg_cols).reset_index()
 
 
@@ -366,6 +371,12 @@ def extract_cols(
 
 """
 Renovation actions
+
+Following functions are used to generate the annual renovation rate at national level. 
+The main steps are written in the function `gen_renovation_rate`.
+(1) building_stock_summary_nuts0.csv --> renovation_building_component_area_total.csv
+(2) renovation_actions.csv --> renovation_building_component_area_renovated.csv
+(3) renovation_building_component_area_total.csv + renovation_building_component_area_renovated.csv --> renovation_rate.csv
 """
 
 
@@ -377,12 +388,84 @@ def gen_renovation_rate(cfg: "Config"):
         (2.2) aggregate the values of building number and building component area
     (3) Calculate the renovation rate per definition
     """
+    aggregate_building_component_area(cfg=cfg)
+    aggregate_renovation_actions(cfg=cfg)
+    calculate_renovation_rate(cfg=cfg)
+
+
+def aggregate_building_component_area(cfg: "Config"):
+
+    def get_building_component_ids():
+        id_building_component = pd.read_excel(os.path.join(cfg.input_folder, "ID_BuildingComponent.xlsx"))
+        return dict(zip(id_building_component["name"], id_building_component["id_building_component"]))
+
+    df = pd.read_csv(os.path.join(cfg.output_folder, "building_stock_summary_nuts0.csv"))
+    df_agg = df.groupby(["id_scenario", "id_region", "year"]).agg({
+        "wall_area": "sum",
+        "window_area": "sum",
+        "roof_area": "sum",
+        "basement_area": "sum",
+    }).reset_index()
+    building_component_ids = get_building_component_ids()
+
+    l = []
+    for _, row in df_agg.iterrows():
+        for component in ["wall", "window", "roof", "basement"]:
+            l.append({
+                "id_scenario": row["id_scenario"],
+                "id_region": row["id_region"],
+                "id_building_component": building_component_ids[component],
+                "year": row["year"],
+                "value": row[f"{component}_area"]
+            })
+    pd.DataFrame(l).to_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_total.csv"), index=False)
+
+
+def aggregate_renovation_actions(cfg: "Config"):
     df = pd.read_csv(os.path.join(cfg.output_folder, "renovation_actions.csv"))
+    df["value"] = df["component_area"] * df["building_number"]
+    df = replace_nuts3_region_id(df_nuts3=df, nuts_level=0)
+    df_agg = df.groupby(["id_scenario", "id_region", "id_building_component", "year"]).agg({"value": "sum"}).reset_index()
+    df_agg.to_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_renovated.csv"), index=False)
 
 
-"""
-Heating system modernization actions
-"""
+def calculate_renovation_rate(cfg: "Config"):
+
+    def get_building_component_names():
+        id_building_component = pd.read_excel(os.path.join(cfg.input_folder, "ID_BuildingComponent.xlsx"))
+        return dict(zip(id_building_component["id_building_component"], id_building_component["name"]))
+
+    def get_renovated_area():
+        d = {}
+        for _, row in df_renovated.iterrows():
+            d[(row["id_scenario"], row["id_region"], row["id_building_component"], row["year"])] = row["value"]
+        return d
+
+    df_renovated = pd.read_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_renovated.csv"))
+    years = df_renovated["year"].unique()
+    renovated_area = get_renovated_area()
+    building_component_names = get_building_component_names()
+    df_total = pd.read_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_total.csv"))
+    df_total_pivot = df_total.pivot_table(
+        index=["id_scenario", "id_region", "year"],
+        columns="id_building_component",
+        values='value'
+    ).reset_index()
+    l = []
+    for _, row in df_total_pivot.iterrows():
+        if row["year"] in years:
+            l.append({
+                "id_scenario": row["id_scenario"],
+                "id_region": row["id_region"],
+                "year": row["year"],
+                f"{building_component_names[1]}": renovated_area[(row["id_scenario"], row["id_region"], 1, row["year"])]/row[1],
+                f"{building_component_names[2]}": renovated_area[(row["id_scenario"], row["id_region"], 2, row["year"])]/row[2],
+                f"{building_component_names[3]}": renovated_area[(row["id_scenario"], row["id_region"], 3, row["year"])]/row[3],
+                f"{building_component_names[4]}": renovated_area[(row["id_scenario"], row["id_region"], 4, row["year"])]/row[4],
+            })
+    df = pd.DataFrame(l)
+    df["average"] = df["wall"] * 0.4 + df["roof"] * 0.28 + df["basement"] * 0.23 + df["window"] * 0.09
+    df.to_csv(os.path.join(cfg.output_folder, "renovation_rate.csv"), index=False)
 
 
 """
@@ -390,11 +473,31 @@ Building demolition and construction
 """
 
 
-def gen_building_demolition_and_construction():
-    # by processing the last year dataframe of the building stock, the results should be able to be generated.
-    ...
+def agg_building_number(df: pd.DataFrame):
+    df = replace_nuts3_region_id(df, nuts_level=0)
+    df = df.groupby(["id_scenario", "id_region", "year"]).agg({"value": "sum"}).reset_index()
+    d = {}
+    for _, row in df.iterrows():
+        d[(row["id_scenario"], row["id_region"], row["year"])] = row["value"]
+    return d
 
 
+def gen_demolition_rate(cfg: "Config"):
+    demolition = agg_building_number(pd.read_csv(os.path.join(cfg.output_folder, "building_demolition_number.csv")))
+    building = agg_building_number(pd.read_csv(os.path.join(cfg.output_folder, "building_number.csv")))
+    l = []
+    for key, value in building.items():
+        if key in demolition.keys():
+            demolished_building = demolition[key]
+        else:
+            demolished_building = 0
+        l.append({
+            "id_scenario": key[0],
+            "id_region": key[1],
+            "year": key[2],
+            "value": demolished_building / value
+        })
+    pd.DataFrame(l).to_csv(os.path.join(cfg.output_folder, "demolition_rate.csv"), index=False)
 
 
 """
