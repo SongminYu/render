@@ -59,7 +59,8 @@
   - no battery
   - size of PV depends on `roof_area`
   - temporal resolution: annual resolution + with self-consumption rate
-  - TBD (when there are specific needs, e.g., for regional profile): 
+  - heads-up: parameters to be developed
+  - further development of the logic (when there are specific needs, e.g., for regional profile): 
     - hourly calculating electricity profile, pv generation, grid demand
     - building-level electricity demand and PV operation calculation --> currently, PV-related results are only collected and aggregated separately in the post-processing
 
