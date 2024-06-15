@@ -147,6 +147,7 @@ class BuildingScenario(RenderScenario):
         self.pr_hot_water = self.load_profile("Profile_HotWater.xlsx", scenario_filter="id_scenario_teleworking")
         self.pr_weather_temperature = self.load_profile("Profile_WeatherTemperature.xlsx", region_level=2)
         self.pr_weather_radiation = self.load_profile("Profile_WeatherRadiation.xlsx", region_level=2)
+        self.pr_pv_generation = self.load_profile("Profile_PVGeneration.xlsx", region_level=2)
 
     def load_scenarios(self):
         # RenderDict
@@ -202,11 +203,14 @@ class BuildingScenario(RenderScenario):
         self.s_ventilation_technology_cost_payback_time = self.load_scenario("Scenario_VentilationTechnology_Cost_PaybackTime.xlsx", region_level=0)
         self.s_ventilation_technology_input_labor = self.load_scenario("Scenario_VentilationTechnology_Input_Labor.xlsx", region_level=0)
         self.s_ventilation_technology_utility_power = self.load_scenario("Scenario_VentilationTechnology_UtilityPower.xlsx", region_level=0)
+        self.s_pv_penetration_rate = self.load_scenario("Scenario_PV_PenetrationRate.xlsx", region_level=0, all_years=True)
+        self.s_pv_self_consumption_rate = self.load_scenario("Scenario_PV_SelfConsumptionRate.xlsx", region_level=0)
         self.s_end_use_demand_appliance = self.load_scenario("Scenario_EndUseDemand_Appliance.xlsx", region_level=0, scenario_filter="id_scenario_teleworking", all_years=True)
         self.s_end_use_demand_hot_water = self.load_scenario("Scenario_EndUseDemand_HotWater.xlsx", region_level=0, scenario_filter="id_scenario_teleworking", all_years=True)
         self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
         self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
         self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx", region_level=0)
+        self.s_construction_pv_adoption_rate = self.load_scenario("Scenario_Construction_PVAdoptionRate.xlsx", region_level=0)
         self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0, scenario_filter="id_scenario_renovation_mandatory")
         self.s_subsidy_building_renovation = self.load_scenario("Scenario_Subsidy_BuildingRenovation.xlsx", region_level=0, scenario_filter="id_scenario_subsidy_building_renovation")
         self.s_subsidy_heating_modernization = self.load_scenario("Scenario_Subsidy_HeatingModernization.xlsx", region_level=0, scenario_filter="id_scenario_subsidy_heating_modernization")

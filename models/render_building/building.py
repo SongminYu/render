@@ -13,6 +13,7 @@ from models.render_building.tech_cooling import CoolingSystem
 from models.render_building.tech_heating import HeatingSystem, HeatingTechnology
 from models.render_building.tech_radiator import Radiator
 from models.render_building.tech_ventilation import VentilationSystem
+from models.render_building.tech_pv import PhotovoltaicSystem
 from utils.funcs import dict_sample, dict_normalize, dict_utility_sample
 
 if TYPE_CHECKING:
@@ -320,6 +321,28 @@ class Building(Agent):
         if random.uniform(0, 1) <= self.scenario.s_ventilation_penetration_rate.get_item(self.rkey):
             self.ventilation_system.select(total_living_area=self.total_living_area)
             self.ventilation_system.install()
+
+    def init_building_pv_system(self):
+        self.pv_system = PhotovoltaicSystem(self.rkey.make_copy(), self.scenario)
+        if random.uniform(0, 1) <= self.scenario.s_pv_penetration_rate.get_item(self.rkey):
+            self.pv_system.init_adoption(
+                roof_area=self.building_components["roof"].area,
+                generation_profile=self.get_pv_generation_profile(self.rkey)
+            )
+
+    def get_pv_generation_profile(self, rkey_to_adjust_year: "BuildingKey"):
+        rkey_adjusted = self.adjust_rkey_year_for_weather_profiles(rkey_to_adjust_year)
+        return self.scenario.pr_pv_generation.get_item(rkey_adjusted)
+
+    def init_building_pv_system_new_construction(self):
+        self.pv_system = PhotovoltaicSystem(self.rkey.make_copy(), self.scenario)
+        new_construction_requirement = random.uniform(0, 1) <= self.scenario.s_construction_pv_adoption_rate.get_item(self.rkey)
+        penetration = random.uniform(0, 1) <= self.scenario.s_pv_penetration_rate.get_item(self.rkey)
+        if new_construction_requirement or penetration:
+            self.pv_system.init_adoption(
+                roof_area=self.building_components["roof"].area,
+                generation_profile=self.get_pv_generation_profile(self.rkey)
+            )
 
     """
     heating and cooling demand calculation

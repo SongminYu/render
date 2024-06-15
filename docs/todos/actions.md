@@ -5,10 +5,13 @@
 ### Meeting
 
 - Updates
-  - meeting with RokiG partners
+  - eceee feedbacks
   - meeting with Hannah
   - meeting with Weijia
   - Code developments
+- meeting with RokiG partners
+  - feedbacks from the partners
+  - new stuff to model?
 - Questions
   - id_region: 9160008 and 9160024 are skipped (also in toolkit.region_mapping)
 - Heads up on calibration
@@ -17,7 +20,9 @@
   - This further decides the calibration of appliance and hot water demand per person. 
   - As a result, if the model is started from 2019. The deviation in 2019 will be larger. 
   - Changing coverage percentage may also impact but not that much.
-- Arrange a meeting to record detailed code walk-through
+- Arrange a meeting
+  - record detailed code walk-through
+  - update the two plots on the Miro board
 
 ### Songmin
 
@@ -49,10 +54,14 @@
   - `post_processor.gen_building_demolition_and_construction`
     - definition: number of demolished/constructed buildings / total number of buildings
     - progress: data collection code added, will add the function in post_processor and calculate results after next run
-- [ ] modeling of PV and battery
-  - do we model at hourly resolution? depending on if we contribute load profiles from our model
-  - or we consider a coupling approach with other model, then in Render we use self-consumption rate
-  - mandatory for new buildings?
+- [x] modeling of PV and battery
+  - exogenous penetration rate + optional policy scenario: mandatory for new buildings
+  - no battery
+  - size of PV depends on `roof_area`
+  - temporal resolution: annual resolution + with self-consumption rate
+  - TBD (when there are specific needs, e.g., for regional profile): 
+    - hourly calculating electricity profile, pv generation, grid demand
+    - building-level electricity demand and PV operation calculation --> currently, PV-related results are only collected and aggregated separately in the post-processing
 
 ### Sirin
 

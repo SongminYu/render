@@ -132,6 +132,22 @@ class BuildingDataCollector(RenderDataCollector):
                 building_dict[f"ventilation_system_id_energy_carrier"] = None
                 building_dict[f"ventilation_system_energy_intensity"] = None
                 building_dict[f"ventilation_system_energy_consumption"] = None
+            # collect pv system
+            if building.pv_system.is_adopted:
+                building_dict["pv_adoption"] = True
+                building_dict["pv_size"] = building.pv_system.size
+                building_dict["pv_generation"] = building.pv_system.generation
+                building_dict["pv_self_consumption_rate"] = building.pv_system.self_consumption_rate
+                building_dict["pv_self_consumption"] = building.pv_system.self_consumption
+                building_dict["pv_2_grid"] = building.pv_system.pv2grid
+            else:
+                building_dict["pv_adoption"] = False
+                building_dict["pv_size"] = None
+                building_dict["pv_generation"] = None
+                building_dict["pv_self_consumption_rate"] = None
+                building_dict["pv_self_consumption"] = None
+                building_dict["pv_2_grid"] = None
+
             # save the building dict
             building_stock.append(building_dict)
         self.save_dataframe(

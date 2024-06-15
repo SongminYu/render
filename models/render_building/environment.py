@@ -36,6 +36,7 @@ class BuildingEnvironment(Environment):
             building.init_building_cooling_system()
             building.init_building_heating_system()
             building.init_building_ventilation_system()
+            building.init_building_pv_system()
             building.init_final_energy_demand()
             building.update_total_energy_cost()
             building.update_heating_system_renewable_percentage()
@@ -72,6 +73,9 @@ class BuildingEnvironment(Environment):
         def update_ventilation_system_year():
             building.ventilation_system.rkey.year += 1
 
+        def update_pv_system_year():
+            building.pv_system.rkey.year += 1
+
         for building in buildings:
             building.rkey.year += 1
             update_units_year()
@@ -80,6 +84,7 @@ class BuildingEnvironment(Environment):
             update_heating_system_year()
             update_cooling_system_year()
             update_ventilation_system_year()
+            update_pv_system_year()
 
     def count_buildings(self, buildings: "AgentList[Building]"):
         for building in buildings:
@@ -202,6 +207,23 @@ class BuildingEnvironment(Environment):
             if building.exists and ((not_adopted and triggered_to_adopt) or time_to_replace):
                 building.ventilation_system.select(total_living_area=building.total_living_area)
                 building.ventilation_system.install()
+
+    def update_buildings_technology_pv(self, buildings: "AgentList[Building]"):
+
+        def get_pv_adoption_prob(rkey: "BuildingKey"):
+            penetration_rate_1 = self.scenario.s_pv_penetration_rate.get_item(rkey)
+            rkey.year = rkey.year - 1
+            penetration_rate_0 = self.scenario.s_pv_penetration_rate.get_item(rkey)
+            return (penetration_rate_1 - penetration_rate_0) / (1 - penetration_rate_0)
+
+        for building in buildings:
+            not_adopted = not building.pv_system.is_adopted
+            triggered_to_adopt = random.uniform(0, 1) <= get_pv_adoption_prob(building.rkey.make_copy())
+            if building.exists and (not_adopted and triggered_to_adopt):
+                building.pv_system.init_adoption(
+                    roof_area=building.building_components["roof"].area,
+                    generation_profile=building.get_pv_generation_profile(building.rkey)
+                )
 
     @staticmethod
     def update_buildings_radiator(buildings: "AgentList[Building]"):
@@ -482,6 +504,7 @@ class BuildingEnvironment(Environment):
         new_building.init_building_cooling_system_new_construction()
         new_building.init_building_ventilation_system_new_construction()
         new_building.init_building_heating_system_new_construction()
+        new_building.init_building_pv_system_new_construction()
         return new_building
 
 

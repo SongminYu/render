@@ -21,6 +21,7 @@ Process region building stock --> final energy demand, building stock summary
 BS = "building_stock"
 BSS = "building_stock_summary"
 FED = "final_energy_demand"
+PV = "pv_generation"
 KEY_COLS = [
     'id_scenario',
     'id_region',
@@ -45,6 +46,12 @@ AGG_COLS = {
     'hot_water_demand_per_person': 'mean',
     'hot_water_demand_per_m2': 'mean',
     'occupancy_rate': 'mean',
+}
+PV_AGG_COLS = {
+    "pv_size": "sum",
+    "pv_generation": "sum",
+    "pv_self_consumption": "sum",
+    "pv_2_grid": "sum",
 }
 
 
@@ -84,6 +91,11 @@ def process_region_building_stock(cfg: "Config", cores: int = 4):
             cfg=cfg,
             building_stock=region_building_stock,
             output_table_name=f'{FED}_{region_table_name.split("_")[-1]}'
+        )
+        gen_pv_generation_from_region_building_stock(
+            cfg=cfg,
+            building_stock=region_building_stock,
+            output_table_name=f'{PV}_{region_table_name.split("_")[-1]}'
         )
         gen_region_building_stock_summary(
             cfg=cfg,
@@ -200,6 +212,43 @@ def gen_final_energy_demand_from_region_building_stock(
     )
 
 
+def gen_pv_generation_from_region_building_stock(
+    cfg: "Config",
+    building_stock: pd.DataFrame,
+    output_table_name: str,
+):
+
+    def get_pv_generation():
+        l_pv_generation = []
+        factor = row["building_number"] * row["occupancy_rate"]
+        if row["pv_adoption"]:
+            d = get_base_d(row=row)
+            d.update({
+                "pv_size": row["pv_size"] * factor,
+                "pv_size_unit": "kW_peak",
+                "pv_generation": row["pv_generation"] * factor,
+                "pv_self_consumption": row["pv_self_consumption"] * factor,
+                "pv_2_grid": row["pv_2_grid"] * factor,
+                "pv_generation_unit": "kWh",
+            })
+            l_pv_generation.append(d)
+        return l_pv_generation
+
+    l = []
+    building_stock = building_stock.loc[building_stock["exists"] == 1]
+    for _, row in building_stock.iterrows():
+        l += get_pv_generation()
+    df = pd.DataFrame(l)
+    group_ids = copy.deepcopy(KEY_COLS)
+    group_ids += ['pv_size_unit', 'pv_generation_unit']
+    pv_generation_nuts3 = df.groupby(group_ids).agg(PV_AGG_COLS).reset_index()
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, cons.REGION_DATA_SUBFOLDER, f'{output_table_name}.csv'),
+        df=pv_generation_nuts3,
+        if_exists="replace"
+    )
+
+
 def gen_region_building_stock_summary(
     cfg: "Config",
     building_stock: pd.DataFrame,
@@ -237,12 +286,22 @@ AGG_FED_KEY_COLS = [
     "year",
     "unit",
 ]
-
 AGG_FED_AGG_COLS = {'value': 'sum'}
+
+AGG_PV_KEY_COLS = [
+    "id_scenario",
+    "id_region",
+    "id_sector",
+    "id_subsector",
+    "year",
+    "pv_size_unit",
+    "pv_generation_unit"
+]
 
 
 def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
     fed_output = f"{FED}_nuts{nuts_level}.csv"
+    pv_output = f"{PV}_nuts{nuts_level}.csv"
     bss_output = f"{BSS}_nuts{nuts_level}.csv"
     # regional aggregation
     for region_table_name in tqdm(
@@ -253,6 +312,12 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
             cfg=cfg,
             region_final_energy_demand_file_name=f'{FED}_{region_table_name.split("_")[-1]}',
             output_file_name=fed_output,
+            nuts_level=nuts_level
+        )
+        aggregate_region_pv_generation(
+            cfg=cfg,
+            region_final_energy_demand_file_name=f'{PV}_{region_table_name.split("_")[-1]}',
+            output_file_name=pv_output,
             nuts_level=nuts_level
         )
         aggregate_region_building_stock_summary(
@@ -268,6 +333,13 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
         save_dataframe(
             path=fed_path,
             df=df_fed.groupby(AGG_FED_KEY_COLS).agg(AGG_FED_AGG_COLS).reset_index(),
+            if_exists="replace"
+        )
+        pv_path = os.path.join(cfg.output_folder, pv_output)
+        df_pv = pd.read_csv(pv_path)
+        save_dataframe(
+            path=pv_path,
+            df=df_pv.groupby(AGG_PV_KEY_COLS).agg(PV_AGG_COLS).reset_index(),
             if_exists="replace"
         )
         bss_path = os.path.join(cfg.output_folder, bss_output)
@@ -313,6 +385,30 @@ def aggregate_region_final_energy_demand(
             nuts_level=nuts_level,
             group_by_cols=AGG_FED_KEY_COLS,
             agg_cols=AGG_FED_AGG_COLS
+        ),
+        if_exists="append"
+    )
+
+
+def aggregate_region_pv_generation(
+    cfg: "Config",
+    region_final_energy_demand_file_name: str,
+    output_file_name: str,
+    nuts_level: int
+):
+    assert nuts_level in [0, 1, 2, 3]
+    pv_generation_nuts3 = pd.read_csv(os.path.join(
+        cfg.output_folder,
+        cons.REGION_DATA_SUBFOLDER,
+        f'{region_final_energy_demand_file_name}.csv'
+    ))
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, output_file_name),
+        df=aggregate_nuts_level(
+            df_nuts3=pv_generation_nuts3,
+            nuts_level=nuts_level,
+            group_by_cols=AGG_PV_KEY_COLS,
+            agg_cols=PV_AGG_COLS
         ),
         if_exists="append"
     )
