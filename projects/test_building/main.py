@@ -26,11 +26,11 @@ def run_toolkit(cfg: "Config"):
 
 
 def run_post_processor(cfg: "Config"):
-    # post_processor.process_region_building_stock(cfg=cfg, cores=8)
-    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=0)
+    post_processor.process_region_building_stock(cfg=cfg, cores=8)
+    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=0)
     # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=1)
     # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=2)
-    # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
+    post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
     # post_processor.gen_renovation_rate(cfg=cfg)
     # post_processor.gen_demolition_rate(cfg=cfg)
 
@@ -38,6 +38,6 @@ def run_post_processor(cfg: "Config"):
 if __name__ == "__main__":
     config = get_config("test_building")
     # run_toolkit(cfg=config)
-    # run_building_model(cfg=config, cores=8)
+    run_building_model(cfg=config, cores=8)
     run_post_processor(cfg=config)
 
