@@ -478,11 +478,8 @@ The main steps are written in the function `gen_renovation_rate`.
 
 def gen_renovation_rate(cfg: "Config"):
     """
-    (1) Create the building summary file
-    (2) Aggregate the summary file:
-        (2.1) keep the ids that are consistent with expected output of renovation rate table
-        (2.2) aggregate the values of building number and building component area
-    (3) Calculate the renovation rate per definition
+    Only run this function when all nuts3 regions are finished.
+    And, the "building_stock_summary_nuts0.csv" file is generated.
     """
     aggregate_building_component_area(cfg=cfg)
     aggregate_renovation_actions(cfg=cfg)
