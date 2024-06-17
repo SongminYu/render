@@ -5,72 +5,30 @@
 ### Meeting
 
 - Updates
-  - eceee feedbacks
+  - RokiG meeting feedbacks
   - meeting with Hannah
   - meeting with Weijia
-  - Code developments
-- meeting with RokiG partners
-  - feedbacks from the partners
-  - new stuff to model?
-- Questions
-  - id_region: 9160008 and 9160024 are skipped (also in toolkit.region_mapping)
-- Heads up on calibration
-  - The calibration was done by starting the model from 2010 with 10% coverage.
-  - This decides the building and employee number in the tertiary sectors, because there is only demolished buildings replaced by new buildings
-  - This further decides the calibration of appliance and hot water demand per person. 
-  - As a result, if the model is started from 2019. The deviation in 2019 will be larger. 
-  - Changing coverage percentage may also impact but not that much.
 - Arrange a meeting
   - record detailed code walk-through
   - update the two plots on the Miro board
 
 ### Songmin
 
-- [x] calibrate based on updated 2010-2022 results
-  - add other energy carriers in appliance consumption and efficiency index
-  - space cooling: maybe update the penetration rate, or cooling temperature? --> found and fixed bug in cooling demand collection
-  - behavior profiles need to be updated
-- [x] collect investment cost of `heating_modernization` and `building_renovation` by both building and state
-- [x] Understand why cooling is underestimated
-  - now it is about 4% of the statistics
-  - checked energy intensity (0.3-0.4) --> looks fine
-  - checked the output tables and aggregation --> no mistake
-  - compared with the 5R1C model results in FLEX, taking useful energy demand of one building as example
-    - flex ratio: cooling/heating = 145437/45471288 = 0.003198436 --> considering the adoption rate and technology efficiency, this number can be reduced --> close to render ratio
-    - render ratio: 0.000923967
-    - statistics ratio: 0.022491748
-      - maybe RC model is not a good approach? 
-      - Sonja's results are likely to be calculated with operation hours and power according to the questions in the survey. 
-      - We should check literature on cooling demand.
-- [x] add function
-  - `post_processor.gen_renovation_rate`
-    - definitions
-      - not added --> component renovation rate = number of component renovated buildings / total number of buildings
-      - component area-weighted renovation rate = renovated component area / total component area in stock
-      - overall modernization rate = (area-weighted renovation rate wall * 0.4 + area-weighted renovation rate roof * 0.28 + area-weighted renovation rate basement * 0.23 + area-weighted renovation rate window * 0.09)
-    - progress
-      - added `component_area` in the renovation table
-      - steps designed
-  - `post_processor.gen_building_demolition_and_construction`
-    - definition: number of demolished/constructed buildings / total number of buildings
-    - progress: data collection code added, will add the function in post_processor and calculate results after next run
-- [x] modeling of PV and battery
-  - exogenous penetration rate + optional policy scenario: mandatory for new buildings
-  - no battery
-  - size of PV depends on `roof_area`
-  - temporal resolution: annual resolution + with self-consumption rate
-  - heads-up: parameters to be developed
-  - further development of the logic (when there are specific needs, e.g., for regional profile): 
-    - hourly calculating electricity profile, pv generation, grid demand
-    - building-level electricity demand and PV operation calculation --> currently, PV-related results are only collected and aggregated separately in the post-processing
+- [ ] Revise: all the new heating system must satisfy 65% renewable requirement
+- [ ] report renovation rate for residential and non-residential buildings separately
 
 ### Sirin
 
 - [x] Overview the data gap
-- [ ] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
+- [x] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
   - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
 - [ ] Check first scenario results and see if further improvements are necessary
-
+  - heating technology ban for oil, even gas
+  - district heating cost calibration (check infrastructure, calibration choice among technologies)
+- [ ] Migrate comments from eceee and RokiG RWTH meeting to the todos
+- [ ] Check literature and sources about cooling
+  - decide how we model cooling demand in RENDER (replacing 5R1C if necessary)
+- [ ] increase window lifetime for lower renovation rate
 
 ## Done
 
@@ -123,6 +81,46 @@
 - [x] for new buildings: only renewable heating is allowed
 - [x] subsidy program for `heating_modernization` --> `Scenario_Subsidy_HeatingModernization`
 - [x] subsidy program for `building_renovation` --> `Scenario_Subsidy_BuildingRenovation`
+- [x] calibrate based on updated 2010-2022 results
+  - add other energy carriers in appliance consumption and efficiency index
+  - space cooling: maybe update the penetration rate, or cooling temperature? --> found and fixed bug in cooling demand collection
+  - behavior profiles need to be updated
+  - Heads up on calibration
+    - The calibration was done by starting the model from 2010 with 10% coverage.
+    - This decides the building and employee number in the tertiary sectors, because there is only demolished buildings replaced by new buildings
+    - This further decides the calibration of appliance and hot water demand per person. 
+    - As a result, if the model is started from 2019. The deviation in 2019 will be larger. 
+    - Changing coverage percentage may also impact but not that much.
+- [x] collect investment cost of `heating_modernization` and `building_renovation` by both building and state
+- [x] Understand why cooling is underestimated
+  - now it is about 4% of the statistics
+  - checked energy intensity (0.3-0.4) --> looks fine
+  - checked the output tables and aggregation --> no mistake
+  - compared with the 5R1C model results in FLEX, taking useful energy demand of one building as example
+    - flex ratio: cooling/heating = 145437/45471288 = 0.003198436 --> considering the adoption rate and technology efficiency, this number can be reduced --> close to render ratio
+    - render ratio: 0.000923967
+    - statistics ratio: 0.022491748
+      - maybe RC model is not a good approach? 
+      - Sonja's results are likely to be calculated with operation hours and power according to the questions in the survey. 
+      - We should check literature on cooling demand.
+- [x] add function
+  - `post_processor.gen_renovation_rate`
+    - definitions
+      - not added --> component renovation rate = number of component renovated buildings / total number of buildings
+      - component area-weighted renovation rate = renovated component area / total component area in stock
+      - overall modernization rate = (area-weighted renovation rate wall * 0.4 + area-weighted renovation rate roof * 0.28 + area-weighted renovation rate basement * 0.23 + area-weighted renovation rate window * 0.09)
+    - progress
+      - added `component_area` in the renovation table
+      - steps designed
+  - `post_processor.gen_building_demolition_and_construction`
+    - definition: number of demolished/constructed buildings / total number of buildings
+    - progress: data collection code added, will add the function in post_processor and calculate results after next run
+- [x] modeling of PV and battery
+  - exogenous penetration rate + optional policy scenario: mandatory for new buildings
+  - no battery
+  - size of PV depends on `roof_area`
+  - temporal resolution: annual resolution + with self-consumption rate
+  - heads-up: parameters to be developed
 
 ### Sirin
 

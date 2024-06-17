@@ -40,6 +40,12 @@
 - [ ] contribution factor depends on the type of main heating technology and building efficiency class?
 - [ ] use better COP of HP to show the impact of smart management (in general, use results of optimization model as input parameters for the RENDER-Building model, to reflect prosumaging / SEMS scenarios)
 
+## PV
+
+- further development of the logic (when there are specific needs, e.g., for regional profile): 
+  - hourly calculating electricity profile, pv generation, grid demand
+  - building-level electricity demand and PV operation calculation --> currently, PV-related results are only collected and aggregated separately in the post-processing
+
 ## Post processor
 
 - [x] Add distribution of `id_building_efficiency_class` (or kWh/m2) as an output, 
