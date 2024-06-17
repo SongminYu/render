@@ -19,9 +19,6 @@
 
 ### Sirin
 
-- [x] Overview the data gap
-- [x] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
-  - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
 - [ ] Check first scenario results and see if further improvements are necessary
   - heating technology ban for oil, even gas
   - district heating cost calibration (check infrastructure, calibration choice among technologies)
@@ -146,3 +143,6 @@
     - update slides to introduce how qualitative input from IBP are used to develop scenarios
     - show IBP how the scenarios are quantified in the model (show the related tables)
     - ask them to fill in the data gap
+- [x] Overview the data gap
+- [x] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
+  - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
