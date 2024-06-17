@@ -4,7 +4,7 @@ import time
 
 
 def monitor_python_memory_usage(interval=1):
-    output_file = f'memory_usage_{time.strftime("%Y-%m-%d_%H:%M:%S", time.localtime())}.csv'
+    output_file = f'memory_usage_{time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())}.csv'
     with open(output_file, 'w', newline='') as csvfile:
         fieldnames = ['timestamp', 'memory_usage_gb', 'unit']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -19,7 +19,7 @@ def monitor_python_memory_usage(interval=1):
             print("Memory Usage by Python Processes: {:.2f} GB".format(memory_usage_gb))
 
             writer.writerow({
-                'timestamp': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()),
+                'timestamp': time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime()),
                 'memory_usage_gb': round(memory_usage_gb, 3),
                 'unit': 'GB'
             })
