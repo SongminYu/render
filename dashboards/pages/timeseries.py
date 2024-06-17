@@ -9,6 +9,7 @@ from dashboards.components import (
     dropdown,
     sub_dropdown,
     comparison_table,
+    line_bar_chart,
 )
 
 dash.register_page(__name__, path='/national_timeseries_analysis', name="National Timeseries Calibration")
@@ -30,6 +31,7 @@ END_USE_DROPDOWN = "enduse-dropdown-timeseries"
 SELECT_ALL_END_USES_BUTTON = "select-all-enduses-button-timeseries"
 
 BAR_CHART = "bar-chart-timeseries"
+LINE_BAR_CHART = "line-bar-chart-timeseries"
 
 DATA_TABLE = "data-table-timeseries"
 DATA_TABLE_REFERENCE = "data-table-reference-timeseries"
@@ -54,13 +56,17 @@ dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
              {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
              {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
-             {'id': END_USE_DROPDOWN, 'column': DataSchema.ID_END_USE},]
+             {'id': END_USE_DROPDOWN, 'column': DataSchema.ID_END_USE}, ]
+
+reference_dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                       {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
+                       {'id': END_USE_DROPDOWN, 'column': DataSchema.ID_END_USE}, ]
 
 x = DataSchema.YEAR
 x_options = years
 y = DataSchema.VALUE_TWh
 category = DataSchema.ID_ENERGY_CARRIER
-category_options=id_energy_carriers
+category_options = id_energy_carriers
 
 # -------------------- DATA TABLES --------------------
 end_use_table = data_table.render(data,
@@ -76,9 +82,7 @@ end_use_table = data_table.render(data,
 reference_table = data_table.render(reference_data[reference_data[DataSchema.YEAR].isin(years)],
                                     id_datatable=DATA_TABLE_REFERENCE,
                                     title='Reference Data in TWh',
-                                    dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                               {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},
-                                               {'id': END_USE_DROPDOWN, 'column': DataSchema.ID_END_USE},],
+                                    dropdowns=reference_dropdowns,
                                     x=category,
                                     x_options=category_options,
                                     y=y,
@@ -93,13 +97,9 @@ layout = html.Div(children=[
     sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
                         DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
     dropdown.render(data, END_USE_DROPDOWN, DataSchema.ID_END_USE, SELECT_ALL_END_USES_BUTTON),
-    stacked_bar_chart.render(data,
-                             id_barchart=BAR_CHART,
-                             dropdowns=dropdowns,
-                             x=x,
-                             y=y,
-                             category=category),
+    line_bar_chart.render(data, reference_data, LINE_BAR_CHART, dropdowns, reference_dropdowns, x, y, category),
     html.Div(className='flex-container', children=[end_use_table, reference_table]),
     comparison_table.render("comparison-table-timeseries", DATA_TABLE, DATA_TABLE_REFERENCE,
-                            "absolute-diff-table-timeseries", "relative-diff-table-timeseries", category=x, coloring='row')
+                            "absolute-diff-table-timeseries", "relative-diff-table-timeseries", category=x,
+                            coloring='row')
 ], )
