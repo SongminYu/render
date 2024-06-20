@@ -493,7 +493,7 @@ def aggregate_building_component_area(cfg: "Config"):
         return dict(zip(id_building_component["name"], id_building_component["id_building_component"]))
 
     df = pd.read_csv(os.path.join(cfg.output_folder, "building_stock_summary_nuts0.csv"))
-    df_agg = df.groupby(["id_scenario", "id_region", "year"]).agg({
+    df_agg = df.groupby(["id_scenario", "id_region", "id_sector", "year"]).agg({
         "wall_area": "sum",
         "window_area": "sum",
         "roof_area": "sum",
@@ -507,6 +507,7 @@ def aggregate_building_component_area(cfg: "Config"):
             l.append({
                 "id_scenario": row["id_scenario"],
                 "id_region": row["id_region"],
+                "id_sector": row["id_sector"],
                 "id_building_component": building_component_ids[component],
                 "year": row["year"],
                 "value": row[f"{component}_area"]
@@ -518,7 +519,7 @@ def aggregate_renovation_actions(cfg: "Config"):
     df = pd.read_csv(os.path.join(cfg.output_folder, "renovation_actions.csv"))
     df["value"] = df["component_area"] * df["building_number"]
     df = replace_nuts3_region_id(df_nuts3=df, nuts_level=0)
-    df_agg = df.groupby(["id_scenario", "id_region", "id_building_component", "year"]).agg({"value": "sum"}).reset_index()
+    df_agg = df.groupby(["id_scenario", "id_region", "id_sector", "id_building_component", "year"]).agg({"value": "sum"}).reset_index()
     df_agg.to_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_renovated.csv"), index=False)
 
 
@@ -531,7 +532,7 @@ def calculate_renovation_rate(cfg: "Config"):
     def get_renovated_area():
         d = {}
         for _, row in df_renovated.iterrows():
-            d[(row["id_scenario"], row["id_region"], row["id_building_component"], row["year"])] = row["value"]
+            d[(row["id_scenario"], row["id_region"], row["id_sector"], row["id_building_component"], row["year"])] = row["value"]
         return d
 
     df_renovated = pd.read_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_renovated.csv"))
@@ -540,7 +541,7 @@ def calculate_renovation_rate(cfg: "Config"):
     building_component_names = get_building_component_names()
     df_total = pd.read_csv(os.path.join(cfg.output_folder, "renovation_building_component_area_total.csv"))
     df_total_pivot = df_total.pivot_table(
-        index=["id_scenario", "id_region", "year"],
+        index=["id_scenario", "id_region", "id_sector", "year"],
         columns="id_building_component",
         values='value'
     ).reset_index()
@@ -550,11 +551,12 @@ def calculate_renovation_rate(cfg: "Config"):
             l.append({
                 "id_scenario": row["id_scenario"],
                 "id_region": row["id_region"],
+                "id_sector": row["id_sector"],
                 "year": row["year"],
-                f"{building_component_names[1]}": renovated_area[(row["id_scenario"], row["id_region"], 1, row["year"])]/row[1],
-                f"{building_component_names[2]}": renovated_area[(row["id_scenario"], row["id_region"], 2, row["year"])]/row[2],
-                f"{building_component_names[3]}": renovated_area[(row["id_scenario"], row["id_region"], 3, row["year"])]/row[3],
-                f"{building_component_names[4]}": renovated_area[(row["id_scenario"], row["id_region"], 4, row["year"])]/row[4],
+                f"{building_component_names[1]}": renovated_area[(row["id_scenario"], row["id_region"], row["id_sector"], 1, row["year"])]/row[1],
+                f"{building_component_names[2]}": renovated_area[(row["id_scenario"], row["id_region"], row["id_sector"], 2, row["year"])]/row[2],
+                f"{building_component_names[3]}": renovated_area[(row["id_scenario"], row["id_region"], row["id_sector"], 3, row["year"])]/row[3],
+                f"{building_component_names[4]}": renovated_area[(row["id_scenario"], row["id_region"], row["id_sector"], 4, row["year"])]/row[4],
             })
     df = pd.DataFrame(l)
     df["average"] = df["wall"] * 0.4 + df["roof"] * 0.28 + df["basement"] * 0.23 + df["window"] * 0.09
@@ -568,10 +570,10 @@ Building demolition and construction
 
 def agg_building_number(df: pd.DataFrame):
     df = replace_nuts3_region_id(df, nuts_level=0)
-    df = df.groupby(["id_scenario", "id_region", "year"]).agg({"value": "sum"}).reset_index()
+    df = df.groupby(["id_scenario", "id_region", "id_sector", "year"]).agg({"value": "sum"}).reset_index()
     d = {}
     for _, row in df.iterrows():
-        d[(row["id_scenario"], row["id_region"], row["year"])] = row["value"]
+        d[(row["id_scenario"], row["id_region"], row["id_sector"], row["year"])] = row["value"]
     return d
 
 
@@ -587,7 +589,8 @@ def gen_demolition_rate(cfg: "Config"):
         l.append({
             "id_scenario": key[0],
             "id_region": key[1],
-            "year": key[2],
+            "id_sector": key[2],
+            "year": key[3],
             "value": demolished_building / value
         })
     pd.DataFrame(l).to_csv(os.path.join(cfg.output_folder, "demolition_rate.csv"), index=False)
@@ -596,6 +599,8 @@ def gen_demolition_rate(cfg: "Config"):
 """
 Save data
 """
+
+
 def save_dataframe(
     path,
     df: pd.DataFrame,
