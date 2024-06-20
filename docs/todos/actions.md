@@ -12,6 +12,7 @@
     - completed the extraction of data from the study (Wie heizt DE?): detailed data at state level on heating system (tech., age, EC, etc.) --> how do we proceed?
     - completed data collection of final energy consumption at state level. however, not every state has data for every year; in fact, no common year so far on all 16. Also, some states have HH and GHD, separate; some together.
     - CO2 emissions statistics are in progress.
+- Discuss the abstract/paper for ECEMP-2024
 - Arrange a meeting
   - record detailed code walk-through
   - update the two plots on the Miro board
