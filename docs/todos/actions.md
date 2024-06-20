@@ -18,7 +18,7 @@
 
 ### Songmin
 
-- [x] Revise: all the new heating system must satisfy 65% renewable requirement
+- [x] Revise: all the new heating system must satisfy 65% renewable requirement --> not changed, because the policy can be captured by the availability table. This "mandatory" logic was added as a symmetric policy with the building renovation. We can keep it "closed" for most scenarios.
 - [x] report renovation rate for residential and non-residential buildings separately
 
 ### Sirin
