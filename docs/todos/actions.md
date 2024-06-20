@@ -18,8 +18,8 @@
 
 ### Songmin
 
-- [ ] Revise: all the new heating system must satisfy 65% renewable requirement
-- [ ] report renovation rate for residential and non-residential buildings separately
+- [x] Revise: all the new heating system must satisfy 65% renewable requirement
+- [x] report renovation rate for residential and non-residential buildings separately
 
 ### Sirin
 
