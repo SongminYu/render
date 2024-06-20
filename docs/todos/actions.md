@@ -6,8 +6,12 @@
 
 - Updates
   - RokiG meeting feedbacks
+    - meeting with IBP and Nico (separately) on Thursday, 27th. Nico commented on PV, IBP commented mainly on new technologies in Neubau and smart operation
   - meeting with Hannah
   - meeting with Weijia
+    - completed the extraction of data from the study (Wie heizt DE?): detailed data at state level on heating system (tech., age, EC, etc.) --> how do we proceed?
+    - completed data collection of final energy consumption at state level. however, not every state has data for every year; in fact, no common year so far on all 16. Also, some states have HH and GHD, separate; some together.
+    - CO2 emissions statistics are in progress.
 - Arrange a meeting
   - record detailed code walk-through
   - update the two plots on the Miro board
@@ -25,7 +29,7 @@
 - [ ] Migrate comments from eceee and RokiG RWTH meeting to the todos
 - [ ] Check literature and sources about cooling
   - decide how we model cooling demand in RENDER (replacing 5R1C if necessary)
-- [ ] increase window lifetime for lower renovation rate
+- [x] increase window lifetime for lower renovation rate: increased mean lifetime by roughly 50%
 
 ## Done
 
