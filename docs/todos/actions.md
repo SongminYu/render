@@ -27,6 +27,8 @@
 - [ ] Check first scenario results and see if further improvements are necessary
   - heating technology ban for oil, even gas
   - district heating cost calibration (check infrastructure, calibration choice among technologies)
+    - in the `heating_system_actions` file, there are columns with cost numbers
+    - if necessary, we can have an "inertia" logic in technology choice?
 - [ ] Migrate comments from eceee and RokiG RWTH meeting to the todos
 - [ ] Check literature and sources about cooling
   - decide how we model cooling demand in RENDER (replacing 5R1C if necessary)
