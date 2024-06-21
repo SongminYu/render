@@ -13,14 +13,13 @@
     - completed data collection of final energy consumption at state level. however, not every state has data for every year; in fact, no common year so far on all 16. Also, some states have HH and GHD, separate; some together.
     - CO2 emissions statistics are in progress.
 - Discuss the abstract/paper for ECEMP-2024
-- Arrange a meeting
+- Arrange a meeting --> July 2nd
   - record detailed code walk-through
   - update the two plots on the Miro board
 
 ### Songmin
 
-- [x] Revise: all the new heating system must satisfy 65% renewable requirement --> not changed, because the policy can be captured by the availability table. This "mandatory" logic was added as a symmetric policy with the building renovation. We can keep it "closed" for most scenarios.
-- [x] report renovation rate for residential and non-residential buildings separately
+- [ ] Prepare the code walk-through
 
 ### Sirin
 
@@ -28,11 +27,14 @@
   - heating technology ban for oil, even gas
   - district heating cost calibration (check infrastructure, calibration choice among technologies)
     - in the `heating_system_actions` file, there are columns with cost numbers
-    - if necessary, we can have an "inertia" logic in technology choice?
+    - check with Tobi about the values in `heating_system_actions`
+    - check how many buildings switch from DH to other technologies
+  - check input tables and make sure there is no table containing only "place-holder data"
 - [ ] Migrate comments from eceee and RokiG RWTH meeting to the todos
 - [ ] Check literature and sources about cooling
   - decide how we model cooling demand in RENDER (replacing 5R1C if necessary)
-- [x] increase window lifetime for lower renovation rate: increased mean lifetime by roughly 50%
+- [ ] compare Weijia's collection of (Wie heizt DE?) with two input tables: Scenario_HeatingSystem, Scenario_HeatingTechnology_Main at NUTS1 level --> maybe improve the input first then calibrate the model if they are too far away
+- [ ] With Weijia: look for data again for the states with RES&GHD together. If not available, we have a separate validation excel tool for these states.
 
 ## Done
 
@@ -125,6 +127,8 @@
   - size of PV depends on `roof_area`
   - temporal resolution: annual resolution + with self-consumption rate
   - heads-up: parameters to be developed
+- [x] Revise: all the new heating system must satisfy 65% renewable requirement --> not changed, because the policy can be captured by the availability table. This "mandatory" logic was added as a symmetric policy with the building renovation. We can keep it "closed" for most scenarios.
+- [x] report renovation rate for residential and non-residential buildings separately
 
 ### Sirin
 
@@ -153,3 +157,4 @@
 - [x] Overview the data gap
 - [x] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
   - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
+- [x] increase window lifetime for lower renovation rate: increased mean lifetime by roughly 50%
