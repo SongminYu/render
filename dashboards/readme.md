@@ -69,12 +69,12 @@ This document contains the development plan of the `RenderDash` tool.
 
 
 ## May 24th, 2024
-- [ ] Future year weather profiles: https://zenodo.org/records/7907883
+- [x] Future year weather profiles: https://zenodo.org/records/7907883
   - check if all years (2010-2050) exceed 100 MB. If so, reduce future years to 5 (or 10) steps like 2025,2030, etc.
   - check how PVGIS creates NUTS2 region temperature. Accordingly, we will decide if we use spatial mean or population mean
   - what type of radiation does PVGIS give? (global irradiation or direct normal irradiation)
   - if there is a way to generate orientation-specific radiation from one global or one direct normal irradiation?
-- [ ] new dashboard (named "national timeseries calibration"): 
+- [x] new dashboard (named "national timeseries calibration"): 
       plotting timeseries for historic comparison. it's a "mixed-plot" where model results are bars, reference is line
   - years on x-axis
   - one bar chart with energy carriers (in legend) accumulated for each year from model results.
@@ -84,20 +84,25 @@ This document contains the development plan of the `RenderDash` tool.
   - tables: 
     - for each of the four end-uses, we will have the four tables (16 table in total)
     - we rename the "end-use analysis" to "national year calibration"
-- [ ] Sirin updates the CalibrationTarget file with historic reference data.
+- [x] Sirin updates the CalibrationTarget file with historic reference data.
 
-## Next time
+## June 21st, 2024
 - [ ] Global radiation (solar radiation flux on horizontal surface) and direct normal irradiance (for perpendicular surfaces) are given
   - (if?) which one do we want to use? I guess it is possible to calculate the different orientations but I am confused about the units (W or W/m^2?)
+    - [ ] Hannah downloads Global radiation.
+    - [ ] Sirin checks methodology of generating orientation-specific radiation from global radiation
+    - we can also generate the PV generation "relatively" to global radiation of 2020.
   - if we have 4 orientations, file size will exceed 100 MB, for temperature it is okay
-- [ ] Which scenario do we want to choose? RCP 4.5 or RCP 8.5
-- [ ] End use as dropdown?
+    - [ ] we deal with this by having only intermediate years after 2020: 2030, 2040, 2050
+- [x] Which scenario do we want to choose? RCP 4.5 or RCP 8.5
+  - we chose RCP 4.5
+- [ ] End use as dropdown
+  - end-use plots (by energy carrier) are shown separately one after each other for now.
+  - aggregation at national/state-level in the input file relevant? --> faster processing?
 
 
 ### Later stage
-- rename dashboards:
-  - 
-- new dashboard: timeseries data from simulation and statistics, e.g., 2010-2020
+
 - beautify dashboards
 - geo-visualization (new dashboard)
 - enhance Floor Area dashboard
