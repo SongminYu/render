@@ -30,6 +30,10 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, categ
         relative = pd.DataFrame()
         for column in end_use:
             relative[column] = (data_df[column] - reference_df[column]).div(reference_df[column])
+        # Identify zeros in reference data table
+        zeros_in_reference = (reference_df == 0)
+        # Set corresponding cells in relative difference table to 100
+        relative[zeros_in_reference] = 1
         relative.insert(loc=0, column=category, value=data_df[category])
         # Round every entry to no digits after the decimal point
         relative = relative.fillna(0)

@@ -14,13 +14,14 @@ def render(data, reference, id_line_barchart, dropdowns, reference_dropdowns, x,
         Output(id_line_barchart, "children"),
         [Input(id, "value") for id in dropdown_ids],
     )
-    def update_bar_chart(*values: list[str]) -> html.Div:
+    def update_bar_chart(*values: list[str]):
         value_dict = dict(zip(dropdown_ids, values))
         # build query to filter in different columns, eg. for one filter f"{id_filtered_colum} in @values"
         filters = ' & '.join([f"{dropdown['column']} in {values[i]}" for i, dropdown in enumerate(dropdowns)])
         filtered_data = data.query(filters)
 
-        reference_filters = ' & '.join([f"{dropdown['column']} in {value_dict[dropdown['id']]}" for i, dropdown in enumerate(reference_dropdowns)])
+        reference_filters = ' & '.join(
+            [f"{dropdown['column']} in {value_dict[dropdown['id']]}" for i, dropdown in enumerate(reference_dropdowns)])
         filtered_reference = reference.query(reference_filters)
 
         if filtered_data.shape[0] == 0:
@@ -41,7 +42,8 @@ def render(data, reference, id_line_barchart, dropdowns, reference_dropdowns, x,
         x_labels = list(grouped_data[x].unique())
         grouped_reference_data = grouped_reference_data[grouped_reference_data[x].isin(x_labels)]
 
-        fig.add_traces(go.Scatter(x=grouped_reference_data[x], y=grouped_reference_data[y], fillcolor='blue', line_color='blue'))
+        fig.add_trace(go.Scatter(x=grouped_reference_data[x], y=grouped_reference_data[y], # mode="lines",
+                                 line=go.scatter.Line(color="blue"), fillcolor='blue', name='reference data'))
 
         return dcc.Graph(figure=fig)
 
