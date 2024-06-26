@@ -129,9 +129,9 @@ def pivot_region_hour_columns(df: pd.DataFrame) -> pd.DataFrame:
     return pivot_df
 
 
-def prep_future_data():
+def prep_future_data(path):
     print('Load future weather data...')
-    df = pd.read_csv('T2M_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv')
+    df = pd.read_csv(path+'_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv')
 
     print('Build year and hour columns...')
     df = build_year_hour_columns(df)
@@ -140,23 +140,35 @@ def prep_future_data():
     df = extract_country_columns(df)
 
     print('Save dataframe...')
-    df.to_csv('T2M_DE_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv', index=False)
+    df.to_csv(path + '_NUTS2_Europe_popweight_rcp45_hourly_2001-2050_DE.csv', index=False)
 
 
 def create_future_weather_profile():
     print('Load prepped future weather data...')
-    df = pd.read_csv('T2M_DE_NUTS2_Europe_popweight_rcp45_hourly_2001-2050.csv')
+    df_temperature = pd.read_csv('T2M_NUTS2_Europe_popweight_rcp45_hourly_2001-2050_DE.csv')
+    df_radiation = pd.read_csv('GLO_NUTS2_Europe_popweight_rcp45_hourly_2001-2050_DE.csv')
 
     print('Pivot region and hour columns...')
-    df = pivot_region_hour_columns(df)
+    df_temperature = pivot_region_hour_columns(df_temperature)
+    df_radiation = pivot_region_hour_columns(df_radiation)
 
-    df = map_nuts_to_region_id(df)
-    df.insert(df.columns.get_loc(1), 'unit', '°C')
+    df_temperature = map_nuts_to_region_id(df_temperature)
+    df_temperature.insert(df_temperature.columns.get_loc(1), 'unit', '°C')
+
+    df_radiation = map_nuts_to_region_id(df_radiation)
+    df_radiation.insert(df_radiation.columns.get_loc(1), 'unit', 'W/m^2')
 
     print('Save dataframe...')
-    df.to_csv('Profile_WeatherTemperature_Future.csv')
+    df_temperature.to_csv('Profile_WeatherTemperature_Future.csv')
+    df_radiation.to_csv('Profile_WeatherRadiation_Future.csv')
 
 
 if __name__ == '__main__':
-    prep_future_data()
+    print('Prepare temperature data.')
+    temperature_path = 'T2M'
+    prep_future_data(temperature_path)
+    print('Prepare radiation data.')
+    radiation_path = 'GLO'
+    prep_future_data(radiation_path)
+    print('Create future weather profiles.')
     create_future_weather_profile()

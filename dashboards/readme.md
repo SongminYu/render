@@ -89,14 +89,14 @@ This document contains the development plan of the `RenderDash` tool.
 ## June 21st, 2024
 - [ ] Global radiation (solar radiation flux on horizontal surface) and direct normal irradiance (for perpendicular surfaces) are given
   - (if?) which one do we want to use? I guess it is possible to calculate the different orientations but I am confused about the units (W or W/m^2?)
-    - [ ] Hannah downloads Global radiation.
+    - [x] Hannah downloads Global radiation.
     - [ ] Sirin checks methodology of generating orientation-specific radiation from global radiation
     - we can also generate the PV generation "relatively" to global radiation of 2020.
   - if we have 4 orientations, file size will exceed 100 MB, for temperature it is okay
     - [ ] we deal with this by having only intermediate years after 2020: 2030, 2040, 2050
 - [x] Which scenario do we want to choose? RCP 4.5 or RCP 8.5
   - we chose RCP 4.5
-- [ ] End use as dropdown
+- [x] End use as dropdown
   - end-use plots (by energy carrier) are shown separately one after each other for now.
   - aggregation at national/state-level in the input file relevant? --> faster processing?
 
