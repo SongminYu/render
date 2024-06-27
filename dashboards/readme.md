@@ -93,13 +93,19 @@ This document contains the development plan of the `RenderDash` tool.
     - [ ] Sirin checks methodology of generating orientation-specific radiation from global radiation
     - we can also generate the PV generation "relatively" to global radiation of 2020.
   - if we have 4 orientations, file size will exceed 100 MB, for temperature it is okay
-    - [ ] we deal with this by having only intermediate years after 2020: 2030, 2040, 2050
+    - [x] we deal with this by having only intermediate years after 2020: 2030, 2040, 2050
 - [x] Which scenario do we want to choose? RCP 4.5 or RCP 8.5
   - we chose RCP 4.5
 - [x] End use as dropdown
   - end-use plots (by energy carrier) are shown separately one after each other for now.
   - aggregation at national/state-level in the input file relevant? --> faster processing?
 
+## June 27th, 2024
+- [ ] check if aggregation at national/state-level in the input file relevant? --> is it faster processing?
+- [ ] dashboard header or indication of which dashboard we are
+- we generate the PV generation and orientation-specific radiation "relatively" to global radiation of 2020.
+  - [ ] check what is the "error margin" of this method by looking into a historic year e.g. 2015-2016.
+  - [ ] produce radiation and PV generation outputs for 2030, 2040, 2050.
 
 ### Later stage
 
