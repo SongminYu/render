@@ -5,17 +5,10 @@
 ### Meeting
 
 - Updates
-  - RokiG meeting feedbacks
-    - meeting with IBP and Nico (separately) on Thursday, 27th. Nico commented on PV, IBP commented mainly on new technologies in Neubau and smart operation
   - meeting with Hannah
   - meeting with Weijia
-    - completed the extraction of data from the study (Wie heizt DE?): detailed data at state level on heating system (tech., age, EC, etc.) --> how do we proceed?
-    - completed data collection of final energy consumption at state level. however, not every state has data for every year; in fact, no common year so far on all 16. Also, some states have HH and GHD, separate; some together.
-    - CO2 emissions statistics are in progress.
-- Discuss the abstract/paper for ECEMP-2024
-- Arrange a meeting --> July 2nd
-  - record detailed code walk-through
-  - update the two plots on the Miro board
+    - cooling modeling
+    - district heating investment cost
 
 ### Songmin
 
@@ -23,6 +16,8 @@
 
 ### Sirin
 
+- [ ] Check consistency of 2019 statistics at country and states level
+- [ ] compare Weijia's collection of (Wie heizt DE?) with two input tables: Scenario_HeatingSystem, Scenario_HeatingTechnology_Main at NUTS1 level --> maybe improve the input first then calibrate the model if they are too far away
 - [ ] Check first scenario results and see if further improvements are necessary
   - heating technology ban for oil, even gas
   - district heating cost calibration (check infrastructure, calibration choice among technologies)
@@ -33,8 +28,6 @@
 - [ ] Migrate comments from eceee and RokiG RWTH meeting to the todos
 - [ ] Check literature and sources about cooling
   - decide how we model cooling demand in RENDER (replacing 5R1C if necessary)
-- [ ] compare Weijia's collection of (Wie heizt DE?) with two input tables: Scenario_HeatingSystem, Scenario_HeatingTechnology_Main at NUTS1 level --> maybe improve the input first then calibrate the model if they are too far away
-- [ ] With Weijia: look for data again for the states with RES&GHD together. If not available, we have a separate validation excel tool for these states.
 
 ## Done
 
@@ -158,3 +151,7 @@
 - [x] Check scenario tables and update them for the reference scenario run after calibration in the first week of June
   - Update the energy carrier price, based on discussions about "mark-up" and "tax" on 31.05.2024
 - [x] increase window lifetime for lower renovation rate: increased mean lifetime by roughly 50%
+- [x] With Weijia: look for data again for the states with RES&GHD together. If not available, we have a separate validation excel tool for these states.
+
+
+
