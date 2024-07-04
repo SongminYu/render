@@ -33,6 +33,7 @@ dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
+        html.H2("Floor Area"),
         dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
         sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
                             DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),

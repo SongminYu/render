@@ -102,9 +102,9 @@ This document contains the development plan of the `RenderDash` tool.
 
 ## June 27th, 2024
 - [ ] check if aggregation at national/state-level in the input file relevant? --> is it faster processing?
-- [ ] dashboard header or indication of which dashboard we are
+- [x] dashboard header or indication of which dashboard we are
 - we generate the PV generation and orientation-specific radiation "relatively" to global radiation of 2020.
-  - [ ] check what is the "error margin" of this method by looking into a historic year e.g. 2015-2016.
+  - [x] check what is the "error margin" of this method by looking into a historic year e.g. 2015-2016.
   - [ ] produce radiation and PV generation outputs for 2030, 2040, 2050.
 
 ### Later stage

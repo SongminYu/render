@@ -83,6 +83,7 @@ reference_table = data_table.render(reference,
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
+    html.H2("Region Analysis"),
     dropdown.render(data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
     dropdown.render(data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
     dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
