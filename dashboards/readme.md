@@ -110,11 +110,14 @@ This document contains the development plan of the `RenderDash` tool.
 ## July 5th, 2024
 - [ ] check if aggregation at national/state-level in the input file relevant? --> is it faster processing?
 - we generate the PV generation and orientation-specific radiation "relatively" to global radiation of 2020.
-  - [ ] understand the "error" of this method: why is it high? e.g. sort the regions in the same order in both datasets to be sure. 
+  - [x] understand the "error" of this method: why is it high? e.g. sort the regions in the same order in both datasets to be sure. 
 - [ ] filter the year when reading the regional reference data
-- [ ] Sirin updates the Energiebilanzen_Regional.csv file with the collected regional data
-  - [ ] renaming of reference data files: Reference_EnergyBalance_National.csv, Reference_EnergyBalance_Regional.csv
-  - [ ] model results are named as final_energy_demand_nutsX
+- [x] Sirin updates the Energiebilanzen_Regional.csv file with the collected regional data
+  - [x] renaming of reference data files: Reference_EnergyBalance_National.csv, Reference_EnergyBalance_Regional.csv
+  - [x] model results are named as final_energy_demand_nutsX
+
+## July 12th, 2024
+- continuing on open points from the previous weeks
 
 ### Later stage
 
