@@ -1,5 +1,5 @@
 import dash
-from dash import html
+from dash import html, dcc
 
 from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
 from dashboards.data import loader
@@ -30,16 +30,11 @@ BAR_CHART = "bar-chart-region"
 DATA_TABLE = "data-table-region"
 DATA_TABLE_REFERENCE = "data-table-reference-region"
 
-EEV_PATH = "data/final_energy_demand_multiple_years.csv"
-REFERENCE_PATH = "data/Energiebilanzen_Regional_Example.csv"
-
 # -------------------- LOAD DATASET --------------------
-data = loader.load_data(EEV_PATH)
-data = loader.preprocess_data(data)
-data = loader.aggregate_to_nuts1(data)
-
-reference = loader.load_data(REFERENCE_PATH)
-reference = loader.convert_TJ_to_TWh(reference)
+print("Load data for Regional Analysis...")
+data = loader.load_nuts1_data()
+reference = loader.load_regional_reference_data()
+print("Finished!")
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
@@ -88,24 +83,26 @@ layout = html.Div(children=[
     dropdown.render(data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
     dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
     dropdown.render(data, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
-    html.H4("Model Results", style={'textAlign': 'center'}),
-    stacked_bar_chart.render(data,
-                             id_barchart=BAR_CHART,
-                             dropdowns=dropdowns,
-                             x=x,
-                             y=y,
-                             category=category),
-    html.H4("Reference Data", style={'textAlign': 'center'}),
-    stacked_bar_chart.render(reference,
-                             id_barchart="bar-chart-reference-region",
-                             dropdowns=[{'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
-                                        {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                                        # {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},
-                                        ],
-                             x=x,
-                             y=y,
-                             category=category),
-    html.Div(className='flex-container', children=[region_table, reference_table]),
-    comparison_table.render("comparison-table-region", DATA_TABLE, DATA_TABLE_REFERENCE,
-                            "absolute-diff-table-region", "relative-diff-table-region", category=x, coloring='row')
-], )
+    dcc.Loading(children=[html.H4("Model Results", style={'textAlign': 'center'}),
+                          stacked_bar_chart.render(data,
+                                                   id_barchart=BAR_CHART,
+                                                   dropdowns=dropdowns,
+                                                   x=x,
+                                                   y=y,
+                                                   category=category),
+                          html.H4("Reference Data", style={'textAlign': 'center'}),
+                          stacked_bar_chart.render(reference,
+                                                   id_barchart="bar-chart-reference-region",
+                                                   dropdowns=[{'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+                                                              {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
+                                                              {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},
+                                                              ],
+                                                   x=x,
+                                                   y=y,
+                                                   category=category),
+                          html.Div(className='flex-container', children=[region_table, reference_table]),
+                          comparison_table.render("comparison-table-region", DATA_TABLE, DATA_TABLE_REFERENCE,
+                                                  "absolute-diff-table-region", "relative-diff-table-region",
+                                                  category=x, coloring='row')
+                          ])
+    ],)

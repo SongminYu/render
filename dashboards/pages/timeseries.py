@@ -1,5 +1,5 @@
 import dash
-from dash import html
+from dash import html, dcc
 
 from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
 from dashboards.data import loader
@@ -70,14 +70,11 @@ DATA_TABLE_COMPARISON_EC_4 = "comparison-table-energy-carrier-4-timeseries"
 DATA_TABLE_ABSOLUTE_DIFF_EC_4 = "absolute-diff-table-energy-carrier-4-timeseries"
 DATA_TABLE_RELATIVE_DIFF_EC_4 = "relative-diff-table-energy-carrier-4-timeseries"
 
-END_USE_PATH = "data/final_energy_demand_multiple_years.csv"
-REFERENCE_PATH = "data/CalibrationTarget.csv"
-
 # -------------------- LOAD DATASET --------------------
-data = loader.load_data(END_USE_PATH)
-data = loader.preprocess_data(data)
-reference_data = loader.load_data(REFERENCE_PATH)
-reference_data = loader.preprocess_data(reference_data)
+print("Load data for National Timeseries Calibration...")
+data = loader.load_energy_data()
+reference_data = loader.load_national_reference_data()
+print("Finished!")
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
@@ -89,10 +86,10 @@ years.sort()
 dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
              {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-             {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},]
+             {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}, ]
 
 reference_dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                       {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR},]
+                       {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}, ]
 
 x = DataSchema.YEAR
 x_options = years
@@ -152,23 +149,23 @@ reference_data_1 = reference_data[reference_data[enduse] == 1]
 
 ec_1_table = data_table.render(data_1,
                                id_datatable=DATA_TABLE_EC_1,
-                                 title='Model Results in TWh',
-                                 dropdowns=dropdowns,
-                                 x=category,
-                                 x_options=category_options,
-                                 y=y,
-                                 category=x,
-                                 category_options=x_options)
+                               title='Model Results in TWh',
+                               dropdowns=dropdowns,
+                               x=category,
+                               x_options=category_options,
+                               y=y,
+                               category=x,
+                               category_options=x_options)
 
-ec_1_reference_table = data_table.render(reference_data_1[reference_data[DataSchema.YEAR].isin(years)],
-                                       id_datatable=DATA_TABLE_REFERENCE_EC_1,
-                                       title='Reference Data in TWh',
-                                       dropdowns=reference_dropdowns,
-                                       x=category,
-                                       x_options=category_options,
-                                       y=y,
-                                       category=x,
-                                       category_options=x_options)
+ec_1_reference_table = data_table.render(reference_data_1[reference_data_1[DataSchema.YEAR].isin(years)],
+                                         id_datatable=DATA_TABLE_REFERENCE_EC_1,
+                                         title='Reference Data in TWh',
+                                         dropdowns=reference_dropdowns,
+                                         x=category,
+                                         x_options=category_options,
+                                         y=y,
+                                         category=x,
+                                         category_options=x_options)
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_2 = data[data[enduse] == 2]
@@ -176,23 +173,23 @@ reference_data_2 = reference_data[reference_data[enduse] == 2]
 
 ec_2_table = data_table.render(data_2,
                                id_datatable=DATA_TABLE_EC_2,
-                                 title='Model Results in TWh',
-                                 dropdowns=dropdowns,
-                                 x=category,
-                                 x_options=category_options,
-                                 y=y,
-                                 category=x,
-                                 category_options=x_options)
+                               title='Model Results in TWh',
+                               dropdowns=dropdowns,
+                               x=category,
+                               x_options=category_options,
+                               y=y,
+                               category=x,
+                               category_options=x_options)
 
-ec_2_reference_table = data_table.render(reference_data_2[reference_data[DataSchema.YEAR].isin(years)],
-                                       id_datatable=DATA_TABLE_REFERENCE_EC_2,
-                                       title='Reference Data in TWh',
-                                       dropdowns=reference_dropdowns,
-                                       x=category,
-                                       x_options=category_options,
-                                       y=y,
-                                       category=x,
-                                       category_options=x_options)
+ec_2_reference_table = data_table.render(reference_data_2[reference_data_2[DataSchema.YEAR].isin(years)],
+                                         id_datatable=DATA_TABLE_REFERENCE_EC_2,
+                                         title='Reference Data in TWh',
+                                         dropdowns=reference_dropdowns,
+                                         x=category,
+                                         x_options=category_options,
+                                         y=y,
+                                         category=x,
+                                         category_options=x_options)
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_3 = data[data[enduse] == 3]
@@ -200,23 +197,23 @@ reference_data_3 = reference_data[reference_data[enduse] == 3]
 
 ec_3_table = data_table.render(data_3,
                                id_datatable=DATA_TABLE_EC_3,
-                                 title='Model Results in TWh',
-                                 dropdowns=dropdowns,
-                                 x=category,
-                                 x_options=category_options,
-                                 y=y,
-                                 category=x,
-                                 category_options=x_options)
+                               title='Model Results in TWh',
+                               dropdowns=dropdowns,
+                               x=category,
+                               x_options=category_options,
+                               y=y,
+                               category=x,
+                               category_options=x_options)
 
-ec_3_reference_table = data_table.render(reference_data_3[reference_data[DataSchema.YEAR].isin(years)],
-                                       id_datatable=DATA_TABLE_REFERENCE_EC_3,
-                                       title='Reference Data in TWh',
-                                       dropdowns=reference_dropdowns,
-                                       x=category,
-                                       x_options=category_options,
-                                       y=y,
-                                       category=x,
-                                       category_options=x_options)
+ec_3_reference_table = data_table.render(reference_data_3[reference_data_3[DataSchema.YEAR].isin(years)],
+                                         id_datatable=DATA_TABLE_REFERENCE_EC_3,
+                                         title='Reference Data in TWh',
+                                         dropdowns=reference_dropdowns,
+                                         x=category,
+                                         x_options=category_options,
+                                         y=y,
+                                         category=x,
+                                         category_options=x_options)
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_4 = data[data[enduse] == 4]
@@ -224,23 +221,23 @@ reference_data_4 = reference_data[reference_data[enduse] == 4]
 
 ec_4_table = data_table.render(data_4,
                                id_datatable=DATA_TABLE_EC_4,
-                                 title='Model Results in TWh',
-                                 dropdowns=dropdowns,
-                                 x=category,
-                                 x_options=category_options,
-                                 y=y,
-                                 category=x,
-                                 category_options=x_options)
+                               title='Model Results in TWh',
+                               dropdowns=dropdowns,
+                               x=category,
+                               x_options=category_options,
+                               y=y,
+                               category=x,
+                               category_options=x_options)
 
-ec_4_reference_table = data_table.render(reference_data_4[reference_data[DataSchema.YEAR].isin(years)],
-                                       id_datatable=DATA_TABLE_REFERENCE_EC_4,
-                                       title='Reference Data in TWh',
-                                       dropdowns=reference_dropdowns,
-                                       x=category,
-                                       x_options=category_options,
-                                       y=y,
-                                       category=x,
-                                       category_options=x_options)
+ec_4_reference_table = data_table.render(reference_data_4[reference_data_4[DataSchema.YEAR].isin(years)],
+                                         id_datatable=DATA_TABLE_REFERENCE_EC_4,
+                                         title='Reference Data in TWh',
+                                         dropdowns=reference_dropdowns,
+                                         x=category,
+                                         x_options=category_options,
+                                         y=y,
+                                         category=x,
+                                         category_options=x_options)
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
@@ -252,45 +249,57 @@ layout = html.Div(children=[
                         DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
     # Energy carrier analysis
     html.H4("Analysis by Energy Carrier", style={'textAlign': 'center'}),
-    line_bar_chart.render(data, reference_data, LINE_BAR_CHART_EC, dropdowns, reference_dropdowns, x, y, category),
-    html.Div(className='flex-container', children=[ec_table, ec_reference_table]),
-    comparison_table.render(DATA_TABLE_COMPARISON_EC, DATA_TABLE_EC, DATA_TABLE_REFERENCE_EC,
-                            DATA_TABLE_ABSOLUTE_DIFF_EC, DATA_TABLE_RELATIVE_DIFF_EC, category=x,
-                            coloring='row'),
+    dcc.Loading(children=[
+        line_bar_chart.render(data, reference_data, LINE_BAR_CHART_EC, dropdowns, reference_dropdowns, x, y, category),
+        html.Div(className='flex-container', children=[ec_table, ec_reference_table]),
+        comparison_table.render(DATA_TABLE_COMPARISON_EC, DATA_TABLE_EC, DATA_TABLE_REFERENCE_EC,
+                                DATA_TABLE_ABSOLUTE_DIFF_EC, DATA_TABLE_RELATIVE_DIFF_EC, category=x,
+                                coloring='row'), ]),
     html.Hr(),
     # End use analysis
     html.H4("Analysis by End use", style={'textAlign': 'center'}),
-    line_bar_chart.render(data, reference_data, LINE_BAR_CHART_EU, dropdowns, reference_dropdowns, x, y, enduse),
-    html.Div(className='flex-container', children=[eu_table, eu_reference_table]),
-    comparison_table.render(DATA_TABLE_COMPARISON_EU, DATA_TABLE_EU, DATA_TABLE_REFERENCE_EU,
-                            DATA_TABLE_ABSOLUTE_DIFF_EU, DATA_TABLE_RELATIVE_DIFF_EC, category=x, coloring='row'),
+    dcc.Loading(children=[
+        line_bar_chart.render(data, reference_data, LINE_BAR_CHART_EU, dropdowns, reference_dropdowns, x, y, enduse),
+        html.Div(className='flex-container', children=[eu_table, eu_reference_table]),
+        comparison_table.render(DATA_TABLE_COMPARISON_EU, DATA_TABLE_EU, DATA_TABLE_REFERENCE_EU,
+                                DATA_TABLE_ABSOLUTE_DIFF_EU, DATA_TABLE_RELATIVE_DIFF_EC, category=x,
+                                coloring='row'), ]),
     html.Hr(),
     # Energy carrier analysis by different end uses
     html.H4("Analysis by Energy Carrier for end use 1", style={'textAlign': 'center'}),
-    line_bar_chart.render(data_1, reference_data_1, LINE_BAR_CHART_EC_1, dropdowns, reference_dropdowns, x, y, category),
-    html.Div(className='flex-container', children=[ec_1_table, ec_1_reference_table]),
-    comparison_table.render(DATA_TABLE_COMPARISON_EC_1, DATA_TABLE_EC_1, DATA_TABLE_REFERENCE_EC_1,
-                            DATA_TABLE_ABSOLUTE_DIFF_EC_1, DATA_TABLE_RELATIVE_DIFF_EC_1, category=x,
-                            coloring='row'),
+    dcc.Loading(children=[
+        line_bar_chart.render(data_1, reference_data_1, LINE_BAR_CHART_EC_1, dropdowns, reference_dropdowns, x, y,
+                              category),
+        html.Div(className='flex-container', children=[ec_1_table, ec_1_reference_table]),
+        comparison_table.render(DATA_TABLE_COMPARISON_EC_1, DATA_TABLE_EC_1, DATA_TABLE_REFERENCE_EC_1,
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_1, DATA_TABLE_RELATIVE_DIFF_EC_1, category=x,
+                                coloring='row'), ]),
     html.Hr(),
     html.H4("Analysis by Energy Carrier for end use 2", style={'textAlign': 'center'}),
-    line_bar_chart.render(data_2, reference_data_2, LINE_BAR_CHART_EC_2, dropdowns, reference_dropdowns, x, y, category),
-    html.Div(className='flex-container', children=[ec_2_table, ec_2_reference_table]),
-    comparison_table.render(DATA_TABLE_COMPARISON_EC_2, DATA_TABLE_EC_2, DATA_TABLE_REFERENCE_EC_2,
-                            DATA_TABLE_ABSOLUTE_DIFF_EC_2, DATA_TABLE_RELATIVE_DIFF_EC_2, category=x,
-                            coloring='row'),
+    dcc.Loading(children=[
+        line_bar_chart.render(data_2, reference_data_2, LINE_BAR_CHART_EC_2, dropdowns, reference_dropdowns, x, y,
+                              category),
+        html.Div(className='flex-container', children=[ec_2_table, ec_2_reference_table]),
+        comparison_table.render(DATA_TABLE_COMPARISON_EC_2, DATA_TABLE_EC_2, DATA_TABLE_REFERENCE_EC_2,
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_2, DATA_TABLE_RELATIVE_DIFF_EC_2, category=x,
+                                coloring='row'), ]),
     html.Hr(),
     html.H4("Analysis by Energy Carrier for end use 3", style={'textAlign': 'center'}),
-    line_bar_chart.render(data_3, reference_data_3, LINE_BAR_CHART_EC_3, dropdowns, reference_dropdowns, x, y, category),
-    html.Div(className='flex-container', children=[ec_3_table, ec_3_reference_table]),
-    comparison_table.render(DATA_TABLE_COMPARISON_EC_3, DATA_TABLE_EC_3, DATA_TABLE_REFERENCE_EC_3,
-                            DATA_TABLE_ABSOLUTE_DIFF_EC_3, DATA_TABLE_RELATIVE_DIFF_EC_3, category=x,
-                            coloring='row'),
+    dcc.Loading(children=[
+        line_bar_chart.render(data_3, reference_data_3, LINE_BAR_CHART_EC_3, dropdowns, reference_dropdowns, x, y,
+                              category),
+        html.Div(className='flex-container', children=[ec_3_table, ec_3_reference_table]),
+        comparison_table.render(DATA_TABLE_COMPARISON_EC_3, DATA_TABLE_EC_3, DATA_TABLE_REFERENCE_EC_3,
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_3, DATA_TABLE_RELATIVE_DIFF_EC_3, category=x,
+                                coloring='row'), ]),
     html.Hr(),
     html.H4("Analysis by Energy Carrier for end use 4", style={'textAlign': 'center'}),
-    line_bar_chart.render(data_4, reference_data_4, LINE_BAR_CHART_EC_4, dropdowns, reference_dropdowns, x, y, category),
-    html.Div(className='flex-container', children=[ec_4_table, ec_4_reference_table]),
-    comparison_table.render(DATA_TABLE_COMPARISON_EC_4, DATA_TABLE_EC_4, DATA_TABLE_REFERENCE_EC_4,
-                            DATA_TABLE_ABSOLUTE_DIFF_EC_4, DATA_TABLE_RELATIVE_DIFF_EC_4, category=x,
-                            coloring='row'),
+    dcc.Loading(children=[
+        line_bar_chart.render(data_4, reference_data_4, LINE_BAR_CHART_EC_4, dropdowns, reference_dropdowns, x, y,
+                              category),
+        html.Div(className='flex-container', children=[ec_4_table, ec_4_reference_table]),
+        comparison_table.render(DATA_TABLE_COMPARISON_EC_4, DATA_TABLE_EC_4, DATA_TABLE_REFERENCE_EC_4,
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_4, DATA_TABLE_RELATIVE_DIFF_EC_4, category=x,
+                                coloring='row'), ]),
+
 ], )

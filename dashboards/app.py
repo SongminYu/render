@@ -13,7 +13,7 @@ app.layout = html.Div([
                  className="btn btn-primary m-2 fs-5")  # How link to other pages should be displayed
         for page in dash.page_registry.values()]
     ),
-    dash.page_container
+    dash.page_container,
 ], className="col-10 mx-auto")
 
 if __name__ == '__main__':

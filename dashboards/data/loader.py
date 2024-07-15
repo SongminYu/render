@@ -1,6 +1,7 @@
 import pandas as pd
 import math
 
+from functools import lru_cache
 
 class DataSchema_Floor_Area:
     ID_SCENARIO = "id_scenario"
@@ -29,6 +30,14 @@ class DataSchema_Final_Energy:
     VALUE = 'value'
     VALUE_TWh = 'value_in_TWh'
     ID_ENERGY_CARRIER = 'id_energy_carrier'
+
+
+# Define paths to data files
+ENERGY_PATH = "final_energy_demand_multiple_years"
+NATIONAL_REFERENCE_PATH = "CalibrationTarget"
+FLOOR_AREA_PATH = "floor_area"
+NUTS1_PATH = "final_energy_demand_nuts1"
+REGIONAL_REFERENCE_PATH = "Energiebilanzen_Regional_Example"
 
 
 def change_ventilation_to_appliances(df: pd.DataFrame) -> pd.DataFrame:
@@ -62,6 +71,7 @@ def convert_id_region(rkey_id_region: int):
     rkey_region_level = math.ceil(len(rkey_id_region_list) / 2) - 1
     return int("".join(rkey_id_region_list[:- 2 * (rkey_region_level - 1)]))
 
+
 def make_ec_int(df):
     if 'id_energy_carrier' in df.columns:
         df['id_energy_carrier'] = df['id_energy_carrier'].astype(int)
@@ -73,8 +83,56 @@ def aggregate_to_nuts1(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+@lru_cache(maxsize=5)
 def load_data(path: str) -> pd.DataFrame:
     # load the data from the CSV file
     data = pd.read_csv(path)
     data = make_ec_int(data)
     return data
+
+
+# Individual functions to load specific datasets
+def load_energy_data():
+    return load_data("data/" + ENERGY_PATH + "_preprocessed.csv")
+
+def load_national_reference_data():
+    return load_data("data/" + NATIONAL_REFERENCE_PATH + "_preprocessed.csv")
+
+def load_floor_area_data():
+    return load_data("data/" + FLOOR_AREA_PATH + ".csv")
+
+def load_nuts1_data():
+    return load_data("data/" + NUTS1_PATH + "_preprocessed.csv")
+
+def load_regional_reference_data():
+    return load_data("data/" + REGIONAL_REFERENCE_PATH + "_preprocessed.csv")
+
+def preprocess_energy_data():
+    df = load_data(ENERGY_PATH + ".csv")
+    df = preprocess_data(df)
+    df.to_csv(ENERGY_PATH + "_preprocessed.csv", index=False)
+
+def preprocess_national_reference_data():
+    df = load_data(NATIONAL_REFERENCE_PATH + ".csv")
+    df = preprocess_data(df)
+    df.to_csv(NATIONAL_REFERENCE_PATH + "_preprocessed.csv", index=False)
+
+def preprocess_nuts1_data():
+    df = load_data(NUTS1_PATH + ".csv")
+    df = preprocess_data(df)
+    df.to_csv(NUTS1_PATH + "_preprocessed.csv", index=False)
+
+def preprocess_regional_reference_data():
+    df = load_data(REGIONAL_REFERENCE_PATH + ".csv")
+    df = convert_TJ_to_TWh(df)
+    df.to_csv(REGIONAL_REFERENCE_PATH + "_preprocessed.csv", index=False)
+
+if __name__ == '__main__':
+    print("Preprocess data for dashboards...")
+
+    preprocess_energy_data()
+    preprocess_national_reference_data()
+    preprocess_regional_reference_data()
+    preprocess_nuts1_data()
+
+    print("Finished preprocessing data!")

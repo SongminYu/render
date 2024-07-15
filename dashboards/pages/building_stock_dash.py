@@ -1,5 +1,5 @@
 import dash
-from dash import html
+from dash import html, dcc
 
 from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
 from dashboards.data import loader
@@ -34,14 +34,11 @@ BAR_CHART = "bar-chart-enduse"
 DATA_TABLE = "data-table-enduse"
 DATA_TABLE_REFERENCE = "data-table-reference-enduse"
 
-END_USE_PATH = "data/final_energy_demand_multiple_years.csv"
-REFERENCE_PATH = "data/CalibrationTarget.csv"
-
 # -------------------- LOAD DATASET --------------------
-data = loader.load_data(END_USE_PATH)
-data = loader.preprocess_data(data)
-reference_data = loader.load_data(REFERENCE_PATH)
-reference_data = loader.preprocess_data(reference_data)
+print("Load data for National Year Calibration...")
+data = loader.load_energy_data()
+reference_data = loader.load_national_reference_data()
+print("Finished!")
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
@@ -94,7 +91,7 @@ layout = html.Div(children=[
     sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
                         DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
     dropdown.render(data, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
-    stacked_bar_chart.render(data,
+    dcc.Loading(children=[stacked_bar_chart.render(data,
                              id_barchart=BAR_CHART,
                              dropdowns=dropdowns,
                              x=x,
@@ -102,5 +99,5 @@ layout = html.Div(children=[
                              category=category),
     html.Div(className='flex-container', children=[end_use_table, reference_table]),
     comparison_table.render("comparison-table-enduse", DATA_TABLE, DATA_TABLE_REFERENCE,
-                            "absolute-diff-table-enduse", "relative-diff-table-enduse", category=category)
+                            "absolute-diff-table-enduse", "relative-diff-table-enduse", category=category)]),
 ], )

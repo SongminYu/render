@@ -2,7 +2,7 @@ import dash
 from dash import html
 
 from dashboards.data.loader import DataSchema_Floor_Area as DataSchema
-from dashboards.data.loader import load_data
+from dashboards.data import loader
 
 
 from dashboards.components import (
@@ -22,10 +22,10 @@ SELECT_ALL_SUBSECTORS_BUTTON = "select-all-subsectors-button-floor"
 
 BAR_CHART = "bar-chart-floor"
 
-DATA_PATH = "data/floor_area.csv"
-
 # -------------------- LOAD DATASET --------------------
-data = load_data(DATA_PATH)
+print("Load data for Floor Area...")
+data = loader.load_floor_area_data()
+print("Finished!")
 
 # -------------------- VARIABLES --------------------
 dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
