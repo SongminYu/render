@@ -29,21 +29,8 @@ def calculate_factor(df, base_year, target_year):
     return rel_diff
 
 
-def calculate_extrapolated_radiation(base_year, target_year):
-    print('Calculate extrapolation factor...')
-    df_differences = pd.read_csv('Profile_WeatherRadiation_Future.csv')
-    df_differences = df_differences.sort_values(by=['id_region']).reset_index(drop=True)
-    region_list_differences = list(df_differences['id_region'].unique())
-    rel_diff = calculate_factor(df_differences, base_year, target_year)
-
-    print('Read PV Gis data...')
-    df_data = pd.read_csv('Profile_WeatherRadiation.csv')
-    region_list_data = list(df_data['id_region'].unique())
-
-    if region_list_differences != region_list_data:
-        return print('Not the same regions in the two dataframes')
-
-    print('Calculate extrapolated values...')
+def calculate_extrapolated_radiation(base_year, target_year, df_data, rel_diff, det_error=False):
+    print('Calculate extrapolated radiation values...')
     dict_of_dfs = {}
     for orientation in list(df_data['id_orientation'].unique()):
         df_base = df_data[(df_data['year'] == base_year) & (df_data['id_orientation'] == orientation)]
@@ -66,12 +53,40 @@ def calculate_extrapolated_radiation(base_year, target_year):
     sorted_df = concatenated_df.sort_values(by=['year', 'id_region', 'id_orientation']).reset_index(drop=True)
     df_data = df_data.sort_values(by=['year', 'id_region', 'id_orientation']).reset_index(drop=True)
 
-    print('Determine error...')
-    determine_error_total(df_data, sorted_df, target_year, base_year)
+    if det_error:
+        print('Determine error...')
+        determine_error_total(df_data, sorted_df, target_year, base_year)
 
     print('Save extrapolated data...')
     # Save extrapolated data to a CSV file
-    sorted_df.to_csv(f'extrapolated_data_for_{target_year}.csv', index=False)
+    sorted_df.to_csv(f'extrapolated_radiation_data_for_{target_year}.csv', index=False)
+
+
+def calculate_extrapolated_pv_generation(base_year, target_year, df_data, rel_diff, det_error=False):
+    print('Calculate extrapolated pv generation values...')
+    df_base = df_data[(df_data['year'] == base_year)]
+    index_df = df_base[df_base.columns[:4]].reset_index(drop=True)
+    base = df_base.drop(columns=df_data.columns[:4]).reset_index(drop=True)
+    extrapolated_diff = base.multiply(rel_diff, axis=0)
+    extrapolated_data = base + extrapolated_diff
+
+    # extrapolated_data = base * (1 + rel_diff)  # when using difference matrix, make base numpy before
+    # extrapolated_data = pd.DataFrame(extrapolated_data)  # convert back to df
+
+    # Create a new DataFrame by concatenating first_4_columns and matrix
+    combined_df = pd.concat([index_df, extrapolated_data], axis=1)
+    combined_df['year'] = target_year
+
+    sorted_df = combined_df.sort_values(by=['year', 'id_region']).reset_index(drop=True)
+    df_data = df_data.sort_values(by=['year', 'id_region']).reset_index(drop=True)
+
+    if det_error:
+        print('Determine error...')
+        determine_error_total(df_data, sorted_df, target_year, base_year)
+
+    print('Save extrapolated data...')
+    # Save extrapolated data to a CSV file
+    sorted_df.to_csv(f'extrapolated_pv_data_for_{target_year}.csv', index=False)
 
 
 def determine_error(df_data, extrapolated_data, target_year, base_year):
@@ -98,12 +113,8 @@ def determine_error_total(df_data, extrapolated_data, target_year, base_year):
     df_data = df_data[df_data['year'] == target_year]
     desired = df_data.drop(columns=df_data.columns[:4]).fillna(0).to_numpy()
     extrapolated = extrapolated_data.drop(columns=df_data.columns[:4]).fillna(0).to_numpy()
-
     desired_total = np.nansum(desired, axis=1)
-    print(f'desired: {desired_total[0:5]}')
     extrapolated_total = np.nansum(extrapolated, axis=1)
-    print(f'extrapolated: {extrapolated_total[0:5]}')
-
     error = desired_total - extrapolated_total
     rel_error = np.divide(error, np.abs(desired_total), out=np.zeros_like(error), where=desired_total != 0)
     print(f'In the minimal relative error for {target_year} is {np.min(rel_error)} and the maximal reltaive error is {np.max(rel_error)}.')
@@ -113,12 +124,33 @@ def determine_error_total(df_data, extrapolated_data, target_year, base_year):
 
 
 def build_extrapolated_dataframes(base_year, target_year):
-    calculate_extrapolated_radiation(base_year, target_year)
-    # calculate_extrapolated_pv_generation(base_year, target_year)
+    print('Calculate extrapolation factor...')
+    df_differences = pd.read_csv('Profile_WeatherRadiation_Future.csv')
+    df_differences = df_differences.sort_values(by=['id_region']).reset_index(drop=True)
+    region_list_differences = list(df_differences['id_region'].unique())
+    rel_diff = calculate_factor(df_differences, base_year, target_year)
+
+    print('Read radiation data...')
+    df_data = pd.read_csv('Profile_WeatherRadiation.csv')
+    region_list_data = list(df_data['id_region'].unique())
+
+    if region_list_differences != region_list_data:
+        return print('Not the same regions in the two dataframes')
+
+    calculate_extrapolated_radiation(base_year, target_year, df_data, rel_diff)
+
+    print('Read pv generation data...')
+    df_data = pd.read_csv('Profile_WeatherPVGeneration.csv')
+    region_list_data = list(df_data['id_region'].unique())
+
+    if region_list_differences != region_list_data:
+        return print('Not the same regions in the two dataframes')
+
+    calculate_extrapolated_pv_generation(base_year, target_year, df_data, rel_diff)
 
 
 if __name__ == '__main__':
-    build_extrapolated_dataframes(2017, 2018)
+    build_extrapolated_dataframes(2020, 2050)
     # df_differences = pd.read_csv('Profile_WeatherRadiation_Future.csv')
     # calculate_factor(df_differences, 2015, 2026)
     # sorted_df = pd.read_csv('extrapolated_data_for_2018.csv')
