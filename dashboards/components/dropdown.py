@@ -3,9 +3,13 @@ from dash import dcc, html, callback
 from dash.dependencies import Input, Output
 
 
-def render(data: pd.DataFrame, id_dropdown, id_options, id_select_all_button) -> html.Div:
-    all_options: list[str] = data[id_options].tolist()
-    unique_options = sorted(set(all_options), key=int)
+def render(data: pd.DataFrame, reference: pd.DataFrame, id_dropdown, id_options, id_select_all_button) -> html.Div:
+    all_options_data: list[str] = data[id_options].tolist()
+    if id_options in reference.columns:
+        all_options_reference: list[str] = reference[id_options].tolist()
+    else:
+        all_options_reference = []
+    unique_options = sorted(set(all_options_data + all_options_reference))
 
     @callback(
         Output(id_dropdown, "value"),

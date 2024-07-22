@@ -25,7 +25,6 @@ BAR_CHART = "bar-chart-floor"
 # -------------------- LOAD DATASET --------------------
 print("Load data for Floor Area...")
 data = loader.load_floor_area_data()
-print("Finished!")
 
 # -------------------- VARIABLES --------------------
 dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
@@ -34,7 +33,7 @@ dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
         html.H2("Floor Area"),
-        dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
+        dropdown.render(data, data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
         sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
                             DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
         bar_chart_filtered.render(data,

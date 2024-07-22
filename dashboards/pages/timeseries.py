@@ -73,8 +73,7 @@ DATA_TABLE_RELATIVE_DIFF_EC_4 = "relative-diff-table-energy-carrier-4-timeseries
 # -------------------- LOAD DATASET --------------------
 print("Load data for National Timeseries Calibration...")
 data = loader.load_energy_data()
-reference_data = loader.load_national_reference_data()
-print("Finished!")
+reference = loader.load_national_reference_data()
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
@@ -112,7 +111,7 @@ ec_table = data_table.render(data,
                              category=x,
                              category_options=x_options)
 
-ec_reference_table = data_table.render(reference_data[reference_data[DataSchema.YEAR].isin(years)],
+ec_reference_table = data_table.render(reference[reference[DataSchema.YEAR].isin(years)],
                                        id_datatable=DATA_TABLE_REFERENCE_EC,
                                        title='Reference Data in TWh',
                                        dropdowns=reference_dropdowns,
@@ -133,7 +132,7 @@ eu_table = data_table.render(data,
                              category=x,
                              category_options=x_options)
 
-eu_reference_table = data_table.render(reference_data[reference_data[DataSchema.YEAR].isin(years)],
+eu_reference_table = data_table.render(reference[reference[DataSchema.YEAR].isin(years)],
                                        id_datatable=DATA_TABLE_REFERENCE_EU,
                                        title='Reference Data in TWh',
                                        dropdowns=reference_dropdowns,
@@ -145,7 +144,7 @@ eu_reference_table = data_table.render(reference_data[reference_data[DataSchema.
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_1 = data[data[enduse] == 1]
-reference_data_1 = reference_data[reference_data[enduse] == 1]
+reference_data_1 = reference[reference[enduse] == 1]
 
 ec_1_table = data_table.render(data_1,
                                id_datatable=DATA_TABLE_EC_1,
@@ -169,7 +168,7 @@ ec_1_reference_table = data_table.render(reference_data_1[reference_data_1[DataS
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_2 = data[data[enduse] == 2]
-reference_data_2 = reference_data[reference_data[enduse] == 2]
+reference_data_2 = reference[reference[enduse] == 2]
 
 ec_2_table = data_table.render(data_2,
                                id_datatable=DATA_TABLE_EC_2,
@@ -193,7 +192,7 @@ ec_2_reference_table = data_table.render(reference_data_2[reference_data_2[DataS
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_3 = data[data[enduse] == 3]
-reference_data_3 = reference_data[reference_data[enduse] == 3]
+reference_data_3 = reference[reference[enduse] == 3]
 
 ec_3_table = data_table.render(data_3,
                                id_datatable=DATA_TABLE_EC_3,
@@ -217,7 +216,7 @@ ec_3_reference_table = data_table.render(reference_data_3[reference_data_3[DataS
 
 # -------------------- END USE 1 DATA TABLES --------------------
 data_4 = data[data[enduse] == 4]
-reference_data_4 = reference_data[reference_data[enduse] == 4]
+reference_data_4 = reference[reference[enduse] == 4]
 
 ec_4_table = data_table.render(data_4,
                                id_datatable=DATA_TABLE_EC_4,
@@ -242,15 +241,15 @@ ec_4_reference_table = data_table.render(reference_data_4[reference_data_4[DataS
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
     html.H2("National Timeseries Calibration"),
-    dropdown.render(data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
-    dropdown.render(data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
-    dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
+    dropdown.render(data, reference, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
+    dropdown.render(data, reference, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
+    dropdown.render(data, reference, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
     sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
                         DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
     # Energy carrier analysis
     html.H4("Analysis by Energy Carrier", style={'textAlign': 'center'}),
     dcc.Loading(children=[
-        line_bar_chart.render(data, reference_data, LINE_BAR_CHART_EC, dropdowns, reference_dropdowns, x, y, category),
+        line_bar_chart.render(data, reference, LINE_BAR_CHART_EC, dropdowns, reference_dropdowns, x, y, category),
         html.Div(className='flex-container', children=[ec_table, ec_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EC, DATA_TABLE_EC, DATA_TABLE_REFERENCE_EC,
                                 DATA_TABLE_ABSOLUTE_DIFF_EC, DATA_TABLE_RELATIVE_DIFF_EC, category=x,
@@ -259,7 +258,7 @@ layout = html.Div(children=[
     # End use analysis
     html.H4("Analysis by End use", style={'textAlign': 'center'}),
     dcc.Loading(children=[
-        line_bar_chart.render(data, reference_data, LINE_BAR_CHART_EU, dropdowns, reference_dropdowns, x, y, enduse),
+        line_bar_chart.render(data, reference, LINE_BAR_CHART_EU, dropdowns, reference_dropdowns, x, y, enduse),
         html.Div(className='flex-container', children=[eu_table, eu_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EU, DATA_TABLE_EU, DATA_TABLE_REFERENCE_EU,
                                 DATA_TABLE_ABSOLUTE_DIFF_EU, DATA_TABLE_RELATIVE_DIFF_EC, category=x,

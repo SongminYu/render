@@ -37,8 +37,7 @@ DATA_TABLE_REFERENCE = "data-table-reference-enduse"
 # -------------------- LOAD DATASET --------------------
 print("Load data for National Year Calibration...")
 data = loader.load_energy_data()
-reference_data = loader.load_national_reference_data()
-print("Finished!")
+reference = loader.load_national_reference_data()
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
@@ -70,7 +69,7 @@ end_use_table = data_table.render(data,
                                   category=category,
                                   category_options=category_options)
 
-reference_table = data_table.render(reference_data,
+reference_table = data_table.render(reference,
                                     id_datatable=DATA_TABLE_REFERENCE,
                                     title='Reference Data in TWh',
                                     dropdowns=[{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
@@ -85,12 +84,12 @@ reference_table = data_table.render(reference_data,
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
     html.H2("National Year Calibration"),
-    dropdown.render(data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
-    dropdown.render(data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
-    dropdown.render(data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
+    dropdown.render(data, reference, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
+    dropdown.render(data, reference, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
+    dropdown.render(data, reference, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),
     sub_dropdown.render(data, SUBSECTOR_DROPDOWN, SECTOR_DROPDOWN, DataSchema.ID_SUBSECTOR,
                         DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
-    dropdown.render(data, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
+    dropdown.render(data, reference, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
     dcc.Loading(children=[stacked_bar_chart.render(data,
                              id_barchart=BAR_CHART,
                              dropdowns=dropdowns,
