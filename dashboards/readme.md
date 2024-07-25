@@ -111,7 +111,7 @@ This document contains the development plan of the `RenderDash` tool.
 - [x] check if aggregation at national/state-level in the input file relevant? --> is it faster processing?
 - we generate the PV generation and orientation-specific radiation "relatively" to global radiation of 2020.
   - [x] understand the "error" of this method: why is it high? e.g. sort the regions in the same order in both datasets to be sure. 
-- [ ] filter the year when reading the regional reference data
+- [x] filter the year when reading the regional reference data
 - [x] Sirin updates the Energiebilanzen_Regional.csv file with the collected regional data
   - [x] renaming of reference data files: Reference_EnergyBalance_National.csv, Reference_EnergyBalance_Regional.csv
   - [x] model results are named as final_energy_demand_nutsX
@@ -123,12 +123,19 @@ This document contains the development plan of the `RenderDash` tool.
 - [x] Once preprocess data (maybe even incorporate in model)
 - [x] Centralized data loading
 
+## July 25th, 2024
+- [ ] (for national timeseries calibration, national year calibration and region analysis) default data file we use is: final_energy_demand_nuts1
+- [ ] we have another dashboard for individual nuts3 region analysis:
+  - where we don't print tables, and there is no reference data
+  - we just plot figures of: Analysis by Energy Carrier, Analysis by End-use, and Analyses for each end-use by energy carrier (x4)
+
+
 ### Later stage
 
-- beautify dashboards
-- geo-visualization (new dashboard)
-- enhance Floor Area dashboard
 - new dashboard for building_efficiency_class
+- enhance Floor Area dashboard
+- geo-visualization (new dashboard)
+- beautify dashboards
 
 - GHSL data processing to distribute NUTS3 and location results to 100m x 100m grid cell (hectare) level.
 
