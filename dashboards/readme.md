@@ -124,8 +124,8 @@ This document contains the development plan of the `RenderDash` tool.
 - [x] Centralized data loading
 
 ## July 25th, 2024
-- [ ] (for national timeseries calibration, national year calibration and region analysis) default data file we use is: final_energy_demand_nuts1
-- [ ] we have another dashboard for individual nuts3 region analysis:
+- [x] (for national timeseries calibration, national year calibration and region analysis) default data file we use is: final_energy_demand_nuts1
+- [x] we have another dashboard for individual nuts3 region analysis:
   - where we don't print tables, and there is no reference data
   - we just plot figures of: Analysis by Energy Carrier, Analysis by End-use, and Analyses for each end-use by energy carrier (x4)
 
