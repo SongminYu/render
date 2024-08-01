@@ -99,6 +99,6 @@ layout = html.Div(children=[
                           html.Div(className='flex-container', children=[region_table, reference_table]),
                           comparison_table.render("comparison-table-region", DATA_TABLE, DATA_TABLE_REFERENCE,
                                                   "absolute-diff-table-region", "relative-diff-table-region",
-                                                  category=x, coloring='row')
+                                                  category=x)
                           ])
 ], )

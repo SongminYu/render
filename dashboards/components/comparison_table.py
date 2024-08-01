@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import plotly.express as px
 
 from dash import dash_table, html, callback
@@ -6,7 +7,7 @@ from dash.dependencies import Input, Output
 from dash.dash_table import FormatTemplate
 
 
-def render(id_comparison, id_data, id_reference, id_absolute, id_relative, category, coloring='column') -> html.Div:
+def render(id_comparison, id_data, id_reference, id_absolute, id_relative, category) -> html.Div:
     @callback(
         Output(id_comparison, "children"),
         [Input(id_data, "children"), Input(id_reference, "children")]
@@ -33,21 +34,14 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, categ
         # Identify zeros in reference data table
         zeros_in_reference = (reference_df == 0)
         # Set corresponding cells in relative difference table to 100
-        relative[zeros_in_reference] = 1
+        relative[zeros_in_reference] = 0
         relative.insert(loc=0, column=category, value=data_df[category])
         # Round every entry to no digits after the decimal point
         relative = relative.fillna(0)
         relative = relative.round(4)
 
-        if coloring == 'column':
-            absolute_styles = get_styles_for_data_table_column(absolute)
-            relative_styles = get_styles_for_data_table_column(relative)
-        elif coloring == 'row':
-            absolute_styles = get_styles_for_data_table_row(absolute)
-            relative_styles = get_styles_for_data_table_row(relative)
-        else:
-            absolute_styles = []
-            relative_styles = []
+        absolute_styles = get_styles_for_data_table(absolute, extreme_val=1000)
+        relative_styles = get_styles_for_data_table(relative, extreme_val=1)
 
         absolute_html = html.Div(className='table-container',
                                  id=id_absolute,
@@ -78,7 +72,7 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, categ
     return html.Div(className='flex-container', id=id_comparison)
 
 
-def get_styles_for_data_table_column(df):
+def get_styles_for_data_table(df, extreme_val):
     # Select numeric columns
     numeric_columns = df.select_dtypes(include='number')
 
@@ -87,42 +81,10 @@ def get_styles_for_data_table_column(df):
 
     styles = []
     for column in numeric_columns:
-        # Get min and max values
-        min_val = df[column].min()
-        max_val = df[column].max()
-        extreme_val = max(abs(min_val), abs(max_val))
         for i, value in df[column].items():
             if pd.notna(value):  # Exclude NaN values
-                color = get_interpolated_color(colormap, value, -1 * extreme_val, extreme_val)
-                text_color = get_text_color(color)
-                styles.append({
-                    'if': {'column_id': column, 'row_index': i},
-                    'backgroundColor': color,
-                    'color': text_color
-                })
-
-    return styles
-
-
-def get_styles_for_data_table_row(df):
-    # Select numeric columns
-    numeric_columns = df.select_dtypes(include='number')
-
-    # Define the colormap
-    colormap = px.colors.sequential.RdBu[::-1]  # Reverse and truncate for proper interpolation
-    row_min_val = numeric_columns.min(axis=1)
-    row_max_val = numeric_columns.max(axis=1)
-
-    styles = []
-
-    for i, row in df.iterrows():
-        # Get min and max values within the row
-        min_val = row_min_val[i]
-        max_val = row_max_val[i]
-        extreme_val = max(abs(min_val), abs(max_val))
-        for column in numeric_columns:
-            value = row[column]
-            if pd.notna(value):  # Exclude NaN values
+                value = max(-1 * extreme_val, value)
+                value = min(extreme_val, value)
                 color = get_interpolated_color(colormap, value, -1 * extreme_val, extreme_val)
                 text_color = get_text_color(color)
                 styles.append({

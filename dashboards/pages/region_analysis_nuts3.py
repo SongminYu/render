@@ -6,7 +6,6 @@ from dashboards.data import loader
 from dashboards.components import (
     dropdown,
     sub_dropdown,
-    comparison_table,
     stacked_bar_chart,
 )
 
@@ -48,9 +47,6 @@ dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema.ID_SCENARIO},
              {'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
              {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}, ]
 
-reference_dropdowns = [{'id': SECTOR_DROPDOWN, 'column': DataSchema.ID_SECTOR},
-                       {'id': SUBSECTOR_DROPDOWN, 'column': DataSchema.ID_SUBSECTOR}, ]
-
 x = DataSchema.YEAR
 x_options = years
 y = DataSchema.VALUE_TWh
@@ -69,7 +65,7 @@ data_4 = data[data[enduse] == 4]
 
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
-    html.H2("National Timeseries Calibration"),
+    html.H2("Region Analysis Nuts 3"),
     dropdown.render(data, data, SCENARIO_DROPDOWN, DataSchema.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
     dropdown.render(data, data, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
     dropdown.render(data, data, SECTOR_DROPDOWN, DataSchema.ID_SECTOR, SELECT_ALL_SECTORS_BUTTON),

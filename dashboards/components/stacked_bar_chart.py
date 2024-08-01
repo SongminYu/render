@@ -31,9 +31,7 @@ def render(data: pd.DataFrame, id_barchart, dropdowns, x, y, category) -> html.D
         grouped_data[x] = grouped_data[x].astype(str)
         grouped_data[category] = grouped_data[category].astype(str)
 
-        fig = px.bar(grouped_data, x=x, y=y,
-                     color=category, color_discrete_sequence=px.colors.qualitative.Bold,
-                     labels={'x': x, 'y': y})
+        fig = px.bar(grouped_data, x=x, y=y, color=category, color_discrete_sequence=px.colors.qualitative.Bold)
 
         return dcc.Graph(figure=fig)
 
