@@ -10,7 +10,7 @@ from dashboards.components import (
     comparison_table,
 )
 
-dash.register_page(__name__, path='/region_analysis', name="Region Analysis")
+dash.register_page(__name__, path='/region_analysis_nuts1', name="Region Analysis Nuts 1")
 
 # -------------------- IDs --------------------
 SCENARIO_DROPDOWN = "scenario-dropdown-region"

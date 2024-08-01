@@ -26,7 +26,6 @@ SELECT_ALL_SECTORS_BUTTON = "select-all-sectors-button-timeseries"
 SUBSECTOR_DROPDOWN = "subsector-dropdown-timeseries"
 SELECT_ALL_SUBSECTORS_BUTTON = "select-all-subsectors-button-timeseries"
 
-BAR_CHART = "bar-chart-timeseries"
 LINE_BAR_CHART_EC = "line-bar-chart-energy-carrier-timeseries"
 LINE_BAR_CHART_EU = "line-bar-chart-end-use-timeseries"
 LINE_BAR_CHART_EC_1 = "line-bar-chart-energy-carrier-1-timeseries"
@@ -72,7 +71,7 @@ DATA_TABLE_RELATIVE_DIFF_EC_4 = "relative-diff-table-energy-carrier-4-timeseries
 
 # -------------------- LOAD DATASET --------------------
 print("Load data for National Timeseries Calibration...")
-data = loader.load_energy_data()
+data = loader.load_nuts1_data()
 reference = loader.load_national_reference_data()
 
 # -------------------- VARIABLES --------------------

@@ -36,7 +36,7 @@ DATA_TABLE_REFERENCE = "data-table-reference-enduse"
 
 # -------------------- LOAD DATASET --------------------
 print("Load data for National Year Calibration...")
-data = loader.load_energy_data()
+data = loader.load_nuts1_data()
 reference = loader.load_national_reference_data()
 
 # -------------------- VARIABLES --------------------
