@@ -46,11 +46,11 @@ def change_ventilation_to_appliances(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
-    # to compare model data with calibration target we change for id_sector=3 the ec 14, 15, 19 to 24
-    df.loc[(df['id_sector'] == 3) & (df['id_energy_carrier'].isin([14, 15, 19])), ['id_energy_carrier']] = 24
+    # to compare model data with calibration target we change ec 14, 15, 19 to 24
+    df.loc[df['id_energy_carrier'].isin([14, 15, 19]), ['id_energy_carrier']] = 24
 
-    # for id_sector = 6 we change 12, 14, 15, 19 to 24
-    df.loc[(df['id_sector'] == 6) & (df['id_energy_carrier'].isin([12, 14, 15, 19])), ['id_energy_carrier']] = 24
+    # for id_sector = 6 we change 12 to 24
+    df.loc[(df['id_sector'] == '6') & (df['id_energy_carrier'] == 12), ['id_energy_carrier']] = 24
 
     # change 7 to 3
     df.loc[(df['id_energy_carrier'] == 7), ['id_energy_carrier']] = 3

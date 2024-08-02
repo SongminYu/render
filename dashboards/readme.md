@@ -130,7 +130,7 @@ This document contains the development plan of the `RenderDash` tool.
   - we just plot figures of: Analysis by Energy Carrier, Analysis by End-use, and Analyses for each end-use by energy carrier (x4)
 
 # August 2nd, 2024
-- [ ] small bug about energy carrier = 24. 
+- [x] small bug about energy carrier = 24. 
       only reference data has it, but it disappears from the difference tables.
 - [ ] new dashboard: heating technologies on nuts 1 level
   - Sirin uploads a recent regional (NUTS 3) building stock table (for small size)
