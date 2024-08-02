@@ -33,7 +33,7 @@ class DataSchema_Final_Energy:
 
 
 # Define paths to data files
-ENERGY_PATH = "final_energy_demand_multiple_years"
+ENERGY_PATH = "final_energy_demand_nuts3"
 NATIONAL_REFERENCE_PATH = "Reference_EnergyBalance_National"
 FLOOR_AREA_PATH = "floor_area"
 NUTS1_PATH = "final_energy_demand_nuts1"
