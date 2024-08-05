@@ -32,8 +32,8 @@ DATA_TABLE_REFERENCE = "data-table-reference-region"
 
 # -------------------- LOAD DATASET --------------------
 print("Load data for Regional Analysis...")
-data = loader.load_nuts1_data()
-reference = loader.load_regional_reference_data()
+data = loader.load_nuts1_energy_data()
+reference = loader.load_regional_reference_energy_data()
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())

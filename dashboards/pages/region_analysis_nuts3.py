@@ -33,7 +33,7 @@ BAR_CHART_EC_4 = "bar-chart-energy-carrier-4-region-nuts3"
 
 # -------------------- LOAD DATASET --------------------
 print("Load data for National Timeseries Calibration...")
-data = loader.load_energy_data()
+data = loader.load_nuts3_energy_data()
 
 # -------------------- VARIABLES --------------------
 id_energy_carriers = list(data[DataSchema.ID_ENERGY_CARRIER].unique())
