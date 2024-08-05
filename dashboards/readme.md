@@ -143,6 +143,8 @@ This document contains the development plan of the `RenderDash` tool.
 # August 6th, 2024
 - [ ] Should 9 be part of regions? Totals do not fit...
 - [ ] Heating Technologies 32 and 33 not in Reference
+- CSV files need to be seperated by ',' not by ';' (Maybe that is also the reason why Sirin can't open the csv files in excel)
+  Control Panel -> Clock and Region –> Change the date, time, or number format -> Additional settings -> List seperator
   
 
 ### Later stage
