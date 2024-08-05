@@ -132,13 +132,17 @@ This document contains the development plan of the `RenderDash` tool.
 # August 2nd, 2024
 - [x] small bug about energy carrier = 24. 
       only reference data has it, but it disappears from the difference tables.
-- [ ] new dashboard: heating technologies on nuts 1 level
+- [x] new dashboard: heating technologies on nuts 1 level
   - Sirin uploads a recent regional (NUTS 3) building stock table (for small size)
     later we can produce NUTS 1 level building stock table as output for regional analysis
   - Sirin uploads the reference data for heating technologies in the same convention as model (id_heating_tech etc.)
   - Hannah: the dashboard is similar structure to region_analysis_nuts1 dashboard
     stacked are number of heating technologies: "heating_system_main_id_heating_technology" 
     (legend is the heating technology type)
+
+# August 6th, 2024
+- [ ] Should 9 be part of regions? Totals do not fit...
+- [ ] Heating Technologies 32 and 33 not in Reference
   
 
 ### Later stage
