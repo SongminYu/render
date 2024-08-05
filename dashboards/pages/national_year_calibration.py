@@ -11,6 +11,9 @@ from dashboards.components import (
     comparison_table,
 )
 
+# Dashboard to analyze the energy demand in one (or multiple) years.
+# We want to analyze the energy carriers in different end uses.
+
 dash.register_page(__name__, path='/', name="National Year Calibration")
 
 # -------------------- IDs --------------------

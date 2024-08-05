@@ -11,6 +11,8 @@ from dashboards.components import (
     sub_dropdown,
 )
 
+# Simple dashboard which displays the floor area by id_building_type
+
 dash.register_page(__name__, path='/floor_area', name="Floor Area")
 
 # -------------------- IDs --------------------

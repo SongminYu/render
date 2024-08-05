@@ -2,6 +2,9 @@ from dash import Dash, html, dcc
 import dash
 from dash_bootstrap_components.themes import BOOTSTRAP
 
+# Main plotly dash app which runs the dashboards.
+# Before running, verify that you run the data/loader.py once, to preprocess the data
+
 app = Dash(__name__, pages_folder='pages', use_pages=True, external_stylesheets=[BOOTSTRAP])
 
 app.layout = html.Div([

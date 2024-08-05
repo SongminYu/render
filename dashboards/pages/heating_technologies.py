@@ -10,6 +10,8 @@ from dashboards.components import (
     comparison_table,
 )
 
+# Dashboard to analyze the building stock for the model wrt. to the share of heating technologies
+
 dash.register_page(__name__, path='/heating_technologies', name="Heating Technologies")
 
 # -------------------- IDs --------------------

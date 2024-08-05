@@ -9,6 +9,9 @@ from dashboards.components import (
     stacked_bar_chart,
 )
 
+# Dashboard to analyze the energy demand in one (or multiple) regions over time.
+# For every year we analyze the energy carriers and end uses
+
 dash.register_page(__name__, path='/region_analysis_nuts3', name="Region Analysis Nuts 3")
 
 # -------------------- IDs --------------------

@@ -10,6 +10,9 @@ from dashboards.components import (
     comparison_table,
 )
 
+# Dashboard to analyze the energy demand in different regions.
+# For every region we analyze the energy carriers
+
 dash.register_page(__name__, path='/region_analysis_nuts1', name="Region Analysis Nuts 1")
 
 # -------------------- IDs --------------------

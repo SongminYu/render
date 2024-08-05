@@ -11,6 +11,9 @@ from dashboards.components import (
     line_bar_chart,
 )
 
+# Dashboard to analyze the energy demand over time.
+# We want to analyze energy carriers and different end uses.
+
 dash.register_page(__name__, path='/national_timeseries_analysis', name="National Timeseries Calibration")
 
 # -------------------- IDs --------------------
