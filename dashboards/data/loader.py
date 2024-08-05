@@ -3,6 +3,9 @@ import math
 
 from functools import lru_cache
 
+# The loader preprocesses the data suitable for the dashboards.
+# Also, it loads the data and cashes the data, such that the dash app is faster
+
 class DataSchema_Floor_Area:
     ID_SCENARIO = "id_scenario"
     ID_REGION = "id_region"
@@ -29,6 +32,7 @@ class DataSchema_Final_Energy:
     VALUE_TWh = 'value_in_TWh'
     ID_ENERGY_CARRIER = 'id_energy_carrier'
 
+
 class DataSchema_Building_Stock:
     ID_SCENARIO = "id_scenario"
     ID_REGION = "id_region"
@@ -36,6 +40,7 @@ class DataSchema_Building_Stock:
     ID_SUBSECTOR = "id_subsector"
     YEAR = "year"
     MAIN_HEATING_TECHNOLOGY = "heating_system_main_id_heating_technology"
+
 
 class DataSchema_Heating_Reference:
     ID_REGION = "id_region"
@@ -58,11 +63,13 @@ NUTS3_BUILDING_PATH = "building_stock_R9160023"
 REGIONAL_REFERENCE_BUILDING_PATH = "Reference_HeatingTech_Regional"
 
 
+# ventilation is end_use = 5, but in reference we do not separate these end_uses
 def change_ventilation_to_appliances(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df['id_end_use'] == 5, ['id_end_use']] = 1
     return df
 
 
+# Certain energy carriers have to be adapted to fit to the reference data
 def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
     # to compare model data with calibration target we change ec 14, 15, 19 to 24
     df.loc[df['id_energy_carrier'].isin([14, 15, 19]), ['id_energy_carrier']] = 24
@@ -75,6 +82,7 @@ def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# Certain heating technologies have to be adapted to fit to the reference data
 def change_id_heating_technology(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([29, 210, 211]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 250
@@ -85,6 +93,7 @@ def change_id_heating_technology(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# For some states in regional reference data we do not differentiate sectors
 def handle_mixed_sector(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[(df['id_sector'] == '3&6'), ['id_sector']] = '3 and 6'
     return df
@@ -102,6 +111,7 @@ def convert_TJ_to_TWh(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# To convert the nuts3 region keys to nuts 1
 def convert_id_region(rkey_id_region: int):
     rkey_id_region_list = list(str(rkey_id_region))
     rkey_region_level = math.ceil(len(rkey_id_region_list) / 2) - 1
@@ -113,6 +123,7 @@ def aggregate_to_nuts1(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+# Gerneral method to load the energy data. Here we cash the data for 5 different function calls
 @lru_cache(maxsize=5)
 def load_energy_data(path: str) -> pd.DataFrame:
     # load the data from the CSV file
@@ -120,7 +131,8 @@ def load_energy_data(path: str) -> pd.DataFrame:
     return data
 
 
-# Individual functions to load specific datasets
+# Individual functions to load specific datasets.
+# This will be called by the pages of the app. Therefor we need to specify the data folder in the data path
 def load_nuts3_energy_data():
     return load_energy_data("data/" + NUTS3_ENERGY_PATH + "_preprocessed.csv")
 
@@ -145,11 +157,13 @@ def load_regional_reference_energy_data():
 def load_nuts3_heating_data():
     return pd.read_csv("data/" + NUTS3_BUILDING_PATH + "_preprocessed.csv")
 
+
 @lru_cache(maxsize=1)
 def load_regional_reference_heating_data():
     return pd.read_csv("data/" + REGIONAL_REFERENCE_BUILDING_PATH + "_preprocessed.csv")
 
 
+# Individual functions to preprocess specific datasets
 def preprocess_nuts3_energy_data():
     print("Preprocess nuts3 energy data...")
     df = load_energy_data(NUTS3_ENERGY_PATH + ".csv")
@@ -188,7 +202,8 @@ def preprocess_nuts3_heating_data():
     # Gruppieren und Zählen
     grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
                              DataSchema_Building_Stock.YEAR,
-                             DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]).size().reset_index(name=DataSchema_Heating_Reference.BUILDING_NUMBER)
+                             DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]).size().reset_index(
+        name=DataSchema_Heating_Reference.BUILDING_NUMBER)
 
     grouped_df = grouped_df.rename(
         columns={DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY: DataSchema_Heating_Reference.ID_HEATING_TECHNOLOGY}
@@ -205,10 +220,10 @@ def preprocess_regional_reference_heating_data():
 if __name__ == '__main__':
     print("Preprocess data for dashboards...")
 
-    # preprocess_nuts1_energy_data()
-    # preprocess_nuts3_energy_data()
-    # preprocess_national_reference_energy_data()
-    # preprocess_regional_reference_energy_data()
+    preprocess_nuts1_energy_data()
+    preprocess_nuts3_energy_data()
+    preprocess_national_reference_energy_data()
+    preprocess_regional_reference_energy_data()
 
     preprocess_nuts3_heating_data()
     preprocess_regional_reference_heating_data()
