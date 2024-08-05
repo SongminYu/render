@@ -145,6 +145,7 @@ This document contains the development plan of the `RenderDash` tool.
 - [ ] Heating Technologies 32 and 33 not in Reference
 - CSV files need to be seperated by ',' not by ';' (Maybe that is also the reason why Sirin can't open the csv files in excel)
   Control Panel -> Clock and Region –> Change the date, time, or number format -> Additional settings -> List seperator
+- Comments in existing code so that it is better understandable
   
 
 ### Later stage
