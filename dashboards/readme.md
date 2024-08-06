@@ -142,11 +142,22 @@ This document contains the development plan of the `RenderDash` tool.
 
 # August 6th, 2024
 - [ ] Should 9 be part of regions? Totals do not fit...
-- [ ] Heating Technologies 32 and 33 not in Reference
+  --> We do not include id_region=9 from reference, it must be the sum of individual regions
+- [ ] Heating Technologies 32 and 33 not in Reference 
+  --> we put them under 31 for now
+- [ ] we should filter for sector=6 already when preparing the data (loader) as the reference only includes sector=6
 - CSV files need to be seperated by ',' not by ';' (Maybe that is also the reason why Sirin can't open the csv files in excel)
   Control Panel -> Clock and Region –> Change the date, time, or number format -> Additional settings -> List seperator
 - Comments in existing code so that it is better understandable
-  
+- [ ] (Sirin) adjust the building_stock_summary files to include heating_system_main_id_heating_technology --> then we use nuts1 aggregation directly in dashboard
+
+- [ ] new dashboard: Energy performance of buildings
+  - stacked bar chart for buildings belonging to each id_building_efficiency_class (for sector=6)
+    x-axis: id_building_efficiency_class
+    y-axis: either the absolute number of buildings, or ratio of the absolute number to the total of the stock
+    stacked are building types (but types 1&2 and types 3-5 aggregated)
+  - (Sirin) prepares the reference
+
 
 ### Later stage
 
