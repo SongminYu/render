@@ -55,7 +55,7 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, categ
         relative = relative.fillna(0).round(4)  # Fill NaN with 0 and round to 4 decimal places
 
         # Get styles for absolute and relative difference tables
-        absolute_styles = get_styles_for_data_table(absolute, extreme_val=1000)
+        # absolute_styles = get_styles_for_data_table(absolute, extreme_val=1000)
         relative_styles = get_styles_for_data_table(relative, extreme_val=1)
 
         absolute_html = html.Div(className='table-container',
@@ -66,7 +66,8 @@ def render(id_comparison, id_data, id_reference, id_absolute, id_relative, categ
                                                                 style_cell_conditional=[
                                                                     {'if': {'column_id': category},
                                                                      'textAlign': 'left'}],
-                                                                style_data_conditional=absolute_styles)
+                                                                #style_data_conditional=absolute_styles
+                                                                )
                                            ])
 
         # Define columns for relative difference table with percentage formatting
