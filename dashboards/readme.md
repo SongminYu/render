@@ -141,11 +141,11 @@ This document contains the development plan of the `RenderDash` tool.
     (legend is the heating technology type)
 
 # August 6th, 2024
-- [ ] Should 9 be part of regions? Totals do not fit...
+- [x] Should 9 be part of regions? Totals do not fit...
   --> We do not include id_region=9 from reference, it must be the sum of individual regions
-- [ ] Heating Technologies 32 and 33 not in Reference 
+- [x] Heating Technologies 32 and 33 not in Reference 
   --> we put them under 31 for now
-- [ ] we should filter for sector=6 already when preparing the data (loader) as the reference only includes sector=6
+- [x] we should filter for sector=6 already when preparing the data (loader) as the reference only includes sector=6
 - CSV files need to be seperated by ',' not by ';' (Maybe that is also the reason why Sirin can't open the csv files in excel)
   Control Panel -> Clock and Region –> Change the date, time, or number format -> Additional settings -> List seperator
 - Comments in existing code so that it is better understandable
@@ -157,6 +157,13 @@ This document contains the development plan of the `RenderDash` tool.
     y-axis: either the absolute number of buildings, or ratio of the absolute number to the total of the stock
     stacked are building types (but types 1&2 and types 3-5 aggregated)
   - (Sirin) prepares the reference
+
+# August 16th, 2024
+- Do aggregation also for id_building_efficiency_class
+- building_number should always be int, in nuts 1 aggregation that is not the case
+- Why include id_building_location and heating_system_main_space_heating_energy_carrier_1_id_energy_carrier?
+- Reference for energy performance is still missing
+- naming of files for heating data of building stock
 
 
 ### Later stage

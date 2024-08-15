@@ -40,6 +40,16 @@ class DataSchema_Building_Stock:
     ID_SUBSECTOR = "id_subsector"
     YEAR = "year"
     MAIN_HEATING_TECHNOLOGY = "heating_system_main_id_heating_technology"
+    ID_BUILDING_TYPE = "id_building_type"
+    ID_EFFICIENCY_CLASS = "id_building_efficiency_class"
+
+class DataSchema_Energy_Performance:
+    ID_REGION = "id_region"
+    YEAR = "year"
+    ID_BUILDING_TYPE = "id_building_type"
+    ID_EFFICIENCY_CLASS = "id_building_efficiency_class"
+    BUILDING_NUMBER = "building_number"
+    PERCENTAGE_BUILDING_NUMBER = 'percentage_building_number'
 
 
 class DataSchema_Heating_Reference:
@@ -49,6 +59,18 @@ class DataSchema_Heating_Reference:
     YEAR = "year"
     BUILDING_NUMBER = "building_number"
     SHARE_PERCENTAGE = "share_percentage"
+
+class DataSchema_Nuts1_Building_Stock:
+    ID_SCENARIO = "id_scenario"
+    ID_REGION = "id_region"
+    ID_SECTOR = "id_sector"
+    ID_SUBSECTOR = "id_subsector"
+    YEAR = "year"
+    ID_BUILDING_TYPE = "id_building_type"
+    ID_BUILDING_LOCATION = "id_building_location"
+    MAIN_HEATING_TECHNOLOGY = "heating_system_main_id_heating_technology"
+    MAIN_HEATING_EC = "heating_system_main_space_heating_energy_carrier_1_id_energy_carrier"
+    BUILDING_NUMBER = "building_number"
 
 
 # Define paths to data files
@@ -60,6 +82,11 @@ REGIONAL_REFERENCE_ENERGY_PATH = "Reference_EnergyBalance_Regional"
 FLOOR_AREA_PATH = "floor_area"
 
 NUTS3_BUILDING_PATH = "building_stock_R9160023"
+NUTS3_HEATING_TECHNOLOGY_PATH = "final_heating_technology_nuts3"
+NUTS3_EFFICIENCY_CLASS_PATH = "final_efficiency_class_nuts3"
+NUTS1_BUILDING_PATH = "output_mainheatingsystem"
+NUTS1_HEATING_TECHNOLOGY_PATH = "final_heating_technology_nuts1"
+NUTS1_EFFICIENCY_CLASS_PATH = "final_efficiency_class_nuts1"
 REGIONAL_REFERENCE_BUILDING_PATH = "Reference_HeatingTech_Regional"
 
 
@@ -90,6 +117,29 @@ def change_id_heating_technology(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([24, 25, 26, 27, 28, 212, 213]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 299
 
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([32, 33]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 31
+
+    return df
+
+
+# Certain building types have to be adapted to fit to the reference data
+def change_id_building_type(df: pd.DataFrame) -> pd.DataFrame:
+    df.loc[df[DataSchema_Building_Stock.ID_BUILDING_TYPE].isin([1, 2]), [DataSchema_Building_Stock.ID_BUILDING_TYPE]] = "1 & 2"
+
+    df.loc[df[DataSchema_Building_Stock.ID_BUILDING_TYPE].isin([3, 4, 5]), [DataSchema_Building_Stock.ID_BUILDING_TYPE]] = "3 - 5"
+    return df
+
+
+def change_building_number_to_percentage(df: pd.DataFrame) -> pd.DataFrame:
+    years = list(df[DataSchema_Energy_Performance.YEAR].unique())
+    totals_per_year = {}
+    for year in years:
+        df_year = df[df[DataSchema_Energy_Performance.YEAR] == year]
+        total_building_number = df_year[DataSchema_Energy_Performance.BUILDING_NUMBER].sum()
+        totals_per_year[year] = total_building_number
+
+    df['percentage_building_number'] = df.apply(lambda row: row['building_number'] / totals_per_year[row['year']], axis=1)
     return df
 
 
@@ -155,7 +205,16 @@ def load_regional_reference_energy_data():
 
 @lru_cache(maxsize=1)
 def load_nuts3_heating_data():
-    return pd.read_csv("data/" + NUTS3_BUILDING_PATH + "_preprocessed.csv")
+    return pd.read_csv("data/" + NUTS3_HEATING_TECHNOLOGY_PATH + "_preprocessed.csv")
+
+
+@lru_cache(maxsize=1)
+def load_nuts3_efficiency_data():
+    return pd.read_csv("data/" + NUTS3_EFFICIENCY_CLASS_PATH + "_preprocessed.csv")
+
+@lru_cache(maxsize=1)
+def load_nuts1_heating_data():
+    return pd.read_csv("data/" + NUTS1_HEATING_TECHNOLOGY_PATH + "_preprocessed.csv")
 
 
 @lru_cache(maxsize=1)
@@ -198,8 +257,11 @@ def preprocess_regional_reference_energy_data():
 def preprocess_nuts3_heating_data():
     print("Preprocess nuts3 heating data...")
     df = pd.read_csv(NUTS3_BUILDING_PATH + ".csv")
+    df = df[df['id_sector'] == 6]  # Reference is only for Sector 6
     df = change_id_heating_technology(df)
-    # Gruppieren und Zählen
+    df = change_id_building_type(df)
+
+    # Heating Technology preprocessed table
     grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
                              DataSchema_Building_Stock.YEAR,
                              DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]).size().reset_index(
@@ -208,12 +270,56 @@ def preprocess_nuts3_heating_data():
     grouped_df = grouped_df.rename(
         columns={DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY: DataSchema_Heating_Reference.ID_HEATING_TECHNOLOGY}
     )
-    grouped_df.to_csv(NUTS3_BUILDING_PATH + "_preprocessed.csv", index=False)
+
+    grouped_df.to_csv(NUTS3_HEATING_TECHNOLOGY_PATH + "_preprocessed.csv", index=False)
+
+    # Building efficiency class preprocessed table
+    grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
+                             DataSchema_Building_Stock.YEAR,
+                             DataSchema_Building_Stock.ID_BUILDING_TYPE,
+                             DataSchema_Building_Stock.ID_EFFICIENCY_CLASS]).size().reset_index(
+        name=DataSchema_Heating_Reference.BUILDING_NUMBER)
+
+    grouped_df = change_building_number_to_percentage(grouped_df)
+
+    grouped_df.to_csv(NUTS3_EFFICIENCY_CLASS_PATH + "_preprocessed.csv", index=False)
+
+
+def preprocess_nuts1_heating_data():
+    print("Preprocess nuts1 heating data...")
+    df = pd.read_csv(NUTS1_BUILDING_PATH + ".csv")
+    df = df[df['id_sector'] == 6]  # Reference is only for Sector 6
+    df = change_id_heating_technology(df)
+    df = change_id_building_type(df)
+
+    # Heating Technology preprocessed table
+    grouped_df = df.groupby([DataSchema_Nuts1_Building_Stock.ID_REGION,
+                             DataSchema_Nuts1_Building_Stock.YEAR,
+                             DataSchema_Nuts1_Building_Stock.MAIN_HEATING_TECHNOLOGY])[DataSchema_Nuts1_Building_Stock.BUILDING_NUMBER].sum().reset_index(
+        name=DataSchema_Heating_Reference.BUILDING_NUMBER)
+
+    grouped_df = grouped_df.rename(
+        columns={DataSchema_Nuts1_Building_Stock.MAIN_HEATING_TECHNOLOGY: DataSchema_Heating_Reference.ID_HEATING_TECHNOLOGY}
+    )
+
+    grouped_df.to_csv(NUTS1_HEATING_TECHNOLOGY_PATH + "_preprocessed.csv", index=False)
+
+    # Building efficiency class preprocessed table
+    #grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
+    #                         DataSchema_Building_Stock.YEAR,
+    #                         DataSchema_Building_Stock.ID_BUILDING_TYPE,
+    #                         DataSchema_Building_Stock.ID_EFFICIENCY_CLASS]).size().reset_index(
+    #    name=DataSchema_Heating_Reference.BUILDING_NUMBER)
+
+    #grouped_df = change_building_number_to_percentage(grouped_df)
+
+    #grouped_df.to_csv(NUTS1_EFFICIENCY_CLASS_PATH + "_preprocessed.csv", index=False)
 
 
 def preprocess_regional_reference_heating_data():
     print("Preprocess regional reference heating data...")
     df = pd.read_csv(REGIONAL_REFERENCE_BUILDING_PATH + ".csv")
+    df = df[df[DataSchema_Heating_Reference.ID_REGION] != 9]
     df.to_csv(REGIONAL_REFERENCE_BUILDING_PATH + "_preprocessed.csv", index=False)
 
 
@@ -227,5 +333,6 @@ if __name__ == '__main__':
 
     preprocess_nuts3_heating_data()
     preprocess_regional_reference_heating_data()
+    preprocess_nuts1_heating_data()
 
     print("Finished preprocessing data!")
