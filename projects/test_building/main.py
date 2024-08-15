@@ -19,7 +19,7 @@ def get_config(project_name: str):
 
 
 def run_toolkit(cfg: "Config"):
-    data_toolkit.find_id(cfg=cfg, id_name="id_ownership")
+    data_toolkit.find_id(cfg=cfg, id_name="id_unit_user_type")
     # data_toolkit.extract_id_data(cfg=cfg, id_name="id_region", id_value=9010101)
     # data_toolkit.pack_sqlite(cfg=cfg)
 
@@ -36,7 +36,7 @@ def run_post_processor(cfg: "Config"):
 
 if __name__ == "__main__":
     config = get_config("test_building")
-    # run_toolkit(cfg=config)
+    run_toolkit(cfg=config)
     # run_building_model(cfg=config, cores=8)
-    run_post_processor(cfg=config)
+    # run_post_processor(cfg=config)
 
