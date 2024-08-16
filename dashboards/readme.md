@@ -149,9 +149,9 @@ This document contains the development plan of the `RenderDash` tool.
 - CSV files need to be seperated by ',' not by ';' (Maybe that is also the reason why Sirin can't open the csv files in excel)
   Control Panel -> Clock and Region –> Change the date, time, or number format -> Additional settings -> List seperator
 - Comments in existing code so that it is better understandable
-- [ ] (Sirin) adjust the building_stock_summary files to include heating_system_main_id_heating_technology --> then we use nuts1 aggregation directly in dashboard
+- [x] (Sirin) adjust the building_stock_summary files to include heating_system_main_id_heating_technology --> then we use nuts1 aggregation directly in dashboard
 
-- [ ] new dashboard: Energy performance of buildings
+- [x] new dashboard: Energy performance of buildings
   - stacked bar chart for buildings belonging to each id_building_efficiency_class (for sector=6)
     x-axis: id_building_efficiency_class
     y-axis: either the absolute number of buildings, or ratio of the absolute number to the total of the stock
@@ -159,12 +159,15 @@ This document contains the development plan of the `RenderDash` tool.
   - (Sirin) prepares the reference
 
 # August 16th, 2024
-- Do aggregation also for id_building_efficiency_class
+- Do aggregation also for id_building_efficiency_class & naming
+  - [ ] Sirin includes id_building_efficiency_class, heating_system_main_id_heating_technology, floor area in the building_stock_summary_nuts1 file
 - building_number should always be int, in nuts 1 aggregation that is not the case
-- Why include id_building_location and heating_system_main_space_heating_energy_carrier_1_id_energy_carrier?
+  - [ ] for now, we adjust the dashboard that the decimal points are not shown
 - Reference for energy performance is still missing
-- naming of files for heating data of building stock
-
+  - [ ] we can use this file for reference: Reference_StockEnergyPerformance_National.csv
+- [ ] new dashboard for renovation rate
+  - [ ] Sirin prepares and uploads the reference.
+    Depending on what's interesting & useful, she configures the 'renovation_rate' output of the model to include these details
 
 ### Later stage
 

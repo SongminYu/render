@@ -459,7 +459,7 @@ def extract_cols(
     input_table: str,
     cols: List[str],
 ):
-    output_table = f"{input_table.split(".")[0]}_cols.csv"
+    output_table = f"{input_table.split('.')[0]}_cols.csv"
     building_stock = pd.read_csv(os.path.join(cfg.output_folder, input_table))
     building_stock_cols = building_stock.loc[:, cols]
     building_stock_cols.to_csv(os.path.join(cfg.output_folder, output_table), index=False)
