@@ -225,7 +225,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,31,agriculture,24,Renewables,2,space cooling,8,space_cooling,2022,kWh,0
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,1,lighting,2019,kWh,11266247318
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,2,ICT,2019,kWh,9276039718
-3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2019,kWh,1.47659E+11
+3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2019,kWh,1.48E+11
 3,GHD & Industry,32,manufacturing,1,Electricity,4,domestic hot water,4,hot_water,2019,kWh,600069650.5
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,5,process_heating,2019,kWh,38254443782
 3,GHD & Industry,32,manufacturing,1,Electricity,3,space heating,6,space_heating,2019,kWh,848843159.6
@@ -243,7 +243,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,3,mechanical_energy,2019,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,4,domestic hot water,4,hot_water,2019,kWh,250000000
-3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,5,process_heating,2019,kWh,1.09333E+11
+3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,5,process_heating,2019,kWh,1.09E+11
 3,GHD & Industry,32,manufacturing,3,Hard coal,3,space heating,6,space_heating,2019,kWh,2444444444
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,2,space cooling,8,space_cooling,2019,kWh,0
@@ -251,7 +251,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2019,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2019,kWh,6750920768
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2019,kWh,2821157689
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,1.81609E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2019,kWh,1.82E+11
 3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2019,kWh,27455918019
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2019,kWh,0
@@ -281,7 +281,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,24,Renewables,2,space cooling,8,space_cooling,2019,kWh,0
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,1,lighting,2020,kWh,10844594654
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,2,ICT,2020,kWh,8768873825
-3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2020,kWh,1.39155E+11
+3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2020,kWh,1.39E+11
 3,GHD & Industry,32,manufacturing,1,Electricity,4,domestic hot water,4,hot_water,2020,kWh,41684136.56
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,5,process_heating,2020,kWh,36126587898
 3,GHD & Industry,32,manufacturing,1,Electricity,3,space heating,6,space_heating,2020,kWh,1330300508
@@ -307,7 +307,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2020,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2020,kWh,6500912058
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2020,kWh,2728542959
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,1.88807E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2020,kWh,1.89E+11
 3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2020,kWh,26016572861
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2020,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2020,kWh,0
@@ -337,7 +337,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,24,Renewables,2,space cooling,8,space_cooling,2020,kWh,0
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,1,lighting,2021,kWh,10684107880
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,2,ICT,2021,kWh,9018779539
-3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2021,kWh,1.44808E+11
+3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2021,kWh,1.45E+11
 3,GHD & Industry,32,manufacturing,1,Electricity,4,domestic hot water,4,hot_water,2021,kWh,566461123.4
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,5,process_heating,2021,kWh,37430948120
 3,GHD & Industry,32,manufacturing,1,Electricity,3,space heating,6,space_heating,2021,kWh,811397544.8
@@ -355,7 +355,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,3,mechanical_energy,2021,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,4,domestic hot water,4,hot_water,2021,kWh,194444444.4
-3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,5,process_heating,2021,kWh,1.21639E+11
+3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,5,process_heating,2021,kWh,1.22E+11
 3,GHD & Industry,32,manufacturing,3,Hard coal,3,space heating,6,space_heating,2021,kWh,2027777778
 3,GHD & Industry,32,manufacturing,3,Hard coal,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,3,Hard coal,2,space cooling,8,space_cooling,2021,kWh,0
@@ -363,7 +363,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2021,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2021,kWh,7195394629
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2021,kWh,2757122621
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,1.96741E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2021,kWh,1.97E+11
 3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2021,kWh,27774717375
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2021,kWh,0
@@ -393,7 +393,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,24,Renewables,2,space cooling,8,space_cooling,2021,kWh,0
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,1,lighting,2022,kWh,10570248043
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,2,ICT,2022,kWh,8512309053
-3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2022,kWh,1.36661E+11
+3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,3,mechanical_energy,2022,kWh,1.37E+11
 3,GHD & Industry,32,manufacturing,1,Electricity,4,domestic hot water,4,hot_water,2022,kWh,591032025.3
 3,GHD & Industry,32,manufacturing,1,Electricity,1,appliance,5,process_heating,2022,kWh,34875902987
 3,GHD & Industry,32,manufacturing,1,Electricity,3,space heating,6,space_heating,2022,kWh,762102911.8
@@ -419,7 +419,7 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,2,ICT,2022,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,3,mechanical_energy,2022,kWh,6473076441
 3,GHD & Industry,32,manufacturing,6,Natural Gas,4,domestic hot water,4,hot_water,2022,kWh,2514296873
-3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,1.71275E+11
+3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,5,process_heating,2022,kWh,1.71E+11
 3,GHD & Industry,32,manufacturing,6,Natural Gas,3,space heating,6,space_heating,2022,kWh,23970275455
 3,GHD & Industry,32,manufacturing,6,Natural Gas,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,32,manufacturing,6,Natural Gas,2,space cooling,8,space_cooling,2022,kWh,0
@@ -3583,6 +3583,438 @@ id_sector,sector,id_subsector,subsector,id_energy_carrier,energy_carrier,id_end_
 3,GHD & Industry,316,other tertiary sectors,24,Renewables,3,space heating,6,space_heating,2022,kWh,122882.3634
 3,GHD & Industry,316,other tertiary sectors,24,Renewables,1,appliance,7,process_cooling,2022,kWh,0
 3,GHD & Industry,316,other tertiary sectors,24,Renewables,2,space cooling,8,space_cooling,2022,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2010,kWh,12866660129
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2010,kWh,25149735242
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2010,kWh,4251833693
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2010,kWh,19619572465
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2010,kWh,38989037066
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2010,kWh,11366012944
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2010,kWh,29457148460
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2010,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2010,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2010,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2010,kWh,923070670.2
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2010,kWh,22805275382
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2010,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2010,kWh,1.40E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2010,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2010,kWh,14932777778
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2010,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2010,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2010,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2010,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2010,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2010,kWh,48308739493
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2010,kWh,972286303.8
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2010,kWh,2.33E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2010,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2010,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2010,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2010,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2010,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2010,kWh,4889301889
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2010,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2010,kWh,47726253667
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2010,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2010,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2010,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2010,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2010,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2010,kWh,8003665087
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2010,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2010,kWh,79953279358
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2010,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2010,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2011,kWh,12640431157
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2011,kWh,24558551963
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2011,kWh,3361521253
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2011,kWh,19363473663
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2011,kWh,38615822656
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2011,kWh,9112222900
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2011,kWh,28947976408
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2011,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2011,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2011,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2011,kWh,1129589100
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2011,kWh,23418310601
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2011,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2011,kWh,1.13E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2011,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2011,kWh,16121111111
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2011,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2011,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2011,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2011,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2011,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2011,kWh,49552507426
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2011,kWh,999938490.7
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2011,kWh,1.84E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2011,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2011,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2011,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2011,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2011,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2011,kWh,5251501826
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2011,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2011,kWh,40400442619
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2011,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2011,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2011,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2011,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2011,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2011,kWh,8003098217
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2011,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2011,kWh,68953846227
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2011,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2011,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2012,kWh,12886276100
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2012,kWh,24717210622
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2012,kWh,3415974052
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2012,kWh,19079464829
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2012,kWh,39047638354
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2012,kWh,8720454085
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2012,kWh,29132981958
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2012,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2012,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2012,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2012,kWh,1174014832
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2012,kWh,23656398872
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2012,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2012,kWh,1.238E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2012,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2012,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2012,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2012,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2012,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2012,kWh,214588379
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2012,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2012,kWh,8418467177
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2012,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2012,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2012,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2012,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2012,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2012,kWh,49591865466
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2012,kWh,979734704.1
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2012,kWh,2.04E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2012,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2012,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2012,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2012,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2012,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2012,kWh,5050653292
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2012,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2012,kWh,42381568930
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2012,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2012,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2012,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2012,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2012,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2012,kWh,6671080804
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2012,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2012,kWh,71340308085
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2012,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2012,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2013,kWh,11196731359
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2013,kWh,22782431052
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2013,kWh,4750970378
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2013,kWh,18392645557
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2013,kWh,38452298264
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2013,kWh,9363023493
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2013,kWh,29867211440
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2013,kWh,1194688458
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2013,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2013,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2013,kWh,1021416430
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2013,kWh,17640137799
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2013,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2013,kWh,1.43109E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2013,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2013,kWh,7904166667
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2013,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2013,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2013,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2013,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2013,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2013,kWh,48245255408
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2013,kWh,1166551944
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2013,kWh,2.18923E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2013,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2013,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2013,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2013,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2013,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2013,kWh,3860818127
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2013,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2013,kWh,47385292984
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2013,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2013,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2013,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2013,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2013,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2013,kWh,7695731056
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2013,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2013,kWh,77040657832
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2013,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2013,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2014,kWh,10859250535
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2014,kWh,22190642398
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2014,kWh,4638094218
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2014,kWh,15191841542
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2014,kWh,37438029979
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2014,kWh,9109550321
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2014,kWh,29106124197
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2014,kWh,1166466809
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2014,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2014,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2014,kWh,1132050130
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2014,kWh,18693340614
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2014,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2014,kWh,1.17501E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2014,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2014,kWh,6693333333
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2014,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2014,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2014,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2014,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2014,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2014,kWh,43353752581
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2014,kWh,1027724640
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2014,kWh,1.72495E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2014,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2014,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2014,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2014,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2014,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2014,kWh,3862168950
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2014,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2014,kWh,38732831050
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2014,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2014,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2014,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2014,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2014,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2014,kWh,11087239583
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2014,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2014,kWh,63509982639
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2014,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2014,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2015,kWh,10752784974
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2015,kWh,22033484456
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2015,kWh,4584520725
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2015,kWh,15170595855
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2015,kWh,37176295337
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2015,kWh,8946761658
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2015,kWh,28896373057
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2015,kWh,1139183938
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2015,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2015,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2015,kWh,1228839150
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2015,kWh,17086715803
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2015,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2015,kWh,1.16652E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2015,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2015,kWh,7946111111
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2015,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2015,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2015,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2015,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2015,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2015,kWh,44182834029
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2015,kWh,1053258268
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2015,kWh,1.94016E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2015,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2015,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2015,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2015,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2015,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2015,kWh,3972315467
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2015,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2015,kWh,43362128978
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2015,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2015,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2015,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2015,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2015,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2015,kWh,11629425126
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2015,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2015,kWh,69520019319
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2015,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2015,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2016,kWh,10194886241
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2016,kWh,21445373781
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2016,kWh,4472416035
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2016,kWh,15445113759
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2016,kWh,38446110509
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2016,kWh,8444810401
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2016,kWh,28529014085
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2016,kWh,1222275190
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2016,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2016,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2016,kWh,1249097548
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2016,kWh,16862816901
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2016,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2016,kWh,1.14917E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2016,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2016,kWh,6050000000
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2016,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2016,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2016,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2016,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2016,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2016,kWh,46471988369
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2016,kWh,939641590.4
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2016,kWh,2.05728E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2016,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2016,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2016,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2016,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2016,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2016,kWh,4193175461
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2016,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2016,kWh,47207935650
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2016,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2016,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2016,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2016,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2016,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2016,kWh,11213308610
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2016,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2016,kWh,77041691390
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2016,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2016,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2017,kWh,10250444204
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2017,kWh,21417594800
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2017,kWh,4500195016
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2017,kWh,15556229686
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2017,kWh,38501668472
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2017,kWh,8194799567
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2017,kWh,28501235103
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2017,kWh,1277833153
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2017,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2017,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2017,kWh,1227998963
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2017,kWh,18390746377
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2017,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2017,kWh,1.11982E+11
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2017,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2017,kWh,5830277778
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2017,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2017,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2017,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2017,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2017,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2017,kWh,49163437485
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2017,kWh,1001126685
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2017,kWh,1.96924E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2017,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2017,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2017,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2017,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2017,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2017,kWh,4472776730
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2017,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2017,kWh,47061389937
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2017,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2017,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2017,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2017,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2017,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2017,kWh,11058827061
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2017,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2017,kWh,75327839605
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2017,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2017,kWh,0
+6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2018,kWh,10251349572
+6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2018,kWh,21336142199
+6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2018,kWh,4445029625
+6,Residential,61,Residential,1,Electricity,4,domestic hot water,4,hot_water,2018,kWh,15363133641
+6,Residential,61,Residential,1,Electricity,1,appliance,5,process_heating,2018,kWh,38227254773
+6,Residential,61,Residential,1,Electricity,3,space heating,6,space_heating,2018,kWh,7362080316
+6,Residential,61,Residential,1,Electricity,1,appliance,7,process_cooling,2018,kWh,28392626728
+6,Residential,61,Residential,1,Electricity,2,space cooling,8,space_cooling,2018,kWh,1222383147
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,1,lighting,2018,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,2,ICT,2018,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,3,mechanical_energy,2018,kWh,1245094658
+6,Residential,61,Residential,2,Light fuel oil,4,domestic hot water,4,hot_water,2018,kWh,17583166026
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,5,process_heating,2018,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,3,space heating,6,space_heating,2018,kWh,99607572650
+6,Residential,61,Residential,2,Light fuel oil,1,appliance,7,process_cooling,2018,kWh,0
+6,Residential,61,Residential,2,Light fuel oil,2,space cooling,8,space_cooling,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,1,lighting,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,2,ICT,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,3,mechanical_energy,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,4,domestic hot water,4,hot_water,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,1,appliance,5,process_heating,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,3,space heating,6,space_heating,2018,kWh,5742777778
+6,Residential,61,Residential,3,Hard coal,1,appliance,7,process_cooling,2018,kWh,0
+6,Residential,61,Residential,3,Hard coal,2,space cooling,8,space_cooling,2018,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,1,lighting,2018,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,2,ICT,2018,kWh,0
+6,Residential,61,Residential,6,Natural Gas,1,appliance,3,mechanical_energy,2018,kWh,0
+6,Residential,61,Residential,6,Natural Gas,4,domestic hot water,4,hot_water,2018,kWh,52884358708
+6,Residential,61,Residential,6,Natural Gas,1,appliance,5,process_heating,2018,kWh,1068910737
+6,Residential,61,Residential,6,Natural Gas,3,space heating,6,space_heating,2018,kWh,2.01543E+11
+6,Residential,61,Residential,6,Natural Gas,1,appliance,7,process_cooling,2018,kWh,0
+6,Residential,61,Residential,6,Natural Gas,2,space cooling,8,space_cooling,2018,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,1,lighting,2018,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,2,ICT,2018,kWh,0
+6,Residential,61,Residential,13,District heating,1,appliance,3,mechanical_energy,2018,kWh,0
+6,Residential,61,Residential,13,District heating,4,domestic hot water,4,hot_water,2018,kWh,4500678013
+6,Residential,61,Residential,13,District heating,1,appliance,5,process_heating,2018,kWh,0
+6,Residential,61,Residential,13,District heating,3,space heating,6,space_heating,2018,kWh,45284599764
+6,Residential,61,Residential,13,District heating,1,appliance,7,process_cooling,2018,kWh,0
+6,Residential,61,Residential,13,District heating,2,space cooling,8,space_cooling,2018,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,1,lighting,2018,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,2,ICT,2018,kWh,0
+6,Residential,61,Residential,24,Renewables,1,appliance,3,mechanical_energy,2018,kWh,0
+6,Residential,61,Residential,24,Renewables,4,domestic hot water,4,hot_water,2018,kWh,12328837209
+6,Residential,61,Residential,24,Renewables,1,appliance,5,process_heating,2018,kWh,0
+6,Residential,61,Residential,24,Renewables,3,space heating,6,space_heating,2018,kWh,76027829457
+6,Residential,61,Residential,24,Renewables,1,appliance,7,process_cooling,2018,kWh,0
+6,Residential,61,Residential,24,Renewables,2,space cooling,8,space_cooling,2018,kWh,0
 6,Residential,61,Residential,1,Electricity,1,appliance,1,lighting,2019,kWh,10000000000
 6,Residential,61,Residential,1,Electricity,1,appliance,2,ICT,2019,kWh,21300000000
 6,Residential,61,Residential,1,Electricity,1,appliance,3,mechanical_energy,2019,kWh,4500000000
