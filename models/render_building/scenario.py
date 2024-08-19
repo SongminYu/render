@@ -20,12 +20,18 @@ class BuildingScenario(RenderScenario):
         self.id_scenario_energy_emission_factor = 0
         self.id_scenario_teleworking = 0
         self.id_scenario_building_component_availability = 0
+        self.id_scenario_building_component_cost_material = 0
+        self.id_scenario_building_component_input_labor = 0
         self.id_scenario_heating_technology_availability = 0
         self.id_scenario_dh_availability = 0
         self.id_scenario_gas_availability = 0
         self.id_scenario_hydrogen_availability = 0
         self.id_scenario_subsidy_building_renovation = 0
         self.id_scenario_subsidy_heating_modernization = 0
+        self.id_scenario_construction_mandatory_renewable_heating = 0
+        self.id_scenario_construction_pv_adoption_rate = 0
+        self.id_scenario_pv_penetration_rate = 0
+        self.id_scenario_pv_self_consumption_rate = 0
         self.id_scenario_renovation_mandatory = 0
         self.id_scenario_heating_technology_mandatory = 0
         self.renovation_mandatory = 0
@@ -159,10 +165,10 @@ class BuildingScenario(RenderScenario):
         self.s_building_unit_area = self.load_scenario("Scenario_Building_UnitArea.xlsx", region_level=0)
         self.s_building_component_option = self.load_scenario("Scenario_BuildingComponent_Option.xlsx", region_level=0)
         self.s_building_component_availability = self.load_scenario("Scenario_BuildingComponent_Availability.xlsx", region_level=0, all_years=True, scenario_filter="id_scenario_building_component_availability")
-        self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0)
+        self.s_building_component_cost_material = self.load_scenario("Scenario_BuildingComponent_Cost_Material.xlsx", region_level=0, scenario_filter="id_scenario_building_component_cost_material")
         self.s_building_component_cost_labor = self.load_scenario("Scenario_BuildingComponent_Cost_Labor.xlsx", region_level=0, all_years=True)
         self.s_building_component_cost_payback_time = self.load_scenario("Scenario_BuildingComponent_Cost_PaybackTime.xlsx", region_level=0)
-        self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True)
+        self.s_building_component_input_labor = self.load_scenario("Scenario_BuildingComponent_Input_Labor.xlsx", region_level=0, all_years=True, scenario_filter="id_scenario_building_component_input_labor")
         self.s_building_component_utility_power = self.load_scenario("Scenario_BuildingComponent_UtilityPower.xlsx", region_level=0)
         self.s_unit_user = self.load_scenario("Scenario_UnitUser.xlsx", region_level=2, all_years=True)
         self.s_unit_user_dwelling_ownership = self.load_scenario("Scenario_UnitUser_DwellingOwnership.xlsx", region_level=2)
@@ -203,14 +209,14 @@ class BuildingScenario(RenderScenario):
         self.s_ventilation_technology_cost_payback_time = self.load_scenario("Scenario_VentilationTechnology_Cost_PaybackTime.xlsx", region_level=0)
         self.s_ventilation_technology_input_labor = self.load_scenario("Scenario_VentilationTechnology_Input_Labor.xlsx", region_level=0)
         self.s_ventilation_technology_utility_power = self.load_scenario("Scenario_VentilationTechnology_UtilityPower.xlsx", region_level=0)
-        self.s_pv_penetration_rate = self.load_scenario("Scenario_PV_PenetrationRate.xlsx", region_level=0, all_years=True)
-        self.s_pv_self_consumption_rate = self.load_scenario("Scenario_PV_SelfConsumptionRate.xlsx", region_level=0)
+        self.s_pv_penetration_rate = self.load_scenario("Scenario_PV_PenetrationRate.xlsx", region_level=0, scenario_filter="id_scenario_pv_penetration_rate", all_years=True)
+        self.s_pv_self_consumption_rate = self.load_scenario("Scenario_PV_SelfConsumptionRate.xlsx", region_level=0, scenario_filter="id_scenario_pv_self_consumption_rate")
         self.s_end_use_demand_appliance = self.load_scenario("Scenario_EndUseDemand_Appliance.xlsx", region_level=0, scenario_filter="id_scenario_teleworking", all_years=True)
         self.s_end_use_demand_hot_water = self.load_scenario("Scenario_EndUseDemand_HotWater.xlsx", region_level=0, scenario_filter="id_scenario_teleworking", all_years=True)
         self.s_interest_rate = self.load_scenario("Scenario_InterestRate.xlsx", region_level=0)
         self.s_construction_residential_building = self.load_scenario("Scenario_Construction_ResidentialBuilding.xlsx")
-        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenwableHeating.xlsx", region_level=0)
-        self.s_construction_pv_adoption_rate = self.load_scenario("Scenario_Construction_PVAdoptionRate.xlsx", region_level=0)
+        self.s_construction_mandatory_renewable_heating = self.load_scenario("Scenario_Construction_MandatoryRenewableHeating.xlsx", region_level=0, scenario_filter="id_scenario_construction_mandatory_renewable_heating")
+        self.s_construction_pv_adoption_rate = self.load_scenario("Scenario_Construction_PVAdoptionRate.xlsx", region_level=0, scenario_filter="id_scenario_construction_pv_adoption_rate")
         self.s_renovation_maximum_heating_intensity = self.load_scenario("Scenario_Renovation_MaximumHeatingIntensity.xlsx", region_level=0, scenario_filter="id_scenario_renovation_mandatory")
         self.s_subsidy_building_renovation = self.load_scenario("Scenario_Subsidy_BuildingRenovation.xlsx", region_level=0, scenario_filter="id_scenario_subsidy_building_renovation")
         self.s_subsidy_heating_modernization = self.load_scenario("Scenario_Subsidy_HeatingModernization.xlsx", region_level=0, scenario_filter="id_scenario_subsidy_heating_modernization")
