@@ -31,6 +31,8 @@ KEY_COLS = [
     'id_building_construction_period',
     'id_building_efficiency_class',
     'id_building_location',
+    'heating_system_main_id_heating_technology',
+    'heating_system_main_space_heating_energy_carrier_1_id_energy_carrier',
     'year',
 ]
 AGG_COLS = {
