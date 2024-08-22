@@ -28,8 +28,8 @@ DATA_TABLE_REFERENCE = "data-table-reference-energy-performance"
 
 # -------------------- LOAD DATASET --------------------
 print("Load data for Energy Performance...")
-data = loader.load_nuts3_efficiency_data()
-reference = loader.load_nuts3_efficiency_data()
+data = loader.load_nuts1_efficiency_data()
+reference = loader.load_reference_efficiency_data()
 
 # -------------------- VARIABLES --------------------
 id_building_type = list(data[DataSchema.ID_BUILDING_TYPE].unique())

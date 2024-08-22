@@ -162,12 +162,17 @@ This document contains the development plan of the `RenderDash` tool.
 - Do aggregation also for id_building_efficiency_class & naming
   - [x] Sirin includes id_building_efficiency_class, heating_system_main_id_heating_technology, floor area in the building_stock_summary_nuts1 file
 - building_number should always be int, in nuts 1 aggregation that is not the case
-  - [ ] for now, we adjust the dashboard that the decimal points are not shown
+  - [x] for now, we adjust the dashboard that the decimal points are not shown
 - Reference for energy performance is still missing
   - [x] we can use this file for reference: Reference_StockEnergyPerformance_National.csv
 - [ ] new dashboard for renovation rate
   - [x] Sirin prepares and uploads the reference.
     Currently, what's interesting & useful is: the national renovation rate. The other details such as acc. to construction period, building type, etc. are not in focus for now.
+
+# August 22nd, 2024
+- In building stock data there is no id_efficiency_class 1, in reference there is
+- Difference of total building number in output_mainheatingsystem: 38.693.685 and building_stock_summary_nuts1: 349.814.481
+-
 
 ### Later stage
 
