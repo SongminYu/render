@@ -72,6 +72,21 @@ class DataSchema_Nuts1_Building_Stock:
     MAIN_HEATING_EC = "heating_system_main_space_heating_energy_carrier_1_id_energy_carrier"
     BUILDING_NUMBER = "building_number"
 
+class DataSchema_Renovation_Rate:
+    ID_SCENARIO = "id_scenario"
+    ID_REGION = "id_region"
+    ID_SECTOR = "id_sector"
+    YEAR = "year"
+    WALL = "wall"
+    WALL_MARGIN = "wall_margin"
+    WINDOW = "window"
+    WINDOW_MARGIN = "window_margin"
+    ROOF = "roof"
+    ROOF_MARGIN = "roof_margin"
+    BASEMENT = "basement"
+    BASEMENT_MARGIN = "basement_margin"
+    AVERAGE = "average"
+
 
 # Define paths to data files
 NUTS1_ENERGY_PATH = "final_energy_demand_nuts1"
@@ -89,6 +104,9 @@ NUTS1_HEATING_TECHNOLOGY_PATH = "final_heating_technology_nuts1"
 NUTS1_EFFICIENCY_CLASS_PATH = "final_efficiency_class_nuts1"
 REGIONAL_REFERENCE_BUILDING_PATH = "Reference_HeatingTech_Regional"
 REFERENCE_ENERGY_PERFORMANCE_PATH = "Reference_StockEnergyPerformance_National"
+
+RENOVATION_RATE_PATH = "renovation_rate"
+REFERENCE_RENOVATION_RATE_PATH = "Reference_RenovationRate"
 
 
 # ventilation is end_use = 5, but in reference we do not separate these end_uses
@@ -229,6 +247,14 @@ def load_regional_reference_heating_data():
 @lru_cache(maxsize=1)
 def load_nuts1_efficiency_data():
     return pd.read_csv("data/" + NUTS1_EFFICIENCY_CLASS_PATH + "_preprocessed.csv")
+
+@lru_cache(maxsize=1)
+def load_renovation_rate_data():
+    return pd.read_csv("data/" + RENOVATION_RATE_PATH + ".csv")
+
+@lru_cache(maxsize=1)
+def load_reference_renovation_rate_data():
+    return pd.read_csv("data/" + REFERENCE_RENOVATION_RATE_PATH + ".csv")
 
 
 # Individual functions to preprocess specific datasets
