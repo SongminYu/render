@@ -22,6 +22,7 @@ BS = "building_stock"
 BSS = "building_stock_summary"
 FED = "final_energy_demand"
 PV = "pv_generation"
+HT = "heating_tech"
 KEY_COLS = [
     'id_scenario',
     'id_region',
@@ -54,6 +55,21 @@ PV_AGG_COLS = {
     "pv_2_grid": "sum",
 }
 
+HT_KEY_COLS = [
+    'id_scenario',
+    'id_region',
+    'id_sector',
+    'id_subsector',
+    'id_building_type',
+    'id_building_construction_period',
+    'id_building_efficiency_class',
+    'id_building_location',
+    'year',
+    'heating_system_main_id_heating_technology',
+    'heating_system_main_space_heating_energy_carrier_1_id_energy_carrier',
+]
+
+HT_AGG_COLS = {"building_number": 'sum'}
 
 def get_base_d(row):
     base_d = {}
@@ -102,6 +118,12 @@ def process_region_building_stock(cfg: "Config", cores: int = 4):
             building_stock=region_building_stock,
             output_table_name=f'{BSS}_{region_table_name.split("_")[-1]}'
         )
+        gen_region_heating_tech_from_region_building_stock(
+            cfg=cfg,
+            building_stock=region_building_stock,
+            output_table_name=f'{HT}_{region_table_name.split("_")[-1]}'
+        )
+
 
     tasks = [
         {
@@ -271,6 +293,27 @@ def gen_region_building_stock_summary(
         if_exists="replace"
     )
 
+def gen_region_heating_tech_from_region_building_stock(
+    cfg: "Config",
+    building_stock: pd.DataFrame,
+    output_table_name: str
+):
+    l = []
+    building_stock = building_stock.loc[building_stock["exists"] == 1]
+    for index, row in building_stock.iterrows():
+        d = get_base_d(row=row)
+        d["heating_system_main_id_heating_technology"] = row["heating_system_main_id_heating_technology"]
+        d["heating_system_main_space_heating_energy_carrier_1_id_energy_carrier"] = row["heating_system_main_space_heating_energy_carrier_1_id_energy_carrier"]
+        d["building_number"] = row["building_number"]
+        l.append(d)
+    df = pd.DataFrame(l)
+    aggregated_df = df.groupby(HT_KEY_COLS).agg(HT_AGG_COLS).reset_index()
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, cons.REGION_DATA_SUBFOLDER, f'{output_table_name}.csv'),
+        df=aggregated_df,
+        if_exists="replace"
+    )
+
 
 """
 Aggregate region building stock
@@ -303,6 +346,7 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
     fed_output = f"{FED}_nuts{nuts_level}.csv"
     pv_output = f"{PV}_nuts{nuts_level}.csv"
     bss_output = f"{BSS}_nuts{nuts_level}.csv"
+    ht_output = f"{HT}_nuts{nuts_level}.csv"
     # regional aggregation
     for region_table_name in tqdm(
         get_region_table_names(cfg=cfg, file_name_prefix=BS),
@@ -326,6 +370,12 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
             output_file_name=bss_output,
             nuts_level=nuts_level
         )
+        aggregate_region_heating_tech(
+            cfg=cfg,
+            region_heating_tech_file_name=f'{HT}_{region_table_name.split("_")[-1]}',
+            output_file_name=ht_output,
+            nuts_level=nuts_level
+        )
     # final aggregation
     if nuts_level < 3:
         fed_path = os.path.join(cfg.output_folder, fed_output)
@@ -347,6 +397,13 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
         save_dataframe(
             path=bss_path,
             df=df_bss.groupby(KEY_COLS).agg(AGG_COLS).reset_index(),
+            if_exists="replace"
+        )
+        ht_path = os.path.join(cfg.output_folder, ht_output)
+        df_ht = pd.read_csv(ht_path)
+        save_dataframe(
+            path=ht_path,
+            df=df_ht.groupby(HT_KEY_COLS).agg(HT_AGG_COLS).reset_index(),
             if_exists="replace"
         )
 
@@ -438,6 +495,28 @@ def aggregate_region_building_stock_summary(
         if_exists="append"
     )
 
+def aggregate_region_heating_tech(
+    cfg: "Config",
+    region_heating_tech_file_name: str,
+    output_file_name: str,
+    nuts_level: int
+):
+    assert nuts_level in [0, 1, 2, 3]
+    heating_tech_nuts3 = pd.read_csv(os.path.join(
+        cfg.output_folder,
+        cons.REGION_DATA_SUBFOLDER,
+        f'{region_heating_tech_file_name}.csv'
+    ))
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, output_file_name),
+        df=aggregate_nuts_level(
+            df_nuts3=heating_tech_nuts3,
+            nuts_level=nuts_level,
+            group_by_cols=HT_KEY_COLS,
+            agg_cols=HT_AGG_COLS
+        ),
+        if_exists="append"
+    )
 
 def concat_region_tables(cfg: "Config", file_name_prefix_list: Optional[List[str]]):
     for file_name_prefix in file_name_prefix_list:

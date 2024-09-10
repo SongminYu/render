@@ -99,7 +99,7 @@ FLOOR_AREA_PATH = "floor_area"
 NUTS3_BUILDING_PATH = "building_stock_R9160023"
 NUTS3_HEATING_TECHNOLOGY_PATH = "final_heating_technology_nuts3"
 NUTS3_EFFICIENCY_CLASS_PATH = "final_efficiency_class_nuts3"
-NUTS1_BUILDING_PATH = "building_stock_summary_nuts1" # "output_mainheatingsystem"
+NUTS1_BUILDING_PATH = "heating_tech_nuts1" # "output_mainheatingsystem"
 NUTS1_HEATING_TECHNOLOGY_PATH = "final_heating_technology_nuts1"
 NUTS1_EFFICIENCY_CLASS_PATH = "final_efficiency_class_nuts1"
 REGIONAL_REFERENCE_BUILDING_PATH = "Reference_HeatingTech_Regional"
@@ -130,14 +130,26 @@ def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
 
 # Certain heating technologies have to be adapted to fit to the reference data
 def change_id_heating_technology(df: pd.DataFrame) -> pd.DataFrame:
-    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([29, 210, 211]), [
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([29, 210, 211, 33]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 250
 
-    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([24, 25, 26, 27, 28, 212, 213]), [
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([26]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 21
+
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([28]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 23
+
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([24, 213]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 299
 
-    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([32, 33]), [
-        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 31
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([27, 32]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 22
+
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([25]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 45
+
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([212, 34]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 46
 
     return df
 
