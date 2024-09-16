@@ -96,7 +96,7 @@ REGIONAL_REFERENCE_ENERGY_PATH = "Reference_EnergyBalance_Regional"
 
 FLOOR_AREA_PATH = "floor_area"
 
-NUTS3_BUILDING_PATH = "building_stock_R9160023"
+NUTS3_BUILDING_PATH = "heating_tech_nuts3"
 NUTS3_HEATING_TECHNOLOGY_PATH = "final_heating_technology_nuts3"
 NUTS3_EFFICIENCY_CLASS_PATH = "final_efficiency_class_nuts3"
 NUTS1_BUILDING_PATH = "heating_tech_nuts1" # "output_mainheatingsystem"
