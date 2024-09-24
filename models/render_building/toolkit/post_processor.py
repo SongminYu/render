@@ -410,6 +410,7 @@ def aggregate_region_building_stock(cfg: "Config", nuts_level: int = 3):
 
 def replace_nuts3_region_id(df_nuts3: pd.DataFrame, nuts_level: int):
     region_df = pd.read_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), "region_mapping.xlsx"))
+    df_nuts3 = df_nuts3[df_nuts3["id_region"].isin(region_df["id_nuts3"])]
     d = dict(zip(region_df["id_nuts3"].to_list(), region_df[f"id_nuts{nuts_level}"].to_list()))
     df_nuts3.rename(columns={"id_region": "id_region_nuts3"}, inplace=True)
     df_nuts3["id_region"] = [d[id_region_nuts3] for id_region_nuts3 in df_nuts3["id_region_nuts3"]]

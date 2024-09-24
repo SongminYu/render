@@ -333,6 +333,7 @@ def preprocess_nuts1_heating_data():
     print("Preprocess nuts1 heating data...")
     df = pd.read_csv(NUTS1_BUILDING_PATH + ".csv")
     df = df[df['id_sector'] == 6]  # Reference is only for Sector 6
+    #df = df[(df['id_sector'] == 6) & (df['id_scenario'] == 10)]
     df = change_id_heating_technology(df)
     df = change_id_building_type(df)
 
@@ -373,13 +374,13 @@ def preprocess_regional_reference_heating_data():
 if __name__ == '__main__':
     print("Preprocess data for dashboards...")
 
-    preprocess_nuts1_energy_data()
-    preprocess_nuts3_energy_data()
+    # preprocess_nuts1_energy_data()
+    # preprocess_nuts3_energy_data()
     #preprocess_national_reference_energy_data()
     #preprocess_regional_reference_energy_data()
 
-    preprocess_nuts3_heating_data()
-    #preprocess_regional_reference_heating_data()
+    # preprocess_nuts3_heating_data()
+    preprocess_regional_reference_heating_data()
     preprocess_nuts1_heating_data()
 
     print("Finished preprocessing data!")
