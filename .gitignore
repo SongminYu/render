@@ -168,3 +168,6 @@ utils/*.csv
 /docs/data_prep/calibration_appliance/final_energy_demand_nuts0.csv
 /dashboards/data/final_energy_demand_nuts3.csv
 /dashboards/data/building_stock_summary_nuts1.csv
+/dashboards/data/final_energy_demand_nuts1.csv
+/dashboards/data/renovation_rate.csv
+/dashboards/data/final_energy_demand_nuts0.csv

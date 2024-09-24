@@ -136,17 +136,14 @@ def change_id_heating_technology(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([26]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 21
 
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([27]), [
+        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 22
+
     df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([28]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 23
 
-    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([24, 213]), [
+    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([24, 25, 32, 213]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 299
-
-    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([27, 32]), [
-        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 22
-
-    df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([25]), [
-        DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 45
 
     df.loc[df[DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY].isin([212, 34]), [
         DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]] = 46
@@ -376,12 +373,12 @@ def preprocess_regional_reference_heating_data():
 if __name__ == '__main__':
     print("Preprocess data for dashboards...")
 
-    #preprocess_nuts1_energy_data()
-    #preprocess_nuts3_energy_data()
+    preprocess_nuts1_energy_data()
+    preprocess_nuts3_energy_data()
     #preprocess_national_reference_energy_data()
     #preprocess_regional_reference_energy_data()
 
-    #preprocess_nuts3_heating_data()
+    preprocess_nuts3_heating_data()
     #preprocess_regional_reference_heating_data()
     preprocess_nuts1_heating_data()
 
