@@ -32,6 +32,7 @@ def run_post_processor(cfg: "Config"):
     # post_processor.aggregate_region_building_stock(cfg=cfg, nuts_level=3)
     post_processor.gen_renovation_rate(cfg=cfg)
     post_processor.gen_demolition_rate(cfg=cfg)
+    post_processor.add_emission_to_fed(cfg=cfg, fed_file="final_energy_demand_nuts3")
 
 
 if __name__ == "__main__":

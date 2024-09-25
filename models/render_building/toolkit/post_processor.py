@@ -701,3 +701,35 @@ def save_dataframe(
         df.to_csv(path, index=False)
 
 
+"""
+add CO2 emission
+"""
+
+def add_emission_to_fed(cfg: "Config", fed_file: str):
+
+    def get_ef_dict():
+        # id_scenario and id_region are not considered, i.e., assuming there is only one combination of the two
+        d = {}
+        years = [int(col) for col in ef.columns if col.startswith("2")]
+        for _, row in ef.iterrows():
+            for year in years:
+                d[row["id_energy_carrier"], year] = row[str(year)]
+        return d
+
+    fed = pd.read_csv(os.path.join(cfg.output_folder, f"{fed_file}.csv"))
+    ef = pd.read_excel(os.path.join(cfg.input_folder, f"Scenario_EnergyCarrier_EmissionFactor.xlsx"))
+    ef_dict = get_ef_dict()
+    fed.rename(columns={"unit": "unit_energy_demand"}, inplace=True)
+    fed["unit_emission"] = "tCO2"
+    fed["emission"] = fed.apply(
+        lambda row: row["value"] * ef_dict[(row["id_energy_carrier"], row["year"])], axis=1
+    )
+    fed.rename(columns={"value": "energy_demand"}, inplace=True)
+    save_dataframe(
+        path=os.path.join(cfg.output_folder, f"{fed_file}_with_emission.csv"),
+        df=fed,
+        if_exists="replace"
+    )
+
+
+
