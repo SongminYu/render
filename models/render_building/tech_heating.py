@@ -32,7 +32,7 @@ class HeatingSystem:
             rdict=self.scenario.s_heating_system
         )
 
-    def init_heating_technology_main(self):
+    def init_heating_technology_main(self, building_age: int):
 
         def mark_info():
             self.scenario.location_building_num.accumulate_item(rkey=self.rkey, value=1)
@@ -53,7 +53,7 @@ class HeatingSystem:
             priority="main"
         )
         self.heating_technology_main.init_option()
-        self.heating_technology_main.init_installation_year()
+        self.heating_technology_main.init_installation_year(building_age=building_age)
         self.heating_technology_main.update_supply_temperature_space_heating()
         self.heating_technology_main.update_supply_temperature_hot_water()
         self.heating_technology_main.update_energy_intensity_space_heating()
@@ -89,7 +89,7 @@ class HeatingSystem:
         self.rkey.id_heating_system = int(list(str(self.heating_technology_main.rkey.id_heating_technology))[0])
         return action_info
 
-    def init_heating_technology_second(self):
+    def init_heating_technology_second(self, building_age: int):
         df = self.scenario.s_heating_technology_second
         df = df.loc[
             (df["id_building_type"] == self.rkey.id_building_type) &
@@ -108,7 +108,7 @@ class HeatingSystem:
                 scenario=self.scenario,
                 priority="second"
             )
-            self.heating_technology_second.init_installation_year()
+            self.heating_technology_second.init_installation_year(building_age=building_age)
             self.heating_technology_second.update_supply_temperature_space_heating()
             self.heating_technology_second.update_supply_temperature_hot_water()
             self.heating_technology_second.space_heating_contribution = self.scenario.p_heating_technology_second_contribution_space_heating.get_item(rkey)
@@ -146,9 +146,9 @@ class HeatingTechnology:
                 rdict=self.scenario.s_heating_technology_main
             )
 
-    def init_installation_year(self):
+    def init_installation_year(self, building_age: int):
         lifetime = self.get_lifetime()
-        age = random.randint(0, lifetime)
+        age = min(random.randint(0, lifetime), building_age)
         self.installation_year = self.rkey.year - age
         self.next_replace_year = self.rkey.year + lifetime - age
 
