@@ -245,7 +245,11 @@ class Building(Agent):
         self.update_heating_system_renewable_percentage()
         action_info["total_heating_demand_peak"] = self.total_heating_demand_peak
         action_info["id_heating_technology_after"] = self.heating_system.heating_technology_main.rkey.id_heating_technology
+        action_info["heating_system_renewable_percentage_before"] = None
+        action_info["heating_system_renewable_percentage_after"] = self.heating_system_renewable_percentage
+        action_info["total_energy_cost_before"] = None
         action_info["total_energy_cost_after"] = self.total_energy_cost
+        action_info["building_number"] = self.building_number
         self.scenario.heating_system_action_info.append(action_info)
 
     def init_building_district_heating_availability(self):
@@ -760,12 +764,6 @@ class Building(Agent):
         option_action_info["total_energy_cost_after"] = self.total_energy_cost
         option_action_info["building_number"] = self.building_number
         self.scenario.heating_system_action_info.append(option_action_info)
-
-
-
-
-
-
 
 
 
