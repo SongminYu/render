@@ -278,7 +278,7 @@ class BuildingEnvironment(Environment):
                 for component_name, building_component in building.building_components.items():
                     if building_component.rkey.year >= building_component.next_replace_year:
                         if random.uniform(0, 1) <= cons.PROB_POSTPONING_RENOVATION:
-                            before_renovation_status, id_building_component_option_efficiency_class = (
+                            before_renovation_status, id_building_action, id_building_component_option_efficiency_class = (
                                 building.select_component(component_name=component_name)
                             )
                             building.renovate_component(
@@ -289,7 +289,8 @@ class BuildingEnvironment(Environment):
                                 building=building,
                                 component_name=component_name,
                                 before_renovation_status=before_renovation_status,
-                                reason="lifecycle"
+                                reason="lifecycle",
+                                id_building_action=id_building_action
                             )
                         else:
                             building_component.next_replace_year += self.scenario.p_building_component_postponing_lifetime.get_item(building_component.rkey)
@@ -312,7 +313,7 @@ class BuildingEnvironment(Environment):
                                 selected_component_next_replace_year = building_component.next_replace_year
 
                         # renovated the selected building component
-                        before_renovation_status, id_building_component_option_efficiency_class = (
+                        before_renovation_status, id_building_action, id_building_component_option_efficiency_class = (
                             building.select_component(component_name=selected_component_name)
                         )
                         building.renovate_component(
@@ -323,12 +324,13 @@ class BuildingEnvironment(Environment):
                             building=building,
                             component_name=selected_component_name,
                             before_renovation_status=before_renovation_status,
-                            reason="mandatory"
+                            reason="mandatory",
+                            id_building_action=id_building_action
                         )
 
-    def record_renovation_action_info(self, building: "Building", component_name: str, before_renovation_status: dict, reason: str):
+    def record_renovation_action_info(self, building: "Building", component_name: str, before_renovation_status: dict, reason: str, id_building_action: int):
         building_component = building.building_components[component_name]
-        rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
+        rkey = building_component.rkey.make_copy().set_id({"id_building_action": id_building_action})
         capex = self.scenario.building_component_capex.get_item(rkey) * building_component.area
         total_investment = capex * self.scenario.s_building_component_cost_payback_time.get_item(rkey)
         subsidy_percentage = self.scenario.s_subsidy_building_renovation.get_item(rkey)
@@ -346,6 +348,7 @@ class BuildingEnvironment(Environment):
             "year": rkey.year,
             "reason": reason,
             "id_building_component": rkey.id_building_component,
+            "id_building_action": rkey.id_building_action,
             "component_area": before_renovation_status["component_area"],
             "id_building_component_option_before": before_renovation_status["id_building_component_option_before"],
             "id_building_component_option_after": rkey.id_building_component_option,

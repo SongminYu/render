@@ -171,3 +171,4 @@ utils/*.csv
 /dashboards/data/final_energy_demand_nuts1.csv
 /dashboards/data/renovation_rate.csv
 /dashboards/data/final_energy_demand_nuts0.csv
+/projects/local_test_ignore/

@@ -693,26 +693,27 @@ class Building(Agent):
             "component_area": building_component.area
         }
         d_option_cost = {}
-        rkey = building_component.rkey.make_copy().set_id({"id_building_action": cons.ID_BUILDING_ACTION_RENOVATION})
-        for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
-            rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
-            if self.scenario.s_building_component_availability.get_item(rkey):
-                capex = (
-                        self.scenario.building_component_capex.get_item(rkey) *
-                        building_component.area *
-                        (1 - self.scenario.s_subsidy_building_renovation.get_item(rkey))
-                )
-                self.renovate_component(
-                    component_name=component_name,
-                    id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
-                )
-                energy_cost_saving = (before_renovation_status["total_energy_cost_before"] - self.total_energy_cost)
-                d_option_cost[id_building_component_option_efficiency_class] = capex - energy_cost_saving
-        id_building_component_option_efficiency_class = dict_utility_sample(
+        for id_building_action in [cons.ID_BUILDING_ACTION_CONVENTIONAL_RENOVATION, cons.ID_BUILDING_ACTION_SERIAL_RENOVATION]:
+            rkey = building_component.rkey.make_copy().set_id({"id_building_action": id_building_action})
+            for id_building_component_option_efficiency_class in self.scenario.building_component_option_efficiency_classes.keys():
+                rkey.id_building_component_option_efficiency_class = id_building_component_option_efficiency_class
+                if self.scenario.s_building_component_availability.get_item(rkey):
+                    capex = (
+                            self.scenario.building_component_capex.get_item(rkey) *
+                            building_component.area *
+                            (1 - self.scenario.s_subsidy_building_renovation.get_item(rkey))
+                    )
+                    self.renovate_component(
+                        component_name=component_name,
+                        id_building_component_option_efficiency_class=id_building_component_option_efficiency_class
+                    )
+                    energy_cost_saving = (before_renovation_status["total_energy_cost_before"] - self.total_energy_cost)
+                    d_option_cost[(id_building_action, id_building_component_option_efficiency_class)] = capex - energy_cost_saving
+        id_building_action, id_building_component_option_efficiency_class = dict_utility_sample(
             options=dict_normalize(d_option_cost),
             utility_power=self.scenario.s_building_component_utility_power.get_item(rkey)
         )
-        return before_renovation_status, id_building_component_option_efficiency_class
+        return before_renovation_status, id_building_action, id_building_component_option_efficiency_class
 
     def renovate_component(
             self,

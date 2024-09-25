@@ -55,7 +55,7 @@ class BuildingComponent:
         if action_year - self.installation_year >= minimum_lifetime:
             self.installation_year = action_year
             self.next_replace_year = action_year + self.get_lifetime()
-            self.select_random_efficiency_class(action_year=action_year, id_building_action=cons.ID_BUILDING_ACTION_RENOVATION)
+            self.select_random_efficiency_class(action_year=action_year, id_building_action=cons.ID_BUILDING_ACTION_CONVENTIONAL_RENOVATION)
 
     def select_random_efficiency_class(self, action_year: int, id_building_action: int):
         rkey = self.rkey.make_copy()
