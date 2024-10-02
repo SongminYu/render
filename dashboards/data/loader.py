@@ -44,6 +44,7 @@ class DataSchema_Building_Stock:
     ID_EFFICIENCY_CLASS = "id_building_efficiency_class"
 
 class DataSchema_Energy_Performance:
+    ID_SCENARIO = "id_scenario"
     ID_REGION = "id_region"
     YEAR = "year"
     ID_BUILDING_TYPE = "id_building_type"
@@ -158,18 +159,24 @@ def change_id_building_type(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df[DataSchema_Building_Stock.ID_BUILDING_TYPE].isin([3, 4, 5]), [DataSchema_Building_Stock.ID_BUILDING_TYPE]] = "3-5"
     return df
 
+def change_energy_performance_distribution_to_share(df: pd.DataFrame) -> pd.DataFrame:
+    # Create a new column for totals based on YEAR and ID_SCENARIO
+    df['total_building_number'] = df.groupby([DataSchema_Energy_Performance.YEAR,
+                                              DataSchema_Energy_Performance.ID_SCENARIO])[DataSchema_Energy_Performance.BUILDING_NUMBER].transform('sum')
 
-def change_building_number_to_percentage(df: pd.DataFrame) -> pd.DataFrame:
-    years = list(df[DataSchema_Energy_Performance.YEAR].unique())
-    totals_per_year = {}
-    for year in years:
-        df_year = df[df[DataSchema_Energy_Performance.YEAR] == year]
-        total_building_number = df_year[DataSchema_Energy_Performance.BUILDING_NUMBER].sum()
-        totals_per_year[year] = total_building_number
-
-    df[DataSchema_Energy_Performance.PERCENTAGE_BUILDING_NUMBER] = df.apply(lambda row: row[DataSchema_Energy_Performance.BUILDING_NUMBER] / totals_per_year[row[DataSchema_Energy_Performance.YEAR]], axis=1)
+    # Calculate the share
+    df[DataSchema_Energy_Performance.PERCENTAGE_BUILDING_NUMBER] = df[DataSchema_Energy_Performance.BUILDING_NUMBER] / df['total_building_number']
     return df
 
+def change_heating_tech_count_to_percentage(df: pd.DataFrame) -> pd.DataFrame:
+    # Create a new column for totals based on YEAR and ID_SCENARIO
+    df['total_building_number'] = df.groupby([DataSchema_Nuts1_Building_Stock.ID_SCENARIO,
+                                              DataSchema_Nuts1_Building_Stock.ID_REGION,
+                                              DataSchema_Nuts1_Building_Stock.YEAR])[DataSchema_Nuts1_Building_Stock.BUILDING_NUMBER].transform('sum')
+
+    # Calculate the percentage
+    df[DataSchema_Heating_Reference.SHARE_PERCENTAGE] = df[DataSchema_Nuts1_Building_Stock.BUILDING_NUMBER] / df['total_building_number'] * 100
+    return df
 
 # For some states in regional reference data we do not differentiate sectors
 def handle_mixed_sector(df: pd.DataFrame) -> pd.DataFrame:
@@ -306,7 +313,8 @@ def preprocess_nuts3_heating_data():
     df = change_id_building_type(df)
 
     # Heating Technology preprocessed table
-    grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
+    grouped_df = df.groupby([DataSchema_Nuts1_Building_Stock.ID_SCENARIO,
+                             DataSchema_Building_Stock.ID_REGION,
                              DataSchema_Building_Stock.YEAR,
                              DataSchema_Building_Stock.MAIN_HEATING_TECHNOLOGY]).size().reset_index(
         name=DataSchema_Heating_Reference.BUILDING_NUMBER)
@@ -318,13 +326,14 @@ def preprocess_nuts3_heating_data():
     grouped_df.to_csv(NUTS3_HEATING_TECHNOLOGY_PATH + "_preprocessed.csv", index=False)
 
     # Building efficiency class preprocessed table
-    grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
+    grouped_df = df.groupby([DataSchema_Nuts1_Building_Stock.ID_SCENARIO,
+                             DataSchema_Building_Stock.ID_REGION,
                              DataSchema_Building_Stock.YEAR,
                              DataSchema_Building_Stock.ID_BUILDING_TYPE,
                              DataSchema_Building_Stock.ID_EFFICIENCY_CLASS]).size().reset_index(
         name=DataSchema_Heating_Reference.BUILDING_NUMBER)
 
-    grouped_df = change_building_number_to_percentage(grouped_df)
+    grouped_df = change_energy_performance_distribution_to_share(grouped_df)
 
     grouped_df.to_csv(NUTS3_EFFICIENCY_CLASS_PATH + "_preprocessed.csv", index=False)
 
@@ -333,33 +342,41 @@ def preprocess_nuts1_heating_data():
     print("Preprocess nuts1 heating data...")
     df = pd.read_csv(NUTS1_BUILDING_PATH + ".csv")
     df = df[df['id_sector'] == 6]  # Reference is only for Sector 6
-    #df = df[(df['id_sector'] == 6) & (df['id_scenario'] == 10)]
     df = change_id_heating_technology(df)
-    df = change_id_building_type(df)
 
     # Heating Technology preprocessed table
-    grouped_df = df.groupby([DataSchema_Nuts1_Building_Stock.ID_REGION,
+    grouped_df = df.groupby([DataSchema_Nuts1_Building_Stock.ID_SCENARIO,
+                             DataSchema_Nuts1_Building_Stock.ID_REGION,
                              DataSchema_Nuts1_Building_Stock.YEAR,
                              DataSchema_Nuts1_Building_Stock.MAIN_HEATING_TECHNOLOGY])[DataSchema_Nuts1_Building_Stock.BUILDING_NUMBER].sum().reset_index(
         name=DataSchema_Heating_Reference.BUILDING_NUMBER)
+
+    # Calculate SHARE_PERCENTAGE
+    grouped_df = change_heating_tech_count_to_percentage(grouped_df)
 
     grouped_df = grouped_df.rename(
         columns={DataSchema_Nuts1_Building_Stock.MAIN_HEATING_TECHNOLOGY: DataSchema_Heating_Reference.ID_HEATING_TECHNOLOGY}
     )
 
-    grouped_df[DataSchema_Heating_Reference.BUILDING_NUMBER] = grouped_df[DataSchema_Heating_Reference.BUILDING_NUMBER].round().astype(int)
+    # grouped_df[DataSchema_Heating_Reference.BUILDING_NUMBER] = grouped_df[DataSchema_Heating_Reference.BUILDING_NUMBER].round().astype(int)
 
     grouped_df.to_csv(NUTS1_HEATING_TECHNOLOGY_PATH + "_preprocessed.csv", index=False)
 
-    # Building efficiency class preprocessed table
+def preprocess_nuts1_efficiency_class_data():
     print("Preprocess nuts1 efficiency class data...")
-    grouped_df = df.groupby([DataSchema_Building_Stock.ID_REGION,
+    df = pd.read_csv(NUTS1_BUILDING_PATH + ".csv")
+    df = df[df['id_sector'] == 6]  # Reference is only for Sector 6
+    df = change_id_building_type(df)
+
+    # Building efficiency class preprocessed table
+    grouped_df = df.groupby([DataSchema_Nuts1_Building_Stock.ID_SCENARIO,
+                             DataSchema_Building_Stock.ID_REGION,
                              DataSchema_Building_Stock.YEAR,
                              DataSchema_Building_Stock.ID_BUILDING_TYPE,
                              DataSchema_Building_Stock.ID_EFFICIENCY_CLASS])[DataSchema_Nuts1_Building_Stock.BUILDING_NUMBER].sum().reset_index(
         name=DataSchema_Heating_Reference.BUILDING_NUMBER)
 
-    grouped_df = change_building_number_to_percentage(grouped_df)
+    grouped_df = change_energy_performance_distribution_to_share(grouped_df)
 
     grouped_df.to_csv(NUTS1_EFFICIENCY_CLASS_PATH + "_preprocessed.csv", index=False)
 
@@ -376,11 +393,13 @@ if __name__ == '__main__':
 
     # preprocess_nuts1_energy_data()
     # preprocess_nuts3_energy_data()
-    #preprocess_national_reference_energy_data()
-    #preprocess_regional_reference_energy_data()
+    # preprocess_national_reference_energy_data()
+    # preprocess_regional_reference_energy_data()
 
-    # preprocess_nuts3_heating_data()
-    preprocess_regional_reference_heating_data()
     preprocess_nuts1_heating_data()
+    # preprocess_nuts1_efficiency_class_data()
+    # preprocess_nuts3_heating_data()
+    # preprocess_regional_reference_heating_data()
+
 
     print("Finished preprocessing data!")
