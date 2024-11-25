@@ -2,6 +2,7 @@ import dash
 from dash import html, dcc
 
 from dashboards.data.loader import DataSchema_Heating_Reference as DataSchema
+from dashboards.data.loader import DataSchema_Nuts1_Building_Stock as DataSchema_Results
 from dashboards.data import loader
 from dashboards.components import (
     dots_bar_chart,
@@ -15,6 +16,9 @@ from dashboards.components import (
 dash.register_page(__name__, path='/heating_technologies', name="Heating Technologies")
 
 # -------------------- IDs --------------------
+SCENARIO_DROPDOWN = "scenario-dropdown-heating"
+SELECT_ALL_SCENARIOS_BUTTON = "select-all-scenarios-button-heating"
+
 REGION_DROPDOWN = "region-dropdown-heating"
 SELECT_ALL_REGIONS_BUTTON = "select-all-regions-button-heating"
 
@@ -38,8 +42,9 @@ id_heating_technologies.sort()
 regions = list(data[DataSchema.ID_REGION].unique())
 regions.sort()
 
-dropdowns = [{'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
-             {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR}, ]
+dropdowns = [{'id': SCENARIO_DROPDOWN, 'column': DataSchema_Results.ID_SCENARIO},
+             {'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+             {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},]
 
 x = DataSchema.ID_REGION
 x_options = regions
@@ -50,7 +55,7 @@ category_options = id_heating_technologies
 # -------------------- DATA TABLES --------------------
 region_table = data_table.render(data,
                                  id_datatable=DATA_TABLE,
-                                 title='Model Results: Amount of Buildings',
+                                 title='Model Results: Number of Buildings',
                                  dropdowns=dropdowns,
                                  x=category,
                                  x_options=category_options,
@@ -60,8 +65,9 @@ region_table = data_table.render(data,
 
 reference_table = data_table.render(reference,
                                     id_datatable=DATA_TABLE_REFERENCE,
-                                    title='Reference Data: Amount of Buildings',
-                                    dropdowns=dropdowns,
+                                    title='Reference Data: Number of Buildings',
+                                    dropdowns=[{'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+                                               {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},],
                                     x=category,
                                     x_options=category_options,
                                     y=y,
@@ -71,6 +77,7 @@ reference_table = data_table.render(reference,
 # -------------------- PAGE LAYOUT --------------------
 layout = html.Div(children=[
     html.H2("Heating Technologies"),
+    dropdown.render(data, reference, SCENARIO_DROPDOWN, DataSchema_Results.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
     dropdown.render(data, reference, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
     dropdown.render(reference, reference, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
     dcc.Loading(children=[html.H4("Model Results", style={'textAlign': 'center'}),
@@ -78,7 +85,8 @@ layout = html.Div(children=[
                                                 reference,
                                                 id_dots_barchart=BAR_CHART,
                                                 dropdowns=dropdowns,
-                                                reference_dropdowns=dropdowns,
+                                                reference_dropdowns=[{'id': REGION_DROPDOWN, 'column': DataSchema.ID_REGION},
+                                                                     {'id': YEAR_DROPDOWN, 'column': DataSchema.YEAR},],
                                                 x=x,
                                                 y=y,
                                                 category=category),

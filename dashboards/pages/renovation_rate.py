@@ -50,21 +50,26 @@ reference_table = html.Div(className='table-container', id=DATA_TABLE, children=
     style_cell={'textAlign': 'center'},
 )])
 
-data_df = data[data[DataSchema.ID_SECTOR] == 6].drop(["id_scenario", ], axis=1)
+data_df = data[data[DataSchema.ID_SECTOR] == 6] #.drop(["id_scenario", ], axis=1)
 data_df = data_df[data_df[DataSchema.YEAR].isin([2010, 2011, 2012, 2013, 2014, 2015])]
+
+# Identify the scenarios in results
+scenarios = list(data[DataSchema.ID_SCENARIO].unique())
+scenarios.sort()
 
 # Combine rows in time periods
 time_periods = [(2010, 2012), (2013, 2015), (2010, 2015)]
 results_list = []
 
-for start_year, end_year in time_periods:
-    filtered_df = data_df[data_df['year'].between(start_year, end_year)]
-    average_df = filtered_df[['id_region', 'id_sector', 'wall', 'window', 'roof', 'basement', 'average']].mean()
-    result_df = pd.DataFrame(average_df).transpose()
-    result_df['year'] = f'{start_year}-{end_year}'
-    result_df = result_df[
-        ['id_region', 'id_sector', 'year', 'wall', 'window', 'roof', 'basement', 'average']]  # Reorder columns
-    results_list.append(result_df)
+for scenario in scenarios:
+    for start_year, end_year in time_periods:
+        filtered_df = data_df[data_df['year'].between(start_year, end_year) & (data_df['id_scenario'] == scenario)]
+        average_df = filtered_df[['id_scenario', 'id_region', 'id_sector', 'wall', 'window', 'roof', 'basement', 'average']].mean()
+        result_df = pd.DataFrame(average_df).transpose()
+        result_df['year'] = f'{start_year}-{end_year}'
+        result_df = result_df[
+            ['id_scenario', 'id_region', 'id_sector', 'year', 'wall', 'window', 'roof', 'basement', 'average']]  # Reorder columns
+        results_list.append(result_df)
 
 final_result_df = pd.concat(results_list, ignore_index=True)
 
