@@ -122,7 +122,7 @@ def change_ec_to_renewables(df: pd.DataFrame) -> pd.DataFrame:
     df.loc[df['id_energy_carrier'].isin([14, 15, 19]), ['id_energy_carrier']] = 24
 
     # for id_sector = 6 we change 12 to 24
-    df.loc[(df['id_sector'] == '6') & (df['id_energy_carrier'] == 12), ['id_energy_carrier']] = 24
+    df.loc[(df['id_energy_carrier'] == 12), ['id_energy_carrier']] = 24
 
     # change 7 to 3
     df.loc[(df['id_energy_carrier'] == 7), ['id_energy_carrier']] = 3
@@ -394,9 +394,9 @@ if __name__ == '__main__':
     # preprocess_nuts1_energy_data()
     # preprocess_nuts3_energy_data()
     # preprocess_national_reference_energy_data()
-    # preprocess_regional_reference_energy_data()
+    preprocess_regional_reference_energy_data()
 
-    preprocess_nuts1_heating_data()
+    # preprocess_nuts1_heating_data()
     # preprocess_nuts1_efficiency_class_data()
     # preprocess_nuts3_heating_data()
     # preprocess_regional_reference_heating_data()

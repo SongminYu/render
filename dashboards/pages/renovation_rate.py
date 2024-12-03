@@ -51,14 +51,18 @@ reference_table = html.Div(className='table-container', id=DATA_TABLE, children=
 )])
 
 data_df = data[data[DataSchema.ID_SECTOR] == 6] #.drop(["id_scenario", ], axis=1)
-data_df = data_df[data_df[DataSchema.YEAR].isin([2010, 2011, 2012, 2013, 2014, 2015])]
+data_df = data_df[data_df[DataSchema.YEAR].isin([2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
+                                                 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029,
+                                                 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039,
+                                                 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049,
+                                                 2050])]
 
 # Identify the scenarios in results
 scenarios = list(data[DataSchema.ID_SCENARIO].unique())
 scenarios.sort()
 
 # Combine rows in time periods
-time_periods = [(2010, 2012), (2013, 2015), (2010, 2015)]
+time_periods = [(2010, 2012), (2013, 2015), (2010, 2015), (2025, 2030), (2030, 2035), (2035, 2040), (2040, 2045), (2045, 2050)]
 results_list = []
 
 for scenario in scenarios:

@@ -79,7 +79,7 @@ layout = html.Div(children=[
     html.H2("Energy Performance"),
     dropdown.render(data, reference, SCENARIO_DROPDOWN, DataSchema_Results.ID_SCENARIO, SELECT_ALL_SCENARIOS_BUTTON),
     dropdown.render(data, reference, REGION_DROPDOWN, DataSchema.ID_REGION, SELECT_ALL_REGIONS_BUTTON),
-    dropdown.render(reference, reference, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
+    dropdown.render(data, reference, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
     dcc.Loading(children=[html.H4("Model Results", style={'textAlign': 'center'}),
                           dots_bar_chart.render(data,
                                                 reference,
