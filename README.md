@@ -1,4 +1,4 @@
-# Introduction
+# RENDER Framework and Models
 
 ## RENDER Framework
 
@@ -17,6 +17,8 @@ Technically, `RENDER` benefits from two open-source packages:
 By using `RENDER`, we aim to develop a series of agent-based energy demand models, among which the first one is `RENDER-Building` developed in the RokiG project in [Energiewendebauen](https://wissen-digital-ewb.de/en/) funded by the Federal Ministry of Economic Affairs and Climate Action (BMWK) of Germany under the [Energy Research Program](https://www.energieforschung.de/forschungsmissionen-fuer-die-energiewende/energieforschungsprogramm-des-bmwk). The other models developed with `RENDER` will be added in this repository in the future.
 
 ## RENDER-Building
+
+### Model introduction
 
 `RENDER-Building` is an agent-based model for the building sector in Germany to explore its decarbonization pathways across various scenarios. 
 The whole German residential and non-residential building stock is represented by ~2M building agents configured in detail (see Figure 1). 
@@ -40,6 +42,13 @@ where their bounded rationality is reflected in the modeling of their choices be
 </figure>
 
 Finally, the model produces the output including energy demand, CO2 emission, building stock, as well as the retrofitting actions happened in the simulation.
+For more details, please refer to our working paper. 
+
+### How to run RENDER-Building
+
+The code of `RENDER` framework and the `RENDER-Building` model are saved in `models`. The data for running the model is saved separately saved for different projects. 
+For example, for the project `PROJECT_NAME`, there is a folder `projects/PROJECT_NAME` containing the input data in `projects/PROJECT_NAME/input`. 
+Next to the input folder, by running the `projects/PROJECT_NAME/main.py` file, the model is started and the output files will be created and saved in `projects/PROJECT_NAME/output`. 
 
 ## License
 
@@ -47,7 +56,7 @@ Copyright © 2024 Fraunhofer ISI
 
 The RENDER framework and the RENDER models are licensed under the Apache License, Version 2.0 (the "License"). 
 You may not use the files in this repository except in compliance with the License. 
-You may obtain a copy of the License in [LICENSE](LICENSE.md) or at http://www.apache.org/licenses/LICENSE-2.0.
+You may obtain a copy of the License in [LICENSE.md](LICENSE.md) or at http://www.apache.org/licenses/LICENSE-2.0.
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
