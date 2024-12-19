@@ -14,7 +14,7 @@ Technically, `RENDER` benefits from two open-source packages:
 
 - Second is `tab2dict`, which is a data management tool designed for developing scientific models ([repo](https://github.com/SongminYu/tab2dict)). The package converts formatted input dataframes (saved in `.xlsx` or `.csv` files) into Python dictionaries for efficient accessing. It also provides functions for collecting data in the simulation and produce output files. `tab2dict` was initially developed as an internal module of `RENDER` for dealing large input and output. Then, it was separated and published as an open-source package. 
 
-By using `RENDER`, we aim to develop a series of agent-based energy demand models, among which the first one is `RENDER-Building` developed in the RokiG project in [Energiewendebauen](https://wissen-digital-ewb.de/en/) partially funded by the Federal Ministry of Economic Affairs and Climate Action (BMWK) of Germany under the [Energy Research Program](https://www.energieforschung.de/forschungsmissionen-fuer-die-energiewende/energieforschungsprogramm-des-bmwk). The other models developed with `RENDER` will be added in this repository in the future.
+By using `RENDER`, we aim to develop a series of agent-based energy demand models, among which the first one is `RENDER-Building` partially developed in the RokiG project in [Energiewendebauen](https://wissen-digital-ewb.de/en/), which is funded by the Federal Ministry of Economic Affairs and Climate Action (BMWK) of Germany under the [Energy Research Program](https://www.energieforschung.de/forschungsmissionen-fuer-die-energiewende/energieforschungsprogramm-des-bmwk). The other models developed with `RENDER` will be added in this repository in the future.
 
 ## RENDER-Building
 
