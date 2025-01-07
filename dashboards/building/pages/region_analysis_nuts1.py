@@ -1,14 +1,9 @@
 import dash
 from dash import html, dcc
 
-from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
-from dashboards.data import loader
-from dashboards.components import (
-    dots_bar_chart,
-    data_table,
-    dropdown,
-    comparison_table,
-)
+from dashboards.building.data.loader import DataSchema_Final_Energy as DataSchema
+from dashboards.building.data import loader
+from dashboards.building.components import comparison_table, dropdown, data_table, dots_bar_chart
 
 # Dashboard to analyze the energy demand in different regions.
 # For every region we analyze the energy carriers

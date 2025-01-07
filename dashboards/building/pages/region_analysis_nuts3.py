@@ -1,13 +1,9 @@
 import dash
 from dash import html, dcc
 
-from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
-from dashboards.data import loader
-from dashboards.components import (
-    dropdown,
-    sub_dropdown,
-    stacked_bar_chart,
-)
+from dashboards.building.data.loader import DataSchema_Final_Energy as DataSchema
+from dashboards.building.data import loader
+from dashboards.building.components import stacked_bar_chart, dropdown, sub_dropdown
 
 # Dashboard to analyze the energy demand in one (or multiple) regions over time.
 # For every year we analyze the energy carriers and end uses

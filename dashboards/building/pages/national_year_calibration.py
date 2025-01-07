@@ -1,15 +1,9 @@
 import dash
 from dash import html, dcc
 
-from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
-from dashboards.data import loader
-from dashboards.components import (
-    stacked_bar_chart,
-    data_table,
-    dropdown,
-    sub_dropdown,
-    comparison_table,
-)
+from dashboards.building.data.loader import DataSchema_Final_Energy as DataSchema
+from dashboards.building.data import loader
+from dashboards.building.components import stacked_bar_chart, comparison_table, dropdown, sub_dropdown, data_table
 
 # Dashboard to analyze the energy demand in one (or multiple) years.
 # We want to analyze the energy carriers in different end uses.
@@ -94,12 +88,12 @@ layout = html.Div(children=[
                         DataSchema.ID_SECTOR, SELECT_ALL_SUBSECTORS_BUTTON),
     dropdown.render(data, reference, YEAR_DROPDOWN, DataSchema.YEAR, SELECT_ALL_YEARS_BUTTON),
     dcc.Loading(children=[stacked_bar_chart.render(data,
-                             id_barchart=BAR_CHART,
-                             dropdowns=dropdowns,
-                             x=x,
-                             y=y,
-                             category=category),
-    html.Div(className='flex-container', children=[end_use_table, reference_table]),
-    comparison_table.render("comparison-table-enduse", DATA_TABLE, DATA_TABLE_REFERENCE,
+                                                   id_barchart=BAR_CHART,
+                                                   dropdowns=dropdowns,
+                                                   x=x,
+                                                   y=y,
+                                                   category=category),
+                          html.Div(className='flex-container', children=[end_use_table, reference_table]),
+                          comparison_table.render("comparison-table-enduse", DATA_TABLE, DATA_TABLE_REFERENCE,
                             "absolute-diff-table-enduse", "relative-diff-table-enduse", category=category)]),
 ], )

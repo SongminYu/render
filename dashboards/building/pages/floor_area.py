@@ -1,15 +1,10 @@
 import dash
 from dash import html
 
-from dashboards.data.loader import DataSchema_Floor_Area as DataSchema
-from dashboards.data import loader
+from dashboards.building.data.loader import DataSchema_Floor_Area as DataSchema
+from dashboards.building.data import loader
 
-
-from dashboards.components import (
-    bar_chart_filtered,
-    dropdown,
-    sub_dropdown,
-)
+from dashboards.building.components import dropdown, sub_dropdown, bar_chart_filtered
 
 # Simple dashboard which displays the floor area by id_building_type
 

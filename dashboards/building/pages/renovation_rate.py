@@ -1,8 +1,8 @@
 import dash
 from dash import html, dcc, dash_table
 
-from dashboards.data.loader import DataSchema_Renovation_Rate as DataSchema
-from dashboards.data import loader
+from dashboards.building.data.loader import DataSchema_Renovation_Rate as DataSchema
+from dashboards.building.data import loader
 
 import pandas as pd
 

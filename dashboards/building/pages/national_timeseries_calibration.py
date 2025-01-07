@@ -1,15 +1,9 @@
 import dash
 from dash import html, dcc
 
-from dashboards.data.loader import DataSchema_Final_Energy as DataSchema
-from dashboards.data import loader
-from dashboards.components import (
-    data_table,
-    dropdown,
-    sub_dropdown,
-    comparison_table,
-    line_bar_chart,
-)
+from dashboards.building.data.loader import DataSchema_Final_Energy as DataSchema
+from dashboards.building.data import loader
+from dashboards.building.components import comparison_table, dropdown, sub_dropdown, data_table, line_bar_chart
 
 # Dashboard to analyze the energy demand over time.
 # We want to analyze energy carriers and different end uses.
@@ -254,7 +248,7 @@ layout = html.Div(children=[
         line_bar_chart.render(data, reference, LINE_BAR_CHART_EC, dropdowns, reference_dropdowns, x, y, category),
         html.Div(className='flex-container', children=[ec_table, ec_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EC, DATA_TABLE_EC, DATA_TABLE_REFERENCE_EC,
-                                DATA_TABLE_ABSOLUTE_DIFF_EC, DATA_TABLE_RELATIVE_DIFF_EC, category=x,), ]),
+                                DATA_TABLE_ABSOLUTE_DIFF_EC, DATA_TABLE_RELATIVE_DIFF_EC, category=x, ), ]),
     html.Hr(),
     # End use analysis
     html.H4("Analysis by End use", style={'textAlign': 'center'}),
@@ -262,7 +256,7 @@ layout = html.Div(children=[
         line_bar_chart.render(data, reference, LINE_BAR_CHART_EU, dropdowns, reference_dropdowns, x, y, enduse),
         html.Div(className='flex-container', children=[eu_table, eu_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EU, DATA_TABLE_EU, DATA_TABLE_REFERENCE_EU,
-                                DATA_TABLE_ABSOLUTE_DIFF_EU, DATA_TABLE_RELATIVE_DIFF_EC, category=x,), ]),
+                                DATA_TABLE_ABSOLUTE_DIFF_EU, DATA_TABLE_RELATIVE_DIFF_EC, category=x, ), ]),
     html.Hr(),
     # Energy carrier analysis by different end uses
     html.H4("Analysis by Energy Carrier for end use 1", style={'textAlign': 'center'}),
@@ -271,7 +265,7 @@ layout = html.Div(children=[
                               category),
         html.Div(className='flex-container', children=[ec_1_table, ec_1_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EC_1, DATA_TABLE_EC_1, DATA_TABLE_REFERENCE_EC_1,
-                                DATA_TABLE_ABSOLUTE_DIFF_EC_1, DATA_TABLE_RELATIVE_DIFF_EC_1, category=x,), ]),
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_1, DATA_TABLE_RELATIVE_DIFF_EC_1, category=x, ), ]),
     html.Hr(),
     html.H4("Analysis by Energy Carrier for end use 2", style={'textAlign': 'center'}),
     dcc.Loading(children=[
@@ -279,7 +273,7 @@ layout = html.Div(children=[
                               category),
         html.Div(className='flex-container', children=[ec_2_table, ec_2_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EC_2, DATA_TABLE_EC_2, DATA_TABLE_REFERENCE_EC_2,
-                                DATA_TABLE_ABSOLUTE_DIFF_EC_2, DATA_TABLE_RELATIVE_DIFF_EC_2, category=x,), ]),
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_2, DATA_TABLE_RELATIVE_DIFF_EC_2, category=x, ), ]),
     html.Hr(),
     html.H4("Analysis by Energy Carrier for end use 3", style={'textAlign': 'center'}),
     dcc.Loading(children=[
@@ -287,7 +281,7 @@ layout = html.Div(children=[
                               category),
         html.Div(className='flex-container', children=[ec_3_table, ec_3_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EC_3, DATA_TABLE_EC_3, DATA_TABLE_REFERENCE_EC_3,
-                                DATA_TABLE_ABSOLUTE_DIFF_EC_3, DATA_TABLE_RELATIVE_DIFF_EC_3, category=x,), ]),
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_3, DATA_TABLE_RELATIVE_DIFF_EC_3, category=x, ), ]),
     html.Hr(),
     html.H4("Analysis by Energy Carrier for end use 4", style={'textAlign': 'center'}),
     dcc.Loading(children=[
@@ -295,6 +289,6 @@ layout = html.Div(children=[
                               category),
         html.Div(className='flex-container', children=[ec_4_table, ec_4_reference_table]),
         comparison_table.render(DATA_TABLE_COMPARISON_EC_4, DATA_TABLE_EC_4, DATA_TABLE_REFERENCE_EC_4,
-                                DATA_TABLE_ABSOLUTE_DIFF_EC_4, DATA_TABLE_RELATIVE_DIFF_EC_4, category=x,), ]),
+                                DATA_TABLE_ABSOLUTE_DIFF_EC_4, DATA_TABLE_RELATIVE_DIFF_EC_4, category=x, ), ]),
 
 ], )
