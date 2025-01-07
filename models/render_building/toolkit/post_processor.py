@@ -44,6 +44,7 @@ AGG_COLS = {
     'basement_area': 'sum',
     'cooling_demand_per_m2': 'mean',
     'heating_demand_per_m2': 'mean',
+    'total_heating_per_m2_norm': 'mean',
     'hot_water_demand_per_person': 'mean',
     'hot_water_demand_per_m2': 'mean',
     'occupancy_rate': 'mean',

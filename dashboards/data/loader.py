@@ -391,15 +391,15 @@ def preprocess_regional_reference_heating_data():
 if __name__ == '__main__':
     print("Preprocess data for dashboards...")
 
-    # preprocess_nuts1_energy_data()
-    # preprocess_nuts3_energy_data()
-    # preprocess_national_reference_energy_data()
+    preprocess_nuts1_energy_data()
+    preprocess_nuts3_energy_data()
+    preprocess_national_reference_energy_data()
     preprocess_regional_reference_energy_data()
 
-    # preprocess_nuts1_heating_data()
-    # preprocess_nuts1_efficiency_class_data()
-    # preprocess_nuts3_heating_data()
-    # preprocess_regional_reference_heating_data()
+    preprocess_nuts1_heating_data()
+    preprocess_nuts1_efficiency_class_data()
+    preprocess_nuts3_heating_data()
+    preprocess_regional_reference_heating_data()
 
 
     print("Finished preprocessing data!")
