@@ -221,6 +221,10 @@ class Building(Agent):
         self.heating_system.init_system_type()
         self.heating_system.init_heating_technology_main(building_age=self.rkey.year - self.construction_year)
         self.heating_system.init_heating_technology_second(building_age=self.rkey.year - self.construction_year)
+        self.heating_system.heating_technology_main.init_heating_technology_size(
+            heating_demand_profile=self.heating_demand_profile,
+            hot_water_profile=self.hot_water_profile
+        )
         self.heating_system.heating_technologies = [
             self.heating_system.heating_technology_main,
             self.heating_system.heating_technology_second
@@ -775,7 +779,9 @@ class Building(Agent):
 
 
 
-
+    """
+    code not used (should check if unnecessary data exists due to this part)
+    """
     def conduct_sync_renovation(self, trigger_type: str, trigger_id: str or int, action_year: int):
         # We don't consider sync_renovation in initialization but in future projection.
         sync_renovation_actions = self.get_sync_renovation_actions(trigger_type, trigger_id)

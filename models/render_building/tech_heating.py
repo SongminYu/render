@@ -128,6 +128,7 @@ class HeatingTechnology:
         self.rkey = rkey
         self.scenario = scenario
         self.priority = priority
+        self.heating_technology_size = 0
         self.supply_temperature_space_heating = 0
         self.supply_temperature_hot_water = 0
         self.space_heating_contribution = 1
@@ -151,6 +152,19 @@ class HeatingTechnology:
         age = min(random.randint(0, lifetime), building_age)
         self.installation_year = self.rkey.year - age
         self.next_replace_year = self.rkey.year + lifetime - age
+
+    def init_heating_technology_size(self, heating_demand_profile: np.array, hot_water_profile: np.array,):
+        heating_technology_demand_profile = (
+            self.space_heating_contribution * heating_demand_profile +
+            self.hot_water_contribution * hot_water_profile
+        )
+        rkey = self.rkey.make_copy()
+        rkey.id_energy_carrier = self.scenario.r_heating_technology_energy_carrier.get_item(rkey=rkey)[0]  # for HPs, there are two energy carriers and the first one in the returned list is electricity
+        heating_technology_efficiency = self.scenario.s_heating_technology_efficiency.get_item(rkey)
+        self.heating_technology_size = np.quantile(
+            heating_technology_demand_profile,
+            1 - self.scenario.p_heating_technology_size_quantile.get_item(rkey)
+        ) / heating_technology_efficiency
 
     def get_lifetime(self):
         return random.randint(
@@ -242,23 +256,24 @@ class HeatingTechnology:
 
         def get_heating_technology_size():
             heating_technology_demand_profile = (
-                    self.space_heating_contribution * heating_demand_profile +
-                    self.hot_water_contribution * hot_water_profile
+                self.space_heating_contribution * heating_demand_profile +
+                self.hot_water_contribution * hot_water_profile
             )
-            return heating_technology_demand_profile.max() * 0.75  # taking multiplication instead of quantile
-            # return np.quantile(
-            #     heating_technology_demand_profile,
-            #     1 - self.scenario.p_heating_technology_size_quantile.get_item(self.rkey)
-            # )
+            rkey.id_energy_carrier = self.scenario.r_heating_technology_energy_carrier.get_item(rkey=rkey)[0] # for HPs, there are two energy carriers and the first one in the returned list is electricity
+            heating_technology_efficiency = self.scenario.s_heating_technology_efficiency.get_item(rkey)
+            return np.quantile(
+                heating_technology_demand_profile,
+                1 - self.scenario.p_heating_technology_size_quantile.get_item(rkey)
+            ) / heating_technology_efficiency
 
         rkey = self.rkey.make_copy()
-        heating_technology_size = get_heating_technology_size()
         total_heating_demand = np.sum(heating_demand_profile) + np.sum(hot_water_profile)
         d_option_cost = {}
         d_option_action_info = {}
         for id_heating_technology in self.optional_heating_technologies:
             rkey.id_heating_technology = id_heating_technology
             rkey = self.update_action_type(rkey=rkey, new_construction=new_construction)
+            heating_technology_size = get_heating_technology_size()
             if self.scenario.s_heating_technology_availability.get_item(rkey):
                 if heating_technology_size < self.scenario.p_heating_technology_cost_criterion_small.get_item(rkey):
                     scale = "small"
@@ -336,6 +351,7 @@ class HeatingTechnology:
             options=dict_normalize(d_option_cost),
             utility_power=self.scenario.s_heating_technology_utility_power.get_item(rkey)
         )
+        self.heating_technology_size = d_option_action_info[self.rkey.id_heating_technology]["heating_technology_size"]
         return d_option_action_info[self.rkey.id_heating_technology]
 
     def update_action_type(self, rkey: "BuildingKey", new_construction: bool = False):
