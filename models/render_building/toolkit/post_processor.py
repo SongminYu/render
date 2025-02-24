@@ -14,6 +14,7 @@ from utils.logger import get_logger
 
 log = get_logger(__name__)
 
+# TODO: simplify the key_col and agg_col setup
 
 """
 Process region building stock --> final energy demand, building stock summary
