@@ -25,7 +25,8 @@ BSS = "building_stock_summary"
 FED = "final_energy_demand"
 PV = "pv_generation"
 HT = "heating_tech"
-KEY_COLS = [
+
+BASE_KEY_COLS = [
     'id_scenario',
     'id_region',
     'id_sector',
@@ -36,20 +37,9 @@ KEY_COLS = [
     'id_building_location',
     'year',
 ]
-AGG_COLS = {
-    'total_living_area': 'sum',
-    'unit_number': 'sum',
-    'population': 'sum',
-    'wall_area': 'sum',
-    'window_area': 'sum',
-    'roof_area': 'sum',
-    'basement_area': 'sum',
-    'cooling_demand_per_m2': 'mean',
-    'heating_demand_per_m2': 'mean',
-    'total_heating_per_m2_norm': 'mean',
-    'hot_water_demand_per_person': 'mean',
-    'hot_water_demand_per_m2': 'mean',
-    'occupancy_rate': 'mean',
+
+FED_AGG_COLS = {
+    'value': 'sum'
 }
 
 PV_AGG_COLS = {
@@ -59,25 +49,38 @@ PV_AGG_COLS = {
     "pv_2_grid": "sum",
 }
 
-HT_KEY_COLS = [
-    'id_scenario',
-    'id_region',
-    'id_sector',
-    'id_subsector',
-    'id_building_type',
-    'id_building_construction_period',
-    'id_building_efficiency_class',
-    'id_building_location',
-    'year',
-    'heating_system_main_id_heating_technology',
-    'heating_system_main_space_heating_energy_carrier_1_id_energy_carrier',
-]
+BSS_AGG_COLS = {
+    'total_living_area': 'sum',
+    'unit_number': 'sum',
+    'population': 'sum',
+    'wall_area': 'sum',
+    'window_area': 'sum',
+    'roof_area': 'sum',
+    'basement_area': 'sum',
+    'appliance_electricity_demand': 'sum',
+    'appliance_electricity_demand_per_person': 'mean',
+    'hot_water_demand': 'sum',
+    'hot_water_demand_per_person': 'mean',
+    'hot_water_demand_per_m2': 'mean',
+    'cooling_demand': 'sum',
+    'cooling_demand_per_m2': 'mean',
+    'cooling_demand_norm': 'sum',
+    'cooling_demand_per_m2_norm': 'mean',
+    'heating_demand': 'sum',
+    'heating_demand_per_m2': 'mean',
+    'total_heating_per_m2': 'mean',
+    'heating_demand_norm': 'sum',
+    'heating_demand_per_m2_norm': 'mean',
+    'total_heating_per_m2_norm': 'mean',
+    'occupancy_rate': 'mean',
+    'building_number': 'sum'
+}
 
 HT_AGG_COLS = {"building_number": 'sum'}
 
 def get_base_d(row):
     base_d = {}
-    for key_col in KEY_COLS:
+    for key_col in BASE_KEY_COLS:
         base_d[key_col] = row[key_col]
     return base_d
 
@@ -224,9 +227,9 @@ def gen_final_energy_demand_from_region_building_stock(
         l += get_hot_water()
         l += get_ventilation()
     df = pd.DataFrame(l)
-    group_ids = copy.deepcopy(KEY_COLS)
+    group_ids = copy.deepcopy(BASE_KEY_COLS)
     group_ids += ['id_end_use', 'id_energy_carrier', 'unit']
-    energy_demand_nuts3 = df.groupby(group_ids).agg({'value': 'sum'}).reset_index()
+    energy_demand_nuts3 = df.groupby(group_ids).agg(FED_AGG_COLS).reset_index()
     save_dataframe(
         path=os.path.join(
             cfg.output_folder,
@@ -265,7 +268,7 @@ def gen_pv_generation_from_region_building_stock(
     for _, row in building_stock.iterrows():
         l += get_pv_generation()
     df = pd.DataFrame(l)
-    group_ids = copy.deepcopy(KEY_COLS)
+    group_ids = copy.deepcopy(BASE_KEY_COLS)
     group_ids += ['pv_size_unit', 'pv_generation_unit']
     pv_generation_nuts3 = df.groupby(group_ids).agg(PV_AGG_COLS).reset_index()
     save_dataframe(
@@ -285,13 +288,12 @@ def gen_region_building_stock_summary(
     for index, row in building_stock.iterrows():
         d = get_base_d(row=row)
         d["building_number"] = row["building_number"]
-        for col_name, col_calc in AGG_COLS.items():
+        for col_name, col_calc in BSS_AGG_COLS.items():
             if col_name != "building_number":
                 d[col_name] = row[col_name] * row["building_number"] if col_calc == "sum" else row[col_name]
         l.append(d)
     df = pd.DataFrame(l)
-    AGG_COLS["building_number"] = "sum"
-    aggregated_df = df.groupby(KEY_COLS).agg(AGG_COLS).reset_index()
+    aggregated_df = df.groupby(BASE_KEY_COLS).agg(BSS_AGG_COLS).reset_index()
     save_dataframe(
         path=os.path.join(cfg.output_folder, cons.REGION_DATA_SUBFOLDER, f'{output_table_name}.csv'),
         df=aggregated_df,
@@ -312,7 +314,12 @@ def gen_region_heating_tech_from_region_building_stock(
         d["building_number"] = row["building_number"]
         l.append(d)
     df = pd.DataFrame(l)
-    aggregated_df = df.groupby(HT_KEY_COLS).agg(HT_AGG_COLS).reset_index()
+    group_ids = copy.deepcopy(BASE_KEY_COLS)
+    group_ids += [
+        'heating_system_main_id_heating_technology',
+        'heating_system_main_space_heating_energy_carrier_1_id_energy_carrier'
+    ]
+    aggregated_df = df.groupby(group_ids).agg(HT_AGG_COLS).reset_index()
     save_dataframe(
         path=os.path.join(cfg.output_folder, cons.REGION_DATA_SUBFOLDER, f'{output_table_name}.csv'),
         df=aggregated_df,
@@ -334,7 +341,6 @@ AGG_FED_KEY_COLS = [
     "year",
     "unit",
 ]
-AGG_FED_AGG_COLS = {'value': 'sum'}
 
 AGG_PV_KEY_COLS = [
     "id_scenario",
@@ -396,25 +402,33 @@ def aggregate_region_building_stock(cfg: "Config"):
                 index=False
             )
 
+    # final energy demand aggregation
     create_nuts_level_aggregation(
         file_name_prefix=FED,
         group_by_cols=AGG_FED_KEY_COLS,
-        agg_cols=AGG_FED_AGG_COLS,
+        agg_cols=FED_AGG_COLS,
     )
+    # pv aggregation
     create_nuts_level_aggregation(
         file_name_prefix=PV,
         group_by_cols=AGG_PV_KEY_COLS,
         agg_cols=PV_AGG_COLS,
     )
-    AGG_COLS["building_number"] = "sum"
+    # building stock summary aggregation
     create_nuts_level_aggregation(
         file_name_prefix=BSS,
-        group_by_cols=KEY_COLS,
-        agg_cols=AGG_COLS,
+        group_by_cols=BASE_KEY_COLS,
+        agg_cols=BSS_AGG_COLS,
     )
+    # heating technology aggregation
+    group_ids = copy.deepcopy(BASE_KEY_COLS)
+    group_ids += [
+        'heating_system_main_id_heating_technology',
+        'heating_system_main_space_heating_energy_carrier_1_id_energy_carrier'
+    ]
     create_nuts_level_aggregation(
         file_name_prefix=HT,
-        group_by_cols=HT_KEY_COLS,
+        group_by_cols=group_ids,
         agg_cols=HT_AGG_COLS,
     )
 
