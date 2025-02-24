@@ -102,6 +102,7 @@ class BuildingDataCollector(RenderDataCollector):
                     building_dict[f"heating_system_{ht_name}_supply_temperature_hot_water"] = None
                     building_dict[f"heating_system_{ht_name}_installation_year"] = None
                     building_dict[f"heating_system_{ht_name}_next_replace_year"] = None
+                    building_dict[f"heating_system_{ht_name}_heating_technology_size"] = None
                     building_dict[f"heating_system_{ht_name}_space_heating_contribution"] = None
                     building_dict[f"heating_system_{ht_name}_hot_water_contribution"] = None
                     for end_use in ["space_heating", "hot_water"]:
