@@ -79,6 +79,7 @@ class BuildingDataCollector(RenderDataCollector):
                     building_dict[f"heating_system_{ht_name}_supply_temperature_hot_water"] = heating_technology.supply_temperature_hot_water
                     building_dict[f"heating_system_{ht_name}_installation_year"] = heating_technology.installation_year
                     building_dict[f"heating_system_{ht_name}_next_replace_year"] = heating_technology.next_replace_year
+                    building_dict[f"heating_system_{ht_name}_heating_technology_size"] = heating_technology.heating_technology_size
                     building_dict[f"heating_system_{ht_name}_space_heating_contribution"] = heating_technology.space_heating_contribution
                     building_dict[f"heating_system_{ht_name}_hot_water_contribution"] = heating_technology.hot_water_contribution
                     for end_use, end_use_useful_demand, energy_intensities in [
