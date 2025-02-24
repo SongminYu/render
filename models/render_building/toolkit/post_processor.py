@@ -568,7 +568,6 @@ def gen_demolition_rate(cfg: "Config"):
 Save data
 """
 
-
 def save_dataframe(
     path,
     df: pd.DataFrame,
@@ -619,6 +618,31 @@ def add_emission_to_fed(cfg: "Config", fed_file: str):
         if_exists="replace"
     )
 
+
+"""
+data extraction
+"""
+def concat_building_stock(cfg: "Config"):
+    df_list = []
+    name_list = get_region_table_names(cfg=cfg, file_name_prefix="building_stock")
+    for region_building_stock_table_name in tqdm(
+        name_list,
+        desc="reading region building stock"
+    ):
+        df = pd.read_csv(
+            os.path.join(
+                cfg.output_folder,
+                cons.REGION_DATA_SUBFOLDER,
+                f'{region_building_stock_table_name}.csv'
+            )
+        )
+        df = df.loc[df["year"] == 2010]
+        df_list.append(df)
+    concat_df = pd.concat(df_list)
+    concat_df.to_excel(os.path.join(
+        cfg.output_folder,
+        f'_concat_building_stock.xlsx'
+    ), index=False)
 
 
 
